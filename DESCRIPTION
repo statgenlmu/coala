@@ -1,0 +1,19 @@
+Package: EvolutionaryModel
+Version: 0.1-1
+Date: 2014-02-24
+License: GPL (>= 3)
+Title: Modeling the evolution of DNA sequences
+Author: Paul R. Staab
+Maintainer: Paul R. Staab <staab@biologie.uni-muenchen.de>
+BugReports: https://github.com/paulstaab/jaatha
+Description: Blub
+URL: http://evol.bio.lmu.de/_statgen/software/jaatha
+Depends:
+    R (>= 2.14.2),
+    Rcpp (>= 0.9.9),
+    methods
+Imports:
+    phyclust (>= 0.1-14)
+LinkingTo: Rcpp
+Suggests:
+    testthat
