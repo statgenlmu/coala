@@ -16,4 +16,5 @@ Imports:
     methods
 LinkingTo: Rcpp
 Suggests:
-    testthat
+    testthat,
+    roxygen2 (>= 3.1)

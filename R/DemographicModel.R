@@ -277,14 +277,17 @@ addFeature <- function(dm, type, parameter=NA,
                          group = group)
 
   # Update some technical properties of the model
-  dm <- .dm.selectSimProg(dm)"test describtion"
+  dm <- .dm.selectSimProg(dm)
 }
 
-# Add Summary Statistics
-# @name EvoModel$addSummaryStatistics
-# @export
+#' @title Add Summary Statistic
+#' 
+#' @param sum.stat The name of a summary statistic.
+#' 
+#' @name EvoModel_addSummaryStatistic
+NULL
 EvoModel$methods(addSummaryStatistic = function(sum.stat) {
-  "test describtion"
+  'see \\code{\\link{EvoModel_addSummaryStatistic}}.'
   checkType(dm, "dm")
   checkType(sum.stat, "char")
   dm@sum.stats <- c(dm@sum.stats, sum.stat)
