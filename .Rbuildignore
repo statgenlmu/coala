@@ -2,3 +2,5 @@
 ^Makefile$
 .tar.gz$
 ^.travis.yml
+^.*\.Rproj$
+^\.Rproj\.user$

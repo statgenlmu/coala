@@ -1,60 +1,22 @@
-if (!exists('sim.progs')) sim.progs <- list()
-.ms <- new.env(parent=emptyenv())
-sim.progs$ms <- .ms
+# --------------------------------------------------------------
+# Translates an demographic model to an ms command and 
+# executes the simulation.
+# 
+# Authors:  Lisha Mathew & Paul R. Staab
+# Licence:  GPLv3 or later
+# --------------------------------------------------------------
 
-# Supported features
-.ms$features <- c("mutation", "migration", "split",
-                  "recombination", "size.change", "growth")
-
-# Supported summary statistics
-.ms$sum.stats <- c("jsfs", "4pc", "tree", "seg.sites")
-
-# Function to perform the actual simulations with ms
-.ms$simulate <- function(dm, parameters) {
-  checkType(dm, "dm")
-  checkType(parameters, "num")
-
-  if (length(parameters) != dm.getNPar(dm)) stop("Wrong number of parameters!")
-
-  ms.options <- generateMsOptions(dm, parameters)
-  ms.out <- callMs(ms.options, dm)
-
-  sum.stats <- list(pars=parameters)
-
-  if ("jsfs" %in% dm@sum.stats) {
-    sum.stats[['jsfs']] <- msOut2Jsfs(dm, ms.out)
-  }
-
-  unlink(ms.out)
-  return(sum.stats)
-}
-
-.ms$finalize <- function(dm) {
-  dm@options[['ms.cmd']] <- generateMsOptionsCommand(dm)
-  return(dm)
-}
-
-## Function to perform simulation using ms 
-## 
-## @param opts The options to pass to ms. Must either be a character or character
-## vector.
-## @param dm The demographic model we are using
-## @return The file containing the output of ms
-.ms$callMs <- function(opts, dm) {
-  if (missing(opts)) stop("No options given!")
-  opts <- unlist(strsplit(opts, " "))
-
-  ms.file <- getTempFile("ms")
-
-  ms(sum(dm@sampleSizes), dm@nLoci, opts, ms.file)
-  return(ms.file)
-}
+possible.features  <- c("sample", "mutation", "migration", "migration_sym",
+                        "pop_merge",
+                        "recombination", "size_change", "growth",
+                        "inter_locus_variation")
+possible.sum.stats <- c("jsfs", "trees", "seg.sites", "file")
 
 
 # This function generates an string that contains an R command for generating
 # an ms call to the current model.
-.ms$generateMsOptionsCommand <- function(dm) {
-  nSample <- dm@sampleSizes
+generateMsOptionsCommand <- function(dm) {
+  nSample <- dm.getSampleSize(dm)
   cmd <- c('c(')
   cmd <- c(cmd,'"-I"', ",", length(nSample), ',', 
            paste(nSample, collapse=","), ',')
@@ -63,38 +25,49 @@ sim.progs$ms <- .ms
     type <- as.character(dm@features[i,"type"])
     feat <- unlist(dm@features[i, ])
 
-    if (type == "mutation") {
+    if ( type == "mutation" ) {
       cmd <- c(cmd,'"-t"', ',', feat["parameter"], ',')
     }
 
-    if (type == "split") {
+    else if (type == "pop_merge") {
       cmd <- c(cmd, '"-ej"', ',', feat["time.point"], ',',
-               feat["pop.sink"], ',', feat["pop.source"], ',')
+               feat["pop.source"], ',', feat["pop.sink"], ',')
     }
 
-    if (type == "migration")
+    else if (type == "migration")
       cmd <- c(cmd, '"-em"', ',', feat['time.point'], ',',
                feat['pop.sink'], ',', feat['pop.source']  , ',',
                feat['parameter'], ',')
 
-    if (type == "recombination") 
-      cmd <- c(cmd, '"-r"', ',', feat['parameter'], ',', dm@seqLength, ',')
+    else if (type == "migration_sym")
+      cmd <- c(cmd, '"-eM"', ',', 
+               feat['time.point'], ',',
+               feat['parameter'], ',')
+    
+    else if (type == "recombination") 
+      cmd <- c(cmd, '"-r"', ',', feat['parameter'], ',', dm.getLociLength(dm), ',')
 
-    if (type == "size.change"){
+    else if (type == "size.change"){
       cmd <- c(cmd, '"-en"', ',', feat['time.point'], ',',
                feat["pop.source"], ',', feat['parameter'], ',')
     }
 
-    if (type == "growth"){
+    else if (type == "growth"){
       cmd <- c(cmd, '"-eg"', ',' , feat["time.point"], ',',
                feat["pop.source"], ',', feat["parameter"], ',')
-    }
+      }
+
+    else if (type %in% c("sample", "loci.number", "loci.length", 
+                         "pos.selection", "bal.selection",
+                         "inter_locus_variation")) {}
+    else stop("Unknown feature:", type)
   }
 
-  cmd <- c(cmd, '"-T")')
+  if ('trees' %in% dm.getSummaryStatistics(dm)) cmd <- c(cmd, '"-T",')
+  cmd <- c(cmd, '" ")')
 }
 
-.ms$generateMsOptions <- function(dm, parameters) {
+generateMsOptions <- function(dm, parameters, subgroup) {
   ms.tmp <- new.env()
 
   par.names <- dm.getParameters(dm)
@@ -115,11 +88,10 @@ sim.progs$ms <- .ms
     cmd <- generateMsOptionsCommand(dm)
   cmd <- eval(parse(text=cmd), envir=ms.tmp)
 
-
   return(cmd)
 }
 
-.ms$printMsCommand <- function(dm) {
+printMsCommand <- function(dm) {
   cmd <- generateMsOptionsCommand(dm)
 
   cmd <- cmd[cmd != ","]
@@ -131,14 +103,43 @@ sim.progs$ms <- .ms
   cmd <- gsub('\"', "", cmd)
   cmd <- gsub('"', " ", cmd)
 
-  return(cmd)
+  cmd <- paste("ms", sum(dm.getSampleSize(dm)), dm.getLociNumber(dm), cmd)
+  .print(cmd)
 }
 
-.ms$msOut2Jsfs <- function(dm, ms.out) {
-  jsfs <- matrix(.Call("msFile2jsfs", ms.out, dm@sampleSizes[1], 
-                       dm@sampleSizes[2]),
-                 dm@sampleSizes[1] + 1 ,
-                 dm@sampleSizes[2] + 1,
-                 byrow=T)
-  return(jsfs)
+msSingleSimFunc <- function(dm, parameters) {
+  checkType(dm, "dm")
+  checkType(parameters, "num")
+  if (length(parameters) != dm.getNPar(dm)) stop("Wrong number of parameters!")
+
+  # Run all simulation in with one ms call if they loci are identical,
+  # or call ms for each locus if there is variation between the loci.
+  if (hasInterLocusVariation(dm)) {
+    sim_reps <- 1:dm.getLociNumber(dm)
+    sim_loci <- 1
+  } else {
+    sim_reps <- 1
+    sim_loci <- dm.getLociNumber(dm)
+  }
+  
+  # Do the actuall simulation
+  ms.files <- lapply(sim_reps, function(locus) {
+    ms.options <- generateMsOptions(dm, parameters, locus)
+    ms.file <- getTempFile('ms')
+    ms(sum(dm.getSampleSize(dm)), sim_loci, 
+       unlist(strsplit(ms.options, " ")), ms.file)
+    ms.file
+  })
+  
+  # Parse & return the simulation output
+  generateSumStats(ms.files, 'ms', parameters, dm)
 }
+
+finalizeMs <- function(dm) {
+  dm@options[['ms.cmd']] <- generateMsOptionsCommand(dm)
+  return(dm)
+}
+
+#' @include dm_sim_program.R
+createSimProgram("ms", possible.features, possible.sum.stats, 
+                 msSingleSimFunc, finalizeMs, printMsCommand, 100)

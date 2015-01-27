@@ -7,3 +7,4 @@
 # Creates binaries
 *.o
 *.so
+.Rproj.user
