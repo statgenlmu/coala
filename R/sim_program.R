@@ -13,7 +13,6 @@
 if (!exists(".jaatha")) .jaatha <- new.env()
 if (!exists("sim_progs", envir=.jaatha)) .jaatha$sim_progs <- list()
 
-#' @include helper_functions.R
 createSimProgram <- function(name, possible_features, possible_sum_stats,
                              sim_func=NULL, finalization_func=NULL,
                              print_cmd_func=NULL,

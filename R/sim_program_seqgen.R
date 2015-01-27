@@ -260,7 +260,7 @@ finalizeSeqgen <- function(dm) {
   return(dm)
 }
 
-#' @include dm_sim_program.R
+#' @include sim_program.R
 createSimProgram("seq-gen", sg.features, sg.sum.stats,
                  seqgenSingleSimFunc, finalizeSeqgen, printSeqgenCommand,
                  priority=10)

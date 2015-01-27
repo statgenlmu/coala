@@ -8,7 +8,7 @@
 # Licence:  GPLv3 or later
 #--------------------------------------------------------------
 
-#' @include dm_sim_program.R
+#' @include sim_program.R
 
 setClass("DemographicModel" ,
          representation(features="data.frame",
