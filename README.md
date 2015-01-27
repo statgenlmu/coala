@@ -1,6 +1,9 @@
 coalescentsimulatr
 =================
 
+[![Build Status](https://travis-ci.org/paulstaab/coalsimr.png?branch=master)](https://travis-ci.org/paulstaab/jaatha) 
+[![Coverage Status](https://coveralls.io/repos/paulstaab/coalsimr/badge.svg?branch=master)](https://coveralls.io/r/paulstaab/coalsimr)
+
 I developed an interface to call coalescent simulation programs from within R for 
 my CRAN package [jaatha](https://github.com/paulstaab/jaatha). To make this 
 functionality available to an broader audience (and to clean up jaatha), I aim
