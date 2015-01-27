@@ -14,7 +14,8 @@ Depends:
 Imports:
     phyclust (>= 0.1-14),
     scrm (>= 1.3-3),
-    Rcpp (>= 0.11.0)
+    Rcpp (>= 0.11.0),
+    settings (>= 0.1.1)
 Suggests:
     ape (>= 2.7),
     testthat
@@ -36,7 +37,9 @@ Collate:
     'model.R'
     'model_build.R'
     'model_examples.R'
+    'options.R'
     'parameter.R'
+    'sample_seed.R'
     'sim_program_ms.R'
     'sim_program_msms.R'
     'sim_program_scrm.R'

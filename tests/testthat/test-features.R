@@ -15,13 +15,13 @@ test_that('Creating features works', {
   expect_equal(feat$get_group(), 1)
   x <- 5
   expect_equal(feat$get_parameters()[["1"]]$eval(), 10)
-  
+
   # Test with two parameters
-  feat <- Feature$new('blub', parameter=par_range('a', 5, 7), 
+  feat <- Feature$new('blub', parameter=par_range('a', 5, 7),
                       time_point=par_range('b', 1, 1.5))
   expect_equal(length(feat$get_parameters()), 2)
   expect_equal(feat$get_table(), createFeatureTable('blub', 'a', NA, NA, 'b', 0))
-  
+
   # Test variance
   feat <- Feature$new('mutation', par_range('theta', 5, 7), variance='10')
   expect_true(is.feature(feat))
@@ -32,12 +32,12 @@ test_that('Creating features works', {
   expect_true(eval(parse(text=par_expr)) != 5)
   sim <- sapply(1:1000, function(x) eval(parse(text=par_expr)))
   expect_true(abs(mean(sim) - theta) < .3)
-  
+
   # Test zero.inflation
   feat <- Feature$new('mutation', par_range('theta', 5, 7), zero_inflation='.1')
   expect_true(is.feature(feat))
   expect_true(feat$get_inter_locus_var())
-  
+
   par_expr <- feat$get_table()$parameter
   dm <- dm.createDemographicModel(5:6, 100)
   locus <- 1; expect_equal(eval(parse(text=par_expr)), 0)
@@ -46,18 +46,40 @@ test_that('Creating features works', {
   locus <- 11; expect_equal(eval(parse(text=par_expr)), 5)
   locus <- 30; expect_equal(eval(parse(text=par_expr)), 5)
   locus <- 72; expect_equal(eval(parse(text=par_expr)), 5)
-  
+
   # Test zero.inflation & variance
-  feat <- Feature$new('mutation', parameter = par_range('theta', 5, 7), 
+  feat <- Feature$new('mutation', parameter = par_range('theta', 5, 7),
                       variance = '10', zero_inflation = '.1')
   expect_true(is.feature(feat))
   expect_true(feat$get_inter_locus_var())
   par_expr <- feat$get_table()$parameter
-  sim <- sapply(1:1000, function(x) { 
-    locus <- x %% 100; 
+  sim <- sapply(1:1000, function(x) {
+    locus <- x %% 100;
     eval(parse(text=par_expr))
   })
   expect_true(abs(mean(sim) - theta*0.9) < .3)
   expect_equal(sum(sim == 5), 0)
   expect_true(sum(sim == 0) > 80)
+})
+
+
+test_that("Adding features to features works", {
+  feat <- Feature$new('abc', 5)
+  feat$add_feature(Feature$new('def', par_range('a', 1, 5)))
+#   feat <- Feature$new('abc', 5) + Feature$new('def', par_range('a', 1, 5))
+   expect_equal(feat$get_table(), rbind(createFeatureTable('abc', '5', NA, NA, NA, 0),
+                                        createFeatureTable('def', 'a', NA, NA, NA, 0)))
+   expect_equal(length(feat$get_parameters()), 1)
+})
+
+
+test_that("Adding parameters to features works", {
+#   feat <- Feature$new('abc', 5) + par_range('blub', 1, 5)
+  feat <- Feature$new('abc', 5)
+  feat$add_parameter(par_range('blub', 1, 5))
+  expect_equal(length(feat$get_parameters()), 1)
+
+#   feat <- feat + par_range('bla', 1, 5)
+  feat$add_parameter(par_range('bla', 1, 5))
+  expect_equal(length(feat$get_parameters()), 2)
 })

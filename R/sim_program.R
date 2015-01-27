@@ -10,8 +10,7 @@
 
 # Keep a user modifiable list of availible simulation programs in a private
 # enviroment (jaatha's own env is read-only after package load)
-if (!exists(".jaatha")) .jaatha <- new.env()
-if (!exists("sim_progs", envir=.jaatha)) .jaatha$sim_progs <- list()
+if (!exists("sim_programs")) sim_programs <- new.env()
 
 createSimProgram <- function(name, possible_features, possible_sum_stats,
                              sim_func=NULL, finalization_func=NULL,
@@ -19,15 +18,15 @@ createSimProgram <- function(name, possible_features, possible_sum_stats,
                              priority=50) {
 
   # Create the simulation program
-  .jaatha$sim_progs[[name]] = list(name=name,
-                                   possible_features=possible_features,
-                                   possible_sum_stats=possible_sum_stats,
-                                   sim_func=sim_func,
-                                   finalization_func=finalization_func,
-                                   print_cmd_func=print_cmd_func,
-                                   priority=priority)
+  sim_programs[[name]] = list(name=name,
+                              possible_features=possible_features,
+                              possible_sum_stats=possible_sum_stats,
+                              sim_func=sim_func,
+                              finalization_func=finalization_func,
+                              print_cmd_func=print_cmd_func,
+                              priority=priority)
 }
 
 getSimProgram <- function(name) {
-  return(.jaatha$sim_progs[[name]])
+  return(sim_programs[[name]])
 }

@@ -4,7 +4,8 @@
 \alias{feat_mutation}
 \title{Creates a Mutation Feature}
 \usage{
-feat_mutation(rate, group = 0, variance = 0)
+feat_mutation(rate, group = 0, variance = 0, model = "IFS",
+  base_frequencies, tstv_ratio, gtr_rates)
 }
 \arguments{
 \item{rate}{A \code{\link{Parameter}} defining the mutation rate (see above).}
@@ -20,6 +21,21 @@ variation follows a gamma distribution with mean equal to
 the value provided as \code{parameter}, and variance as given
 here. Can also be set to a previously
 created parameter, or an expression based on parameters.}
+
+\item{model}{The mutation model you want to use. Can be IFS (default),
+HKY, F84 or GTR.}
+
+\item{tstv.ratio}{The ratio of transitions to transversions. The default is
+0.5, which means that all amino acid substitutions are
+equally likely. In this case, the HKY model is identical to
+the Felsenstein 81 model.}
+
+\item{base.frequencies}{The equilibrium frequencies of the four bases.
+Must be a numeric vector of length four.
+Order is A, C, G, T.}
+
+\item{gtr.rates}{The rates for the amino acid substitutions. Must be a
+numeric vector of length six. Order: A->C, A->G, A->T, C->G, C->T, G->T.}
 }
 \value{
 The feature, which can be added to a model using `+`.

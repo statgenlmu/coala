@@ -92,23 +92,22 @@ rm(.init)
 #-----------------------------------------------------------------------
 .showModel <- function(object) {
   if (!object@finalized) dm = dm.finalize(object)
-  .print("Used simulation program:", object@currentSimProg)
-  .print()
+  cat("Used simulation program:", object@currentSimProg, "\n\n")
 
   # Print parameters that get estimated
 
   pars.est = object@parameters
   rownames(pars.est) <- NULL
 
-  if (nrow(pars.est) == 0) .print("No Parameters.")
+  if (nrow(pars.est) == 0) cat("No Parameters.\n")
   else {
-    .print("Parameters:")
+    cat("Parameters:\n")
     print(pars.est)
   }
-  .print()
+  cat('\n')
 
   # Print simulation command
-  .print("Simulation command:")
+  cat("Simulation command:\n")
   getSimProgram(object@currentSimProg)$print_cmd_func(object)
 }
 
@@ -119,11 +118,11 @@ rm(.init)
     .showModel(object)
   } else {
     for (group in names(object@options$grp.models)) {
-      .print('----------------------------------')
-      .print("Group", group)
-      .print('----------------------------------')
+      cat('----------------------------------\n')
+      cat("Group", group, '\n')
+      cat('----------------------------------\n')
       .showModel(object@options$grp.models[[group]])
-      .print()
+      cat('\n')
     }
   }
 }
@@ -202,8 +201,8 @@ dm.addSummaryStatistic <- function(dm, sum.stat, population = 0, group = 0) {
   dm@finalized = FALSE
 
   # Check if there is any simulation program supporting this summary statistic
-  for (sim.prog in .jaatha$sim_progs) {
-    if (sum.stat %in% sim.prog$possible_sum_stats) return(dm)
+  for (sim.prog in ls(sim_programs)) {
+    if (sum.stat %in% getSimProgram(sim.prog)$possible_sum_stats) return(dm)
   }
   stop("No simulation program for summary statistic", sum.stat)
 }
@@ -244,7 +243,8 @@ dm.selectSimProg <- function(dm) {
   name <- NULL
   priority <- -Inf
 
-  for (sim_prog in .jaatha$sim_progs) {
+  for (sim_prog_name in ls(sim_programs)) {
+    sim_prog = getSimProgram(sim_prog_name)
     if (all(dm@features$type %in% sim_prog$possible_features) &
         all(dm@sum.stats$name %in% sim_prog$possible_sum_stats)) {
 

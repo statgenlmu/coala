@@ -17,6 +17,17 @@
 #'                 the feature applies to all groups, and 1 is the default group.
 #'                 Set to 1 or an greater integer to set this feature only for
 #'                 the corresponding group of loci.
+#' @param model    The mutation model you want to use. Can be IFS (default),
+#'                 HKY, F84 or GTR.
+#' @param tstv.ratio The ratio of transitions to transversions. The default is
+#'                   0.5, which means that all amino acid substitutions are
+#'                   equally likely. In this case, the HKY model is identical to
+#'                   the Felsenstein 81 model.
+#' @param base.frequencies The equilibrium frequencies of the four bases.
+#'                   Must be a numeric vector of length four.
+#'                   Order is A, C, G, T.
+#' @param gtr.rates  The rates for the amino acid substitutions. Must be a
+#'                   numeric vector of length six. Order: A->C, A->G, A->T, C->G, C->T, G->T.
 #' @return The feature, which can be added to a model using `+`.
 #' @export
 #'
@@ -31,79 +42,64 @@
 #' # A model with variable gamma distributed mutation rate
 #' dm <- dm.createDemographicModel(c(15,20), 100) +
 #'   feat_mutation(par_range('theta', 1, 20), variance=100)
-feat_mutation <- function(rate, group = 0, variance = 0) {
-  Feature$new('mutation', parameter=rate,  group=group, variance=variance)
+feat_mutation <- function(rate, group = 0, variance = 0, model='IFS',
+                          base_frequencies, tstv_ratio, gtr_rates) {
+  feat <- Feature$new('mutation', parameter=rate,  group=group, variance=variance)
+
+  # Add the mutation model
+  if (model != 'IFS') {
+    if (! model %in% sg.mutation.models)
+      stop("Possible mutation models: ", paste(sg.mutation.models, collapse=" "))
+    feat$add_feature(Feature$new("mutation_model", par_const(model)))
+  }
+
+  if ( !missing(tstv_ratio) ) {
+    if (!model %in% c("HKY", "F84"))
+      stop("This mutation model does not support a ts/tv ratio")
+    feat$add_feature(Feature$new("tstv_ratio", tstv_ratio))
+  }
+
+  if ( !missing(base_frequencies) ) {
+    stopifnot(length(base_frequencies) == 4)
+    stopifnot(sum(base_frequencies) == 1)
+    if (!model %in% c("HKY", "F84"))
+      stop("This mutation model does not support base frequencies")
+
+    feat$add_feature(Feature$new("base_freq_A", base_frequencies[1]))
+    feat$add_feature(Feature$new("base_freq_C", base_frequencies[2]))
+    feat$add_feature(Feature$new("base_freq_G", base_frequencies[3]))
+    feat$add_feature(Feature$new("base_freq_T", base_frequencies[4]))
+  }
+
+  if (!missing(gtr_rates)) {
+    stopifnot(length(gtr_rates) == 6)
+    if (!model %in% c("GTR"))
+      stop("You can specify gtr_rates only with the GTR model")
+
+    feat$add_feature(Feature$new("gtr_rate_1", gtr_rates[1]))
+    feat$add_feature(Feature$new("gtr_rate_2", gtr_rates[2]))
+    feat$add_feature(Feature$new("gtr_rate_3", gtr_rates[3]))
+    feat$add_feature(Feature$new("gtr_rate_4", gtr_rates[4]))
+    feat$add_feature(Feature$new("gtr_rate_5", gtr_rates[5]))
+    feat$add_feature(Feature$new("gtr_rate_6", gtr_rates[6]))
+  }
+
+  feat
 }
 
 #-------------------------------------------------------------------
 # dm.setMutationModel
 #-------------------------------------------------------------------
-#' Defines what mutation model is used for simulations
-#'
-#' As default, we simulate mutation using the Infinite Sites Model.
-#' Using the function, you can change it either to the Hasegawa, Kishino and
-#' Yano (HKY), to the Felsenstein and Churchill 96 (F84) or to the Generalised
-#' time reversible (GTR) model. This requires that seq-gen is installed on our system.
-#'
-#' The HKY and F84 models use the the arguments 'base.frequencies' and
-#' 'tstv.ratio'. The GTR model uses 'gtr.rates'.
-#'
-#' @param dm  The demographic model for which the mutation model will be set.
-#' @param mutation.model  The mutation model you want to use. Can be HKY, F84 or GTR.
-#' @param tstv.ratio The ratio of transitions to transversions. The default is
-#'                   0.5, which means that all amino acid substitutions are
-#'                   equally likely. In this case, the HKY model is identical to
-#'                   the Felsenstein 81 model.
-#' @param base.frequencies The equilibrium frequencies of the four bases.
-#'                   Must be a numeric vector of length four.
-#'                   Order is A, C, G, T.
-#' @param gtr.rates  The rates for the amino acid substitutions. Must be a
-#'                   numeric vector of length six. Order: A->C, A->G, A->T, C->G, C->T, G->T.
-#' @return    The demographic model with the new mutation model.
-dm.setMutationModel <- function(dm, mutation.model,
-                                base.frequencies, tstv.ratio,
-                                gtr.rates) {
+# Defines what mutation model is used for simulations
+#
+# As default, we simulate mutation using the Infinite Sites Model.
+# Using the function, you can change it either to the Hasegawa, Kishino and
+# Yano (HKY), to the Felsenstein and Churchill 96 (F84) or to the Generalised
+# time reversible (GTR) model. This requires that seq-gen is installed on our system.
+#
+# The HKY and F84 models use the the arguments 'base.frequencies' and
+# 'tstv.ratio'. The GTR model uses 'gtr.rates'.
 
-
-  if (! mutation.model %in% sg.mutation.models)
-    stop("Possible mutation models: ", paste(sg.mutation.models, collapse=" "))
-
-  dm <- addFeature(dm, "mutation.model", mutation.model)
-
-  if ( !missing(tstv.ratio) ) {
-    if (!mutation.model %in% c("HKY", "F84"))
-      stop("This mutation model does not support a ts/tv ratio")
-    dm <- addFeature(dm, "tstv.ratio", tstv.ratio)
-  }
-
-  if ( !missing(base.frequencies) ) {
-    if ( length(base.frequencies) != 4 )
-      stop("You must enter frequencies for all 4 bases")
-    if (!mutation.model %in% c("HKY", "F84"))
-      stop("This mutation model does not support base frequencies")
-
-    dm <- addFeature(dm, "base.freq.A", base.frequencies[1])
-    dm <- addFeature(dm, "base.freq.C", base.frequencies[2])
-    dm <- addFeature(dm, "base.freq.G", base.frequencies[3])
-    dm <- addFeature(dm, "base.freq.T", base.frequencies[4])
-  }
-
-  if ( !missing(gtr.rates) ) {
-    if ( length(gtr.rates) != 6 )
-      stop("You must enter rates for all 6 posible substitutions")
-    if (!mutation.model %in% c("GTR"))
-      stop("You can specify gtr.rates only with the GTR model")
-
-    dm <- addFeature(dm, "gtr.rate.1", gtr.rates[1])
-    dm <- addFeature(dm, "gtr.rate.2", gtr.rates[2])
-    dm <- addFeature(dm, "gtr.rate.3", gtr.rates[3])
-    dm <- addFeature(dm, "gtr.rate.4", gtr.rates[4])
-    dm <- addFeature(dm, "gtr.rate.5", gtr.rates[5])
-    dm <- addFeature(dm, "gtr.rate.6", gtr.rates[6])
-  }
-
-  return(dm)
-}
 
 
 #-------------------------------------------------------------------

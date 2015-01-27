@@ -104,12 +104,12 @@ printMsCommand <- function(dm) {
   cmd <- gsub('"', " ", cmd)
 
   cmd <- paste("ms", sum(dm.getSampleSize(dm)), dm.getLociNumber(dm), cmd)
-  .print(cmd)
+  cat(cmd, "\n")
 }
 
 #' @importFrom phyclust ms
-msSingleSimFunc <- function(dm, parameters) {
-  stopifnot(all(is.numeric(parameters)))
+msSingleSimFunc <- function(dm, parameters=numeric()) {
+  stopifnot(length(parameters) == 0 | all(is.numeric(parameters)))
   if (length(parameters) != dm.getNPar(dm)) stop("Wrong number of parameters!")
 
   # Run all simulation in with one ms call if they loci are identical,

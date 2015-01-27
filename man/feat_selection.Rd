@@ -4,16 +4,16 @@
 \alias{feat_selection}
 \title{Adds positiv selection to a model}
 \usage{
-feat_selection(dm, strength_AA, strength_Aa, variance = 0,
-  fraction.neutral = 0, population, at.time, group = 0)
+feat_selection(strength_AA, strength_Aa, variance = 0, fraction_neutral = 0,
+  population, at_time, group = 0)
 }
 \arguments{
-\item{fraction.neutral}{Optionally, a fraction of the loci in the group can
+\item{fraction_neutral}{Optionally, a fraction of the loci in the group can
 be neutral.}
 
 \item{population}{The populaton in which the allele is selected.}
 
-\item{at.time}{The time at which the selection starts.}
+\item{at_time}{The time at which the selection starts.}
 }
 \description{
 Adds positiv selection to a model

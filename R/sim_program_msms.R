@@ -29,11 +29,7 @@ callMsms <- function(jar.path, ms.args, msms.args, subgroup) {
 }
 
 checkForMsms <- function(throw.error = TRUE, silent = FALSE) {
-  if (isJaathaVariable('msms.jar')) {
-    if (file.exists(getJaathaVariable('msms.jar'))) {
-      return(TRUE)
-    }
-  }
+  if ((!is.null(get_msms_path())) && file.exists(get_msms_path())) return(TRUE)
 
   # Works on Linux only maybe
   run.path <- strsplit(Sys.getenv("PATH"), ":")[[1]]
@@ -41,13 +37,13 @@ checkForMsms <- function(throw.error = TRUE, silent = FALSE) {
   for (exe in executables) {
     if (file.exists(exe)) {
       if (!silent) message(paste("Using", exe, "as msms implementation\n"))
-      setJaathaVariable('msms.jar', exe)
+      set_msms_path(exe)
       return(TRUE)
     }
   }
 
   if (throw.error) stop("No msms executable found.")
-  return(FALSE)
+  FALSE
 }
 
 

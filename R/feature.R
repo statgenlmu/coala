@@ -4,12 +4,7 @@ Feature <- R6Class("Feature",
     feature_table = NULL,
     parameter = list(),
     group = 0,
-    inter_locus_var = FALSE,
-    add_parameter = function(parameter) {
-      stopifnot(is.par(parameter))
-      idx <- as.character(length(private$parameter) + 1)
-      private$parameter[[idx]] <- parameter
-    }
+    inter_locus_var = FALSE
   ),
   public = list(
     initialize = function(type, parameter,
@@ -21,7 +16,7 @@ Feature <- R6Class("Feature",
       if (is.numeric(parameter)) par_expr <- as.character(parameter)
       else if (is.character(parameter)) par_expr <- parameter
       else if (is.par(parameter)) {
-        private$add_parameter(parameter)
+        self$add_parameter(parameter)
         par_expr <- as.character(parameter$get_expression())
       }
       else stop("Unexpected type of argument 'parameter'")
@@ -29,7 +24,7 @@ Feature <- R6Class("Feature",
       # Add the time point, which might also be a parameter
       if (is.numeric(time_point)) time_point <- as.character(time_point)
       else if (is.par(time_point)) {
-        private$add_parameter(time_point)
+        self$add_parameter(time_point)
         time_point <- as.character(time_point$get_expression())
       }
       else if (is.character(time_point) | is.na(time_point)) {}
@@ -56,7 +51,19 @@ Feature <- R6Class("Feature",
     get_table = function() private$feature_table,
     get_parameters = function() private$parameter,
     get_group = function() private$group,
-    get_inter_locus_var = function() private$inter_locus_var
+    get_inter_locus_var = function() private$inter_locus_var,
+    add_parameter = function(parameter) {
+      stopifnot(is.par(parameter))
+      idx <- as.character(length(private$parameter) + 1)
+      private$parameter[[idx]] <- parameter
+    },
+    add_feature = function(feature) {
+      stopifnot(is.feature(feature))
+      private$feature_table <- rbind(private$feature_table, feature$get_table())
+      for (par in feature$get_parameters()) {
+        self$add_parameter(par)
+      }
+    }
   )
 )
 
