@@ -2,8 +2,8 @@
 # DemographicModel.R
 # Class for representing a model of the evolutionary development
 # of two different species.
-# 
-# Authors:  Paul R. Staab & Lisha Mathew 
+#
+# Authors:  Paul R. Staab & Lisha Mathew
 # Email:    staab ( at ) bio.lmu.de
 # Licence:  GPLv3 or later
 #--------------------------------------------------------------
@@ -30,14 +30,14 @@ setClass("DemographicModel" ,
 createFeatureTable <- function(type=character(), parameter=character(),
                                pop.source=numeric(), pop.sink=numeric(),
                                time.point=character(), group=numeric()) {
-  
+
   stopifnot(is.character(type))
   stopifnot(is.character(parameter))
   stopifnot(is.na(pop.source) | is.numeric(pop.source))
   stopifnot(is.na(pop.sink) | is.numeric(pop.sink))
   stopifnot(is.na(time.point) | is.character(time.point))
   stopifnot(is.numeric(group))
-  
+
   data.frame(type=type,
              parameter=parameter,
              pop.source=pop.source,
@@ -49,14 +49,14 @@ createFeatureTable <- function(type=character(), parameter=character(),
 
 .init <- function(.Object, sample.size, loci.number, loci.length,
                   finiteSites, tsTvRatio){
-  
+
   .Object <- resetSumStats(.Object)
-  
+
   .Object@features <- createFeatureTable()
-  
+
   .Object@loci <- data.frame(group=numeric(),
-                             number=numeric(),  
-                             name=character(), 
+                             number=numeric(),
+                             name=character(),
                              name_l=character(),
                              name_r=character(),
                              length_l=numeric(),
@@ -69,13 +69,13 @@ createFeatureTable <- function(type=character(), parameter=character(),
   .Object@parameters <- data.frame(parameter=character(),
                                    lower.range=numeric(),
                                    upper.range=numeric(),
-                                   stringsAsFactors=F )  
+                                   stringsAsFactors=F )
 
   for (pop in seq(along = sample.size)) {
     .Object <- .Object + feat_sample(sample.size[pop], pop)
   }
   .Object <- dm.addLocus(.Object, length = loci.length, number = loci.number)
-  
+
   .Object@finiteSites     <- finiteSites
   .Object@tsTvRatio       <- tsTvRatio
   .Object@options         <- list()
@@ -94,19 +94,19 @@ rm(.init)
   if (!object@finalized) dm = dm.finalize(object)
   .print("Used simulation program:", object@currentSimProg)
   .print()
-  
+
   # Print parameters that get estimated
-  
+
   pars.est = object@parameters
   rownames(pars.est) <- NULL
-  
+
   if (nrow(pars.est) == 0) .print("No Parameters.")
-  else { 
+  else {
     .print("Parameters:")
     print(pars.est)
   }
   .print()
-    
+
   # Print simulation command
   .print("Simulation command:")
   getSimProgram(object@currentSimProg)$print_cmd_func(object)
@@ -114,7 +114,7 @@ rm(.init)
 
 .show <- function(object) {
   object <- dm.finalize(object)
-  
+
   if (is.null(object@options$grp.models)) {
     .showModel(object)
   } else {
@@ -126,7 +126,7 @@ rm(.init)
       .print()
     }
   }
-} 
+}
 setMethod("show", "DemographicModel", .show)
 rm(.show)
 
@@ -135,52 +135,49 @@ rm(.show)
 # Private functions
 #------------------------------------------------------------------------------
 
+is.model <- function(model) {
+  "DemographicModel" %in% class(model)
+}
+
 dm.addParameter <- function(dm, par.name, lower.boundary, upper.boundary) {
-
-  checkType(dm,          c("dm",   "s"), T, F)
-  checkType(par.name,    c("char", "s"), T, F)
-  checkType(lower.boundary, c("num",  "s"), T, T)
-  checkType(upper.boundary, c("num",  "s"), T, T)
-
   if (par.name %in% dm.getParameters(dm))
     stop("There is already a parameter with name ", par.name)
- 
+
   dm <- appendToParameters(dm, par.name, lower.boundary, upper.boundary)
 
   dm@finalized = FALSE
   return(dm)
 }
 
-
 dm.addFeature <- function(dm, feature) {
   stopifnot(is.feature(feature))
-  
+
   dm@features <- rbind(dm@features, feature$get_table())
   for (parameter in feature$get_parameters()) {
     dm <- dm + parameter
   }
-  
+
   if (feature$get_inter_locus_var()) {
     dm <- addInterLocusVariation(dm, feature$get_group())
   }
-  
+
   dm
 }
 
 #' Adds a summary statistic to the model.
-#' 
+#'
 #' This summary statistic will the be calulated for each simualtion
 #' and returned by the simSumStats function.
-#' 
+#'
 #' Avaible summary statistics are
 #' 'jsfs' - calculates the Joint Site Frequency Spectrum
 #' 'seg.sites' - return the simulated segregating sites as matrix
 #' 'file' - returns a file in which the simulation output is written
 #' 'fpc' - calculates the Four-Gamete-Condition based statistic
-#' 
-#' @param dm The demographic model to which a summary statistic should be added. 
+#'
+#' @param dm The demographic model to which a summary statistic should be added.
 #' @param sum.stat The summary statistic to add. Use the names mentioned above.
-#' @param group If given, the summary statistic is only calculated for a 
+#' @param group If given, the summary statistic is only calculated for a
 #'        given group of loci.
 #' @param population The population for which the summary statistic is calculated.
 #'   Currently only used for 'fpc' statistics.
@@ -190,21 +187,20 @@ dm.addFeature <- function(dm, feature) {
 #' dm <- dm.createDemographicModel(c(15, 20), 100)
 #' dm <- dm.addSummaryStatistic(dm, 'seg.sites')
 dm.addSummaryStatistic <- function(dm, sum.stat, population = 0, group = 0) {
-  checkType(dm, "dm")
-  checkType(sum.stat, "char")
+  stopifnot(is.model(dm))
 
   if (sum.stat == 'fpc' & population == 0) {
     dm <- dm.addSummaryStatistic(dm, 'fpc', 1, group)
     dm <- dm.addSummaryStatistic(dm, 'fpc', 2, group)
     return(dm)
   }
-  
+
   # Add the summary statistic
-  dm@sum.stats = rbind(dm@sum.stats, data.frame(name=sum.stat, 
-                                                population = population, 
+  dm@sum.stats = rbind(dm@sum.stats, data.frame(name=sum.stat,
+                                                population = population,
                                                 group=group))
   dm@finalized = FALSE
-  
+
   # Check if there is any simulation program supporting this summary statistic
   for (sim.prog in .jaatha$sim_progs) {
     if (sum.stat %in% sim.prog$possible_sum_stats) return(dm)
@@ -223,7 +219,7 @@ appendToParameters <- function(dm, name, lower.range, upper.range) {
                               lower.range=lower.range,
                               upper.range=upper.range,
                               stringsAsFactors=F)
-  
+
   dm@parameters <- rbind(dm@parameters, new.parameter)
   return(dm)
 }
@@ -247,21 +243,21 @@ checkParInRange <- function(dm, param) {
 dm.selectSimProg <- function(dm) {
   name <- NULL
   priority <- -Inf
-  
+
   for (sim_prog in .jaatha$sim_progs) {
-    if (all(dm@features$type %in% sim_prog$possible_features) & 
+    if (all(dm@features$type %in% sim_prog$possible_features) &
         all(dm@sum.stats$name %in% sim_prog$possible_sum_stats)) {
-      
+
       if (sim_prog$priority > priority) {
         name <- sim_prog$name
         priority <- sim_prog$priority
       }
-      
+
     }
   }
-  
+
   if (is.null(name)) stop("No suitable simulation software found!")
-  
+
   dm@currentSimProg <- name
   return(dm)
 }
@@ -276,13 +272,13 @@ dm.finalize <- function(dm) {
   dm@options$grp.models <- list()
   dm@currentSimProg <- "groups"
   dm.raw <- dm
-  
+
   for (group in dm.getGroups(dm)) {
     grp.model <- generateGroupModel(dm.raw, group)
     grp.model <- dm.finalize(grp.model)
     dm@options$grp.models[[as.character(group)]] <- grp.model
   }
-  
+
   dm@finalized = TRUE
   dm
 }
@@ -293,17 +289,14 @@ dm.finalize <- function(dm) {
 # Getters & Setters for Jaatha
 #------------------------------------------------------------------------------
 dm.getParameters <- function(dm) {
-  checkType(dm,"dm")
   dm@parameters$name
 }
 
 dm.getNPar <- function(dm){
-  checkType(dm, "dm")
-  return(length(dm.getParameters(dm)))
+  length(dm.getParameters(dm))
 }
 
 dm.getParRanges <- function(dm){
-  #checkType(dm,"dm")
   par.ranges <- dm@parameters[ , c("lower.range","upper.range")]
   rownames(par.ranges) <- dm@parameters[ ,"name"]
   par.ranges
@@ -334,12 +327,12 @@ resetSumStats <- function(dm) {
 #------------------------------------------------------------------------------
 
 #' Create a basic demographic model
-#' 
+#'
 #' This function creates a basic empty demographic model, which
-#' is returned. Features like mutation, pop.source splits and 
+#' is returned. Features like mutation, pop.source splits and
 #' migration can be added afterwards.
 #'
-#' @param sample.sizes Number of haploid individuals/chromosomes that are sampled. If your model 
+#' @param sample.sizes Number of haploid individuals/chromosomes that are sampled. If your model
 #'            consists of multiple populations, this needs to be a vector
 #'            containing the sample sizes from each population.
 #' @param loci.num     Number of loci that will be simulated
@@ -360,17 +353,17 @@ dm.createDemographicModel <- function(sample.sizes, loci.num, seq.length=1000) {
 
 
 # Low level function for adding a locus
-addLocus <- function(dm, group=0, number=1, 
+addLocus <- function(dm, group=0, number=1,
                      name='', name_l='', name_r='',
-                     length_l=0, length_il=0, length_m=0, 
+                     length_l=0, length_il=0, length_m=0,
                      length_ir=0, length_r=0) {
   if (number > 1 & any(dm@loci[dm@loci$group == group, 'number'] != 1)) {
     stop("You can only have multiple loci in one group if 'number' is 1 for all")
   }
-  
+
   dm@loci <- rbind(dm@loci, data.frame(group=group,
-                                       number=number,  
-                                       name=name, 
+                                       number=number,
+                                       name=name,
                                        name_l=name_l,
                                        name_r=name_r,
                                        length_l=length_l,
@@ -378,7 +371,7 @@ addLocus <- function(dm, group=0, number=1,
                                        length_m=length_m,
                                        length_ir=length_ir,
                                        length_r=length_r))
-  
+
   invisible(dm)
 }
 
@@ -386,7 +379,7 @@ addLocus <- function(dm, group=0, number=1,
 #'
 #' @param dm The Demographic Model
 #' @param number The number of loci to add to the group.
-#' @param length The average length of the loci or the acctual of the locus 
+#' @param length The average length of the loci or the acctual of the locus
 #'               if just one is used.
 #' @param group The group for which we set the loci number
 #' @return The changed Demographic Model
@@ -395,11 +388,11 @@ addLocus <- function(dm, group=0, number=1,
 #' dm <- dm.createDemographicModel(c(25,25), 100)
 #' dm <- dm.addLocus(dm, number = 200, length = 250, group = 1)
 dm.addLocus <- function(dm, length, number = 1, group=0) {
-  checkType(dm, 'dm')
+  stopifnot(is.model(dm))
   if (!is.numeric(number)) stop("'number' needs to be numeric")
   if (!is.numeric(length)) stop("'length' needs to be numeric")
   if (!is.numeric(group)) stop("'group' needs to be numeric")
-  
+
   addLocus(dm, group=group, number=number, length_m=length)
 }
 
@@ -407,10 +400,10 @@ dm.addLocus <- function(dm, length, number = 1, group=0) {
 #' @param dm The Demographic Model
 #' @param locus_names A vector of 3 strings, giving the names for the loci.
 #'   The names are used for identifying the loci later (left, middle and right).
-#' @param locus_length An integer vector of length 3, giving the length of each 
+#' @param locus_length An integer vector of length 3, giving the length of each
 #'   of the three loci (left, middle and right).
 #' @param distance A vector of two, giving the distance between left and middle,
-#'   and middle an right locus, in basepairs. 
+#'   and middle an right locus, in basepairs.
 #' @param group The group to which to add the trio
 #' @return The extended demographic model
 #' @export
@@ -419,28 +412,28 @@ dm.addLocus <- function(dm, length, number = 1, group=0) {
 #' dm <- dm.addLocusTrio(dm, locus_names = c('Solyc00g00500.2',
 #'                                           'Solyc00g00520.1',
 #'                                           'Solyc00g00540.1'),
-#'                       locus_length=c(1250, 1017, 980), 
+#'                       locus_length=c(1250, 1017, 980),
 #'                       distance=c(257, 814))
-dm.addLocusTrio <- function(dm, locus_names=c(left='', middle='', right=''), 
-                            locus_length=c(left=1000, middle=1000, right=1000), 
+dm.addLocusTrio <- function(dm, locus_names=c(left='', middle='', right=''),
+                            locus_length=c(left=1000, middle=1000, right=1000),
                             distance=c(left_middle=500, middle_right=500),
                             group=1) {
-  
-  checkType(dm, 'dm')
+
+  stopifnot(is.model(dm))
   if (!is.character(locus_names)) stop("'name' needs to be numeric")
-  if (length(locus_names) != 3) stop("'name' needs to be a vector of three names")  
+  if (length(locus_names) != 3) stop("'name' needs to be a vector of three names")
   if (!is.numeric(locus_length)) stop("'locus_length' needs to be numeric")
-  if (length(locus_length) != 3) 
-    stop("'locus_length' needs to be a vector of three names")    
+  if (length(locus_length) != 3)
+    stop("'locus_length' needs to be a vector of three names")
   if (!is.numeric(group)) stop("'group' needs to be numeric")
-  
+
   if (nrow(searchFeature(dm, 'locus_trios', group = group)) == 0) {
     dm <- addFeature(dm, 'locus_trios', parameter = NA, group = group)
   }
-  
-  addLocus(dm, group=group, 
-           name_l = locus_names[1], 
-           name = locus_names[2], 
+
+  addLocus(dm, group=group,
+           name_l = locus_names[1],
+           name = locus_names[2],
            name_r = locus_names[3],
            length_l=locus_length[1],
            length_il=distance[1],
@@ -468,7 +461,7 @@ dm.setLociLength <- function(dm, length, group = 0) {
 #' Gets how many loci belong to a group of loci
 #'
 #' @param dm The Demographic Model
-#' @param group The group for which we get the number of loci. Defaults to 
+#' @param group The group for which we get the number of loci. Defaults to
 #'              the first group.
 #' @return The number of loci in the group
 #' @export
@@ -511,10 +504,10 @@ dm.getLociLengthMatrix <- function(dm, group=1) {
   # Select the rows of the group
   rows <- which(dm@loci$group == group)
   if (sum(rows) == 0) rows <- which(dm@loci$group == 0)
-  
+
   # Repeat the row if number > 1
   if (length(rows) == 1) rows <- rep(rows, dm@loci$number[rows])
-  
+
   # Return the matrix
   llm <- dm@loci[rows, 6:10, drop = FALSE]
   row.names(llm) <- NULL
@@ -545,20 +538,20 @@ dm.getSampleSize <- function(dm) {
 #-------------------------------------------------------------------
 # dm.addSizeChange
 #-------------------------------------------------------------------
-#' Adds an instantaneous change of the population size of one 
+#' Adds an instantaneous change of the population size of one
 #' population to a model.
 #'
-#' This function changes the effective population size of one 
+#' This function changes the effective population size of one
 #' population. The change is performed at a given time point
-#' ('at.time') and applies to the time interval farther into 
+#' ('at.time') and applies to the time interval farther into
 #' the past from this point. The population size is set to a
 #' fraction of N0, the present day size of population one.
 #'
 #' If you want to add a slow, continuous change over some time,
 #' then use the \link{dm.addGrowth} function.
-#' 
+#'
 #' @param dm  The demographic model to which the size change should be added.
-#' @param min.size.factor  If you want to estimate the size factor, this will be 
+#' @param min.size.factor  If you want to estimate the size factor, this will be
 #'            used as the smallest possible value.
 #' @param max.size.factor  Same as min.size.factor, but the largest possible value.
 #' @param population The number of the population in which the spilt
@@ -566,7 +559,7 @@ dm.getSampleSize <- function(dm) {
 #' @param parameter  Instead of creating a new parameter, you can also
 #'            set the mutation rate to an expression based on existing
 #'            parameters. For example setting this to "tau" will use
-#'            an parameter with name tau that you have previously 
+#'            an parameter with name tau that you have previously
 #'            created. You can also use R expression here, i.e. "2*tau"
 #'            or "5*M+2*tau" (if M is another parameter) will also
 #'            work (also this does not make much sense).
@@ -581,9 +574,6 @@ dm.addSizeChange <- function(dm, min.size.factor, max.size.factor,
                              parameter="q",
                              population, at.time="0") {
 
-  checkType(population, c("num",  "s"), T, F)
-  checkType(at.time,    c("char", "s"), T, F)
-
   dm <- addFeature(dm, "size.change", parameter, min.size.factor, max.size.factor,
                    population, NA, at.time)
 
@@ -594,24 +584,24 @@ dm.addSizeChange <- function(dm, min.size.factor, max.size.factor,
 #-------------------------------------------------------------------
 # dm.addGrowth
 #-------------------------------------------------------------------
-#' Adds an growth or decline of the population size of one 
+#' Adds an growth or decline of the population size of one
 #' population to a model.
 #'
-#' This function changes the growth factor of a population at given 
-#' point in time ('at.time'). This factor than applies to the time 
-#' interval farther into the past from this point. 
+#' This function changes the growth factor of a population at given
+#' point in time ('at.time'). This factor than applies to the time
+#' interval farther into the past from this point.
 #'
 #' The population size changes by factor exp(-alpha*t), where alpha
-#' is the growth parameter and t is the time since the growth has 
-#' started. Hence, for positive alpha, the population will 'decline 
+#' is the growth parameter and t is the time since the growth has
+#' started. Hence, for positive alpha, the population will 'decline
 #' backwards in time' or grow forwards in time. Similar, will decline
 #' in forwards time for a negative value of alpha.
 #'
 #' If you want to add an instantaneous change of the population size,
 #' then use the \link{dm.addSizeChange} function.
-#' 
+#'
 #' @param dm  The demographic model to which the size change should be added.
-#' @param min.growth.rate  If you want to estimate the growth rate, this will be 
+#' @param min.growth.rate  If you want to estimate the growth rate, this will be
 #'            used as the smallest possible value.
 #' @param max.growth.rate  Same as min.growth.rate, but the largest possible value.
 #' @param population The number of the population in which the spilt
@@ -619,7 +609,7 @@ dm.addSizeChange <- function(dm, min.size.factor, max.size.factor,
 #' @param parameter  Instead of creating a new parameter, you can also
 #'            set the mutation rate to an expression based on existing
 #'            parameters. For example setting this to "alpha" will use
-#'            an parameter with name tau that you have previously 
+#'            an parameter with name tau that you have previously
 #'            created. You can also use R expression here, i.e. "2*alpha"
 #'            or "5*M+2*alpha" (if M is another parameter) will also
 #'            work (also the latter does not make much sense).
@@ -630,11 +620,8 @@ dm.addSizeChange <- function(dm, min.size.factor, max.size.factor,
 #' # A model with one smaller population
 #' dm <- dm.createDemographicModel(c(20,37), 88)
 #' dm <- dm.addGrowth(dm, 0.1, 2, population=2, at.time="0")
-dm.addGrowth <- function(dm, min.growth.rate=NA, max.growth.rate=NA, 
+dm.addGrowth <- function(dm, min.growth.rate=NA, max.growth.rate=NA,
                          parameter="alpha", population, at.time="0") {
-
-  checkType(population, c("num",  "s"), T, F)
-  checkType(at.time,    c("char", "s"), T, F)
 
   dm <- addFeature(dm, "growth", parameter, min.growth.rate, max.growth.rate,
                    population, NA, at.time)
@@ -647,9 +634,9 @@ dm.addGrowth <- function(dm, min.growth.rate=NA, max.growth.rate=NA,
 #-------------------------------------------------------------------
 #' Defines what mutation model is used for simulations
 #'
-#' As default, we simulate mutation using the Infinite Sites Model. 
+#' As default, we simulate mutation using the Infinite Sites Model.
 #' Using the function, you can change it either to the Hasegawa, Kishino and
-#' Yano (HKY), to the Felsenstein and Churchill 96 (F84) or to the Generalised 
+#' Yano (HKY), to the Felsenstein and Churchill 96 (F84) or to the Generalised
 #' time reversible (GTR) model. This requires that seq-gen is installed on our system.
 #'
 #' The HKY and F84 models use the the arguments 'base.frequencies' and
@@ -661,8 +648,8 @@ dm.addGrowth <- function(dm, min.growth.rate=NA, max.growth.rate=NA,
 #'                   0.5, which means that all amino acid substitutions are
 #'                   equally likely. In this case, the HKY model is identical to
 #'                   the Felsenstein 81 model.
-#' @param base.frequencies The equilibrium frequencies of the four bases. 
-#'                   Must be a numeric vector of length four. 
+#' @param base.frequencies The equilibrium frequencies of the four bases.
+#'                   Must be a numeric vector of length four.
 #'                   Order is A, C, G, T.
 #' @param gtr.rates  The rates for the amino acid substitutions. Must be a
 #'                   numeric vector of length six. Order: A->C, A->G, A->T, C->G, C->T, G->T.
@@ -674,18 +661,14 @@ dm.addGrowth <- function(dm, min.growth.rate=NA, max.growth.rate=NA,
 #' dm.hky <- dm.setMutationModel(dm, "HKY", c(0.2, 0.2, 0.3, 0.3), 2)
 #' dm.f81 <- dm.setMutationModel(dm, "F84", c(0.3, 0.2, 0.3, 0.2), 2)
 #' dm.gtr <- dm.setMutationModel(dm, "GTR", gtr.rates=c(0.2, 0.2, 0.1, 0.1, 0.1, 0.2))
-dm.setMutationModel <- function(dm, mutation.model, 
-                                base.frequencies, tstv.ratio, 
+dm.setMutationModel <- function(dm, mutation.model,
+                                base.frequencies, tstv.ratio,
                                 gtr.rates) {
 
-  checkType(mutation.model, c("char", "s"), T, F)
-  checkType(base.frequencies, c("num"), F, F)
-  checkType(tstv.ratio, c("num", "s"), F, F)
-  checkType(gtr.rates, c("num"), F, F)
 
-  if (! mutation.model %in% sg.mutation.models) 
+  if (! mutation.model %in% sg.mutation.models)
     stop("Possible mutation models: ", paste(sg.mutation.models, collapse=" "))
-  
+
   dm <- addFeature(dm, "mutation.model", mutation.model)
 
   if ( !missing(tstv.ratio) ) {
@@ -695,9 +678,9 @@ dm.setMutationModel <- function(dm, mutation.model,
   }
 
   if ( !missing(base.frequencies) ) {
-    if ( length(base.frequencies) != 4 ) 
+    if ( length(base.frequencies) != 4 )
         stop("You must enter frequencies for all 4 bases")
-    if (!mutation.model %in% c("HKY", "F84")) 
+    if (!mutation.model %in% c("HKY", "F84"))
       stop("This mutation model does not support base frequencies")
 
     dm <- addFeature(dm, "base.freq.A", base.frequencies[1])
@@ -707,9 +690,9 @@ dm.setMutationModel <- function(dm, mutation.model,
   }
 
   if ( !missing(gtr.rates) ) {
-    if ( length(gtr.rates) != 6 ) 
+    if ( length(gtr.rates) != 6 )
         stop("You must enter rates for all 6 posible substitutions")
-    if (!mutation.model %in% c("GTR")) 
+    if (!mutation.model %in% c("GTR"))
       stop("You can specify gtr.rates only with the GTR model")
 
     dm <- addFeature(dm, "gtr.rate.1", gtr.rates[1])
@@ -727,15 +710,15 @@ dm.setMutationModel <- function(dm, mutation.model,
 #-------------------------------------------------------------------
 # dm.addMutationRateHeterogenity
 #-------------------------------------------------------------------
-#' Allows the mutation rate on different sites within one locus to 
+#' Allows the mutation rate on different sites within one locus to
 #' vary according to a Gamma Distribution.
 #'
-#' This function adds a Gamma distributed rate heterogeneity as implemented 
+#' This function adds a Gamma distributed rate heterogeneity as implemented
 #' in 'seq-gen' to the model.
 #'
 #' "The [...] model of rate heterogeneity assigns different rates to different
 #' sites according to a gamma distribution (Yang, 1993). The distribution is scaled
-#' such that the mean rate for all the sites is 1 but 
+#' such that the mean rate for all the sites is 1 but
 #' the user must supply a parameter which describes its shape. A low value for this
 #' parameter (<1.0) simulates a large degree of site-specific rate heterogeneity
 #' and as this value increases the simulated data becomes more rate-homogeneous.
@@ -747,10 +730,10 @@ dm.setMutationModel <- function(dm, mutation.model,
 #' [From the seq-gen homepage http://bioweb2.pasteur.fr/docs/seq-gen ]
 #'
 #' The Parameter in this text will be referred to as 'alpha'. Simulation a model
-#' with rate heterogeneity requires that 'seq-gen' is installed on your system. 
-#' 
+#' with rate heterogeneity requires that 'seq-gen' is installed on your system.
+#'
 #' @param dm  The demographic model to which the rate heterogeneity should be added.
-#' @param min.alpha  If you want to estimate the rate heterogeneity, this will be 
+#' @param min.alpha  If you want to estimate the rate heterogeneity, this will be
 #'            used as the smallest possible value.
 #' @param max.alpha  Same as min.growth.rate, but the largest possible value.
 #' @param categories.number If this is set, a fixed number of categories will be
@@ -759,7 +742,7 @@ dm.setMutationModel <- function(dm, mutation.model,
 #' @param parameter  Instead of creating a new parameter, you can also
 #'            set the mutation rate to an expression based on existing
 #'            parameters. For example setting this to "alpha" will use
-#'            a parameter with name alpha that you have previously 
+#'            a parameter with name alpha that you have previously
 #'            created. You can also use R expression here, i.e. "2*alpha"
 #'            or "5*M+2*alpha" (if M is another parameter) will also
 #'            work (also the latter does not make much sense).
@@ -770,7 +753,7 @@ dm.setMutationModel <- function(dm, mutation.model,
 #' dm <- dm.createDemographicModel(c(20,37), 88)
 #' dm <- dm.setMutationModel(dm, "HKY")
 #' dm <- dm.addMutationRateHeterogenity(dm, 0.1, 5, parameter="alpha")
-dm.addMutationRateHeterogenity <- 
+dm.addMutationRateHeterogenity <-
   function(dm, min.alpha, max.alpha, parameter="alpha", categories.number) {
 
   dm <- addFeature(dm, "gamma.rate", parameter, min.alpha, max.alpha, NA, NA, NA)
@@ -789,12 +772,12 @@ dm.addMutationRateHeterogenity <-
 #-------------------------------------------------------------------
 #' Adds an outgroup to a demographic model
 #'
-#' This function adds an outgroup consisting of one individual to a 
+#' This function adds an outgroup consisting of one individual to a
 #' demographic model. The outgroup consists of one individual.
 #' An outgroup is required for a finite sites analysis.
 #'
 #' @param dm The demographic model to which we add the outgroup
-#' @param separation_time The time point at which the outgroup splits 
+#' @param separation_time The time point at which the outgroup splits
 #'           from the ancestral population. This can be an absolute value
 #'           (e.g. 10) or relative to another time points (e.g. '5*t_split_1').
 #' @param sample_size The number of individuals in the group
@@ -804,22 +787,22 @@ dm.addMutationRateHeterogenity <-
 #' @export
 dm.addOutgroup <- function(dm, separation_time, sample_size = 1, anc_pop = 1) {
   pop <- max(na.omit(dm@features$pop.source)) + 1
-  dm <- addFeature(dm, "sample", as.character(sample_size), 
+  dm <- addFeature(dm, "sample", as.character(sample_size),
                      pop.source=pop, group=0, time.point='0')
   dm <- dm.addSpeciationEvent(dm, in.pop=anc_pop, to.pop=pop,
                               time.point=separation_time)
-  dm <- addFeature(dm, "outgroup",sample_size, 
+  dm <- addFeature(dm, "outgroup",sample_size,
                    pop.source = anc_pop, pop.sink = pop)
   dm
 }
 
 dm.getOutgroupSize <- function(dm) {
   as.integer(searchFeature(dm, 'outgroup')$parameter)
-} 
+}
 
 
 #' Adds positiv selection to a model
-#' 
+#'
 #' @inheritParams dm.addMutation
 #' @param min.strength Minimal strength of selection
 #' @param max.strength Maximal strength of selection
@@ -832,8 +815,6 @@ dm.addPositiveSelection <- function(dm, min.strength=NA, max.strength=NA,
                          parameter='s', variance = 0, fraction.neutral = 0,
                          population, at.time, group=0) {
 
-  checkType(population, c("num",  "s"), T, F)
-  checkType(at.time,    c("char", "s"), T, F)
 
   dm <- addFeature(dm, "pos.selection", parameter, min.strength, max.strength,
                    population, NA, at.time, group,
@@ -844,7 +825,7 @@ dm.addPositiveSelection <- function(dm, min.strength=NA, max.strength=NA,
 
 
 #' Adds balancing selection to a model
-#' 
+#'
 #' @inheritParams dm.addMutation
 #' @param min.strength Minimal strength of selection
 #' @param max.strength Maximal strength of selection
@@ -856,14 +837,12 @@ dm.addPositiveSelection <- function(dm, min.strength=NA, max.strength=NA,
 dm.addBalancingSelection <- function(dm, min.strength=NA, max.strength=NA,
                                     parameter='s', variance = 0, fraction.neutral = 0,
                                     population, at.time, group=0) {
-  
-  checkType(population, c("num",  "s"), T, F)
-  checkType(at.time,    c("char", "s"), T, F)
-  
+
+
   dm <- addFeature(dm, "bal.selection", parameter, min.strength, max.strength,
                    population, NA, at.time, group,
                    variance = variance, zero.inflation = fraction.neutral)
-  
+
   dm
 }
 
@@ -873,13 +852,13 @@ dm.addBalancingSelection <- function(dm, min.strength=NA, max.strength=NA,
 # dm.simSumStats
 #-------------------------------------------------------------------
 #' Simulates data according to a demographic model
-#' 
+#'
 #' @param dm The demographic model according to which the simulations should be done
-#' @param parameters A vector of parameters which should be used for the simulations. 
+#' @param parameters A vector of parameters which should be used for the simulations.
 #'           If a matrix is given, a simulation for each row of the matrix will be performed
 #' @param sum.stats A vector with names of the summary statistics to simulate,
 #'           or "all" for simulating all possible statistics.
-#' @return A matrix where each row is the vector of summary statistics for 
+#' @return A matrix where each row is the vector of summary statistics for
 #'         the parameters in the same row of the "parameter" matrix
 #' @export
 #'
@@ -889,15 +868,15 @@ dm.addBalancingSelection <- function(dm, min.strength=NA, max.strength=NA,
 #' dm <- dm.addMutation(dm,1,20)
 #' dm.simSumStats(dm,c(1,10))
 dm.simSumStats <- function(dm, parameters, sum.stats=c("all")) {
-  checkType(dm, "dm")
+  stopifnot(is.model(dm))
   checkParInRange(dm, parameters)
-  
+
   if (!dm@finalized) dm = dm.finalize(dm)
 
   if (dm@currentSimProg != "groups") {
     return(getSimProgram(dm@currentSimProg)$sim_func(dm, parameters))
-  } 
-    
+  }
+
   sum.stats <- list(pars=parameters)
   for (group in dm.getGroups(dm)) {
     dm.grp <- dm@options$grp.models[[as.character(group)]]
@@ -908,34 +887,34 @@ dm.simSumStats <- function(dm, parameters, sum.stats=c("all")) {
       sum.stats[[name]] <- sum.stats.grp[[i]]
     }
   }
-  
+
   sum.stats
 }
 
 
 generateGroupModel <- function(dm, group) {
-  if (all(dm@features$group == 0) & 
+  if (all(dm@features$group == 0) &
       all(dm@sum.stats$group == 0) &
       all(dm@loci$group == 0) ) return(dm)
-  
-  if (!is.null(dm@options$grp.models[[as.character(group)]])) { 
-    return(dm@options$grp.models[[as.character(group)]]) 
+
+  if (!is.null(dm@options$grp.models[[as.character(group)]])) {
+    return(dm@options$grp.models[[as.character(group)]])
   }
-  
+
   # Features
   dm@features <- searchFeature(dm, group = group)
   dm@features$group <- 0
-  
+
   # Sum.Stats
   dm@sum.stats <- dm@sum.stats[dm@sum.stats$group %in% c(0, group), ]
   dm@sum.stats$group <- 0
-  
+
   # Loci
   loci <- dm@loci[dm@loci$group == group, , drop=FALSE]
   if (nrow(loci) > 0) dm@loci <- loci
   else dm@loci <- dm@loci[dm@loci$group == 0, , drop=FALSE]
   dm@loci$group <- 0
-  
+
   # Options
   group.name <- paste("group", group, sep='.')
   if (!is.null(dm@options[[group.name]])) {
@@ -943,7 +922,7 @@ generateGroupModel <- function(dm, group) {
       dm@options[[option]] <- dm@options[[group.name]][[option]]
     }
   }
-  
+
   dm
 }
 
@@ -955,32 +934,32 @@ searchFeature <- function(dm, type=NULL, parameter=NULL, pop.source=NULL,
   if (!is.null(type)) mask <- mask & dm@features$type %in% type
 
   if (!is.null(parameter)) {
-    if (is.na(parameter)) { 
-      mask <- mask & is.na(dm@features$parameter) 
+    if (is.na(parameter)) {
+      mask <- mask & is.na(dm@features$parameter)
     } else {
-      mask <- mask & dm@features$parameter %in% parameter 
+      mask <- mask & dm@features$parameter %in% parameter
     }
   }
 
   if (!is.null(pop.source)) {
-    if (is.na(pop.source)) { 
-      mask <- mask & is.na(dm@features$pop.source) 
+    if (is.na(pop.source)) {
+      mask <- mask & is.na(dm@features$pop.source)
     } else {
       mask <- mask & dm@features$pop.source %in% pop.source
     }
   }
 
   if (!is.null(pop.sink)) {
-    if (is.na(pop.sink)) { 
-      mask <- mask & is.na(dm@features$pop.sink) 
+    if (is.na(pop.sink)) {
+      mask <- mask & is.na(dm@features$pop.sink)
     } else {
       mask <- mask & dm@features$pop.sink %in% pop.sink
     }
   }
 
   if (!is.null(time.point)) {
-    if (is.na(time.point)) { 
-      mask <- mask & is.na(dm@features$time.point) 
+    if (is.na(time.point)) {
+      mask <- mask & is.na(dm@features$time.point)
     } else {
       mask <- mask & dm@features$time.point %in% time.point
     }
@@ -990,7 +969,7 @@ searchFeature <- function(dm, type=NULL, parameter=NULL, pop.source=NULL,
     if (group == 0) mask <- mask & dm@features$group == 0
     else {
       mask <- mask & dm@features$group %in% c(0, group)
-      
+
       # Check if values for the default group are overwritten in the focal group
       grp_0 <- dm@features$group == 0
       overwritten <- grp_0[mask]
@@ -998,12 +977,12 @@ searchFeature <- function(dm, type=NULL, parameter=NULL, pop.source=NULL,
         duplicats <- searchFeature(dm, type=dm@features$type[mask][i],
                                    pop.source=dm@features$pop.source[mask][i],
                                    pop.sink=dm@features$pop.sink[mask][i])
-        if (sum(duplicats$group == group) == 0) overwritten[i] <- FALSE  
+        if (sum(duplicats$group == group) == 0) overwritten[i] <- FALSE
       }
       mask[mask] <- !overwritten
     }
   }
-  
+
   return(dm@features[mask, ])
 }
 
@@ -1011,20 +990,20 @@ searchFeature <- function(dm, type=NULL, parameter=NULL, pop.source=NULL,
 # dm.getGroups
 #-------------------------------------------------------------------
 #' Returns the groups currently in the model
-#' 
+#'
 #' @param dm The demographic model
 #' @return The groups in the model.
 #' @export
 dm.getGroups <- function(dm) {
-  if (all(c(dm@features$group == 0, 
-            dm@sum.stats$group == 0, 
+  if (all(c(dm@features$group == 0,
+            dm@sum.stats$group == 0,
             dm@loci$group == 0))) return(1)
 
-  groups <- sort(unique(c(1, 
-                          dm@features$group, 
-                          dm@sum.stats$group, 
+  groups <- sort(unique(c(1,
+                          dm@features$group,
+                          dm@sum.stats$group,
                           dm@loci$group)))
-  
+
   return(groups[groups != 0])
 }
 
@@ -1038,7 +1017,7 @@ dm.getSummaryStatistics <- function(dm, group = 1, pop) {
 
 scaleDemographicModel <- function(dm, scaling.factor) {
   for (group in unique(dm@loci$group)) {
-    dm <- dm.setLociNumber(dm, 
+    dm <- dm.setLociNumber(dm,
                      round(dm.getLociNumber(dm, group) / scaling.factor),
                      group)
   }

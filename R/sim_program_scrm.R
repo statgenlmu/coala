@@ -1,6 +1,6 @@
 # --------------------------------------------------------------
 # Uses scrm to simulate demographic models
-# 
+#
 # Authors:  Lisha Mathew & Paul R. Staab
 # Licence:  GPLv3 or later
 # --------------------------------------------------------------
@@ -12,15 +12,13 @@ scrm_features  <- c("sample", "loci.number", "loci.length",
 scrm_sum_stats <- c("jsfs", "seg.sites", "file", "trees")
 
 scrm_simulate <- function(dm, parameters) {
-  checkType(dm, "dm")
-  checkType(parameters, "num")
 
   if (length(parameters) != dm.getNPar(dm)) stop("Wrong number of parameters!")
 
   args <- paste(sum(dm.getSampleSize(dm)),
                 dm.getLociNumber(dm),
                 paste(generateMsOptions(dm, parameters), collapse = ' '))
-  
+
   if ('file' %in% dm.getSummaryStatistics(dm)) {
     file <- getTempFile('scrm')
     sum_stats <- scrm(args, file)

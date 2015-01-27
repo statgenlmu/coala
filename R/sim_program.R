@@ -1,8 +1,8 @@
 #---------------------------------------------------------------
 # SimProgram.R
-# 
-# 
-# Author:   Paul R. Staab & Lisha Naduvilezhath 
+#
+#
+# Author:   Paul R. Staab & Lisha Naduvilezhath
 # Email:    staab (at) bio.lmu.de
 # Date:     2012-10-05
 # Licence:  GPLv3 or later
@@ -19,14 +19,6 @@ createSimProgram <- function(name, possible_features, possible_sum_stats,
                              print_cmd_func=NULL,
                              priority=50) {
 
-  # Basic sanity check
-  checkType(name, c('char', 'single'))
-  checkType(possible_features, "char")
-  checkType(possible_sum_stats, "char")
-  checkType(sim_func, "fun")
-  checkType(finalization_func, "fun", F)
-  checkType(print_cmd_func, "fun", F)
- 
   # Create the simulation program
   .jaatha$sim_progs[[name]] = list(name=name,
                                    possible_features=possible_features,

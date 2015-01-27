@@ -1,7 +1,7 @@
 # --------------------------------------------------------------
-# Translates an demographic model to an ms command and 
+# Translates an demographic model to an ms command and
 # executes the simulation.
-# 
+#
 # Authors:  Lisha Mathew & Paul R. Staab
 # Licence:  GPLv3 or later
 # --------------------------------------------------------------
@@ -18,7 +18,7 @@ possible.sum.stats <- c("jsfs", "trees", "seg.sites", "file")
 generateMsOptionsCommand <- function(dm) {
   nSample <- dm.getSampleSize(dm)
   cmd <- c('c(')
-  cmd <- c(cmd,'"-I"', ",", length(nSample), ',', 
+  cmd <- c(cmd,'"-I"', ",", length(nSample), ',',
            paste(nSample, collapse=","), ',')
 
   for (i in 1:dim(dm@features)[1] ) {
@@ -40,11 +40,11 @@ generateMsOptionsCommand <- function(dm) {
                feat['parameter'], ',')
 
     else if (type == "migration_sym")
-      cmd <- c(cmd, '"-eM"', ',', 
+      cmd <- c(cmd, '"-eM"', ',',
                feat['time.point'], ',',
                feat['parameter'], ',')
-    
-    else if (type == "recombination") 
+
+    else if (type == "recombination")
       cmd <- c(cmd, '"-r"', ',', feat['parameter'], ',', dm.getLociLength(dm), ',')
 
     else if (type == "size.change"){
@@ -57,7 +57,7 @@ generateMsOptionsCommand <- function(dm) {
                feat["pop.source"], ',', feat["parameter"], ',')
       }
 
-    else if (type %in% c("sample", "loci.number", "loci.length", 
+    else if (type %in% c("sample", "loci.number", "loci.length",
                          "pos.selection", "bal.selection",
                          "inter_locus_variation")) {}
     else stop("Unknown feature:", type)
@@ -108,8 +108,7 @@ printMsCommand <- function(dm) {
 }
 
 msSingleSimFunc <- function(dm, parameters) {
-  checkType(dm, "dm")
-  checkType(parameters, "num")
+  stopifnot(all(is.numeric(parameters)))
   if (length(parameters) != dm.getNPar(dm)) stop("Wrong number of parameters!")
 
   # Run all simulation in with one ms call if they loci are identical,
@@ -121,16 +120,16 @@ msSingleSimFunc <- function(dm, parameters) {
     sim_reps <- 1
     sim_loci <- dm.getLociNumber(dm)
   }
-  
+
   # Do the actuall simulation
   ms.files <- lapply(sim_reps, function(locus) {
     ms.options <- generateMsOptions(dm, parameters, locus)
     ms.file <- getTempFile('ms')
-    ms(sum(dm.getSampleSize(dm)), sim_loci, 
+    ms(sum(dm.getSampleSize(dm)), sim_loci,
        unlist(strsplit(ms.options, " ")), ms.file)
     ms.file
   })
-  
+
   # Parse & return the simulation output
   generateSumStats(ms.files, 'ms', parameters, dm)
 }
@@ -141,5 +140,5 @@ finalizeMs <- function(dm) {
 }
 
 #' @include dm_sim_program.R
-createSimProgram("ms", possible.features, possible.sum.stats, 
+createSimProgram("ms", possible.features, possible.sum.stats,
                  msSingleSimFunc, finalizeMs, printMsCommand, 100)
