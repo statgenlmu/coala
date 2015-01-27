@@ -21,6 +21,7 @@ Suggests:
 LinkingTo: Rcpp
 Collate:
     'RcppExports.R'
+    'coalsimr.R'
     'feature.R'
     'feature_growth.R'
     'feature_migration.R'
@@ -38,3 +39,4 @@ Collate:
     'sim_program_msms.R'
     'sim_program_scrm.R'
     'sim_program_seqgen.R'
+    'sum_stat_generate.R'
