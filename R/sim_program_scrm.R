@@ -11,6 +11,7 @@ scrm_features  <- c("sample", "loci.number", "loci.length",
 
 scrm_sum_stats <- c("jsfs", "seg.sites", "file", "trees")
 
+#' @importFrom scrm scrm
 scrm_simulate <- function(dm, parameters) {
 
   if (length(parameters) != dm.getNPar(dm)) stop("Wrong number of parameters!")
@@ -20,7 +21,7 @@ scrm_simulate <- function(dm, parameters) {
                 paste(generateMsOptions(dm, parameters), collapse = ' '))
 
   if ('file' %in% dm.getSummaryStatistics(dm)) {
-    file <- getTempFile('scrm')
+    file <- tempfile('csr_scrm')
     sum_stats <- scrm(args, file)
     return(generateSumStats(file, 'ms', parameters, dm))
   }

@@ -107,6 +107,7 @@ printMsCommand <- function(dm) {
   .print(cmd)
 }
 
+#' @importFrom phyclust ms
 msSingleSimFunc <- function(dm, parameters) {
   stopifnot(all(is.numeric(parameters)))
   if (length(parameters) != dm.getNPar(dm)) stop("Wrong number of parameters!")
@@ -124,7 +125,7 @@ msSingleSimFunc <- function(dm, parameters) {
   # Do the actuall simulation
   ms.files <- lapply(sim_reps, function(locus) {
     ms.options <- generateMsOptions(dm, parameters, locus)
-    ms.file <- getTempFile('ms')
+    ms.file <- tempfile('csr_ms')
     ms(sum(dm.getSampleSize(dm)), sim_loci,
        unlist(strsplit(ms.options, " ")), ms.file)
     ms.file

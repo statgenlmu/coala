@@ -92,7 +92,7 @@ callSeqgen <- function(opts, ms_files) {
     if(!file.exists(ms_files[i])) stop("ms file not found")
     if(file.info(ms_files[i])$size == 0 ) stop("ms output is empty")
 
-    seqgen_file <- getTempFile("seqgen")
+    seqgen_file <- tempfile('csr_seqgen')
     cmd <- paste(opts[i], "<", ms_files[i], ">", seqgen_file)
 
     # Do the acctual simulation
@@ -237,7 +237,7 @@ seqgenSingleSimFunc <- function(dm, parameters) {
     sum_stats_ms <- dm.simSumStats(tree.model, parameters)
     tree_files <- parseTrees(sum_stats_ms[['file']][[1]],
                              locus_length[locus,],
-                             getTempFile)
+                             tempfile)
 
     # Call seq-gen to distribute mutations
     seqgen.options <- generateSeqgenOptions(dm, parameters, locus,

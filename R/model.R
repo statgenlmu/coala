@@ -427,9 +427,9 @@ dm.addLocusTrio <- function(dm, locus_names=c(left='', middle='', right=''),
     stop("'locus_length' needs to be a vector of three names")
   if (!is.numeric(group)) stop("'group' needs to be numeric")
 
-  if (nrow(searchFeature(dm, 'locus_trios', group = group)) == 0) {
-    dm <- addFeature(dm, 'locus_trios', parameter = NA, group = group)
-  }
+  #if (nrow(searchFeature(dm, 'locus_trios', group = group)) == 0) {
+  #  dm <- addFeature(dm, 'locus_trios', parameter = NA, group = group)
+  #}
 
   addLocus(dm, group=group,
            name_l = locus_names[1],
@@ -535,235 +535,11 @@ dm.getSampleSize <- function(dm) {
 
 
 
-#-------------------------------------------------------------------
-# dm.addSizeChange
-#-------------------------------------------------------------------
-#' Adds an instantaneous change of the population size of one
-#' population to a model.
-#'
-#' This function changes the effective population size of one
-#' population. The change is performed at a given time point
-#' ('at.time') and applies to the time interval farther into
-#' the past from this point. The population size is set to a
-#' fraction of N0, the present day size of population one.
-#'
-#' If you want to add a slow, continuous change over some time,
-#' then use the \link{dm.addGrowth} function.
-#'
-#' @param dm  The demographic model to which the size change should be added.
-#' @param min.size.factor  If you want to estimate the size factor, this will be
-#'            used as the smallest possible value.
-#' @param max.size.factor  Same as min.size.factor, but the largest possible value.
-#' @param population The number of the population in which the spilt
-#'            occurs. See \link{dm.addSpeciationEvent} for more information.
-#' @param parameter  Instead of creating a new parameter, you can also
-#'            set the mutation rate to an expression based on existing
-#'            parameters. For example setting this to "tau" will use
-#'            an parameter with name tau that you have previously
-#'            created. You can also use R expression here, i.e. "2*tau"
-#'            or "5*M+2*tau" (if M is another parameter) will also
-#'            work (also this does not make much sense).
-#' @param at.time The time point at which the size changes.
-#' @return    The demographic model with a size change.
-#' @export
-#' @examples
-#' # A model with one smaller population
-#' dm <- dm.createDemographicModel(c(20,37), 88)
-#' dm <- dm.addSizeChange(dm, 0.1, 1, population=2, at.time="0")
-dm.addSizeChange <- function(dm, min.size.factor, max.size.factor,
-                             parameter="q",
-                             population, at.time="0") {
-
-  dm <- addFeature(dm, "size.change", parameter, min.size.factor, max.size.factor,
-                   population, NA, at.time)
-
-  dm
-}
 
 
-#-------------------------------------------------------------------
-# dm.addGrowth
-#-------------------------------------------------------------------
-#' Adds an growth or decline of the population size of one
-#' population to a model.
-#'
-#' This function changes the growth factor of a population at given
-#' point in time ('at.time'). This factor than applies to the time
-#' interval farther into the past from this point.
-#'
-#' The population size changes by factor exp(-alpha*t), where alpha
-#' is the growth parameter and t is the time since the growth has
-#' started. Hence, for positive alpha, the population will 'decline
-#' backwards in time' or grow forwards in time. Similar, will decline
-#' in forwards time for a negative value of alpha.
-#'
-#' If you want to add an instantaneous change of the population size,
-#' then use the \link{dm.addSizeChange} function.
-#'
-#' @param dm  The demographic model to which the size change should be added.
-#' @param min.growth.rate  If you want to estimate the growth rate, this will be
-#'            used as the smallest possible value.
-#' @param max.growth.rate  Same as min.growth.rate, but the largest possible value.
-#' @param population The number of the population in which the spilt
-#'            occurs. See \link{dm.addSpeciationEvent} for more information.
-#' @param parameter  Instead of creating a new parameter, you can also
-#'            set the mutation rate to an expression based on existing
-#'            parameters. For example setting this to "alpha" will use
-#'            an parameter with name tau that you have previously
-#'            created. You can also use R expression here, i.e. "2*alpha"
-#'            or "5*M+2*alpha" (if M is another parameter) will also
-#'            work (also the latter does not make much sense).
-#' @param at.time The time point at which the size changes.
-#' @return    The demographic model with a size change.
-#' @export
-#' @examples
-#' # A model with one smaller population
-#' dm <- dm.createDemographicModel(c(20,37), 88)
-#' dm <- dm.addGrowth(dm, 0.1, 2, population=2, at.time="0")
-dm.addGrowth <- function(dm, min.growth.rate=NA, max.growth.rate=NA,
-                         parameter="alpha", population, at.time="0") {
-
-  dm <- addFeature(dm, "growth", parameter, min.growth.rate, max.growth.rate,
-                   population, NA, at.time)
-  dm
-}
 
 
-#-------------------------------------------------------------------
-# dm.setMutationModel
-#-------------------------------------------------------------------
-#' Defines what mutation model is used for simulations
-#'
-#' As default, we simulate mutation using the Infinite Sites Model.
-#' Using the function, you can change it either to the Hasegawa, Kishino and
-#' Yano (HKY), to the Felsenstein and Churchill 96 (F84) or to the Generalised
-#' time reversible (GTR) model. This requires that seq-gen is installed on our system.
-#'
-#' The HKY and F84 models use the the arguments 'base.frequencies' and
-#' 'tstv.ratio'. The GTR model uses 'gtr.rates'.
-#'
-#' @param dm  The demographic model for which the mutation model will be set.
-#' @param mutation.model  The mutation model you want to use. Can be HKY, F84 or GTR.
-#' @param tstv.ratio The ratio of transitions to transversions. The default is
-#'                   0.5, which means that all amino acid substitutions are
-#'                   equally likely. In this case, the HKY model is identical to
-#'                   the Felsenstein 81 model.
-#' @param base.frequencies The equilibrium frequencies of the four bases.
-#'                   Must be a numeric vector of length four.
-#'                   Order is A, C, G, T.
-#' @param gtr.rates  The rates for the amino acid substitutions. Must be a
-#'                   numeric vector of length six. Order: A->C, A->G, A->T, C->G, C->T, G->T.
-#' @return    The demographic model with the new mutation model.
-#' @export
-#' @examples
-#' dm <- dm.createDemographicModel(10:11, 10, 100)
-#' dm <- dm.addOutgroup(dm, "2*tau")
-#' dm.hky <- dm.setMutationModel(dm, "HKY", c(0.2, 0.2, 0.3, 0.3), 2)
-#' dm.f81 <- dm.setMutationModel(dm, "F84", c(0.3, 0.2, 0.3, 0.2), 2)
-#' dm.gtr <- dm.setMutationModel(dm, "GTR", gtr.rates=c(0.2, 0.2, 0.1, 0.1, 0.1, 0.2))
-dm.setMutationModel <- function(dm, mutation.model,
-                                base.frequencies, tstv.ratio,
-                                gtr.rates) {
 
-
-  if (! mutation.model %in% sg.mutation.models)
-    stop("Possible mutation models: ", paste(sg.mutation.models, collapse=" "))
-
-  dm <- addFeature(dm, "mutation.model", mutation.model)
-
-  if ( !missing(tstv.ratio) ) {
-    if (!mutation.model %in% c("HKY", "F84"))
-      stop("This mutation model does not support a ts/tv ratio")
-    dm <- addFeature(dm, "tstv.ratio", tstv.ratio)
-  }
-
-  if ( !missing(base.frequencies) ) {
-    if ( length(base.frequencies) != 4 )
-        stop("You must enter frequencies for all 4 bases")
-    if (!mutation.model %in% c("HKY", "F84"))
-      stop("This mutation model does not support base frequencies")
-
-    dm <- addFeature(dm, "base.freq.A", base.frequencies[1])
-    dm <- addFeature(dm, "base.freq.C", base.frequencies[2])
-    dm <- addFeature(dm, "base.freq.G", base.frequencies[3])
-    dm <- addFeature(dm, "base.freq.T", base.frequencies[4])
-  }
-
-  if ( !missing(gtr.rates) ) {
-    if ( length(gtr.rates) != 6 )
-        stop("You must enter rates for all 6 posible substitutions")
-    if (!mutation.model %in% c("GTR"))
-      stop("You can specify gtr.rates only with the GTR model")
-
-    dm <- addFeature(dm, "gtr.rate.1", gtr.rates[1])
-    dm <- addFeature(dm, "gtr.rate.2", gtr.rates[2])
-    dm <- addFeature(dm, "gtr.rate.3", gtr.rates[3])
-    dm <- addFeature(dm, "gtr.rate.4", gtr.rates[4])
-    dm <- addFeature(dm, "gtr.rate.5", gtr.rates[5])
-    dm <- addFeature(dm, "gtr.rate.6", gtr.rates[6])
-  }
-
-  return(dm)
-}
-
-
-#-------------------------------------------------------------------
-# dm.addMutationRateHeterogenity
-#-------------------------------------------------------------------
-#' Allows the mutation rate on different sites within one locus to
-#' vary according to a Gamma Distribution.
-#'
-#' This function adds a Gamma distributed rate heterogeneity as implemented
-#' in 'seq-gen' to the model.
-#'
-#' "The [...] model of rate heterogeneity assigns different rates to different
-#' sites according to a gamma distribution (Yang, 1993). The distribution is scaled
-#' such that the mean rate for all the sites is 1 but
-#' the user must supply a parameter which describes its shape. A low value for this
-#' parameter (<1.0) simulates a large degree of site-specific rate heterogeneity
-#' and as this value increases the simulated data becomes more rate-homogeneous.
-#' This can be performed as a continuous model, i.e. every site has a different
-#' rate sampled from the gamma distribution of the given shape, or as a discrete
-#' model, i.e. each site falls into one of N rate categories approximating the
-#' gamma distribution. For a review of site-specific rate heterogeneity and its
-#' implications for phylogenetic analyses, see Yang (1996)."
-#' [From the seq-gen homepage http://bioweb2.pasteur.fr/docs/seq-gen ]
-#'
-#' The Parameter in this text will be referred to as 'alpha'. Simulation a model
-#' with rate heterogeneity requires that 'seq-gen' is installed on your system.
-#'
-#' @param dm  The demographic model to which the rate heterogeneity should be added.
-#' @param min.alpha  If you want to estimate the rate heterogeneity, this will be
-#'            used as the smallest possible value.
-#' @param max.alpha  Same as min.growth.rate, but the largest possible value.
-#' @param categories.number If this is set, a fixed number of categories will be
-#'            used to model the gamma distribution instead of drawing every parameter
-#'            seperately (see text).
-#' @param parameter  Instead of creating a new parameter, you can also
-#'            set the mutation rate to an expression based on existing
-#'            parameters. For example setting this to "alpha" will use
-#'            a parameter with name alpha that you have previously
-#'            created. You can also use R expression here, i.e. "2*alpha"
-#'            or "5*M+2*alpha" (if M is another parameter) will also
-#'            work (also the latter does not make much sense).
-#' @return    The demographic model with a size change.
-#' @export
-#' @examples
-#' # A model with one smaller population
-#' dm <- dm.createDemographicModel(c(20,37), 88)
-#' dm <- dm.setMutationModel(dm, "HKY")
-#' dm <- dm.addMutationRateHeterogenity(dm, 0.1, 5, parameter="alpha")
-dm.addMutationRateHeterogenity <-
-  function(dm, min.alpha, max.alpha, parameter="alpha", categories.number) {
-
-  dm <- addFeature(dm, "gamma.rate", parameter, min.alpha, max.alpha, NA, NA, NA)
-
-  if (!missing(categories.number)) {
-    dm <- addFeature(dm, "gamma.categories", parameter=categories.number)
-  }
-
-  return(dm)
-}
 
 
 
@@ -801,50 +577,8 @@ dm.getOutgroupSize <- function(dm) {
 }
 
 
-#' Adds positiv selection to a model
-#'
-#' @inheritParams dm.addMutation
-#' @param min.strength Minimal strength of selection
-#' @param max.strength Maximal strength of selection
-#' @param fraction.neutral Optionally, a fraction of the loci in the group can
-#'   be neutral.
-#' @param population The populaton in which the allele is selected.
-#' @param at.time The time at which the selection starts.
-#' @export
-dm.addPositiveSelection <- function(dm, min.strength=NA, max.strength=NA,
-                         parameter='s', variance = 0, fraction.neutral = 0,
-                         population, at.time, group=0) {
 
 
-  dm <- addFeature(dm, "pos.selection", parameter, min.strength, max.strength,
-                   population, NA, at.time, group,
-                   variance = variance, zero.inflation = fraction.neutral)
-
-  dm
-}
-
-
-#' Adds balancing selection to a model
-#'
-#' @inheritParams dm.addMutation
-#' @param min.strength Minimal strength of selection
-#' @param max.strength Maximal strength of selection
-#' @param fraction.neutral Optionally, a fraction of the loci in the group can
-#'   be neutral.
-#' @param population The populaton in which the allele is selected.
-#' @param at.time The time at which the selection starts.
-#' @export
-dm.addBalancingSelection <- function(dm, min.strength=NA, max.strength=NA,
-                                    parameter='s', variance = 0, fraction.neutral = 0,
-                                    population, at.time, group=0) {
-
-
-  dm <- addFeature(dm, "bal.selection", parameter, min.strength, max.strength,
-                   population, NA, at.time, group,
-                   variance = variance, zero.inflation = fraction.neutral)
-
-  dm
-}
 
 
 
@@ -863,10 +597,11 @@ dm.addBalancingSelection <- function(dm, min.strength=NA, max.strength=NA,
 #' @export
 #'
 #' @examples
-#' dm <- dm.createDemographicModel(c(25,25), 100)
-#' dm <- dm.addSpeciationEvent(dm, 0.01, 5, 'tau', 1, 2)
-#' dm <- dm.addMutation(dm,1,20)
-#' dm.simSumStats(dm,c(1,10))
+#' dm <- dm.createDemographicModel(c(25,25), 100) +
+#'   feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
+#'   feat_mutation(par_range('theta', 1, 10))
+#'
+#' dm.simSumStats(dm, c(1, 5))
 dm.simSumStats <- function(dm, parameters, sum.stats=c("all")) {
   stopifnot(is.model(dm))
   checkParInRange(dm, parameters)

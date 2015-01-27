@@ -12,7 +12,7 @@ possible.features  <- c(getSimProgram('ms')$possible_features, msms.features)
 possible.sum.stats <- getSimProgram('ms')$possible_sum_stats
 
 callMsms <- function(jar.path, ms.args, msms.args, subgroup) {
-  out.file = getTempFile("msms")
+  out.file = tempfile('csr_msms')
   seed <- sampleSeed(1)
 
   # Create the command
