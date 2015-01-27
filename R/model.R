@@ -341,10 +341,9 @@ resetSumStats <- function(dm) {
 #' @export
 #'
 #' @examples
-#' dm <- dm.createDemographicModel(sample.sizes=c(25,25), loci.num=100)
-#' dm <- dm.addSpeciationEvent(dm, 0.01, 5, 'tau', 1, 2)
-#' dm <- dm.addMutation(dm,1,20)
-#' dm
+#' dm <- dm.createDemographicModel(sample.sizes=c(25,25), loci.num=100) +
+#'   feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
+#'   feat_mutation(par_range('theta', 1, 10))
 dm.createDemographicModel <- function(sample.sizes, loci.num, seq.length=1000) {
   dm <- new("DemographicModel", sample.sizes, loci.num, seq.length, F, .33)
   dm <- dm.addSummaryStatistic(dm, 'jsfs')
@@ -582,9 +581,6 @@ dm.getOutgroupSize <- function(dm) {
 
 
 
-#-------------------------------------------------------------------
-# dm.simSumStats
-#-------------------------------------------------------------------
 #' Simulates data according to a demographic model
 #'
 #' @param dm The demographic model according to which the simulations should be done
@@ -777,7 +773,6 @@ getIndOfPop <- function(dm, population) {
 }
 
 #' Set the mutation rates for trios
-#' @inheritParams dm.addMutation
 #' @param middle_rate The mutation rate used for the middle locus
 #' @param outer_rate The mutation rate for the two outer loci
 #' @export

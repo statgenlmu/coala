@@ -23,9 +23,10 @@ A matrix where each row is the vector of summary statistics for
 Simulates data according to a demographic model
 }
 \examples{
-dm <- dm.createDemographicModel(c(25,25), 100)
-dm <- dm.addSpeciationEvent(dm, 0.01, 5, 'tau', 1, 2)
-dm <- dm.addMutation(dm,1,20)
-dm.simSumStats(dm,c(1,10))
+dm <- dm.createDemographicModel(c(25,25), 100) +
+  feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
+  feat_mutation(par_range('theta', 1, 10))
+
+dm.simSumStats(dm, c(1, 5))
 }
 

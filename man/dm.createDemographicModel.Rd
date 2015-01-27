@@ -24,9 +24,8 @@ is returned. Features like mutation, pop.source splits and
 migration can be added afterwards.
 }
 \examples{
-dm <- dm.createDemographicModel(sample.sizes=c(25,25), loci.num=100)
-dm <- dm.addSpeciationEvent(dm, 0.01, 5, 'tau', 1, 2)
-dm <- dm.addMutation(dm,1,20)
-dm
+dm <- dm.createDemographicModel(sample.sizes=c(25,25), loci.num=100) +
+  feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
+  feat_mutation(par_range('theta', 1, 10))
 }
 
