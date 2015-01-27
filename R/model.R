@@ -527,52 +527,9 @@ dm.getSampleSize <- function(dm) {
   sample.size
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#-------------------------------------------------------------------
-# dm.addOutgroup
-#-------------------------------------------------------------------
-#' Adds an outgroup to a demographic model
-#'
-#' This function adds an outgroup consisting of one individual to a
-#' demographic model. The outgroup consists of one individual.
-#' An outgroup is required for a finite sites analysis.
-#'
-#' @param dm The demographic model to which we add the outgroup
-#' @param separation_time The time point at which the outgroup splits
-#'           from the ancestral population. This can be an absolute value
-#'           (e.g. 10) or relative to another time points (e.g. '5*t_split_1').
-#' @param sample_size The number of individuals in the group
-#' @param anc_pop The ancestral population of the non-outgroup individuals. The
-#'          outgroup splits from this population at the separation_time.
-#' @return  The extended demographic model
-#' @export
-dm.addOutgroup <- function(dm, separation_time, sample_size = 1, anc_pop = 1) {
-  pop <- max(na.omit(dm@features$pop.source)) + 1
-  dm <- addFeature(dm, "sample", as.character(sample_size),
-                     pop.source=pop, group=0, time.point='0')
-  dm <- dm.addSpeciationEvent(dm, in.pop=anc_pop, to.pop=pop,
-                              time.point=separation_time)
-  dm <- addFeature(dm, "outgroup",sample_size,
-                   pop.source = anc_pop, pop.sink = pop)
-  dm
-}
-
 dm.getOutgroupSize <- function(dm) {
-  as.integer(searchFeature(dm, 'outgroup')$parameter)
+  pop <- as.integer(searchFeature(dm, 'outgroup')$parameter)
+  dm.getSampleSize(dm)[pop]
 }
 
 
