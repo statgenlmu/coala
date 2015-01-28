@@ -1,5 +1,5 @@
 #' Creates a feature that represents the sampling from one population
-#' 
+#'
 #' @param size The number of individuals that are sampled.
 #' @param population The population from with the indidivuals are sampled
 #' @param time_point The time at which the sample is taken.

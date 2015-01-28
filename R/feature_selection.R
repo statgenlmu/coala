@@ -5,13 +5,23 @@
 #' @param population The populaton in which the allele is selected.
 #' @param at_time The time at which the selection starts.
 #' @export
+#' @examples
+#' # Positive selection in population 2:
+#' model <- dm.createDemographicModel(c(10, 13), 100) +
+#'   feat_pop_merge(par_range('tau', .1, 2), 2, 1) +
+#'   feat_selection(strength_AA=par_expr(2*s), strength_Aa=par_range('s', 100, 2000),
+#'                  population = 2, at_time=par_expr(tau))
+#'
 feat_selection <- function(strength_AA, strength_Aa,
-                           variance = 0, fraction_neutral = 0,
                            population, at_time, group=0) {
 
-  Feature$new("selection", strength_AA,
-              pop_source=population, time_point=at_time, group=group,
-              variance = variance, zero_inflation = fraction_neutral)
+  feat <- Feature$new("selection", par_const(NA),
+                      pop_source=population, time_point=at_time, group=group)
+  feat$add_feature(Feature$new("selection_AA", strength_AA, pop_source=population,
+                               time_point=at_time, group=group))
+  feat$add_feature(Feature$new("selection_Aa", strength_Aa, pop_source=population,
+                               time_point=at_time, group=group))
+  feat
 }
 
 # #' Adds balancing selection to a model

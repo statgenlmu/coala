@@ -7,7 +7,7 @@
 # Licence:  GPLv3 or later
 # --------------------------------------------------------------
 
-msms.features <- c("pos.selection", "bal.selection")
+msms.features <- c("selection", "selection_AA", "selection_Aa")
 possible.features  <- c(getSimProgram('ms')$possible_features, msms.features)
 possible.sum.stats <- getSimProgram('ms')$possible_sum_stats
 
@@ -57,26 +57,25 @@ generateMsmsOptionsCommand <- function(dm) {
     type <- as.character(dm@features[i,"type"])
     feat <- unlist(dm@features[i, ])
 
-    if (type == "pos.selection") {
+    if (type == "selection") {
       cmd <- c(cmd, '"-SI"', ',', feat['time.point'], ',', length(dm.getSampleSize(dm)), ',')
       start.freq <- rep(0, length(dm.getSampleSize(dm)))
       start.freq[ as.integer(feat['pop.source']) ] <- 0.0005
       cmd <- c(cmd, paste0('"', paste(start.freq, collapse=' '), '"'), ',')
 
       cmd <- c(cmd, '"-N 10000"', ',')
-      cmd <- c(cmd, '"-SA"', ',', feat['parameter'], ',')
-      cmd <- c(cmd, '"-Sp 0.5"', ',', '"-SForceKeep"', ',')
-      cmd <- c(cmd, '"-threads 1"', ',')
-    }
 
-    else if (type == "bal.selection") {
-      cmd <- c(cmd, '"-SI"', ',', feat['time.point'], ',', length(dm.getSampleSize(dm)), ',')
-      start.freq <- rep(0, length(dm.getSampleSize(dm)))
-      start.freq[ as.integer(feat['pop.source']) ] <- 0.0005
-      cmd <- c(cmd, paste0('"', paste(start.freq, collapse=' '), '"'), ',')
+      s_AA <- searchFeature(dm, 'selection_AA',
+                            pop.source = feat['pop.source'],
+                            time.point = feat['time.point'])$parameter
+      stopifnot(length(s_AA) == 1)
+      cmd <- c(cmd, '"-SAA"', ',', s_AA, ',')
 
-      cmd <- c(cmd, '"-N 10000"', ',')
-      cmd <- c(cmd, '"-SAA 0"', ',',  '"-SAa"', ',', feat['parameter'], ',')
+      s_Aa <- searchFeature(dm, 'selection_Aa',
+                            pop.source = feat['pop.source'],
+                            time.point = feat['time.point'])$parameter
+      stopifnot(length(s_Aa) == 1)
+      cmd <- c(cmd, '"-SAa"', ',', s_Aa, ',')
       cmd <- c(cmd, '"-Sp 0.5"', ',', '"-SForceKeep"', ',')
       cmd <- c(cmd, '"-threads 1"', ',')
     }
@@ -85,6 +84,7 @@ generateMsmsOptionsCommand <- function(dm) {
   cmd <- c(cmd, '" ")')
   cmd
 }
+
 
 createParameterEnv <- function(dm, parameters, ...) {
   par_env <- new.env()
@@ -143,7 +143,7 @@ msmsSimFunc <- function(dm, parameters) {
     msms.options <- paste(generateMsmsOptions(dm, parameters, locus),
                           collapse= " ")
     #print(c(ms.options, msms.options))
-    callMsms(getJaathaVariable('msms.jar'), ms.options, msms.options)
+    callMsms(get_msms_path(), ms.options, msms.options)
   })
 
   # Parse the simulation output
@@ -163,7 +163,7 @@ printMsmsCommand <- function(dm) {
 
   cmd <- paste("msms", msms.cmd,
                "-ms", sum(dm.getSampleSize(dm)), dm.getLociNumber(dm), ms.cmd)
-  .print(cmd)
+  cat(cmd, '\n')
 }
 
 printOptionsCmd <- function(cmd) {

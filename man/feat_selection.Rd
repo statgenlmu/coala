@@ -4,18 +4,24 @@
 \alias{feat_selection}
 \title{Adds positiv selection to a model}
 \usage{
-feat_selection(strength_AA, strength_Aa, variance = 0, fraction_neutral = 0,
-  population, at_time, group = 0)
+feat_selection(strength_AA, strength_Aa, population, at_time, group = 0)
 }
 \arguments{
-\item{fraction_neutral}{Optionally, a fraction of the loci in the group can
-be neutral.}
-
 \item{population}{The populaton in which the allele is selected.}
 
 \item{at_time}{The time at which the selection starts.}
+
+\item{fraction_neutral}{Optionally, a fraction of the loci in the group can
+be neutral.}
 }
 \description{
 Adds positiv selection to a model
+}
+\examples{
+# Positive selection in population 2:
+model <- dm.createDemographicModel(c(10, 13), 100) +
+  feat_pop_merge(par_range('tau', .1, 2), 2, 1) +
+  feat_selection(strength_AA=par_expr(2*s), strength_Aa=par_range('s', 100, 2000),
+                 population = 2, at_time=par_expr(tau))
 }
 
