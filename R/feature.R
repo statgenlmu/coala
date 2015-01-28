@@ -41,7 +41,7 @@ Feature <- R6Class("Feature",
       if (zero_inflation != 0) {
         private$inter_locus_var <- TRUE
         par_expr <- paste0('ifelse(locus <= ',
-                            zero_inflation, ' * dm.getLociNumber(dm)',
+                            zero_inflation, ' * locus_number',
                             ', 0, ', par_expr, ')')
       }
 

@@ -37,6 +37,7 @@ Collate:
     'model.R'
     'model_build.R'
     'model_examples.R'
+    'model_getters.R'
     'options.R'
     'parameter.R'
     'sample_seed.R'

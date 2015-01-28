@@ -1,0 +1,76 @@
+get_locus_length <- function(dm, group=1) {
+  length <- dm$loci[dm$loci$group == group, c(6,8,10), drop = FALSE]
+  if (nrow(length) == 0) {
+    length <- dm$loci[dm$loci$group == 0, c(6,8,10), drop = FALSE]
+  }
+  if (nrow(length) == 0) stop("Failed to determine loci length")
+  as.integer(sum(length))
+}
+
+get_populations <- function(dm) {
+  unique(searchFeature(dm, 'sample')$pop.source)
+}
+
+get_parameter_table <- function(model) {
+  stopifnot(is.model(model))
+  model$parameters
+}
+
+get_locus_number <- function(dm, group=1) {
+  number <- dm$loci[dm$loci$group == group, 'number']
+  if (length(number) == 0) {
+    if (group > 0) number <- dm$loci[dm$loci$group == 0, 'number']
+    else stop("Failed to determine loci number")
+  }
+  as.integer(sum(number))
+}
+
+get_sample_size <- function(dm) {
+  feat.samples <- searchFeature(dm, type="sample")
+  stopifnot(nrow(feat.samples) > 0)
+
+  sample.size <- rep(0, length(get_populations(dm)))
+  for (row.nr in 1:nrow(feat.samples)) {
+    stopifnot(sample.size[feat.samples$pop.source[row.nr]] == 0)
+    sample.size[feat.samples$pop.source[row.nr]] <-
+      as.integer(feat.samples$parameter[row.nr])
+  }
+
+  sample.size
+}
+
+get_summary_statistics <- function(dm, group = 1, pop) {
+  rows <- dm$sum_stats$group %in% c(0,group)
+  if (!missing(pop)) rows <- rows & dm$sum_stats$population == pop
+  if (length(rows) == 0) return(character())
+  unique(dm$sum_stats$name[rows])
+}
+
+get_groups <- function(dm) {
+  if (all(c(dm$features$group == 0,
+            dm$sum_stats$group == 0,
+            dm$loci$group == 0))) return(1)
+
+  groups <- sort(unique(c(1,
+                          dm$features$group,
+                          dm$sum_stats$group,
+                          dm$loci$group)))
+
+  groups[groups != 0]
+}
+
+
+
+get_locus_length_matrix <- function(dm, group=1) {
+  # Select the rows of the group
+  rows <- which(dm$loci$group == group)
+  if (sum(rows) == 0) rows <- which(dm$loci$group == 0)
+
+  # Repeat the row if number > 1
+  if (length(rows) == 1) rows <- rep(rows, dm$loci$number[rows])
+
+  # Return the matrix
+  llm <- dm$loci[rows, 6:10, drop = FALSE]
+  row.names(llm) <- NULL
+  as.matrix(llm)
+}
