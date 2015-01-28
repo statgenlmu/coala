@@ -426,9 +426,9 @@ dm.addLocusTrio <- function(dm, locus_names=c(left='', middle='', right=''),
     stop("'locus_length' needs to be a vector of three names")
   if (!is.numeric(group)) stop("'group' needs to be numeric")
 
-  #if (nrow(searchFeature(dm, 'locus_trios', group = group)) == 0) {
-  #  dm <- addFeature(dm, 'locus_trios', parameter = NA, group = group)
-  #}
+  if (nrow(searchFeature(dm, 'locus_trios', group = group)) == 0) {
+    dm <- dm + Feature$new('locus_trios', par_const(NA), group = group)
+  }
 
   addLocus(dm, group=group,
            name_l = locus_names[1],

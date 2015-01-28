@@ -6,6 +6,7 @@ model_theta_tau <- function() {
     feat_mutation(par_range('theta', 1, 10))
 }
 
+
 model_hky <- function() {
   dm.createDemographicModel(c(3, 3, 1), 2) +
     feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
@@ -14,6 +15,7 @@ model_hky <- function() {
     feat_outgroup(3) +
     feat_mutation(par_range('theta', 1, 10), model = 'HKY', tstv_ratio = 2)
 }
+
 
 model_f84 <- function() {
   dm.createDemographicModel(c(3, 3, 1), 2) +
@@ -25,6 +27,7 @@ model_f84 <- function() {
                   base_frequencies = c(.1, .2, .3, .4))
 }
 
+
 model_gtr <- function() {
   dm.createDemographicModel(c(3, 3, 2), 2) +
     feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
@@ -33,4 +36,13 @@ model_gtr <- function() {
     feat_outgroup(3) +
     feat_mutation(par_range('theta', 1, 10),
                   model='GTR', gtr_rates=1:6/sum(1:6))
+}
+
+
+model_grps <- function() {
+  dm.grp <- model_theta_tau()
+  dm.grp <- dm.addLocus(dm.grp, 100, 15, 1)
+  dm.grp <- dm.addLocus(dm.grp, 200, 10, 2)
+  dm.grp <- dm.addLocus(dm.grp, 50, 5, 3)
+  dm.grp
 }
