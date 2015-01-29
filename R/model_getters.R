@@ -129,3 +129,14 @@ get_outgroup_size <- function(model) {
   get_sample_size(model)[get_outgroup(model)]
 }
 
+
+#' @describeIn get_feature_table Returns the index of the individuals of one
+#'   population
+#' @export
+get_population_indiviuals <- function(model, pop) {
+  if (!pop %in% get_populations(model)) stop('Invalid population')
+  sample_size <- get_sample_size(model)
+  from <- cumsum(c(0, sample_size)) + 1
+  to <- cumsum(sample_size)
+  from[pop]:to[pop]
+}

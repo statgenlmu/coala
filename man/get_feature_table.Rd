@@ -9,6 +9,7 @@
 \alias{get_outgroup}
 \alias{get_outgroup_size}
 \alias{get_parameter_table}
+\alias{get_population_indiviuals}
 \alias{get_populations}
 \alias{get_sample_size}
 \alias{get_summary_statistics}
@@ -35,6 +36,8 @@ get_locus_length_matrix(dm, group = 1)
 get_outgroup(model)
 
 get_outgroup_size(model)
+
+get_population_indiviuals(model, pop)
 }
 \arguments{
 \item{model}{The coalescent model from which aspects are returned}
@@ -71,6 +74,9 @@ information about the loci in the model.
 \item \code{get_outgroup}: Returns the population that is marked as outgroup
 
 \item \code{get_outgroup_size}: Returns the number of samples in the outgroup
+
+\item \code{get_population_indiviuals}: Returns the index of the individuals of one
+population
 }}
 \author{
 Paul Staab
