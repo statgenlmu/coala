@@ -37,7 +37,7 @@ createFeatureTable <- function(type=character(), parameter=character(),
 #' @export
 CoalModel <- function(sample_size, loci_number, loci_length=1000) {
   model <- list()
-  class(model) <- "CoalModel"
+  class(model) <- c("CoalModel", class(Base_Object))
 
   model$features <- createFeatureTable()
 

@@ -16,6 +16,8 @@ test_that("adding parameters works", {
   expect_equal("theta", par_table$name)
   expect_equal(1, par_table$lower.range)
   expect_equal(5, par_table$upper.range)
+  expect_error(model + 5)
+  expect_error(model + 'bla')
 })
 
 

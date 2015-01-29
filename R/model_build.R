@@ -3,9 +3,11 @@
 #' @param e1 The Model to which the feature/parameter should be added
 #' @param e2 The feature/parameter to add
 #' @return The extended model
-"+.CoalModel" <- function(e1, e2) {
+"+.CSR_OBJ" <- function(e1, e2) {
   e2name <- deparse(substitute(e2)) # Passed throw for error messages
-  addToModel(e2, e1, e2name)
+  if (is.model(e1)) return(addToModel(e2, e1, e2name))
+  else if (is.feature(e1)) return(addToFeature(e2, e1, e2name))
+  else stop('Can not add ', e2name, ' to ', e1)
 }
 
 addToModel <- function(x, model, x_name) UseMethod("addToModel")
@@ -14,6 +16,7 @@ addToModel.default <- function(x, model, x_name) {
 }
 
 addToModel.Parameter <- function(par, model, par_name) model
+
 
 addToModel.Par_Range <- function(par, model, par_name) {
   if (par$get_name() %in% get_parameter_table(model))
@@ -28,6 +31,7 @@ addToModel.Par_Range <- function(par, model, par_name) {
   model
 }
 
+
 addToModel.Feature <- function(feat, model, feat_name) {
   model$features <- rbind(model$features, feat$get_table())
   for (parameter in feat$get_parameters()) {
@@ -40,17 +44,14 @@ addToModel.Feature <- function(feat, model, feat_name) {
 }
 
 
-# Deactived
-# Seems you can't have +.DemographicModel and +.Feature and then add a
-# feature to a model => create a common base class as in ggplot2
-# "+.Feature" <- function(e1, e2) {
-#   e2name <- deparse(substitute(e2)) # Passed throw for error messages
-#   if (is.par_model(e2)) {
-#     e1$add_parameter(e2)
-#     return(e1)
-#   } else if (is.feature(e2)) {
-#     e1$add_feature(e2)
-#     return(e1)
-#   }
-#   else stop("Can not add `", x_name, "` to feature")
-# }
+addToFeature <- function(x, feat, x_name) {
+  if (is.par_model(x)) {
+    feat$add_parameter(x)
+    return(feat)
+  } else if (is.feature(x)) {
+    feat$add_feature(x)
+    return(feat)
+  }
+  else stop("Can not add `", x_name, "` to feature")
+}
+

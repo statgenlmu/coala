@@ -48,6 +48,7 @@ test_that('Creating features works', {
   locus <- 72; expect_equal(eval(parse(text=par_expr)), 5)
 
   # Test zero.inflation & variance
+  set.seed(111222333)
   feat <- Feature$new('mutation', parameter = par_range('theta', 5, 7),
                       variance = '10', zero_inflation = '.1')
   expect_true(is.feature(feat))
@@ -66,20 +67,27 @@ test_that('Creating features works', {
 test_that("Adding features to features works", {
   feat <- Feature$new('abc', 5)
   feat$add_feature(Feature$new('def', par_range('a', 1, 5)))
-#   feat <- Feature$new('abc', 5) + Feature$new('def', par_range('a', 1, 5))
-   expect_equal(feat$get_table(), rbind(createFeatureTable('abc', '5', NA, NA, NA, 0),
-                                        createFeatureTable('def', 'a', NA, NA, NA, 0)))
-   expect_equal(length(feat$get_parameters()), 1)
+  expect_equal(feat$get_table(), rbind(createFeatureTable('abc', '5', NA, NA, NA, 0),
+                                       createFeatureTable('def', 'a', NA, NA, NA, 0)))
+  expect_equal(length(feat$get_parameters()), 1)
+
+  feat <- Feature$new('abc', 5) + Feature$new('def', par_range('a', 1, 5))
+  expect_equal(feat$get_table(), rbind(createFeatureTable('abc', '5', NA, NA, NA, 0),
+                                       createFeatureTable('def', 'a', NA, NA, NA, 0)))
+  expect_equal(length(feat$get_parameters()), 1)
+
+  feat <- Feature$new('abc', 5) + Feature$new('def', 2) + par_range('a', 1, 5)
+  expect_equal(feat$get_table(), rbind(createFeatureTable('abc', '5', NA, NA, NA, 0),
+                                       createFeatureTable('def', '2', NA, NA, NA, 0)))
+  expect_equal(length(feat$get_parameters()), 1)
+  expect_error(feat + 5)
 })
 
 
 test_that("Adding parameters to features works", {
-#   feat <- Feature$new('abc', 5) + par_range('blub', 1, 5)
-  feat <- Feature$new('abc', 5)
-  feat$add_parameter(par_range('blub', 1, 5))
+  feat <- Feature$new('abc', 5) + par_range('blub', 1, 5)
   expect_equal(length(feat$get_parameters()), 1)
 
-#   feat <- feat + par_range('bla', 1, 5)
-  feat$add_parameter(par_range('bla', 1, 5))
+  feat <- feat + par_range('bla', 1, 5)
   expect_equal(length(feat$get_parameters()), 2)
 })

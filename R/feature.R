@@ -1,5 +1,6 @@
-#' @importFrom R6 R6Class
-Feature <- R6Class("Feature",
+Base_Object <- R6Class("CSR_OBJ")
+
+Feature <- R6Class("Feature", inherit = Base_Object,
   private = list(
     feature_table = NULL,
     parameter = list(),

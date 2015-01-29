@@ -12,7 +12,7 @@
 \alias{get_populations}
 \alias{get_sample_size}
 \alias{get_summary_statistics}
-\title{Getters for Coalescent models}
+\title{Getters for coalescent models}
 \usage{
 get_feature_table(model)
 
@@ -44,7 +44,7 @@ get_outgroup_size(model)
 \item{pop}{The population for which aspects are returned}
 }
 \description{
-Getters for Coalescent models
+Getters for coalescent models
 }
 \section{Functions}{
 \itemize{
