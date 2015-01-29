@@ -18,7 +18,7 @@ Imports:
     settings (>= 0.1.1),
     stats
 Suggests:
-    testthat (>= 0.9.1)
+    testthat (>= 0.9.1.9000)
 LinkingTo: Rcpp
 Collate:
     'RcppExports.R'
