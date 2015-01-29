@@ -1,3 +1,10 @@
+#' Getters for coalescent models
+#'
+#' @param model The coalescent model from which aspects are returned
+#'
+#' @export
+#' @author Paul Staab
+#' @describeIn get_feature_table Returns the features of a model as a data.frame
 get_feature_table <- function(model) {
   stopifnot(is.model(model))
   stopifnot(!is.null(model$features))
@@ -5,6 +12,9 @@ get_feature_table <- function(model) {
 }
 
 
+#' @export
+#' @describeIn get_feature_table Returns the ranged parameters of a model as a
+#'   data.frame
 get_parameter_table <- function(model) {
   stopifnot(is.model(model))
   stopifnot(!is.null(model$parameters))
@@ -12,6 +22,9 @@ get_parameter_table <- function(model) {
 }
 
 
+#' @param group The locus group for which aspects are returned
+#' @export
+#' @describeIn get_feature_table Returns the length of the loci in a locus group
 get_locus_length <- function(dm, group=1) {
   length <- dm$loci[dm$loci$group == group, c(6,8,10), drop = FALSE]
   if (nrow(length) == 0) {
@@ -21,10 +34,9 @@ get_locus_length <- function(dm, group=1) {
   as.integer(sum(length))
 }
 
-get_populations <- function(dm) {
-  unique(searchFeature(dm, 'sample')$pop.source)
-}
 
+#' @describeIn get_feature_table Returns the number of loci in a locus group
+#' @export
 get_locus_number <- function(dm, group=1) {
   number <- dm$loci[dm$loci$group == group, 'number']
   if (length(number) == 0) {
@@ -34,6 +46,16 @@ get_locus_number <- function(dm, group=1) {
   as.integer(sum(number))
 }
 
+
+#' @describeIn get_feature_table Returns a vector of populations in the model
+#' @export
+get_populations <- function(dm) {
+  unique(searchFeature(dm, 'sample')$pop.source)
+}
+
+
+#' @describeIn get_feature_table Returns a vector of samples sizes per population.
+#' @export
 get_sample_size <- function(dm) {
   feat.samples <- searchFeature(dm, type="sample")
   stopifnot(nrow(feat.samples) > 0)
@@ -48,6 +70,10 @@ get_sample_size <- function(dm) {
   sample.size
 }
 
+
+#' @param pop The population for which aspects are returned
+#' @describeIn get_feature_table Returns a vector of populations in the model
+#' @export
 get_summary_statistics <- function(dm, group = 1, pop) {
   rows <- dm$sum_stats$group %in% c(0,group)
   if (!missing(pop)) rows <- rows & dm$sum_stats$population == pop
@@ -55,6 +81,9 @@ get_summary_statistics <- function(dm, group = 1, pop) {
   unique(dm$sum_stats$name[rows])
 }
 
+
+#' @describeIn get_feature_table Returns a vector of groups in the model
+#' @export
 get_groups <- function(dm) {
   if (all(c(dm$features$group == 0,
             dm$sum_stats$group == 0,
@@ -69,7 +98,9 @@ get_groups <- function(dm) {
 }
 
 
-
+#' @describeIn get_feature_table Returns a matrix with detailed length
+#' information about the loci in the model.
+#' @export
 get_locus_length_matrix <- function(dm, group=1) {
   # Select the rows of the group
   rows <- which(dm$loci$group == group)
@@ -85,11 +116,15 @@ get_locus_length_matrix <- function(dm, group=1) {
 }
 
 
+#' @describeIn get_feature_table Returns the population that is marked as outgroup
+#' @export
 get_outgroup <- function(model) {
   as.integer(searchFeature(model, 'outgroup')$parameter)
 }
 
 
+#' @describeIn get_feature_table Returns the number of samples in the outgroup
+#' @export
 get_outgroup_size <- function(model) {
   get_sample_size(model)[get_outgroup(model)]
 }
