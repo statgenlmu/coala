@@ -324,7 +324,7 @@ test_that('Outgroup setting and getting works', {
 })
 
 
-test_that('get population individuals works'), {
+test_that('get population individuals works', {
   expect_equal(get_population_indiviuals(model_theta_tau(), 1), 1:10)
   expect_equal(get_population_indiviuals(model_theta_tau(), 2), 11:25)
   expect_error(get_population_indiviuals(model_theta_tau(), 3))
@@ -332,4 +332,4 @@ test_that('get population individuals works'), {
   expect_equal(get_population_indiviuals(model_hky(), 1), 1:3)
   expect_equal(get_population_indiviuals(model_hky(), 2), 4:6)
   expect_equal(get_population_indiviuals(model_hky(), 3), 7)
-}
+})
