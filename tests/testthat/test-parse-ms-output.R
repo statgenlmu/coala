@@ -20,7 +20,7 @@ test_that("parsing output works", {
   ss <- get_sample_size(dm.tt)
   ln <- get_locus_number(dm.tt)
 
-  ms.file <- simulate(dm.tt, c(1, 5))$file
+  ms.file <- simulate(dm.tt, pars=c(1, 5))$file
   expect_error(parseMsOutput(list("bulb.txt"), ss, ln))
 
   seg_sites <- parseMsOutput(ms.file, ss, ln)

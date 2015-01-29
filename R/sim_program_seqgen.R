@@ -229,7 +229,7 @@ seqgenSingleSimFunc <- function(dm, parameters) {
     tree.model <- generateTreeModel(dm, locus_length[locus,])
 
     # Simulate the trees
-    sum_stats_ms <- simulate(tree.model, parameters)
+    sum_stats_ms <- simulate(tree.model, pars=parameters)
     tree_files <- parseTrees(sum_stats_ms[['file']][[1]],
                              locus_length[locus,],
                              tempfile)

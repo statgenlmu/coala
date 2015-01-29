@@ -30,7 +30,7 @@ test_that("test.generateTreeModel", {
   if (!checkForSeqgen(FALSE, TRUE)) skip('seqgen not installed')
   for (dm in list(model_hky(), model_f84(), model_gtr())) {
     dm.ms <- dm.finalize(generateTreeModel(dm, get_locus_length_matrix(dm)[1,]))
-    sum.stats <- simulate(dm.ms, c(1, 5))
+    sum.stats <- simulate(dm.ms, pars=c(1, 5))
     expect_false(is.null(sum.stats$file))
     expect_true(file.exists(sum.stats$file[[1]]))
     unlink(sum.stats$file)
@@ -58,7 +58,7 @@ test_that("All example models can be simulated", {
   if (!checkForSeqgen(FALSE, TRUE)) skip('seqgen not installed')
   set.seed(12)
   for (model in list(model_hky(), model_f84(), model_gtr())) {
-    sum_stats <- simulate(model, c(1, 5))
+    sum_stats <- simulate(model, pars=c(1, 5))
     expect_true(sum(sum_stats$jsfs) > 0)
   }
 })
@@ -100,7 +100,7 @@ test_that("seq-gen can simulate trios", {
   dm.lt <- dm.lt + sumstat_seg_sites()
   dm.lt <- dm.finalize(dm.lt)
 
-  sum.stats <- simulate(dm.lt, c(1, 10))
+  sum.stats <- simulate(dm.lt, pars=c(1, 10))
   expect_that(sum(sum.stats$jsfs), is_less_than(sum(sapply(sum.stats$seg.sites, ncol))))
 })
 

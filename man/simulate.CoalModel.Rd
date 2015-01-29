@@ -4,7 +4,7 @@
 \alias{simulate.CoalModel}
 \title{Simulates data according to a demographic model}
 \usage{
-\method{simulate}{CoalModel}(dm, parameters)
+\method{simulate}{CoalModel}(object, nsim = 1, seed, pars = NULL, ...)
 }
 \arguments{
 \item{dm}{The demographic model according to which the simulations should be done}
@@ -25,6 +25,6 @@ model <- CoalModel(c(5,10), 20) +
   feat_mutation(par_range('theta', 1, 10)) +
   sumstat_jsfs()
 
-simulate(model, c(1, 5))
+simulate(model, pars=c(1, 5))
 }
 

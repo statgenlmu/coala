@@ -6,6 +6,7 @@
 #' @return A matrix where each row is the vector of summary statistics for
 #'         the parameters in the same row of the "parameter" matrix
 #' @export
+#' @importFrom stats simulate
 #'
 #' @examples
 #' model <- CoalModel(c(5,10), 20) +
@@ -13,21 +14,21 @@
 #'   feat_mutation(par_range('theta', 1, 10)) +
 #'   sumstat_jsfs()
 #'
-#' simulate(model, c(1, 5))
-simulate.CoalModel <- function(dm, parameters) {
-  stopifnot(is.model(dm))
-  checkParInRange(dm, parameters)
+#' simulate(model, pars=c(1, 5))
+simulate.CoalModel <- function(object, nsim = 1, seed, pars=NULL, ...) {
+  stopifnot(!is.null(pars))
+  checkParInRange(object, pars)
 
-  if (!dm$finalized) dm = dm.finalize(dm)
+  if (!object$finalized) object = dm.finalize(object)
 
-  if (dm$currentSimProg != "groups") {
-    return(getSimProgram(dm$currentSimProg)$sim_func(dm, parameters))
+  if (object$currentSimProg != "groups") {
+    return(getSimProgram(object$currentSimProg)$sim_func(object, pars))
   }
 
-  sum_stats <- list(pars=parameters)
-  for (group in get_groups(dm)) {
-    dm.grp <- dm$options$grp.models[[as.character(group)]]
-    sum_stats.grp <- getSimProgram(dm.grp$currentSimProg)$sim_func(dm.grp, parameters)
+  sum_stats <- list(pars=pars)
+  for (group in get_groups(object)) {
+    object.grp <- object$options$grp.models[[as.character(group)]]
+    sum_stats.grp <- getSimProgram(object.grp$currentSimProg)$sim_func(object.grp, pars)
     for (i in seq(along = sum_stats.grp)) {
       if (names(sum_stats.grp)[i] == 'pars') next()
       name <- paste(names(sum_stats.grp)[i], group, sep='.')
