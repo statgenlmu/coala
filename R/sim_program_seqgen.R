@@ -47,19 +47,19 @@ checkForSeqgen <- function(throw.error = TRUE, silent = FALSE) {
 }
 
 generateTreeModel <- function(dm, locus_length) {
-  stopifnot(all(dm.getGroups(dm) == 1))
-  if (any(msms.features %in% dm@features$type)) {
+  stopifnot(all(get_groups(dm) == 1))
+  if (any(msms.features %in% dm$features$type)) {
     tree.prog <- getSimProgram('msms')
   } else {
     tree.prog <- getSimProgram('ms')
   }
 
-  dm@features <- dm@features[dm@features$type %in% tree.prog$possible_features, ]
+  dm$features <- dm$features[dm$features$type %in% tree.prog$possible_features, ]
   dm <- resetSumStats(dm)
   dm <- dm.addSummaryStatistic(dm, "trees")
   dm <- dm.addSummaryStatistic(dm, "file")
 
-  dm@loci <- dm@loci[FALSE, ]
+  dm$loci <- dm$loci[FALSE, ]
   dm <- addLocus(dm, number = 1, length_m = sum(locus_length), group = 0)
   dm.finalize(dm)
 }
@@ -105,8 +105,8 @@ callSeqgen <- function(opts, ms_files) {
 generateSeqgenOptions <- function(dm, parameters, locus,
                                   locus_lengths, seeds) {
   # Generate the command template to execute or use the buffered one
-  if ( !is.null( dm@options[['seqgen.cmd']] ) ) {
-    cmd <- dm@options[['seqgen.cmd']]
+  if ( !is.null( dm$options[['seqgen.cmd']] ) ) {
+    cmd <- dm$options[['seqgen.cmd']]
   } else {
     cmd <- generateSeqgenOptionsCmd(dm)
   }
@@ -128,11 +128,12 @@ generateSeqgenOptions <- function(dm, parameters, locus,
 
 
 generateSeqgenOptionsCmd <- function(dm) {
+  stopifnot(is.model(dm))
   base.freqs <- F
   gtr.rates <- F
   includes.model <- F
 
-  if (!is.numeric(dm.getOutgroupSize(dm))) {
+  if (!is.numeric(get_outgroup_size(dm))) {
     stop("Finite Sites models need an outgroup.")
   }
 
@@ -144,9 +145,9 @@ generateSeqgenOptionsCmd <- function(dm) {
     base.freqs <- list()
     gtr.rates <- list()
 
-    for (i in 1:dim(dm@features)[1] ) {
-      type <- as.character(dm@features[i,"type"])
-      feat <- unlist(dm@features[i, ])
+    for (i in 1:dim(dm$features)[1] ) {
+      type <- as.character(dm$features[i,"type"])
+      feat <- unlist(dm$features[i, ])
 
       if (type == "mutation_model") {
         includes.model <- T
@@ -201,8 +202,8 @@ generateSeqgenOptionsCmd <- function(dm) {
 }
 
 printSeqgenCommand <- function(dm) {
-  tree.model <- generateTreeModel(dm, dm.getLociLengthMatrix(dm)[1,3])
-  getSimProgram(tree.model@currentSimProg)$print_cmd_func(tree.model)
+  tree.model <- generateTreeModel(dm, get_locus_length_matrix(dm)[1,3])
+  getSimProgram(tree.model$currentSimProg)$print_cmd_func(tree.model)
 
   cmds <- generateSeqgenOptionsCmd(dm)
   for (cmd in cmds) {
@@ -221,17 +222,15 @@ printSeqgenCommand <- function(dm) {
 
 seqgenSingleSimFunc <- function(dm, parameters) {
   checkForSeqgen()
-  if (length(parameters) != dm.getNPar(dm))
-    stop("Wrong number of parameters!")
 
-  locus_length <- dm.getLociLengthMatrix(dm)
+  locus_length <- get_locus_length_matrix(dm)
 
-  seqgen.files <- lapply(1:dm.getLociNumber(dm), function(locus) {
+  seqgen.files <- lapply(1:get_locus_number(dm), function(locus) {
     # Generate options for seqgen
     tree.model <- generateTreeModel(dm, locus_length[locus,])
 
     # Simulate the trees
-    sum_stats_ms <- dm.simSumStats(tree.model, parameters)
+    sum_stats_ms <- simulate(tree.model, parameters)
     tree_files <- parseTrees(sum_stats_ms[['file']][[1]],
                              locus_length[locus,],
                              tempfile)
@@ -252,9 +251,10 @@ seqgenSingleSimFunc <- function(dm, parameters) {
 }
 
 finalizeSeqgen <- function(dm) {
+  stopifnot(is.model(dm))
   checkForSeqgen()
-  dm@options[['seqgen.cmd']] <- generateSeqgenOptionsCmd(dm)
-  return(dm)
+  dm$options[['seqgen.cmd']] <- generateSeqgenOptionsCmd(dm)
+  dm
 }
 
 #' @include sim_program.R

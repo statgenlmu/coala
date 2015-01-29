@@ -23,7 +23,7 @@ The changed Demographic Model
 Defines how many identical loci belong to a group of loci
 }
 \examples{
-dm <- dm.createDemographicModel(c(25,25), 100)
+dm <- CoalModel(c(25,25), 100)
 dm <- dm.addLocus(dm, number = 200, length = 250, group = 1)
 }
 

@@ -1,3 +1,17 @@
+get_feature_table <- function(model) {
+  stopifnot(is.model(model))
+  stopifnot(!is.null(model$features))
+  model$features
+}
+
+
+get_parameter_table <- function(model) {
+  stopifnot(is.model(model))
+  stopifnot(!is.null(model$parameters))
+  model$parameters
+}
+
+
 get_locus_length <- function(dm, group=1) {
   length <- dm$loci[dm$loci$group == group, c(6,8,10), drop = FALSE]
   if (nrow(length) == 0) {
@@ -9,11 +23,6 @@ get_locus_length <- function(dm, group=1) {
 
 get_populations <- function(dm) {
   unique(searchFeature(dm, 'sample')$pop.source)
-}
-
-get_parameter_table <- function(model) {
-  stopifnot(is.model(model))
-  model$parameters
 }
 
 get_locus_number <- function(dm, group=1) {
@@ -74,3 +83,14 @@ get_locus_length_matrix <- function(dm, group=1) {
   row.names(llm) <- NULL
   as.matrix(llm)
 }
+
+
+get_outgroup <- function(model) {
+  as.integer(searchFeature(model, 'outgroup')$parameter)
+}
+
+
+get_outgroup_size <- function(model) {
+  get_sample_size(model)[get_outgroup(model)]
+}
+

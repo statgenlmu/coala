@@ -34,7 +34,7 @@ createFeatureTable <- function(type=character(), parameter=character(),
              stringsAsFactors=F)
 }
 
-
+#' @export
 CoalModel <- function(sample_size, loci_number, loci_length=1000) {
   model <- list()
   class(model) <- "CoalModel"
@@ -140,7 +140,7 @@ is.model <- function(model) {
 #' @return The model with a summary statistic added.
 #' @export
 #' @examples
-#' dm <- dm.createDemographicModel(c(15, 20), 100)
+#' dm <- CoalModel(c(15, 20), 100)
 #' dm <- dm.addSummaryStatistic(dm, 'seg.sites')
 dm.addSummaryStatistic <- function(dm, sum.stat, population = 0, group = 0) {
   stopifnot(is.model(dm))
@@ -281,7 +281,7 @@ addLocus <- function(dm, group=0, number=1,
 #' @return The changed Demographic Model
 #' @export
 #' @examples
-#' dm <- dm.createDemographicModel(c(25,25), 100)
+#' dm <- CoalModel(c(25,25), 100)
 #' dm <- dm.addLocus(dm, number = 200, length = 250, group = 1)
 dm.addLocus <- function(dm, length, number = 1, group=0) {
   stopifnot(is.model(dm))
@@ -304,7 +304,7 @@ dm.addLocus <- function(dm, length, number = 1, group=0) {
 #' @return The extended demographic model
 #' @export
 #' @examples
-#' dm <- dm.createDemographicModel(c(25,25), 100)
+#' dm <- CoalModel(c(25,25), 100)
 #' dm <- dm.addLocusTrio(dm, locus_names = c('Solyc00g00500.2',
 #'                                           'Solyc00g00520.1',
 #'                                           'Solyc00g00540.1'),
@@ -354,10 +354,6 @@ dm.setLociLength <- function(dm, length, group = 0) {
 
 
 
-dm.getOutgroupSize <- function(dm) {
-  pop <- as.integer(searchFeature(dm, 'outgroup')$parameter)
-  get_sample_size(dm)[pop]
-}
 
 
 
@@ -370,19 +366,18 @@ dm.getOutgroupSize <- function(dm) {
 #' @param dm The demographic model according to which the simulations should be done
 #' @param parameters A vector of parameters which should be used for the simulations.
 #'           If a matrix is given, a simulation for each row of the matrix will be performed
-#' @param sum_stats A vector with names of the summary statistics to simulate,
-#'           or "all" for simulating all possible statistics.
 #' @return A matrix where each row is the vector of summary statistics for
 #'         the parameters in the same row of the "parameter" matrix
 #' @export
 #'
 #' @examples
-#' dm <- dm.createDemographicModel(c(25,25), 100) +
+#' model <- CoalModel(c(5,10), 20) +
 #'   feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
 #'   feat_mutation(par_range('theta', 1, 10))
+#' model <- dm.addSummaryStatistic(model, 'jsfs')
 #'
-#' dm.simSumStats(dm, c(1, 5))
-dm.simSumStats <- function(dm, parameters, sum_stats=c("all")) {
+#' simulate(model, c(1, 5))
+simulate.CoalModel <- function(dm, parameters) {
   stopifnot(is.model(dm))
   checkParInRange(dm, parameters)
 
@@ -444,7 +439,7 @@ generateGroupModel <- function(dm, group) {
 searchFeature <- function(dm, type=NULL, parameter=NULL, pop.source=NULL,
                           pop.sink=NULL, time.point=NULL, group=NULL) {
 
-  mask <- rep(TRUE, nrow(dm$features))
+  mask <- rep(TRUE, nrow(get_feature_table(dm)))
 
   if (!is.null(type)) mask <- mask & dm$features$type %in% type
 
@@ -540,5 +535,5 @@ dm.setTrioMutationRates <- function(dm, middle_rate, outer_rate, group = 0) {
 }
 
 dm.hasTrios <- function(dm, group=0) {
-  sum(dm.getLociLengthMatrix(dm, group)[,-3]) > 0
+  sum(get_locus_length_matrix(dm, group)[,-3]) > 0
 }

@@ -1,7 +1,7 @@
 context("parsing seq-gen output")
 
 test_that("parseSeqgenOutput works with a single file", {
-  dm_tmp <- dm.createDemographicModel(c(4, 6, 1), 2, 10) +
+  dm_tmp <- CoalModel(c(4, 6, 1), 2, 10) +
     feat_outgroup(3) +
     feat_pop_merge(par_range('tau', 0.5, 2), 2, 1) +
     feat_pop_merge(par_expr('2*tau'), 3, 1) #+
@@ -33,7 +33,8 @@ s2        CTTGACGGTA
 s3        GCAGACGGTA
 s4        GCTGATAATA", file = seqgen_file)
 
-  seg_sites <- parseSeqgenOutput(list(seqgen_file), 11, dm.getLociLengthMatrix(dm_tmp), 2)
+  seg_sites <- parseSeqgenOutput(list(seqgen_file), 11,
+                                 get_locus_length_matrix(dm_tmp), 2)
   expect_is(seg_sites, 'list')
   expect_equal(length(seg_sites), 2)
 
@@ -66,7 +67,7 @@ s4        GCTGATAATA", file = seqgen_file)
   expect_equal(seg_sites[[2]], seg_sites_2)
 
   # With outgroup of multiple individuals
-  seg_sites <- parseSeqgenOutput(list(seqgen_file), 11, dm.getLociLengthMatrix(dm_tmp), 2, outgroup_size = 3)
+  seg_sites <- parseSeqgenOutput(list(seqgen_file), 11, get_locus_length_matrix(dm_tmp), 2, outgroup_size = 3)
   seg_sites_o1 <- seg_sites_1[1:8, 4, drop=FALSE]
   attr(seg_sites_o1, 'positions') <- attr(seg_sites_1, 'positions')[4]
   expect_equal(seg_sites[[1]], seg_sites_o1)
@@ -77,9 +78,9 @@ s4        GCTGATAATA", file = seqgen_file)
 
   # Muliple files
   seg_sites <- parseSeqgenOutput(list(seqgen_file, seqgen_file),
-                                 sum(dm.getSampleSize(dm_tmp)),
-                                 rbind(dm.getLociLengthMatrix(dm_tmp),
-                                       dm.getLociLengthMatrix(dm_tmp)), 4)
+                                 sum(get_sample_size(dm_tmp)),
+                                 rbind(get_locus_length_matrix(dm_tmp),
+                                       get_locus_length_matrix(dm_tmp)), 4)
   expect_is(seg_sites, 'list')
   expect_equal(length(seg_sites), 4)
   expect_equal(seg_sites[[1]], seg_sites_1)

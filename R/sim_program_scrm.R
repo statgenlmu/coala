@@ -13,14 +13,11 @@ scrm_sum_stats <- c("jsfs", "seg.sites", "file", "trees")
 
 #' @importFrom scrm scrm
 scrm_simulate <- function(dm, parameters) {
-
-  if (length(parameters) != dm.getNPar(dm)) stop("Wrong number of parameters!")
-
-  args <- paste(sum(dm.getSampleSize(dm)),
-                dm.getLociNumber(dm),
+  args <- paste(sum(get_sample_size(dm)),
+                get_locus_number(dm),
                 paste(generateMsOptions(dm, parameters), collapse = ' '))
 
-  if ('file' %in% dm.getSummaryStatistics(dm)) {
+  if ('file' %in% get_summary_statistics(dm)) {
     file <- tempfile('csr_scrm')
     sum_stats <- scrm(args, file)
     return(generateSumStats(file, 'ms', parameters, dm))
@@ -31,7 +28,7 @@ scrm_simulate <- function(dm, parameters) {
 }
 
 scrm_finalize <- function(dm) {
-  dm@options[['ms.cmd']] <- generateMsOptionsCommand(dm)
+  dm$options[['ms.cmd']] <- generateMsOptionsCommand(dm)
   return(dm)
 }
 

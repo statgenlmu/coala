@@ -255,18 +255,16 @@ test_that('locus length matrix generations works', {
 })
 
 
-test_that("test.simSumStats", {
-  expect_error(dm.simSumStats(1))
-  expect_error(dm.simSumStats(model_theta_tau(), 1))
-  expect_error(dm.simSumStats(model_theta_tau(), 1:3))
-  expect_error(dm.simSumStats(model_theta_tau(), c(2, 50)))
-  sum.stats <- dm.simSumStats(model_theta_tau(), c(1, 5), "jsfs")
+test_that("test simulation works", {
+  expect_error(simulate(model_theta_tau(), 1))
+  expect_error(simulate(model_theta_tau(), 1:3))
+  expect_error(simulate(model_theta_tau(), c(2, 50)))
+  sum.stats <- simulate(model_theta_tau(), c(1, 5))
   expect_true(is.list(sum.stats))
   expect_false(is.null(sum.stats$jsfs))
   expect_true(sum(sum.stats$jsfs) > 0)
 
-
-  sum.stats <- dm.simSumStats(model_grps(), c(1, 5), "jsfs")
+  sum.stats <- simulate(model_grps(), c(1, 5))
   expect_false(is.null(sum.stats))
   expect_false(is.null(sum.stats$jsfs.1))
   expect_true(sum(sum.stats$jsfs.1) > 0)
@@ -337,4 +335,14 @@ test_that('getting the available Populations works', {
   expect_equal(get_populations(dm), 1:2)
   expect_equal(get_populations(model_theta_tau()), 1:2)
   expect_equal(get_populations(model_hky()), 1:3)
+})
+
+
+test_that('Outgroup setting and getting works', {
+  model <- CoalModel(1:4*2, 100)
+
+  for (i in 1:4) {
+    expect_equal(get_outgroup(model + feat_outgroup(i)), i)
+    expect_equal(get_outgroup_size(model + feat_outgroup(i)), 2*i)
+  }
 })

@@ -33,14 +33,14 @@
 #'
 #' @examples
 #' # A model with a constant scaled mutation rate of 5:
-#' dm <- dm.createDemographicModel(c(15,20), 100) + feat_mutation(par_const(5))
+#' dm <- CoalModel(c(15,20), 100) + feat_mutation(par_const(5))
 #'
 #' # A model with a mutation rate that can be estimated with Jaatha:
-#' dm <- dm.createDemographicModel(c(15,20), 100) +
+#' dm <- CoalModel(c(15,20), 100) +
 #'   feat_mutation(par_range('theta', 1, 20))
 #'
 #' # A model with variable gamma distributed mutation rate
-#' dm <- dm.createDemographicModel(c(15,20), 100) +
+#' dm <- CoalModel(c(15,20), 100) +
 #'   feat_mutation(par_range('theta', 1, 20), variance=100)
 feat_mutation <- function(rate, group = 0, variance = 0, model='IFS',
                           base_frequencies, tstv_ratio, gtr_rates) {

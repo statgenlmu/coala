@@ -32,7 +32,7 @@ Avaible summary statistics are
 'fpc' - calculates the Four-Gamete-Condition based statistic
 }
 \examples{
-dm <- dm.createDemographicModel(c(15, 20), 100)
+dm <- CoalModel(c(15, 20), 100)
 dm <- dm.addSummaryStatistic(dm, 'seg.sites')
 }
 
