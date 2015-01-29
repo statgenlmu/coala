@@ -29,7 +29,7 @@ The extended demographic model
 Adds a trio of loci to a group
 }
 \examples{
-dm <- dm.createDemographicModel(c(25,25), 100)
+dm <- CoalModel(c(25,25), 100)
 dm <- dm.addLocusTrio(dm, locus_names = c('Solyc00g00500.2',
                                           'Solyc00g00520.1',
                                           'Solyc00g00540.1'),

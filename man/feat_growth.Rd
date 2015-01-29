@@ -33,7 +33,7 @@ If you want to add an instantaneous change of the population size,
 then use the \link{dm.addSizeChange} function.
 }
 \examples{
-dm <- dm.createDemographicModel(c(20,37), 88) +
+dm <- CoalModel(c(20,37), 88) +
   feat_growth(par_range('alpha', 0.1, 2), population=2, at.time="0")
 }
 

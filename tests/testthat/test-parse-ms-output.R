@@ -17,17 +17,17 @@ test_that("parsing positions works", {
 test_that("parsing output works", {
   set.seed(25)
   dm.tt <- model_theta_tau()
-  dm.tt@sum.stats <- data.frame()
+  dm.tt <- resetSumStats(dm.tt)
   dm.tt <- dm.addSummaryStatistic(dm.tt, "file")
-  ss <- dm.getSampleSize(dm.tt)
-  ln <- dm.getLociNumber(dm.tt)
+  ss <- get_sample_size(dm.tt)
+  ln <- get_locus_number(dm.tt)
 
-  ms.file <- dm.simSumStats(dm.tt, c(1, 5))$file
+  ms.file <- simulate(dm.tt, c(1, 5))$file
   expect_error(parseMsOutput(list("bulb.txt"), ss, ln))
 
   seg_sites <- parseMsOutput(ms.file, ss, ln)
   expect_true(is.list(seg_sites))
-  expect_equal(length(seg_sites), dm.getLociNumber(dm.tt))
+  expect_equal(length(seg_sites), get_locus_number(dm.tt))
   for (seg_site in seg_sites) {
     expect_true(is.matrix(seg_site))
     expect_true(is.numeric(attr(seg_site, 'positions')))

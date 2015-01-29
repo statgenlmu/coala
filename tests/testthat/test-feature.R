@@ -39,7 +39,7 @@ test_that('Creating features works', {
   expect_true(feat$get_inter_locus_var())
 
   par_expr <- feat$get_table()$parameter
-  dm <- dm.createDemographicModel(5:6, 100)
+  locus_number <- 100
   locus <- 1; expect_equal(eval(parse(text=par_expr)), 0)
   locus <- 5; expect_equal(eval(parse(text=par_expr)), 0)
   locus <- 10; expect_equal(eval(parse(text=par_expr)), 0)

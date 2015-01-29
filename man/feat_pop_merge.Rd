@@ -34,7 +34,7 @@ Time in measured in Number of 4N0 generations in the past,
 where N0 is the size of population 1 at time 0.
 }
 \examples{
-dm <- dm.createDemographicModel(c(25,25), 100) +
+dm <- CoalModel(c(25,25), 100) +
   feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
   feat_mutation(par_range('theta', 1, 20))
 }

@@ -33,7 +33,7 @@ then use the \link{dm.addGrowth} function.
 }
 \examples{
 # A model with one smaller population
-dm <- dm.createDemographicModel(c(20,37), 88) +
+dm <- CoalModel(c(20,37), 88) +
   feat_size_change(par_const(.1), 2, at.time='1')
 }
 

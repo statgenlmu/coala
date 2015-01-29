@@ -53,13 +53,13 @@ checkForMsms <- function(throw.error = TRUE, silent = FALSE) {
 generateMsmsOptionsCommand <- function(dm) {
   cmd <- c('c(')
 
-  for (i in 1:dim(dm@features)[1] ) {
-    type <- as.character(dm@features[i,"type"])
-    feat <- unlist(dm@features[i, ])
+  for (i in 1:dim(dm$features)[1] ) {
+    type <- as.character(dm$features[i,"type"])
+    feat <- unlist(dm$features[i, ])
 
     if (type == "selection") {
-      cmd <- c(cmd, '"-SI"', ',', feat['time.point'], ',', length(dm.getSampleSize(dm)), ',')
-      start.freq <- rep(0, length(dm.getSampleSize(dm)))
+      cmd <- c(cmd, '"-SI"', ',', feat['time.point'], ',', length(get_sample_size(dm)), ',')
+      start.freq <- rep(0, length(get_sample_size(dm)))
       start.freq[ as.integer(feat['pop.source']) ] <- 0.0005
       cmd <- c(cmd, paste0('"', paste(start.freq, collapse=' '), '"'), ',')
 
@@ -89,12 +89,12 @@ generateMsmsOptionsCommand <- function(dm) {
 createParameterEnv <- function(dm, parameters, ...) {
   par_env <- new.env()
 
-  par.names <- dm.getParameters(dm)
+  par.names <- get_parameter_table(dm)$name
   for (i in seq(along = par.names)){
     par_env[[ par.names[i] ]] <- parameters[i]
   }
 
-  fixed.pars <- dm@parameters[dm@parameters$fixed, ]
+  fixed.pars <- dm$parameters[dm$parameters$fixed, ]
   if (nrow(fixed.pars) > 0) {
     for (i in 1:nrow(fixed.pars)){
       par_env[[ fixed.pars$name[i] ]] <- fixed.pars$lower.range[i]
@@ -112,8 +112,8 @@ createParameterEnv <- function(dm, parameters, ...) {
 generateMsmsOptions <- function(dm, parameters, locus) {
   msms.tmp <- createParameterEnv(dm, parameters, locus = locus)
 
-  if ( !is.null( dm@options[['msms.cmd']] ) )
-    cmd <- dm@options[['msms.cmd']]
+  if ( !is.null( dm$options[['msms.cmd']] ) )
+    cmd <- dm$options[['msms.cmd']]
   else
     cmd <- generateMsmsOptionsCommand(dm)
   cmd <- eval(parse(text=cmd), envir=msms.tmp)
@@ -122,22 +122,19 @@ generateMsmsOptions <- function(dm, parameters, locus) {
 }
 
 msmsSimFunc <- function(dm, parameters) {
-  if (length(parameters) != dm.getNPar(dm))
-    stop("Wrong number of parameters!")
-
   # Run all simulation in with one ms call if they loci are identical,
   # or call ms for each locus if there is variation between the loci.
   if (hasInterLocusVariation(dm)) {
-    sim_reps <- 1:dm.getLociNumber(dm)
+    sim_reps <- 1:get_locus_number(dm)
     sim_loci <- 1
   } else {
     sim_reps <- 1
-    sim_loci <- dm.getLociNumber(dm)
+    sim_loci <- get_locus_number(dm)
   }
 
   # Run the simulation(s)
   msms.files <- lapply(sim_reps, function(locus) {
-    ms.options <- paste(sum(dm.getSampleSize(dm)), sim_loci,
+    ms.options <- paste(sum(get_sample_size(dm)), sim_loci,
                         paste(generateMsOptions(dm, parameters, locus),
                               collapse=" "))
     msms.options <- paste(generateMsmsOptions(dm, parameters, locus),
@@ -152,8 +149,8 @@ msmsSimFunc <- function(dm, parameters) {
 
 finalizeMsms <- function(dm) {
   checkForMsms()
-  dm@options[['ms.cmd']] <- generateMsOptionsCommand(dm)
-  dm@options[['msms.cmd']] <- generateMsmsOptionsCommand(dm)
+  dm$options[['ms.cmd']] <- generateMsOptionsCommand(dm)
+  dm$options[['msms.cmd']] <- generateMsmsOptionsCommand(dm)
   return(dm)
 }
 
@@ -162,7 +159,7 @@ printMsmsCommand <- function(dm) {
   ms.cmd <- printOptionsCmd(generateMsOptionsCommand(dm))
 
   cmd <- paste("msms", msms.cmd,
-               "-ms", sum(dm.getSampleSize(dm)), dm.getLociNumber(dm), ms.cmd)
+               "-ms", sum(get_sample_size(dm)), get_locus_number(dm), ms.cmd)
   cat(cmd, '\n')
 }
 

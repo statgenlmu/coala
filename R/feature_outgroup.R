@@ -7,7 +7,7 @@
 #' @export
 #' @examples
 #' # A simple finite sites model
-#' dm <- dm.createDemographicModel(c(4, 6, 1), 2, 10) +
+#' dm <- CoalModel(c(4, 6, 1), 2, 10) +
 #'    feat_outgroup(3) +
 #'    feat_pop_merge(par_range('tau', 0.5, 2), 2, 1) +
 #'    feat_pop_merge(par_expr('2*tau'), 3, 1) #+
