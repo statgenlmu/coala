@@ -10,6 +10,7 @@
   else stop('Can not add ', e2name, ' to ', e1)
 }
 
+
 addToModel <- function(x, model, x_name) UseMethod("addToModel")
 addToModel.default <- function(x, model, x_name) {
   stop("Can not add `", x_name, "` to model")
@@ -40,6 +41,22 @@ addToModel.Feature <- function(feat, model, feat_name) {
   if (feat$get_inter_locus_var()) {
     model <- addInterLocusVariation(model, feat$get_group())
   }
+  model
+}
+
+
+addToModel.SumStat <- function(sum_stat, model, feat_name) {
+  if (sum_stat$get_name() %in%
+        get_summary_statistics(model,
+                               group = sum_stat$get_group(),
+                               pop = sum_stat$get_population()))
+    stop("Summary Statistic ", sum_stat$get_name(), ' is already in the model.')
+
+  model$sum_stats = rbind(model$sum_stats,
+                          data.frame(name = sum_stat$get_name(),
+                                     population = sum_stat$get_population(),
+                                     group = sum_stat$get_group(),
+                                     stringsAsFactors = FALSE))
   model
 }
 

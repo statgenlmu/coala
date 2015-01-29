@@ -42,33 +42,6 @@ test_that("adding features works", {
 })
 
 
-test_that("test.dm.addSummaryStatistics", {
-  dm <- CoalModel(11:12, 100)
-  expect_equal(length(get_summary_statistics(dm)), 0)
-
-  dm <- dm.addSummaryStatistic(dm, "jsfs")
-  expect_equal(length(get_summary_statistics(dm)), 1)
-
-  expect_true(get_summary_statistics(dm) == "jsfs")
-  dm <- dm.addSummaryStatistic(dm, "seg.sites")
-  expect_equal(length(get_summary_statistics(dm)), 2)
-  expect_true(all(get_summary_statistics(dm) == c("jsfs",
-                                                   "seg.sites")))
-  dm <- dm.addSummaryStatistic(dm, "seg.sites")
-  expect_equal(length(get_summary_statistics(dm)), 2)
-  expect_true(all(get_summary_statistics(dm) == c("jsfs",
-                                                   "seg.sites")))
-  dm <- dm.addSummaryStatistic(dm, "file", group = 2)
-  expect_equal(length(get_summary_statistics(dm, group = 1)), 2)
-  expect_equal(length(get_summary_statistics(dm, group = 2)), 3)
-  dm <- dm.addSummaryStatistic(dm, "trees", group = 1)
-  expect_equal(length(get_summary_statistics(dm, group = 1)), 3)
-  expect_equal(length(get_summary_statistics(dm, group = 2)), 3)
-  expect_error(dm.addSummaryStatistic(dm, "no.existing.sumstat"))
-  suppressWarnings(expect_error(dm.addSummaryStatistic(dm, 1:10)))
-})
-
-
 test_that("test get_summary_statistics", {
   expect_equal(get_summary_statistics(CoalModel(1:2, 2)), character())
   expect_equal(get_summary_statistics(model_theta_tau()),  "jsfs")
@@ -118,13 +91,14 @@ test_that("test.generateGroupModel", {
   expect_equal(get_locus_length(dm), 30)
   expect_equal(get_locus_number(dm), 31)
   sum.stats <- model_theta_tau()$sum_stats
-  dm <- dm.addSummaryStatistic(model_theta_tau(), "file", group = 2)
+
+  dm <- model_theta_tau() + sumstat_seg_sites(group = 2)
   dm.1 <- generateGroupModel(dm, 1)
   expect_true(sum.stats$name %in% dm.1$sum_stats$name)
   expect_true(dm.1$sum_stats$name %in% sum.stats$name)
   dm.2 <- generateGroupModel(dm, 2)
   expect_equal(nrow(dm.2$sum_stats), nrow(sum.stats) + 1)
-  expect_true("file" %in% get_summary_statistics(dm.2))
+  expect_true("seg.sites" %in% get_summary_statistics(dm.2))
   dm$options[["bli"]] <- 0
   dm$options[["bla"]] <- 0
   dm$options[["blub"]] <- 0

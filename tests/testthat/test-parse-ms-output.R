@@ -16,9 +16,7 @@ test_that("parsing positions works", {
 
 test_that("parsing output works", {
   set.seed(25)
-  dm.tt <- model_theta_tau()
-  dm.tt <- resetSumStats(dm.tt)
-  dm.tt <- dm.addSummaryStatistic(dm.tt, "file")
+  dm.tt <- model_theta_tau() + sumstat_file()
   ss <- get_sample_size(dm.tt)
   ln <- get_locus_number(dm.tt)
 

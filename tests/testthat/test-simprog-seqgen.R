@@ -97,7 +97,7 @@ test_that("seq-gen can simulate trios", {
                            distance = c(5, 5), group = 1)
   dm.lt <- dm.addLocusTrio(dm.lt, locus_length = c(20, 10, 15),
                            distance = c(7, 5), group = 1)
-  dm.lt <- dm.addSummaryStatistic(dm.lt, 'seg.sites')
+  dm.lt <- dm.lt + sumstat_seg_sites()
   dm.lt <- dm.finalize(dm.lt)
 
   sum.stats <- simulate(dm.lt, c(1, 10))
@@ -147,7 +147,7 @@ test_that("Simulation of trios with unequal mutation rates works", {
 #   expect_equal(grep(as.character(2/ll[5]), cmds[[3]]), 1)
 #
 #   # simulate
-#   grp_mdl <- dm.addSummaryStatistic(grp_mdl, 'seg.sites')
+#   grp_mdl <- grp_mdl + sumstat_seg_sites()
 #   ss <- simulate(grp_mdl, c(1,5))
 #   expect_false(is.null(ss$seg.sites))
 })

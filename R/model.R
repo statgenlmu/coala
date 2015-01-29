@@ -120,55 +120,6 @@ is.model <- function(model) {
 }
 
 
-#' Adds a summary statistic to the model.
-#'
-#' This summary statistic will the be calulated for each simualtion
-#' and returned by the simSumStats function.
-#'
-#' Avaible summary statistics are
-#' 'jsfs' - calculates the Joint Site Frequency Spectrum
-#' 'seg.sites' - return the simulated segregating sites as matrix
-#' 'file' - returns a file in which the simulation output is written
-#' 'fpc' - calculates the Four-Gamete-Condition based statistic
-#'
-#' @param dm The demographic model to which a summary statistic should be added.
-#' @param sum.stat The summary statistic to add. Use the names mentioned above.
-#' @param group If given, the summary statistic is only calculated for a
-#'        given group of loci.
-#' @param population The population for which the summary statistic is calculated.
-#'   Currently only used for 'fpc' statistics.
-#' @return The model with a summary statistic added.
-#' @export
-#' @examples
-#' dm <- CoalModel(c(15, 20), 100)
-#' dm <- dm.addSummaryStatistic(dm, 'seg.sites')
-dm.addSummaryStatistic <- function(dm, sum.stat, population = 0, group = 0) {
-  stopifnot(is.model(dm))
-
-  if (sum.stat == 'fpc' & population == 0) {
-    dm <- dm.addSummaryStatistic(dm, 'fpc', 1, group)
-    dm <- dm.addSummaryStatistic(dm, 'fpc', 2, group)
-    return(dm)
-  }
-
-  # Add the summary statistic
-  dm$sum_stats = rbind(dm$sum_stats, data.frame(name=sum.stat,
-                                                population = population,
-                                                group=group,
-                                                stringsAsFactors = FALSE))
-  dm$finalized = FALSE
-
-  # Check if there is any simulation program supporting this summary statistic
-  for (sim.prog in ls(sim_programs)) {
-    if (sum.stat %in% getSimProgram(sim.prog)$possible_sum_stats) return(dm)
-  }
-  stop("No simulation program for summary statistic", sum.stat)
-}
-
-
-
-
-
 # Checks if a vector of parameters is within the ranges of the model
 checkParInRange <- function(dm, param) {
   if (length(param) != nrow(get_parameter_table(dm))) stop("Wrong number of parameters")
@@ -350,55 +301,6 @@ dm.setLociLength <- function(dm, length, group = 0) {
   if (sum(dm$loci$group == group) != 1) stop('More the one set of loci for this group')
   dm$loci[dm$loci$group == group, 'length_m'] <- length
   dm
-}
-
-
-
-
-
-
-
-
-
-
-#' Simulates data according to a demographic model
-#'
-#' @param dm The demographic model according to which the simulations should be done
-#' @param parameters A vector of parameters which should be used for the simulations.
-#'           If a matrix is given, a simulation for each row of the matrix will be performed
-#' @return A matrix where each row is the vector of summary statistics for
-#'         the parameters in the same row of the "parameter" matrix
-#' @export
-#'
-#' @examples
-#' model <- CoalModel(c(5,10), 20) +
-#'   feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
-#'   feat_mutation(par_range('theta', 1, 10))
-#' model <- dm.addSummaryStatistic(model, 'jsfs')
-#'
-#' simulate(model, c(1, 5))
-simulate.CoalModel <- function(dm, parameters) {
-  stopifnot(is.model(dm))
-  checkParInRange(dm, parameters)
-
-  if (!dm$finalized) dm = dm.finalize(dm)
-
-  if (dm$currentSimProg != "groups") {
-    return(getSimProgram(dm$currentSimProg)$sim_func(dm, parameters))
-  }
-
-  sum_stats <- list(pars=parameters)
-  for (group in get_groups(dm)) {
-    dm.grp <- dm$options$grp.models[[as.character(group)]]
-    sum_stats.grp <- getSimProgram(dm.grp$currentSimProg)$sim_func(dm.grp, parameters)
-    for (i in seq(along = sum_stats.grp)) {
-      if (names(sum_stats.grp)[i] == 'pars') next()
-      name <- paste(names(sum_stats.grp)[i], group, sep='.')
-      sum_stats[[name]] <- sum_stats.grp[[i]]
-    }
-  }
-
-  sum_stats
 }
 
 

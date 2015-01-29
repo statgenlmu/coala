@@ -56,8 +56,7 @@ generateTreeModel <- function(dm, locus_length) {
 
   dm$features <- dm$features[dm$features$type %in% tree.prog$possible_features, ]
   dm <- resetSumStats(dm)
-  dm <- dm.addSummaryStatistic(dm, "trees")
-  dm <- dm.addSummaryStatistic(dm, "file")
+  dm <- dm + sumstat_trees() + sumstat_file()
 
   dm$loci <- dm$loci[FALSE, ]
   dm <- addLocus(dm, number = 1, length_m = sum(locus_length), group = 0)

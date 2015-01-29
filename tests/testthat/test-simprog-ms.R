@@ -16,8 +16,8 @@ test_that("msSimFunc is working", {
 test_that("msSimFunc works with inter-locus variation", {
   dm_tmp <- CoalModel(5:6, 2) +
     feat_mutation(par_const(2), variance = '2') +
-    feat_pop_merge(par_const(.5), 2, 1)
-  dm_tmp <- dm.addSummaryStatistic(dm_tmp, 'jsfs')
+    feat_pop_merge(par_const(.5), 2, 1) +
+    sumstat_jsfs()
 
   set.seed(117)
   sum_stats <- msSingleSimFunc(dm_tmp)
