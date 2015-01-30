@@ -33,6 +33,7 @@ Collate:
     'feature_sample.R'
     'feature_selection.R'
     'feature_size_change.R'
+    'locus.R'
     'sim_program.R'
     'model.R'
     'model_build.R'

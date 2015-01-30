@@ -59,7 +59,7 @@ generateTreeModel <- function(dm, locus_length) {
   dm <- dm + sumstat_trees() + sumstat_file()
 
   dm$loci <- dm$loci[FALSE, ]
-  dm <- addLocus(dm, number = 1, length_m = sum(locus_length), group = 0)
+  dm <- dm + locus_single(sum(locus_length), group = 0)
   dm.finalize(dm)
 }
 
