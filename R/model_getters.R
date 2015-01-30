@@ -31,7 +31,7 @@ get_locus_length <- function(dm, group=1) {
     length <- dm$loci[dm$loci$group == 0, c(6,8,10), drop = FALSE]
   }
   if (nrow(length) == 0) stop("Failed to determine loci length")
-  as.integer(sum(length))
+  as.integer(rowSums(length))
 }
 
 

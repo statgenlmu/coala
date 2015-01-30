@@ -61,6 +61,34 @@ addToModel.SumStat <- function(sum_stat, model, feat_name) {
 }
 
 
+addToModel.Locus <- function(locus, model, locus_name) {
+  if (length(locus$get_name()) == 1) {
+    locus_names <- c('', locus$get_name(), '')
+  } else if (length(locus$get_name()) == 3) {
+    locus_names <- locus$get_name()
+  } else stop("Failed to get locus names from ", locus_name)
+
+  if (length(locus$get_length()) == 1) {
+    locus_length <- c(0, 0, locus$get_length(), 0, 0)
+  } else if (length(locus$get_length()) == 5) {
+    locus_length <- locus$get_length()
+  } else stop("Failed to get locus length from ", locus_name)
+
+  model$loci <- rbind(model$loci, data.frame(group = locus$get_group(),
+                                             number = locus$get_number(),
+                                             name = locus_names[2],
+                                             name_l = locus_names[1],
+                                             name_r = locus_names[3],
+                                             length_l = locus_length[1],
+                                             length_il = locus_length[2],
+                                             length_m = locus_length[3],
+                                             length_ir = locus_length[4],
+                                             length_r = locus_length[5],
+                                             stringsAsFactors = FALSE))
+  model
+}
+
+
 addToFeature <- function(x, feat, x_name) {
   if (is.par_model(x)) {
     feat$add_parameter(x)

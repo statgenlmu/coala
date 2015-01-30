@@ -65,40 +65,36 @@ test_that("All example models can be simulated", {
 
 
 test_that("test.RateHeterogenity", {
-#   if (!test_seqgen) skip('seq-gen not installed')
-#   set.seed(12)
-#   dm.rh <- dm.addMutationRateHeterogenity(dm.hky, 0.1, 5, categories.number = 5)
-#   jsfs <- simulate(dm.rh, c(1, 10, 1))
-#   expect_true(sum(jsfs$jsfs) > 0)
+  skip("Temporarily deactivated")
+  if (!checkForSeqgen(FALSE, TRUE)) skip('seqgen not installed')
+  set.seed(12)
+  dm.rh <- dm.addMutationRateHeterogenity(dm.hky, 0.1, 5, categories.number = 5)
+  jsfs <- simulate(dm.rh, c(1, 10, 1))
+  expect_true(sum(jsfs$jsfs) > 0)
 })
 
 
 test_that("test.seqgenWithMsms", {
   if (!checkForSeqgen(FALSE, TRUE)) skip('seqgen not installed')
   if (!checkForMsms(FALSE, TRUE)) skip('msms not installed')
-#   dm.selsq <- dm.addPositiveSelection(dm.f81, 100, 500, population = 1,
-#                                       at.time = "0.1")
-#   dm.selsq <- dm.finalize(dm.selsq)
-#   expect_false(is.null(dm.selsq@options[["seqgen.cmd"]]))
-#   #expect_false(is.null(dm.selsq@options[["tree.model"]]))
-#   set.seed(4444)
-#   sum.stats <- simulate(dm.selsq, c(1, 5, 250))
-#   expect_false(is.null(sum.stats$jsfs))
-#   set.seed(4444)
-#   sum.stats2 <- simulate(dm.selsq, c(1, 5, 250))
-#   expect_false(is.null(sum.stats2$jsfs))
-#   expect_equal(sum.stats2, sum.stats)
+
+  m1 <- model_hky() + feat_selection(500, 250, 1, 0.1)
+  set.seed(4444)
+  sum.stats <- simulate(m1, pars = c(1, 5))
+  expect_false(is.null(sum.stats$jsfs))
+
+  set.seed(4444)
+  sum.stats2 <- simulate(m1, pars = c(1, 5))
+  expect_equal(sum.stats2, sum.stats)
 })
 
 
 test_that("seq-gen can simulate trios", {
   if (!checkForSeqgen(FALSE, TRUE)) skip('seqgen not installed')
-  dm.lt <- dm.addLocusTrio(model_f84(), locus_length = c(10, 20, 10),
-                           distance = c(5, 5), group = 1)
-  dm.lt <- dm.addLocusTrio(dm.lt, locus_length = c(20, 10, 15),
-                           distance = c(7, 5), group = 1)
-  dm.lt <- dm.lt + sumstat_seg_sites()
-  dm.lt <- dm.finalize(dm.lt)
+  dm.lt <- model_f84() +
+    locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5), group = 1) +
+    locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5), group = 1) +
+    sumstat_seg_sites()
 
   sum.stats <- simulate(dm.lt, pars=c(1, 10))
   expect_that(sum(sum.stats$jsfs), is_less_than(sum(sapply(sum.stats$seg.sites, ncol))))
@@ -106,6 +102,7 @@ test_that("seq-gen can simulate trios", {
 
 
 test_that("Simulation of trios with unequal mutation rates works", {
+  skip("Temporarily deactivated")
 #   if (!test_seqgen) skip('seq-gen not installed')
 #   if (!isJaathaVariable('seqgen.exe')) setJaathaVariable('seqgen.exe', 'seq-gen')
 #   dm <- dm.setTrioMutationRates(dm_trios, '17', 'theta', group=2)

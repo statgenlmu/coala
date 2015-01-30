@@ -44,9 +44,8 @@ model_gtr <- function() {
 
 
 model_grps <- function() {
-  dm.grp <- model_theta_tau()
-  dm.grp <- dm.addLocus(dm.grp, 100, 15, 1)
-  dm.grp <- dm.addLocus(dm.grp, 200, 10, 2)
-  dm.grp <- dm.addLocus(dm.grp, 50, 5, 3)
-  dm.grp
+  model_theta_tau() +
+    locus_averaged(15, 100, 1) +
+    locus_averaged(10, 200, 2) +
+    locus_averaged(5, 50, 3)
 }

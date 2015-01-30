@@ -73,14 +73,15 @@ test_that("test.generateGroupModel", {
   expect_equal(dm$sum_stats, model_theta_tau()$sum_stats)
   expect_equal(dm$options, model_theta_tau()$options)
 
-  dm <- dm.addLocus(model_theta_tau(), 23, 10, group = 1)
+  dm <- model_theta_tau() + locus_averaged(10, 23, group = 1)
   dm <- generateGroupModel(dm, 1)
   expect_equal(nrow(dm$features), nrow(model_theta_tau()$features))
   expect_true(all(dm$features$group == 0))
   expect_equal(get_locus_length(dm), 23)
 
-  dm.3 <- dm.addLocus(model_theta_tau(), 23, 5, group = 1)
-  dm.3 <- dm.addLocus(dm.3, 30, 31, group = 2)
+  dm.3 <- model_theta_tau() +
+    locus_averaged(5, 23, group = 1) +
+    locus_averaged(31, 30, group = 2)
   dm <- generateGroupModel(dm.3, 1)
   expect_equal(nrow(dm$features), nrow(model_theta_tau()$features))
   expect_true(all(dm$features$group == 0))
@@ -116,11 +117,11 @@ test_that("test.generateGroupModel", {
 
 test_that("test.getGroups", {
   expect_equal(get_groups(model_theta_tau()), 1)
-  dm <- dm.addLocus(model_theta_tau(), 23, 10, group = 1)
+  dm <- model_theta_tau() + locus_averaged(10, 23, group = 1)
   expect_equal(get_groups(dm), 1)
-  dm <- dm.addLocus(model_theta_tau(), 32, 10, group = 2)
+  dm <- model_theta_tau() + locus_averaged(10, 32, group = 2)
   expect_equal(get_groups(dm), 1:2)
-  dm <- dm.addLocus(dm, 32, group = 4)
+  dm <- dm + locus_averaged(10, 32, group = 4)
   expect_equal(get_groups(dm), c(1:2, 4))
 })
 
@@ -155,14 +156,18 @@ test_that("test.parInRange", {
 })
 
 
-test_that("test.scaleDemographicModel", {
-  dm <- CoalModel(11:12, 10)
-  dm <- dm.addLocus(dm, 10, 25, group = 1)
-  dm <- dm.addLocus(dm, 15, 25, group = 2)
+test_that("test that scaling of model works", {
+  dm <- CoalModel(11:12, 10) +
+    locus_averaged(25, 10, group = 1) +
+    locus_averaged(25, 15, group = 2) +
+    locus_single(101, group = 3) +
+    locus_single(102, group = 3)
+
   dm <- scaleDemographicModel(dm, 5)
   expect_equal(get_locus_number(dm, 0), 2L)
   expect_equal(get_locus_number(dm, 1), 5L)
   expect_equal(get_locus_number(dm, 2), 5L)
+  expect_equal(get_locus_number(dm, 3), 2L)
 })
 
 
@@ -176,39 +181,22 @@ test_that("searchFeature", {
 })
 
 
-test_that("set and get loci length works", {
-  dm_tmp <- dm.setLociLength(model_theta_tau(), 17)
-  expect_equal(get_locus_length(dm_tmp), 17)
+test_that("get loci length and number works", {
+  model <- CoalModel(10, 11, 101) + locus_averaged(12, 102, group = 2)
+  expect_equal(get_locus_number(model), 11)
+  expect_equal(get_locus_number(model, 1), 11)
+  expect_equal(get_locus_number(model, 2), 12)
+  expect_equal(get_locus_length(model, 1), 101)
+  expect_equal(get_locus_length(model), 101)
+  expect_equal(get_locus_length(model, 2), 102)
 
-  dm_tmp <- dm.addLocus(dm_tmp, 22, 10, group = 2)
-  dm_tmp <- dm.setLociLength(dm_tmp, 23, group = 2)
-  expect_equal(get_locus_length(dm_tmp), 17)
-  expect_equal(get_locus_length(dm_tmp, 1), 17)
-  expect_equal(get_locus_length(dm_tmp, 2), 23)
-
-  dm_tmp <- dm.addLocus(dm_tmp, 32, 10, group = 1)
-  dm_tmp <- dm.setLociLength(dm_tmp, 32, group = 1)
-  expect_equal(get_locus_length(dm_tmp), 32)
-  expect_equal(get_locus_length(dm_tmp, 1), 32)
-  expect_equal(get_locus_length(dm_tmp, 2), 23)
-})
-
-
-test_that("set and get loci number works", {
-  dm <- dm.setLociNumber(model_theta_tau(), 17)
-  expect_equal(get_locus_number(dm), 17)
-
-  dm <- dm.addLocus(dm, 22, 10, group = 2)
-  dm <- dm.setLociNumber(dm, 23, group = 2)
-  expect_equal(get_locus_number(dm), 17)
-  expect_equal(get_locus_number(dm, 1), 17)
-  expect_equal(get_locus_number(dm, 2), 23)
-
-  dm <- dm.addLocus(dm, 32, 10, group = 1)
-  dm <- dm.setLociNumber(dm, 32, group = 1)
-  expect_equal(get_locus_number(dm), 32)
-  expect_equal(get_locus_number(dm, 1), 32)
-  expect_equal(get_locus_number(dm, 2), 23)
+  model <- model + locus_averaged(21, 201, group = 1)
+  expect_equal(get_locus_number(model), 21)
+  expect_equal(get_locus_number(model, 1), 21)
+  expect_equal(get_locus_number(model, 2), 12)
+  expect_equal(get_locus_length(model, 1), 201)
+  expect_equal(get_locus_length(model), 201)
+  expect_equal(get_locus_length(model, 2), 102)
 })
 
 
@@ -221,9 +209,11 @@ test_that('locus length matrix generations works', {
                matrix(c(0, 0, 1000, 0, 0), 10, 5, TRUE, dimnames))
 
   # Multiple loci with differnt length
-  dm <- dm.addLocus(model_theta_tau(), 21, 1, group = 2)
-  dm <- dm.addLocus(dm, 22, 1, group = 2)
-  dm <- dm.addLocus(dm, 23, 1, group = 2)
+  dm <- model_theta_tau() +
+    locus_single(21, group = 2) +
+    locus_single(22, group = 2) +
+    locus_single(23, group = 2)
+
   expect_equal(get_locus_length_matrix(dm, group = 2),
                matrix(c(0, 0, 21, 0, 0,
                         0, 0, 22, 0, 0,
@@ -251,29 +241,20 @@ test_that("test simulation works", {
 })
 
 
-test_that("Loci trios are added to model", {
-  dm.lt <- dm.addLocusTrio(model_hky(), locus_length =  c(3, 5, 7),
-                           distance = c(4, 6), group = 2)
-
-  expect_true(all(get_locus_length_matrix(dm.lt, 2) == 3:7))
-  expect_true(nrow(searchFeature(dm.lt, 'locus_trios', group = 2)) > 0)
-})
-
-
 test_that("Adding and Getting inter locus variation works", {
-  warning('model test for inter-locus-variation deactivated')
-#   expect_false(dm.hasInterLocusVariation(model_theta_tau()))
-#
-#   dm_tmp <- dm.addInterLocusVariation(model_theta_tau(), 0)
-#   expect_true(dm.hasInterLocusVariation(dm_tmp))
-#   dm_tmp <- dm.addInterLocusVariation(dm_tmp, 0)
-#   expect_true(dm.hasInterLocusVariation(dm_tmp))
-#   expect_equal(nrow(searchFeature(dm_tmp, 'inter_locus_variation')), 1)
-#
-#   dm_tmp <- dm.addInterLocusVariation(model_theta_tau(), 2)
-#   expect_false(dm.hasInterLocusVariation(dm_tmp))
-#   expect_false(dm.hasInterLocusVariation(dm_tmp, 1))
-#   expect_true(dm.hasInterLocusVariation(dm_tmp, 2))
+  skip('model test for inter-locus-variation deactivated')
+  expect_false(dm.hasInterLocusVariation(model_theta_tau()))
+
+  dm_tmp <- dm.addInterLocusVariation(model_theta_tau(), 0)
+  expect_true(dm.hasInterLocusVariation(dm_tmp))
+  dm_tmp <- dm.addInterLocusVariation(dm_tmp, 0)
+  expect_true(dm.hasInterLocusVariation(dm_tmp))
+  expect_equal(nrow(searchFeature(dm_tmp, 'inter_locus_variation')), 1)
+
+  dm_tmp <- dm.addInterLocusVariation(model_theta_tau(), 2)
+  expect_false(dm.hasInterLocusVariation(dm_tmp))
+  expect_false(dm.hasInterLocusVariation(dm_tmp, 1))
+  expect_true(dm.hasInterLocusVariation(dm_tmp, 2))
 })
 
 

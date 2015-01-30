@@ -35,7 +35,7 @@ createFeatureTable <- function(type=character(), parameter=character(),
 }
 
 #' @export
-CoalModel <- function(sample_size, loci_number, loci_length=1000) {
+CoalModel <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model <- list()
   class(model) <- c("CoalModel", class(Base_Object))
 
@@ -60,11 +60,13 @@ CoalModel <- function(sample_size, loci_number, loci_length=1000) {
 
   # Add sample sizes
   for (pop in seq(along = sample_size)) {
-    model <- model + feat_sample(sample_size[pop], pop)
+    if (sample_size[pop] > 0) model <- model + feat_sample(sample_size[pop], pop)
   }
 
-  # Add loci
-  model <- dm.addLocus(model, length = loci_length, number = loci_number)
+  # Add locus
+  if (loci_number > 0) {
+    model <- model + locus_averaged(loci_number, loci_length)
+  }
 
   model$options <- list()
   model$finalized <- FALSE
@@ -198,112 +200,6 @@ resetSumStats <- function(dm) {
 }
 
 
-# Low level function for adding a locus
-addLocus <- function(dm, group=0, number=1,
-                     name='', name_l='', name_r='',
-                     length_l=0, length_il=0, length_m=0,
-                     length_ir=0, length_r=0) {
-
-  if (number > 1 & any(dm$loci[dm$loci$group == group, 'number'] != 1)) {
-    stop("You can only have multiple loci in one group if 'number' is 1 for all")
-  }
-
-  dm$loci <- rbind(dm$loci, data.frame(group=group,
-                                       number=number,
-                                       name=name,
-                                       name_l=name_l,
-                                       name_r=name_r,
-                                       length_l=length_l,
-                                       length_il=length_il,
-                                       length_m=length_m,
-                                       length_ir=length_ir,
-                                       length_r=length_r))
-
-  invisible(dm)
-}
-
-#' Defines how many identical loci belong to a group of loci
-#'
-#' @param dm The Demographic Model
-#' @param number The number of loci to add to the group.
-#' @param length The average length of the loci or the acctual of the locus
-#'               if just one is used.
-#' @param group The group for which we set the loci number
-#' @return The changed Demographic Model
-#' @export
-#' @examples
-#' dm <- CoalModel(c(25,25), 100)
-#' dm <- dm.addLocus(dm, number = 200, length = 250, group = 1)
-dm.addLocus <- function(dm, length, number = 1, group=0) {
-  stopifnot(is.model(dm))
-  if (!is.numeric(number)) stop("'number' needs to be numeric")
-  if (!is.numeric(length)) stop("'length' needs to be numeric")
-  if (!is.numeric(group)) stop("'group' needs to be numeric")
-
-  addLocus(dm, group=group, number=number, length_m=length)
-}
-
-#' Adds a trio of loci to a group
-#' @param dm The Demographic Model
-#' @param locus_names A vector of 3 strings, giving the names for the loci.
-#'   The names are used for identifying the loci later (left, middle and right).
-#' @param locus_length An integer vector of length 3, giving the length of each
-#'   of the three loci (left, middle and right).
-#' @param distance A vector of two, giving the distance between left and middle,
-#'   and middle an right locus, in basepairs.
-#' @param group The group to which to add the trio
-#' @return The extended demographic model
-#' @export
-#' @examples
-#' dm <- CoalModel(c(25,25), 100)
-#' dm <- dm.addLocusTrio(dm, locus_names = c('Solyc00g00500.2',
-#'                                           'Solyc00g00520.1',
-#'                                           'Solyc00g00540.1'),
-#'                       locus_length=c(1250, 1017, 980),
-#'                       distance=c(257, 814))
-dm.addLocusTrio <- function(dm, locus_names=c(left='', middle='', right=''),
-                            locus_length=c(left=1000, middle=1000, right=1000),
-                            distance=c(left_middle=500, middle_right=500),
-                            group=1) {
-
-  stopifnot(is.model(dm))
-  if (!is.character(locus_names)) stop("'name' needs to be numeric")
-  if (length(locus_names) != 3) stop("'name' needs to be a vector of three names")
-  if (!is.numeric(locus_length)) stop("'locus_length' needs to be numeric")
-  if (length(locus_length) != 3)
-    stop("'locus_length' needs to be a vector of three names")
-  if (!is.numeric(group)) stop("'group' needs to be numeric")
-
-  if (nrow(searchFeature(dm, 'locus_trios', group = group)) == 0) {
-    dm <- dm + Feature$new('locus_trios', par_const(NA), group = group)
-  }
-
-  addLocus(dm, group=group,
-           name_l = locus_names[1],
-           name = locus_names[2],
-           name_r = locus_names[3],
-           length_l=locus_length[1],
-           length_il=distance[1],
-           length_m=locus_length[2],
-           length_ir=distance[2],
-           length_r=locus_length[3])
-}
-
-# Legacy function for unit testing
-dm.setLociNumber <- function(dm, number, group = 0) {
-  if (sum(dm$loci$group == group) != 1) stop('More the one set of loci for this group')
-  dm$loci[dm$loci$group == group, 'number'] <- number
-  dm
-}
-
-# Legacy function for unit testing
-dm.setLociLength <- function(dm, length, group = 0) {
-  if (sum(dm$loci$group == group) != 1) stop('More the one set of loci for this group')
-  dm$loci[dm$loci$group == group, 'length_m'] <- length
-  dm
-}
-
-
 generateGroupModel <- function(dm, group) {
   if (all(dm$features$group == 0) &
       all(dm$sum_stats$group == 0) &
@@ -401,13 +297,10 @@ searchFeature <- function(dm, type=NULL, parameter=NULL, pop.source=NULL,
 
 
 
-scaleDemographicModel <- function(dm, scaling.factor) {
-  for (group in unique(dm$loci$group)) {
-    dm <- dm.setLociNumber(dm,
-                     round(get_locus_number(dm, group) / scaling.factor),
-                     group)
-  }
-  dm
+scaleDemographicModel <- function(model, scaling_factor) {
+  model$loci$number[model$loci$number > 1] <-
+    round(model$loci$number[model$loci$number > 1] /  scaling_factor)
+  model
 }
 
 addInterLocusVariation <- function(dm, group = 0) {
