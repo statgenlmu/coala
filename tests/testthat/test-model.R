@@ -157,17 +157,17 @@ test_that("test.parInRange", {
 
 
 test_that("test that scaling of model works", {
-  dm <- CoalModel(11:12, 10) +
+  model <- CoalModel(11:12, 10) +
     locus_averaged(25, 10, group = 1) +
     locus_averaged(25, 15, group = 2) +
     locus_single(101, group = 3) +
     locus_single(102, group = 3)
 
-  dm <- scaleDemographicModel(dm, 5)
-  expect_equal(get_locus_number(dm, 0), 2L)
-  expect_equal(get_locus_number(dm, 1), 5L)
-  expect_equal(get_locus_number(dm, 2), 5L)
-  expect_equal(get_locus_number(dm, 3), 2L)
+  model <- scale_model(model, 5)
+  expect_equal(get_locus_number(model, 0), 2L)
+  expect_equal(get_locus_number(model, 1), 5L)
+  expect_equal(get_locus_number(model, 2), 5L)
+  expect_equal(get_locus_number(model, 3), 2L)
 })
 
 

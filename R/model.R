@@ -295,14 +295,6 @@ searchFeature <- function(dm, type=NULL, parameter=NULL, pop.source=NULL,
 }
 
 
-
-
-scaleDemographicModel <- function(model, scaling_factor) {
-  model$loci$number[model$loci$number > 1] <-
-    round(model$loci$number[model$loci$number > 1] /  scaling_factor)
-  model
-}
-
 addInterLocusVariation <- function(dm, group = 0) {
   stopifnot(is.numeric(group))
   if (hasInterLocusVariation(dm, group)) return(dm)
