@@ -3,3 +3,4 @@ coalsimr 0.1
 
 * Imported coalescent simulation functionality from package jaatha.
 * Redesigned the user interface using S3 and R6 classes.
+* Added a caching mechanism for simulation commands.
