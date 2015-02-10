@@ -116,7 +116,6 @@ generateMsmsOptions <- function(dm, parameters, locus) {
 
   cmd <- read_cache(dm, 'msms_cmd')
   if (is.null(cmd)) {
-    message('Generating & caching msms cmd...')
     cmd <- generateMsmsOptionsCommand(dm)
     cache(dm, 'msms_cmd', cmd)
   }

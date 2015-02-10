@@ -50,8 +50,6 @@ generateTreeModel <- function(dm, locus) {
   tree_model <- read_cache(dm, paste0('tree_model_', locus))
 
   if (is.null(tree_model)) {
-    message('Generating  & caching tree model for locus ', locus)
-
     stopifnot(all(get_groups(dm) == 1))
     locus_length <- get_locus_length_matrix(dm)[locus,]
 
@@ -124,7 +122,6 @@ generateSeqgenOptions <- function(dm, parameters, locus,
 
   cmd <- read_cache(dm, 'seqgen_cmd')
   if (is.null(cmd)) {
-    message('Generating & caching seqgen cmd...')
     cmd <- generateSeqgenOptionsCmd(dm)
     cache(dm, 'seqgen_cmd', cmd)
   }

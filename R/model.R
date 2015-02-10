@@ -133,8 +133,6 @@ determine_sim_prog <- function(dm) {
   name <- read_cache(dm, 'sim_prog')
 
   if (is.null(name)) {
-    message('Determining simulation program')
-
     if (length(get_groups(dm)) > 1) {
       name <- 'groups'
     } else {

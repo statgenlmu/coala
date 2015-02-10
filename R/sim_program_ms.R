@@ -77,7 +77,6 @@ generateMsOptions <- function(dm, parameters, subgroup) {
 
   cmd <- read_cache(dm, 'ms_cmd')
   if (is.null(cmd)) {
-    message('Generating & caching ms cmd...')
     cmd <- generateMsOptionsCommand(dm)
     cache(dm, 'ms_cmd', cmd)
   }
