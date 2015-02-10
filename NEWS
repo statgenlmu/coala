@@ -2,5 +2,6 @@ coalsimr 0.1
 ------------
 
 * Imported coalescent simulation functionality from package jaatha.
-* Redesigned the user interface using S3 and R6 classes.
-* Added a caching mechanism for simulation commands.
+* Redesigned the user interface using S3 and R6 classes (#1, #2, #5, #6).
+* Added a caching mechanism for simulation commands (#7).
+* Re-enabled bulk simulation for seq-gen (#8, #10).

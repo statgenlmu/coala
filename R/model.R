@@ -202,7 +202,6 @@ generateGroupModel <- function(dm, group) {
 get_group_model <- function(model, group) {
   grp_model <- read_cache(model, paste0('grp_model_', group))
   if (is.null(grp_model)) {
-    message("Generating group model ", group)
     grp_model <- generateGroupModel(model, group)
     cache(model, paste0('grp_model_', group), grp_model)
   }
