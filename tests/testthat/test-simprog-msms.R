@@ -2,15 +2,14 @@ context('Simulation Program msms')
 
 test_that("calling msms works", {
   if (!checkForMsms(FALSE, TRUE)) skip('msms not installed')
-  jar.path = get_msms_path()
   ms.args <- "5 1 -r 10 100 -t 5 -I 2 3 2 1"
   msms.args <- ""
   set.seed(17)
-  out.file <- callMsms(jar.path, ms.args, msms.args)
+  out.file <- callMsms(ms.args, msms.args)
   set.seed(17)
-  out.file.2 <- callMsms(jar.path, ms.args, msms.args)
+  out.file.2 <- callMsms(ms.args, msms.args)
   set.seed(20)
-  out.file.3 <- callMsms(jar.path, ms.args, msms.args)
+  out.file.3 <- callMsms(ms.args, msms.args)
   expect_equal(file.info(out.file.2)$size, file.info(out.file)$size)
   expect_true(file.info(out.file)$size != file.info(out.file.3)$size)
   unlink(c(out.file, out.file.2, out.file.3))

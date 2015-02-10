@@ -27,12 +27,8 @@ scrm_simulate <- function(dm, parameters) {
   generateSumStats(sum_stats, "scrm", parameters, dm)
 }
 
-scrm_finalize <- function(dm) {
-  dm$options[['ms.cmd']] <- generateMsOptionsCommand(dm)
-  return(dm)
-}
 
 #' @include sim_program.R
 createSimProgram("scrm", scrm_features, scrm_sum_stats,
-                  scrm_simulate, scrm_finalize, printMsCommand, 90)
-rm(scrm_features, scrm_sum_stats, scrm_simulate, scrm_finalize)
+                  scrm_simulate, printMsCommand, 90)
+rm(scrm_features, scrm_sum_stats, scrm_simulate)

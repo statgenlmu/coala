@@ -7,6 +7,8 @@ test_that("creating models works", {
   expect_equal(get_sample_size(model), 11:12)
   expect_equal(get_locus_number(model), 111)
   expect_equal(get_locus_length(model), 1234)
+
+  expect_is(model$id, 'character')
 })
 
 
@@ -52,26 +54,10 @@ test_that("test get_summary_statistics", {
 })
 
 
-
-test_that("test model finalization", {
-  dm <- dm.finalize(model_grps())
-  dm.1 <- dm$options$grp.models[["1"]]
-  dm.2 <- dm$options$grp.models[["2"]]
-  dm.3 <- dm$options$grp.models[["3"]]
-  expect_false(is.null(dm.1))
-  expect_false(is.null(dm.2))
-  expect_false(is.null(dm.3))
-  expect_false(is.null(dm.1$options$ms.cmd))
-  expect_false(is.null(dm.2$options$ms.cmd))
-  expect_false(is.null(dm.3$options$ms.cmd))
-})
-
-
-test_that("test.generateGroupModel", {
+test_that("generation of group models", {
   dm <- generateGroupModel(model_theta_tau(), 1)
   expect_equal(dm$features, model_theta_tau()$features)
   expect_equal(dm$sum_stats, model_theta_tau()$sum_stats)
-  expect_equal(dm$options, model_theta_tau()$options)
 
   dm <- model_theta_tau() + locus_averaged(10, 23, group = 1)
   dm <- generateGroupModel(dm, 1)
@@ -100,19 +86,6 @@ test_that("test.generateGroupModel", {
   dm.2 <- generateGroupModel(dm, 2)
   expect_equal(nrow(dm.2$sum_stats), nrow(sum.stats) + 1)
   expect_true("seg.sites" %in% get_summary_statistics(dm.2))
-  dm$options[["bli"]] <- 0
-  dm$options[["bla"]] <- 0
-  dm$options[["blub"]] <- 0
-  dm$options[["group.1"]] <- list(blub = 1, bli = 1)
-  dm$options[["group.2"]] <- list(blub = 2, bla = 2)
-  dm.1 <- generateGroupModel(dm, 1)
-  dm.2 <- generateGroupModel(dm, 2)
-  expect_equal(dm.1$options$bli, 1)
-  expect_equal(dm.1$options$bla, 0)
-  expect_equal(dm.1$options$blub, 1)
-  expect_equal(dm.2$options$bli, 0)
-  expect_equal(dm.2$options$bla, 2)
-  expect_equal(dm.2$options$blub, 2)
 })
 
 test_that("test.getGroups", {
@@ -221,7 +194,7 @@ test_that('locus length matrix generations works', {
 })
 
 
-test_that("test simulation works", {
+test_that("simulation works", {
   expect_error(simulate(model_theta_tau(), pars=1))
   expect_error(simulate(model_theta_tau(), pars=1:3))
   expect_error(simulate(model_theta_tau(), pars=c(2, 50)))

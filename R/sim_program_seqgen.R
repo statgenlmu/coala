@@ -46,21 +46,36 @@ checkForSeqgen <- function(throw.error = TRUE, silent = FALSE) {
   return(FALSE)
 }
 
-generateTreeModel <- function(dm, locus_length) {
-  stopifnot(all(get_groups(dm) == 1))
-  if (any(msms.features %in% dm$features$type)) {
-    tree.prog <- getSimProgram('msms')
-  } else {
-    tree.prog <- getSimProgram('ms')
+generateTreeModel <- function(dm, locus) {
+  tree_model <- read_cache(dm, paste0('tree_model_', locus))
+
+  if (is.null(tree_model)) {
+    stopifnot(all(get_groups(dm) == 1))
+    locus_length <- get_locus_length_matrix(dm)[locus,]
+
+    if (any(msms.features %in% dm$features$type)) {
+      tree.prog <- getSimProgram('msms')
+    } else {
+      tree.prog <- getSimProgram('ms')
+    }
+
+    # Features
+    tree_model <- dm
+    tree_model$features <-
+      dm$features[dm$features$type %in% tree.prog$possible_features, ]
+
+    # Summary Stastics
+    tree_model <- resetSumStats(tree_model)
+    tree_model <- tree_model + sumstat_trees() + sumstat_file()
+
+    # Loci
+    tree_model$loci <- tree_model$loci[FALSE, ]
+    tree_model <- tree_model + locus_single(sum(locus_length), group = 0)
+
+    cache(dm, paste0('tree_model_', locus), tree_model)
   }
 
-  dm$features <- dm$features[dm$features$type %in% tree.prog$possible_features, ]
-  dm <- resetSumStats(dm)
-  dm <- dm + sumstat_trees() + sumstat_file()
-
-  dm$loci <- dm$loci[FALSE, ]
-  dm <- dm + locus_single(sum(locus_length), group = 0)
-  dm.finalize(dm)
+  tree_model
 }
 
 
@@ -81,6 +96,7 @@ setSeqgenExecutable <- function(seqgen_exe) {
 # @param opts The options to pass to ms. Must either be a character or character
 # vector.
 callSeqgen <- function(opts, ms_files) {
+  checkForSeqgen()
   stopifnot(!missing(opts))
   stopifnot(length(opts) == length(ms_files))
 
@@ -103,11 +119,11 @@ callSeqgen <- function(opts, ms_files) {
 
 generateSeqgenOptions <- function(dm, parameters, locus,
                                   locus_lengths, seeds) {
-  # Generate the command template to execute or use the buffered one
-  if ( !is.null( dm$options[['seqgen.cmd']] ) ) {
-    cmd <- dm$options[['seqgen.cmd']]
-  } else {
+
+  cmd <- read_cache(dm, 'seqgen_cmd')
+  if (is.null(cmd)) {
     cmd <- generateSeqgenOptionsCmd(dm)
+    cache(dm, 'seqgen_cmd', cmd)
   }
 
   if (locus_lengths[1] == 0 & locus_lengths[5] == 0) {
@@ -132,12 +148,12 @@ generateSeqgenOptionsCmd <- function(dm) {
   gtr.rates <- F
   includes.model <- F
 
-  if (!is.numeric(get_outgroup_size(dm))) {
+  if (length(get_outgroup_size(dm)) == 0) {
     stop("Finite Sites models need an outgroup.")
   }
 
-  if (!dm.hasTrios(dm)) is_outer <- FALSE
-  else is_outer <- c(TRUE, FALSE, TRUE)
+  if (has_trios(dm, 0)) is_outer <- c(TRUE, FALSE, TRUE)
+  else is_outer <- FALSE
 
   lapply(is_outer, function(outer) {
     opts <- c('c(', paste('"', get_seqgen_path(), '"', sep=""), ",")
@@ -187,9 +203,9 @@ generateSeqgenOptionsCmd <- function(dm) {
                 ',', gtr.rates[['gtr_rate_6']], ',')
     }
 
-    if (!includes.model) {
-      stop("You must specify a finite sites mutation model for this demographic model")
-    }
+#     if (!includes.model) {
+#       stop("You must specify a finite sites mutation model for this demographic model")
+#     }
 
     opts <- c(opts, '"-l"', ',', 'locus_length', ',')
     opts <- c(opts, '"-s"', ',', paste(getThetaName(dm, outer), ' / locus_length'), ',')
@@ -199,6 +215,7 @@ generateSeqgenOptionsCmd <- function(dm) {
     opts
   })
 }
+
 
 printSeqgenCommand <- function(dm) {
   tree.model <- generateTreeModel(dm, get_locus_length_matrix(dm)[1,3])
@@ -221,12 +238,16 @@ printSeqgenCommand <- function(dm) {
 
 seqgenSingleSimFunc <- function(dm, parameters) {
   checkForSeqgen()
+  if (length(get_outgroup_size(dm)) == 0) {
+    stop("Finite site models need an outgroup")
+  }
 
   locus_length <- get_locus_length_matrix(dm)
 
   seqgen.files <- lapply(1:get_locus_number(dm), function(locus) {
     # Generate options for seqgen
-    tree.model <- generateTreeModel(dm, locus_length[locus,])
+    tree.model <- generateTreeModel(dm, locus)
+    stopifnot(!is.null(tree.model))
 
     # Simulate the trees
     sum_stats_ms <- simulate(tree.model, pars=parameters)
@@ -249,14 +270,8 @@ seqgenSingleSimFunc <- function(dm, parameters) {
   generateSumStats(seqgen.files, 'seqgen', parameters, dm)
 }
 
-finalizeSeqgen <- function(dm) {
-  stopifnot(is.model(dm))
-  checkForSeqgen()
-  dm$options[['seqgen.cmd']] <- generateSeqgenOptionsCmd(dm)
-  dm
-}
 
 #' @include sim_program.R
 createSimProgram("seq-gen", sg.features, sg.sum.stats,
-                 seqgenSingleSimFunc, finalizeSeqgen, printSeqgenCommand,
+                 seqgenSingleSimFunc, printSeqgenCommand,
                  priority=10)
