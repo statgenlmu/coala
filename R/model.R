@@ -58,6 +58,8 @@ CoalModel <- function(sample_size=0, loci_number=0, loci_length=1000) {
                                 group=numeric(),
                                 stringsAsFactors=F)
 
+  model$id <- get_id()
+
   # Add sample sizes
   for (pop in seq(along = sample_size)) {
     if (sample_size[pop] > 0) model <- model + feat_sample(sample_size[pop], pop)
@@ -67,9 +69,6 @@ CoalModel <- function(sample_size=0, loci_number=0, loci_length=1000) {
   if (loci_number > 0) {
     model <- model + locus_averaged(loci_number, loci_length)
   }
-
-  model$options <- list()
-  model$finalized <- FALSE
 
   model
 }
@@ -84,7 +83,6 @@ is.model <- function(model) {
 # Print
 #-----------------------------------------------------------------------
 .showModel <- function(object) {
-  if (!object@finalized) dm = dm.finalize(object)
   cat("Used simulation program:", object$currentSimProg, "\n\n")
 
   # Print parameters that get estimated
@@ -106,7 +104,6 @@ is.model <- function(model) {
 
 
 .show <- function(object) {
-  object <- dm.finalize(object)
 
   if (is.null(object@options$grp.models)) {
     .showModel(object)
@@ -132,51 +129,35 @@ checkParInRange <- function(dm, param) {
 }
 
 # Selects a program for simulation that is capable of all current features
-dm.selectSimProg <- function(dm) {
-  name <- NULL
-  priority <- -Inf
+determine_sim_prog <- function(dm) {
+  name <- read_cache(dm, 'sim_prog')
 
-  for (sim_prog_name in ls(sim_programs)) {
-    sim_prog = getSimProgram(sim_prog_name)
-    if (all(dm$features$type %in% sim_prog$possible_features) &
-        all(dm$sum_stats$name %in% sim_prog$possible_sum_stats)) {
+  if (is.null(name)) {
+    message('Determining simulation program')
 
-      if (sim_prog$priority > priority) {
-        name <- sim_prog$name
-        priority <- sim_prog$priority
+    if (length(get_groups(dm)) > 1) {
+      name <- 'groups'
+    } else {
+      priority <- -Inf
+
+      for (sim_prog_name in ls(sim_programs)) {
+        sim_prog = getSimProgram(sim_prog_name)
+        if (all(dm$features$type %in% sim_prog$possible_features) &
+              all(dm$sum_stats$name %in% sim_prog$possible_sum_stats)) {
+
+          if (sim_prog$priority > priority) {
+            name <- sim_prog$name
+            priority <- sim_prog$priority
+          }
+        }
       }
-
     }
+
+    if (is.null(name)) stop("No suitable simulation software found!")
+    cache(dm, 'sim_prog', name)
   }
 
-  if (is.null(name)) stop("No suitable simulation software found!")
-
-  dm$currentSimProg <- name
-  return(dm)
-}
-
-dm.finalize <- function(dm) {
-  if (length(get_summary_statistics(dm)) == 0) {
-    stop("Model has no summary statistics!")
-  }
-  if (length(get_groups(dm)) == 1) {
-    dm <- generateGroupModel(dm, 1)
-    dm <- dm.selectSimProg(dm)
-    return(getSimProgram(dm$currentSimProg)$finalization_func(dm))
-  }
-
-  dm$options$grp.models <- list()
-  dm$currentSimProg <- "groups"
-  dm.raw <- dm
-
-  for (group in get_groups(dm)) {
-    grp.model <- generateGroupModel(dm.raw, group)
-    grp.model <- dm.finalize(grp.model)
-    dm$options$grp.models[[as.character(group)]] <- grp.model
-  }
-
-  dm$finalized = TRUE
-  dm
+  name
 }
 
 
@@ -201,14 +182,6 @@ resetSumStats <- function(dm) {
 
 
 generateGroupModel <- function(dm, group) {
-  if (all(dm$features$group == 0) &
-      all(dm$sum_stats$group == 0) &
-      all(dm$loci$group == 0) ) return(dm)
-
-  if (!is.null(dm$options$grp.models[[as.character(group)]])) {
-    return(dm$options$grp.models[[as.character(group)]])
-  }
-
   # Features
   dm$features <- searchFeature(dm, group = group)
   dm$features$group <- 0
@@ -223,16 +196,21 @@ generateGroupModel <- function(dm, group) {
   else dm$loci <- dm$loci[dm$loci$group == 0, , drop=FALSE]
   dm$loci$group <- 0
 
-  # Options
-  group.name <- paste("group", group, sep='.')
-  if (!is.null(dm$options[[group.name]])) {
-    for (option in names(dm$options[[group.name]])) {
-      dm$options[[option]] <- dm$options[[group.name]][[option]]
-    }
-  }
-
+  dm$id <- get_id()
   dm
 }
+
+
+get_group_model <- function(model, group) {
+  grp_model <- read_cache(model, paste0('grp_model_', group))
+  if (is.null(grp_model)) {
+    message("Generating group model ", group)
+    grp_model <- generateGroupModel(model, group)
+    cache(model, paste0('grp_model_', group), grp_model)
+  }
+  grp_model
+}
+
 
 searchFeature <- function(dm, type=NULL, parameter=NULL, pop.source=NULL,
                           pop.sink=NULL, time.point=NULL, group=NULL) {
@@ -314,6 +292,7 @@ dm.setTrioMutationRates <- function(dm, middle_rate, outer_rate, group = 0) {
   dm <- addFeature(dm, 'mutation_outer', parameter = outer_rate, group = group)
 }
 
-dm.hasTrios <- function(dm, group=0) {
+
+has_trios <- function(dm, group=0) {
   sum(get_locus_length_matrix(dm, group)[,-3]) > 0
 }

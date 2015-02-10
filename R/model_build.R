@@ -29,6 +29,7 @@ addToModel.Par_Range <- function(par, model, par_name) {
                         stringsAsFactors=F)
 
   model$parameters <- rbind(model$parameters, new_par)
+  model$id <- get_id()
   model
 }
 
@@ -41,6 +42,8 @@ addToModel.Feature <- function(feat, model, feat_name) {
   if (feat$get_inter_locus_var()) {
     model <- addInterLocusVariation(model, feat$get_group())
   }
+
+  model$id <- get_id()
   model
 }
 
@@ -57,6 +60,8 @@ addToModel.SumStat <- function(sum_stat, model, feat_name) {
                                      population = sum_stat$get_population(),
                                      group = sum_stat$get_group(),
                                      stringsAsFactors = FALSE))
+
+  model$id <- get_id()
   model
 }
 
@@ -85,6 +90,8 @@ addToModel.Locus <- function(locus, model, locus_name) {
                                              length_ir = locus_length[4],
                                              length_r = locus_length[5],
                                              stringsAsFactors = FALSE))
+
+  model$id <- get_id()
   model
 }
 

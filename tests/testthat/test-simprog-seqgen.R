@@ -1,19 +1,8 @@
 context("Simulation Program seqgen")
 
-
-test_that("finalizations works", {
-  if (!checkForSeqgen(FALSE, TRUE)) skip('seqgen not installed')
-  for (model in list(model_hky(), model_f84(), model_gtr())) {
-    model <- finalizeSeqgen(model)
-    expect_false(is.null(model$options[["seqgen.cmd"]]))
-  }
-})
-
-
 test_that("test.generateSeqgenOptions", {
   if (!checkForSeqgen(FALSE, TRUE)) skip('seqgen not installed')
   dm.hky <- model_hky()
-  dm.hky$options$seqgen.cmd <- NULL
   opts <- generateSeqgenOptions(dm.hky, c(1, 10), 1, c(0, 0, 10, 0, 0), 1)
   opts <- strsplit(opts, " ")[[1]]
   expect_true("-l" %in% opts)
@@ -26,10 +15,10 @@ test_that("test.generateSeqgenOptions", {
 })
 
 
-test_that("test.generateTreeModel", {
+test_that("generation of tree models works", {
   if (!checkForSeqgen(FALSE, TRUE)) skip('seqgen not installed')
   for (dm in list(model_hky(), model_f84(), model_gtr())) {
-    dm.ms <- dm.finalize(generateTreeModel(dm, get_locus_length_matrix(dm)[1,]))
+    dm.ms <-generateTreeModel(dm, 1)
     sum.stats <- simulate(dm.ms, pars=c(1, 5))
     expect_false(is.null(sum.stats$file))
     expect_true(file.exists(sum.stats$file[[1]]))
@@ -98,6 +87,16 @@ test_that("seq-gen can simulate trios", {
 
   sum.stats <- simulate(dm.lt, pars=c(1, 10))
   expect_that(sum(sum.stats$jsfs), is_less_than(sum(sapply(sum.stats$seg.sites, ncol))))
+})
+
+
+test_that("Error is thrown without an outgroup", {
+  if (!checkForSeqgen(FALSE, TRUE)) skip('seqgen not installed')
+  model <- CoalModel(c(3, 3), 10) +
+    feat_mutation(par_range('theta', 5, 10), model = 'HKY') +
+    feat_pop_merge(par_range('tau', .5, 1), 2, 1) +
+    sumstat_jsfs()
+  expect_error(simulate(model, pars = c(7.5, .75)))
 })
 
 

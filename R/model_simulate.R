@@ -19,16 +19,18 @@ simulate.CoalModel <- function(object, nsim = 1, seed, pars=NULL, ...) {
   stopifnot(!is.null(pars))
   checkParInRange(object, pars)
 
-  if (!object$finalized) object = dm.finalize(object)
+  sim_prog <- determine_sim_prog(object)
 
-  if (object$currentSimProg != "groups") {
-    return(getSimProgram(object$currentSimProg)$sim_func(object, pars))
+  if (sim_prog != "groups") {
+    model <- get_group_model(object, 1)
+    return(getSimProgram(sim_prog)$sim_func(model, pars))
   }
 
   sum_stats <- list(pars=pars)
   for (group in get_groups(object)) {
-    object.grp <- object$options$grp.models[[as.character(group)]]
-    sum_stats.grp <- getSimProgram(object.grp$currentSimProg)$sim_func(object.grp, pars)
+    grp_model <- get_group_model(object, group)
+    sum_stats.grp <- simulate(grp_model, pars = pars)
+
     for (i in seq(along = sum_stats.grp)) {
       if (names(sum_stats.grp)[i] == 'pars') next()
       name <- paste(names(sum_stats.grp)[i], group, sep='.')

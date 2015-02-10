@@ -11,12 +11,14 @@ msms.features <- c("selection", "selection_AA", "selection_Aa")
 possible.features  <- c(getSimProgram('ms')$possible_features, msms.features)
 possible.sum.stats <- getSimProgram('ms')$possible_sum_stats
 
-callMsms <- function(jar.path, ms.args, msms.args, subgroup) {
+callMsms <- function(ms.args, msms.args, subgroup) {
+  checkForMsms()
+
   out.file = tempfile('csr_msms')
   seed <- sampleSeed(1)
 
   # Create the command
-  cmd = paste("java -jar", jar.path, as.character(msms.args),
+  cmd = paste("java -jar", get_msms_path(), as.character(msms.args),
               "-ms", as.character(ms.args), "-seed", seed, ">", out.file)
 
   # Execute the command
@@ -112,13 +114,14 @@ createParameterEnv <- function(dm, parameters, ...) {
 generateMsmsOptions <- function(dm, parameters, locus) {
   msms.tmp <- createParameterEnv(dm, parameters, locus = locus)
 
-  if ( !is.null( dm$options[['msms.cmd']] ) )
-    cmd <- dm$options[['msms.cmd']]
-  else
+  cmd <- read_cache(dm, 'msms_cmd')
+  if (is.null(cmd)) {
+    message('Generating & caching msms cmd...')
     cmd <- generateMsmsOptionsCommand(dm)
-  cmd <- eval(parse(text=cmd), envir=msms.tmp)
+    cache(dm, 'msms_cmd', cmd)
+  }
 
-  cmd
+  eval(parse(text=cmd), envir=msms.tmp)
 }
 
 msmsSimFunc <- function(dm, parameters) {
@@ -140,18 +143,11 @@ msmsSimFunc <- function(dm, parameters) {
     msms.options <- paste(generateMsmsOptions(dm, parameters, locus),
                           collapse= " ")
     #print(c(ms.options, msms.options))
-    callMsms(get_msms_path(), ms.options, msms.options)
+    callMsms(ms.options, msms.options)
   })
 
   # Parse the simulation output
   generateSumStats(msms.files, 'ms', parameters, dm)
-}
-
-finalizeMsms <- function(dm) {
-  checkForMsms()
-  dm$options[['ms.cmd']] <- generateMsOptionsCommand(dm)
-  dm$options[['msms.cmd']] <- generateMsmsOptionsCommand(dm)
-  return(dm)
 }
 
 printMsmsCommand <- function(dm) {
@@ -176,4 +172,4 @@ printOptionsCmd <- function(cmd) {
 
 #' @include sim_program.R
 createSimProgram("msms", possible.features, possible.sum.stats,
-                 msmsSimFunc, finalizeMsms, printMsmsCommand, priority=40)
+                 msmsSimFunc, printMsmsCommand, priority=40)

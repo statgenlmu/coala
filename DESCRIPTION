@@ -22,6 +22,7 @@ Suggests:
 LinkingTo: Rcpp
 Collate:
     'RcppExports.R'
+    'cache.R'
     'coalsimr.R'
     'feature.R'
     'feature_growth.R'

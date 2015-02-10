@@ -75,20 +75,14 @@ generateMsOptions <- function(dm, parameters, subgroup) {
     ms.tmp[[ par.names[i] ]] <- parameters[i]
   }
 
-  fixed.pars <- dm$parameters[dm$parameters$fixed, ]
-  if (nrow(fixed.pars) > 0) {
-    for (i in 1:nrow(fixed.pars)){
-      ms.tmp[[ fixed.pars$name[i] ]] <- fixed.pars$lower.range[i]
-    }
+  cmd <- read_cache(dm, 'ms_cmd')
+  if (is.null(cmd)) {
+    message('Generating & caching ms cmd...')
+    cmd <- generateMsOptionsCommand(dm)
+    cache(dm, 'ms_cmd', cmd)
   }
 
-  if ( !is.null( dm$options[['ms.cmd']] ) )
-    cmd <- dm$options[['ms.cmd']]
-  else
-    cmd <- generateMsOptionsCommand(dm)
-  cmd <- eval(parse(text=cmd), envir=ms.tmp)
-
-  return(cmd)
+  eval(parse(text=cmd), envir=ms.tmp)
 }
 
 printMsCommand <- function(dm) {
@@ -134,11 +128,7 @@ msSingleSimFunc <- function(dm, parameters=numeric()) {
   generateSumStats(ms.files, 'ms', parameters, dm)
 }
 
-finalizeMs <- function(dm) {
-  dm$options[['ms.cmd']] <- generateMsOptionsCommand(dm)
-  return(dm)
-}
 
 #' @include sim_program.R
 createSimProgram("ms", possible.features, possible.sum.stats,
-                 msSingleSimFunc, finalizeMs, printMsCommand, 100)
+                 msSingleSimFunc, printMsCommand, 100)

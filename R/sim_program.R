@@ -13,8 +13,7 @@
 if (!exists("sim_programs")) sim_programs <- new.env()
 
 createSimProgram <- function(name, possible_features, possible_sum_stats,
-                             sim_func=NULL, finalization_func=NULL,
-                             print_cmd_func=NULL,
+                             sim_func=NULL, print_cmd_func=NULL,
                              priority=50) {
 
   # Create the simulation program
@@ -22,7 +21,6 @@ createSimProgram <- function(name, possible_features, possible_sum_stats,
                               possible_features=possible_features,
                               possible_sum_stats=possible_sum_stats,
                               sim_func=sim_func,
-                              finalization_func=finalization_func,
                               print_cmd_func=print_cmd_func,
                               priority=priority)
 }
