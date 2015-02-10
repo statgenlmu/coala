@@ -46,7 +46,7 @@ checkForSeqgen <- function(throw.error = TRUE, silent = FALSE) {
   return(FALSE)
 }
 
-generateTreeModel <- function(dm, locus) {
+generateTreeModel <- function(dm, locus, locus_number=1) {
   tree_model <- read_cache(dm, paste0('tree_model_', locus))
 
   if (is.null(tree_model)) {
@@ -70,7 +70,13 @@ generateTreeModel <- function(dm, locus) {
 
     # Loci
     tree_model$loci <- tree_model$loci[FALSE, ]
-    tree_model <- tree_model + locus_single(sum(locus_length), group = 0)
+    if (locus_number == 1) {
+      tree_model <- tree_model + locus_single(sum(locus_length), group = 0)
+    } else {
+      tree_model <- tree_model + locus_averaged(locus_number,
+                                                sum(locus_length),
+                                                group = 0)
+    }
 
     cache(dm, paste0('tree_model_', locus), tree_model)
   }
@@ -242,15 +248,26 @@ seqgenSingleSimFunc <- function(dm, parameters) {
     stop("Finite site models need an outgroup")
   }
 
+  # Run all simulation in with one seqgen call if they loci are identical,
+  # or call ms for each locus if there is variation between the loci.
+  if (hasInterLocusVariation(dm)) {
+    sim_reps <- 1:get_locus_number(dm)
+    sim_loci <- 1
+  } else {
+    sim_reps <- 1
+    sim_loci <- get_locus_number(dm)
+  }
+
   locus_length <- get_locus_length_matrix(dm)
 
-  seqgen.files <- lapply(1:get_locus_number(dm), function(locus) {
+  seqgen.files <- lapply(1:sim_reps, function(locus) {
     # Generate options for seqgen
-    tree.model <- generateTreeModel(dm, locus)
+    tree.model <- generateTreeModel(dm, locus, sim_loci)
     stopifnot(!is.null(tree.model))
 
     # Simulate the trees
     sum_stats_ms <- simulate(tree.model, pars=parameters)
+
     tree_files <- parseTrees(sum_stats_ms[['file']][[1]],
                              locus_length[locus,],
                              tempfile)
@@ -259,6 +276,7 @@ seqgenSingleSimFunc <- function(dm, parameters) {
     seqgen.options <- generateSeqgenOptions(dm, parameters, locus,
                                             locus_length[locus,],
                                             sampleSeed(length(tree_files)))
+
     seqgen.file <- callSeqgen(seqgen.options, tree_files)
 
     # Delete tree files
