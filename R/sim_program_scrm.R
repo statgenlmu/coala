@@ -1,14 +1,5 @@
-# --------------------------------------------------------------
-# Uses scrm to simulate demographic models
-#
-# Authors:  Lisha Mathew & Paul R. Staab
-# Licence:  GPLv3 or later
-# --------------------------------------------------------------
-
-scrm_features  <- c("sample", "loci.number", "loci.length",
-                    "mutation", "migration", "split",
-                    "recombination", "size.change", "growth")
-
+scrm_features  <- c("sample", "mutation", "migration", "migration_sym",
+                    "pop_merge", "recombination", "size_change", "growth")
 scrm_sum_stats <- c("jsfs", "seg.sites", "file", "trees")
 
 #' @importFrom scrm scrm

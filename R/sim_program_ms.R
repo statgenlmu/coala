@@ -7,8 +7,7 @@
 # --------------------------------------------------------------
 
 possible.features  <- c("sample", "mutation", "migration", "migration_sym",
-                        "pop_merge",
-                        "recombination", "size_change", "growth",
+                        "pop_merge", "recombination", "size_change", "growth",
                         "inter_locus_variation")
 possible.sum.stats <- c("jsfs", "trees", "seg.sites", "file")
 
@@ -47,7 +46,7 @@ generateMsOptionsCommand <- function(dm) {
     else if (type == "recombination")
       cmd <- c(cmd, '"-r"', ',', feat['parameter'], ',', get_locus_length(dm), ',')
 
-    else if (type == "size.change"){
+    else if (type == "size_change"){
       cmd <- c(cmd, '"-en"', ',', feat['time.point'], ',',
                feat["pop.source"], ',', feat['parameter'], ',')
     }
