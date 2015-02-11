@@ -117,8 +117,11 @@ msSingleSimFunc <- function(dm, parameters=numeric()) {
   ms.files <- lapply(sim_reps, function(locus) {
     ms.options <- generateMsOptions(dm, parameters, locus)
     ms.file <- tempfile('csr_ms')
+
     ms(sum(get_sample_size(dm)), sim_loci,
        unlist(strsplit(ms.options, " ")), ms.file)
+
+    if(file.info(ms.file)$size == 0) stop("ms simulation output is empty")
     ms.file
   })
 

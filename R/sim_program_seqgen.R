@@ -107,8 +107,7 @@ callSeqgen <- function(opts, ms_files) {
   stopifnot(length(opts) == length(ms_files))
 
   sapply(seq(along = opts), function(i) {
-    if(!file.exists(ms_files[i])) stop("ms file not found")
-    if(file.info(ms_files[i])$size == 0 ) stop("ms output is empty")
+    if(file.info(ms_files[i])$size == 0 ) stop("No trees in file ", ms_files[i])
 
     seqgen_file <- tempfile('csr_seqgen')
     cmd <- paste(opts[i], "<", ms_files[i], ">", seqgen_file)

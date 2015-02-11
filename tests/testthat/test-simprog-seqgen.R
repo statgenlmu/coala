@@ -147,3 +147,26 @@ test_that("Simulation of trios with unequal mutation rates works", {
 #   ss <- simulate(grp_mdl, c(1,5))
 #   expect_false(is.null(ss$seg.sites))
 })
+
+
+test_that('a more complicated model works', {
+  model <- CoalModel(c(5,5,2), 1, 100) +
+    feat_mutation(par_range('theta', .1, 40), model = 'HKY',
+                  base_frequencies = c(0.26, 0.20, 0.22, 0.32),
+                  tstv_ratio = 1.26) +
+    feat_migration(par_range('m12', 0.001, 5), 1, 2) +
+    feat_migration(par_range('m21', 0.001, 5), 2, 1) +
+    feat_size_change(par_range('q', 0.05, 40), population = 2, at.time = 0) +
+    par_range("s1", 0.01, 2) + par_range("s2", 0.01, 2) +
+    feat_growth(par_expr(log(1/s1)/tau), population = 1, at.time = 0) +
+    feat_growth(par_expr(log(q/s2)/tau), population = 2, at.time = 0) +
+    feat_size_change(par_expr(s1+s2), population = 1, at.time = par_expr(tau)) +
+    feat_pop_merge(par_range('tau', 0.001, 5), 2, 1) +
+    feat_pop_merge(par_expr(2*tau), 3, 1) +
+    feat_recombination(par_const(10)) +
+    feat_outgroup(3) +
+    sumstat_jsfs()
+
+  stat <- simulate(model, pars = c(10, 0.5, 0.6, 4.5, 0.2, 0.1, 0.4))
+  expect_true(sum(stat$jsfs) > 0)
+})
