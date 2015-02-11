@@ -29,6 +29,22 @@ test_that("msSimFunc works with inter-locus variation", {
   expect_equal(sum_stats$jsfs, sum_stats2$jsfs)
 })
 
+
 test_that("the ms sim program exists", {
   expect_false(is.null(getSimProgram('ms')))
 })
+
+
+test_that("simulating a size change works", {
+  dm_tmp <- CoalModel(5:6, 1) +
+    feat_mutation(par_range('theta', 1, 10), variance = '2') +
+    feat_pop_merge(par_const(.5), 2, 1) +
+    feat_size_change(par_const(2), population = 2, at.time = 0) +
+    sumstat_jsfs()
+
+  sum_stats <- simulate(dm_tmp, pars=5)
+  expect_true(is.matrix(sum_stats$jsfs))
+  expect_true(sum(sum_stats$jsfs) > 0)
+})
+
+
