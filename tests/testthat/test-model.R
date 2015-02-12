@@ -18,8 +18,10 @@ test_that("adding parameters works", {
   expect_equal("theta", par_table$name)
   expect_equal(1, par_table$lower.range)
   expect_equal(5, par_table$upper.range)
-  expect_error(model + 5)
-  expect_error(model + 'bla')
+
+  test <- list (1:10)
+  class(test) <- 'CSR_OBJ'
+  expect_error(model + test)
 })
 
 
@@ -145,12 +147,15 @@ test_that("test that scaling of model works", {
 
 
 test_that("searchFeature", {
-  expect_equal(nrow(searchFeature(model_theta_tau(), type = "sample")), 2)
-  expect_equal(nrow(searchFeature(model_theta_tau(), type = c("pop_merge", "sample"))), 3)
-  expect_equal(nrow(searchFeature(model_theta_tau(), type = c("pop_merge", "sample"),
+  model <- model_theta_tau()
+  expect_equal(nrow(searchFeature(model, type = "sample")), 2)
+  expect_equal(nrow(searchFeature(model, type = c("pop_merge", "sample"))), 3)
+  expect_equal(nrow(searchFeature(model, type = c("pop_merge", "sample"),
                                   pop.sink = NA)), 2)
-  expect_equal(nrow(searchFeature(model_theta_tau(), time.point = "tau")), 1)
-  expect_equal(nrow(searchFeature(model_theta_tau(), time.point = NA)), 1)
+  expect_equal(nrow(searchFeature(model, time.point = "tau")), 1)
+  expect_equal(nrow(searchFeature(model, time.point = NA)), 1)
+
+  expect_equal(nrow(searchFeature(model, type = "sample")), 2)
 })
 
 

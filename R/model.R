@@ -79,46 +79,6 @@ is.model <- function(model) {
 }
 
 
-#-----------------------------------------------------------------------
-# Print
-#-----------------------------------------------------------------------
-.showModel <- function(object) {
-  cat("Used simulation program:", object$currentSimProg, "\n\n")
-
-  # Print parameters that get estimated
-
-  pars.est = object@parameters
-  rownames(pars.est) <- NULL
-
-  if (nrow(pars.est) == 0) cat("No Parameters.\n")
-  else {
-    cat("Parameters:\n")
-    print(pars.est)
-  }
-  cat('\n')
-
-  # Print simulation command
-  cat("Simulation command:\n")
-  getSimProgram(object$currentSimProg)$print_cmd_func(object)
-}
-
-
-.show <- function(object) {
-
-  if (is.null(object@options$grp.models)) {
-    .showModel(object)
-  } else {
-    for (group in names(object@options$grp.models)) {
-      cat('----------------------------------\n')
-      cat("Group", group, '\n')
-      cat('----------------------------------\n')
-      .showModel(object@options$grp.models[[group]])
-      cat('\n')
-    }
-  }
-}
-
-
 # Checks if a vector of parameters is within the ranges of the model
 checkParInRange <- function(dm, param) {
   if (length(param) != nrow(get_parameter_table(dm))) stop("Wrong number of parameters")
@@ -209,20 +169,12 @@ get_group_model <- function(model, group) {
 }
 
 
-searchFeature <- function(dm, type=NULL, parameter=NULL, pop.source=NULL,
+searchFeature <- function(dm, type=NULL, pop.source=NULL,
                           pop.sink=NULL, time.point=NULL, group=NULL) {
 
   mask <- rep(TRUE, nrow(get_feature_table(dm)))
 
   if (!is.null(type)) mask <- mask & dm$features$type %in% type
-
-  if (!is.null(parameter)) {
-    if (is.na(parameter)) {
-      mask <- mask & is.na(dm$features$parameter)
-    } else {
-      mask <- mask & dm$features$parameter %in% parameter
-    }
-  }
 
   if (!is.null(pop.source)) {
     if (is.na(pop.source)) {
@@ -278,15 +230,6 @@ addInterLocusVariation <- function(dm, group = 0) {
 
 hasInterLocusVariation <- function(dm, group = 0) {
   nrow(searchFeature(dm, 'inter_locus_variation', group = group)) > 0
-}
-
-#' Set the mutation rates for trios
-#' @param middle_rate The mutation rate used for the middle locus
-#' @param outer_rate The mutation rate for the two outer loci
-#' @export
-dm.setTrioMutationRates <- function(dm, middle_rate, outer_rate, group = 0) {
-  dm <- addFeature(dm, 'mutation', parameter = middle_rate, group = group)
-  dm <- addFeature(dm, 'mutation_outer', parameter = outer_rate, group = group)
 }
 
 

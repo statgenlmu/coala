@@ -96,6 +96,7 @@ test_that("Error is thrown without an outgroup", {
     feat_mutation(par_range('theta', 5, 10), model = 'HKY') +
     feat_pop_merge(par_range('tau', .5, 1), 2, 1) +
     sumstat_jsfs()
+  expect_error(generateSeqgenOptionsCmd(model))
   expect_error(simulate(model, pars = c(7.5, .75)))
 })
 
@@ -169,4 +170,29 @@ test_that('a more complicated model works', {
 
   stat <- simulate(model, pars = c(10, 0.5, 0.6, 4.5, 0.2, 0.1, 0.4))
   expect_true(sum(stat$jsfs) > 0)
+})
+
+
+test_that('printing a seqgen command works', {
+  cmd <- sg_get_command(model_f84())
+  expect_equal(length(cmd), 2)
+})
+
+
+test_that("seqgen works with inter-locus variation", {
+  if (!checkForSeqgen(FALSE, TRUE)) skip('msms not installed')
+
+  dm_tmp <- CoalModel(c(3, 3, 1), 2) +
+    feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
+    feat_pop_merge(par_expr('2*tau'), 3, 1) +
+    feat_recombination(par_const(1)) +
+    feat_outgroup(3) +
+    feat_mutation(par_range('theta', 1, 10), model = 'F84', variance = 15) +
+    sumstat_jsfs()
+  expect_true(hasInterLocusVariation(dm_tmp))
+
+  set.seed(1100)
+  sum_stats <- seqgenSingleSimFunc(dm_tmp, c(1,5))
+  expect_is(sum_stats$jsfs, 'matrix')
+  expect_that(sum(sum_stats$jsfs), is_more_than(0))
 })

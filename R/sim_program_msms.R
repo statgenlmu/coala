@@ -88,29 +88,6 @@ generateMsmsOptionsCommand <- function(dm) {
 }
 
 
-createParameterEnv <- function(dm, parameters, ...) {
-  par_env <- new.env()
-
-  par.names <- get_parameter_table(dm)$name
-  for (i in seq(along = par.names)){
-    par_env[[ par.names[i] ]] <- parameters[i]
-  }
-
-  fixed.pars <- dm$parameters[dm$parameters$fixed, ]
-  if (nrow(fixed.pars) > 0) {
-    for (i in 1:nrow(fixed.pars)){
-      par_env[[ fixed.pars$name[i] ]] <- fixed.pars$lower.range[i]
-    }
-  }
-
-  additional_pars = list(...)
-  for (i in seq(along = additional_pars)) {
-    par_env[[names(additional_pars)[i]]] <- additional_pars[[i]]
-  }
-
-  par_env
-}
-
 generateMsmsOptions <- function(dm, parameters, locus) {
   msms.tmp <- createParameterEnv(dm, parameters, locus = locus)
 
@@ -149,26 +126,19 @@ msmsSimFunc <- function(dm, parameters) {
   generateSumStats(msms.files, 'ms', parameters, dm)
 }
 
-printMsmsCommand <- function(dm) {
-  msms.cmd <- printOptionsCmd(generateMsmsOptionsCommand(dm))
-  ms.cmd <- printOptionsCmd(generateMsOptionsCommand(dm))
 
-  cmd <- paste("msms", msms.cmd,
-               "-ms", sum(get_sample_size(dm)), get_locus_number(dm), ms.cmd)
-  cat(cmd, '\n')
+msms_get_command <- function(model) {
+  ms_cmd <- paste(generateMsOptions(model, get_parameter_table(model)$name),
+                  collapse = ' ')
+  msms_cmd <- paste(generateMsmsOptions(model,
+                                        get_parameter_table(model)$name, 1),
+                    collapse = ' ')
+
+  paste("msms", msms_cmd,
+        "-ms", sum(get_sample_size(model)), get_locus_number(model), ms_cmd)
 }
 
-printOptionsCmd <- function(cmd) {
-  cmd <- cmd[cmd != ","]
-  cmd <- cmd[-c(1, length(cmd))]
-
-  cmd <- paste(cmd, collapse=" ")
-
-  cmd <- gsub(",", " ", cmd)
-  cmd <- gsub('\"', "", cmd)
-  cmd <- gsub('"', " ", cmd)
-}
 
 #' @include sim_program.R
 createSimProgram("msms", possible.features, possible.sum.stats,
-                 msmsSimFunc, printMsmsCommand, priority=40)
+                 msmsSimFunc, msms_get_command, priority=40)

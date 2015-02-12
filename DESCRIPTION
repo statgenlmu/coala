@@ -45,6 +45,7 @@ Collate:
     'options.R'
     'parameter.R'
     'sample_seed.R'
+    'sim_program_helpers.R'
     'sim_program_ms.R'
     'sim_program_msms.R'
     'sim_program_scrm.R'
