@@ -66,13 +66,8 @@ generateMsOptionsCommand <- function(dm) {
   cmd <- c(cmd, '" ")')
 }
 
-generateMsOptions <- function(dm, parameters, subgroup) {
-  ms.tmp <- new.env()
-
-  par.names <- get_parameter_table(dm)$name
-  for (i in seq(along = par.names)){
-    ms.tmp[[ par.names[i] ]] <- parameters[i]
-  }
+generateMsOptions <- function(dm, parameters, eval_pars = TRUE) {
+  ms.tmp <- createParameterEnv(dm, parameters)
 
   cmd <- read_cache(dm, 'ms_cmd')
   if (is.null(cmd)) {
@@ -80,24 +75,17 @@ generateMsOptions <- function(dm, parameters, subgroup) {
     cache(dm, 'ms_cmd', cmd)
   }
 
+  if (!eval_pars) cmd <- escape_par_expr(cmd)
   eval(parse(text=cmd), envir=ms.tmp)
 }
 
-printMsCommand <- function(dm) {
-  cmd <- generateMsOptionsCommand(dm)
 
-  cmd <- cmd[cmd != ","]
-  cmd <- cmd[-c(1, length(cmd))]
-
-  cmd <- paste(cmd, collapse=" ")
-
-  cmd <- gsub(",", " ", cmd)
-  cmd <- gsub('\"', "", cmd)
-  cmd <- gsub('"', " ", cmd)
-
-  cmd <- paste("ms", sum(get_sample_size(dm)), get_locus_number(dm), cmd)
-  cat(cmd, "\n")
+ms_get_command <- function(model) {
+  cmd <- generateMsOptions(model, get_parameter_table(model)$name, FALSE)
+  txt <- paste(cmd, collapse = ' ')
+  paste("ms", sum(get_sample_size(model)), get_locus_number(model), txt)
 }
+
 
 #' @importFrom phyclust ms
 msSingleSimFunc <- function(dm, parameters=numeric()) {
@@ -132,4 +120,4 @@ msSingleSimFunc <- function(dm, parameters=numeric()) {
 
 #' @include sim_program.R
 createSimProgram("ms", possible.features, possible.sum.stats,
-                 msSingleSimFunc, printMsCommand, 100)
+                 msSingleSimFunc, ms_get_command, 100)

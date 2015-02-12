@@ -153,3 +153,13 @@ dm.addMutationRateHeterogenity <-
 
     return(dm)
   }
+
+
+#' Set the mutation rates for trios
+#' @param middle_rate The mutation rate used for the middle locus
+#' @param outer_rate The mutation rate for the two outer loci
+#' @export
+dm.setTrioMutationRates <- function(dm, middle_rate, outer_rate, group = 0) {
+  dm <- addFeature(dm, 'mutation', parameter = middle_rate, group = group)
+  dm <- addFeature(dm, 'mutation_outer', parameter = outer_rate, group = group)
+}

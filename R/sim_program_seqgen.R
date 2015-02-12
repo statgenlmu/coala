@@ -123,7 +123,7 @@ callSeqgen <- function(opts, ms_files) {
 }
 
 generateSeqgenOptions <- function(dm, parameters, locus,
-                                  locus_lengths, seeds) {
+                                  seeds, eval_pars = TRUE) {
 
   cmd <- read_cache(dm, 'seqgen_cmd')
   if (is.null(cmd)) {
@@ -131,6 +131,7 @@ generateSeqgenOptions <- function(dm, parameters, locus,
     cache(dm, 'seqgen_cmd', cmd)
   }
 
+  locus_lengths <- get_locus_length_matrix(dm)[locus,]
   if (locus_lengths[1] == 0 & locus_lengths[5] == 0) {
     locus_lengths <- locus_lengths[3]
   } else {
@@ -139,6 +140,7 @@ generateSeqgenOptions <- function(dm, parameters, locus,
 
   # Fill the parameters in the template
   sapply(seq(along = locus_lengths), function(i) {
+    if (!eval_pars) cmd[[i]] <- escape_par_expr(cmd[[i]])
     par_envir <- createParameterEnv(dm, parameters, locus = locus,
                                     locus_length = locus_lengths[i],
                                     seed = seeds[i])
@@ -213,7 +215,7 @@ generateSeqgenOptionsCmd <- function(dm) {
 #     }
 
     opts <- c(opts, '"-l"', ',', 'locus_length', ',')
-    opts <- c(opts, '"-s"', ',', paste(getThetaName(dm, outer), ' / locus_length'), ',')
+    opts <- c(opts, '"-s"', ',', s=paste(getThetaName(dm, outer), ' / locus_length'), ',')
     opts <- c(opts, '"-p"', ',', 'locus_length + 1', ',')
     opts <- c(opts, '"-z"', ',', 'seed', ',')
     opts <- c(opts, '"-q"', ')')
@@ -222,24 +224,19 @@ generateSeqgenOptionsCmd <- function(dm) {
 }
 
 
-printSeqgenCommand <- function(dm) {
-  tree.model <- generateTreeModel(dm, get_locus_length_matrix(dm)[1,3])
-  getSimProgram(tree.model$currentSimProg)$print_cmd_func(tree.model)
+sg_get_command <- function(dm) {
+  tree_model <- generateTreeModel(dm, 1)
+  tree_cmd <- getSimProgram(determine_sim_prog(tree_model))$print_cmd_func(tree_model)
 
-  cmds <- generateSeqgenOptionsCmd(dm)
-  for (cmd in cmds) {
-    cmd <- cmd[cmd != ","]
-    cmd <- cmd[-c(1, length(cmd))]
+  sg_cmd <- paste(generateSeqgenOptions(dm, get_parameter_table(dm)$name,
+                                        locus = 1, seeds = 'seed',
+                                        eval_pars=FALSE),
+                  collapse = ' ')
+  sg_cmd <- paste('seq-gen', sg_cmd)
 
-    cmd <- paste(cmd, collapse=" ")
-
-    cmd <- gsub(",", " ", cmd)
-    cmd <- gsub('\"', "", cmd)
-    cmd <- gsub('"', " ", cmd)
-
-    cat(cmd, '\n')
-  }
+  c(tree=tree_cmd, seqgen=sg_cmd)
 }
+
 
 seqgenSingleSimFunc <- function(dm, parameters) {
   checkForSeqgen()
@@ -249,6 +246,7 @@ seqgenSingleSimFunc <- function(dm, parameters) {
 
   # Run all simulation in with one seqgen call if they loci are identical,
   # or call ms for each locus if there is variation between the loci.
+
   if (hasInterLocusVariation(dm)) {
     sim_reps <- 1:get_locus_number(dm)
     sim_loci <- 1
@@ -259,7 +257,7 @@ seqgenSingleSimFunc <- function(dm, parameters) {
 
   locus_length <- get_locus_length_matrix(dm)
 
-  seqgen.files <- lapply(1:sim_reps, function(locus) {
+  seqgen.files <- lapply(sim_reps, function(locus) {
     # Generate options for seqgen
     tree.model <- generateTreeModel(dm, locus, sim_loci)
     stopifnot(!is.null(tree.model))
@@ -273,7 +271,6 @@ seqgenSingleSimFunc <- function(dm, parameters) {
 
     # Call seq-gen to distribute mutations
     seqgen.options <- generateSeqgenOptions(dm, parameters, locus,
-                                            locus_length[locus,],
                                             sampleSeed(length(tree_files)))
 
     seqgen.file <- callSeqgen(seqgen.options, tree_files)
@@ -282,6 +279,7 @@ seqgenSingleSimFunc <- function(dm, parameters) {
     unlink(c(tree_files, sum_stats_ms[['file']]))
     seqgen.file
   })
+  stopifnot(length(seqgen.files) == length(sim_reps))
 
   # Generate the summary statistics
   generateSumStats(seqgen.files, 'seqgen', parameters, dm)
@@ -290,5 +288,5 @@ seqgenSingleSimFunc <- function(dm, parameters) {
 
 #' @include sim_program.R
 createSimProgram("seq-gen", sg.features, sg.sum.stats,
-                 seqgenSingleSimFunc, printSeqgenCommand,
+                 seqgenSingleSimFunc, sg_get_command,
                  priority=10)

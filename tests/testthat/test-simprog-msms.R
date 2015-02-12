@@ -42,13 +42,16 @@ test_that("generating msms options works", {
 })
 
 
-test_that("test.msmsPrint", {
-#   if (!checkForMsms(FALSE, TRUE)) skip('msms not installed')
-#   tmp_file <- tempfile()
-#   sink(tmp_file)
-#   print(dm.sel)
-#   sink(NULL)
-#   unlink(tmp_file)
+test_that("generating text command works", {
+  model2 <- model_theta_tau() +
+    feat_selection(par_range('s', 1, 10), par_expr(s),
+                   population = 1, at_time = 1.7)
+
+  cmd <- msms_get_command(model2)
+  expect_equal(grep('^msms', cmd), 1)
+  expect_equal(grep('-ms 25 10', cmd), 1)
+  expect_equal(grep('-SAA s', cmd), 1)
+  expect_equal(grep('-SAa s', cmd), 1)
 })
 
 
@@ -71,17 +74,16 @@ test_that("msmsSimFunc works", {
 
 test_that("msmsSimFunc works with inter-locus variation", {
   if (!checkForMsms(FALSE, TRUE)) skip('msms not installed')
-  warning("msms test with inter-locus-variation deactivated")
-#   dm_tmp <- dm.addInterLocusVariation(dm.sel)
-#
-#   set.seed(1100)
-#   sum_stats <- msmsSimFunc(dm_tmp, c(1, 1.5, 1500, 5))
-#   expect_true(is.matrix(sum_stats$jsfs))
-#   expect_true(sum(sum_stats$jsfs) > 0)
-#
-#   set.seed(1100)
-#   sum_stats2 <- msmsSimFunc(dm_tmp, c(1, 1.5, 1500, 5))
-#   expect_equal(sum_stats$jsfs, sum_stats2$jsfs)
+
+  dm_tmp <- CoalModel(5, 2) +
+    feat_mutation(par_range('theta', 1, 5), variance = 17) +
+    sumstat_seg_sites()
+  expect_true(hasInterLocusVariation(dm_tmp))
+
+  set.seed(1100)
+  sum_stats <- msmsSimFunc(dm_tmp, c(3))
+  expect_is(sum_stats$seg.sites, 'list')
+  expect_equal(length(sum_stats$seg.sites), 2)
 })
 
 

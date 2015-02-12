@@ -48,3 +48,19 @@ test_that("simulating a size change works", {
 })
 
 
+test_that('Printing the command works', {
+  cmd <- ms_get_command(CoalModel(5:6, 17))
+  expect_equal(grep('ms', cmd), 1)
+  expect_equal(grep('ms 11 17', cmd), 1)
+  expect_equal(grep('-I 2 5 6', cmd), 1)
+
+  cmd <- ms_get_command(CoalModel(5:6, 17) +
+                          par_range('a', 1, 5) +
+                          feat_mutation(par_expr(2*a)))
+  expect_equal(grep('ms', cmd), 1)
+  expect_equal(grep('ms 11 17', cmd), 1)
+  expect_equal(grep('-I 2 5 6', cmd), 1)
+  expect_equal(grep('a', cmd), 1)
+})
+
+
