@@ -1,7 +1,7 @@
 context("Rcpp tree parsing")
 
 test_that("Trees are extracted from simulation output", {
-  sim_output <- tempfile("csr_sim_output")
+  sim_output <- tempfile("sim_output")
 
   cat("ms 3 1 -t 1 -r 1 20 -T
 30461 15911 34727
