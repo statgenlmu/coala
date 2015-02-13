@@ -20,9 +20,8 @@ test_that("generation of tree models works", {
   for (dm in list(model_hky(), model_f84(), model_gtr())) {
     dm.ms <-generateTreeModel(dm, 1)
     sum.stats <- simulate(dm.ms, pars=c(1, 5))
-    expect_false(is.null(sum.stats$file))
-    expect_true(file.exists(sum.stats$file[[1]]))
-    unlink(sum.stats$file)
+    expect_false(is.null(sum.stats$sg_trees))
+    unlink(sum.stats$sg_trees)
   }
 })
 
@@ -86,7 +85,7 @@ test_that("seq-gen can simulate trios", {
     sumstat_seg_sites()
 
   sum.stats <- simulate(dm.lt, pars=c(1, 10))
-  expect_that(sum(sum.stats$jsfs), is_less_than(sum(sapply(sum.stats$seg.sites, ncol))))
+  expect_that(sum(sum.stats$jsfs), is_less_than(sum(sapply(sum.stats$seg_sites, ncol))))
 })
 
 

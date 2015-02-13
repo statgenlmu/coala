@@ -11,7 +11,8 @@ test_that("simulation with scrm works", {
 })
 
 test_that("simulating files works", {
-  model <- model_theta_tau() + sumstat_file()
+  folder <- tempfile('scrm_test')
+  model <- model_theta_tau() + sumstat_file(folder)
   sum_stats <- getSimProgram('scrm')$sim_func(model, c(1, 5))
   expect_true(is.list(sum_stats))
   expect_equal(length(sum_stats), 3)
@@ -19,4 +20,5 @@ test_that("simulating files works", {
   expect_true(is.character(sum_stats$file))
   expect_true(file.exists(sum_stats$file))
   unlink(sum_stats$file)
+  unlink(folder, recursive = TRUE)
 })

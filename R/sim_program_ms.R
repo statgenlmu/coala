@@ -8,7 +8,7 @@
 
 possible.features  <- c("sample", "mutation", "migration", "migration_sym",
                         "pop_merge", "recombination", "size_change", "growth",
-                        "inter_locus_variation")
+                        "inter_locus_variation", "trees")
 possible.sum.stats <- c("jsfs", "trees", "seg.sites", "file")
 
 
@@ -56,13 +56,17 @@ generateMsOptionsCommand <- function(dm) {
                feat["pop.source"], ',', feat["parameter"], ',')
       }
 
+    else if (type == 'trees') {
+      cmd <- c(cmd, '"-T",')
+    }
+
     else if (type %in% c("sample", "loci.number", "loci.length",
                          "selection", "selection_AA", "selection_Aa",
                          "inter_locus_variation")) {}
     else stop("Unknown feature:", type)
   }
 
-  if ('trees' %in% get_summary_statistics(dm)) cmd <- c(cmd, '"-T",')
+
   cmd <- c(cmd, '" ")')
 }
 
@@ -102,19 +106,24 @@ msSingleSimFunc <- function(dm, parameters=numeric()) {
   }
 
   # Do the actuall simulation
-  ms.files <- lapply(sim_reps, function(locus) {
+  files <- lapply(sim_reps, function(locus) {
     ms.options <- generateMsOptions(dm, parameters, locus)
-    ms.file <- tempfile('csr_ms')
+    file <- tempfile('csr_ms')
 
     ms(sum(get_sample_size(dm)), sim_loci,
-       unlist(strsplit(ms.options, " ")), ms.file)
+       unlist(strsplit(ms.options, " ")), file)
 
-    if(file.info(ms.file)$size == 0) stop("ms simulation output is empty")
-    ms.file
+    if(file.info(file)$size == 0) stop("ms simulation output is empty")
+    file
   })
 
-  # Parse & return the simulation output
-  generateSumStats(ms.files, 'ms', parameters, dm)
+  # Parse the output and calculate summary statistics
+  seg_sites <- parseMsOutput(files, get_sample_size(dm), get_locus_number(dm))
+  sum_stats <- calc_sumstats(seg_sites, files, dm, parameters)
+
+  # Clean Up
+  unlink(files)
+  sum_stats
 }
 
 

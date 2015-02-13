@@ -53,10 +53,7 @@ CoalModel <- function(sample_size=0, loci_number=0, loci_length=1000) {
                                  upper.range=numeric(),
                                  stringsAsFactors=F)
 
-  model$sum_stats <- data.frame(name=character(),
-                                population=numeric(),
-                                group=numeric(),
-                                stringsAsFactors=F)
+  model$sum_stats <- create_sumstat_container()
 
   model$id <- get_id()
 
@@ -133,20 +130,13 @@ getThetaName <- function(dm, outer=FALSE, group=0) {
 }
 
 
-resetSumStats <- function(dm) {
-  dm$sum_stats <- dm$sum_stats[FALSE, ]
-  dm
-}
-
-
 generateGroupModel <- function(dm, group) {
   # Features
   dm$features <- searchFeature(dm, group = group)
   dm$features$group <- 0
 
   # sum_stats
-  dm$sum_stats <- dm$sum_stats[dm$sum_stats$group %in% c(0, group), , drop=FALSE]
-  dm$sum_stats$group <- 0
+  dm$sum_stats <- get_group_statistics(dm, group)
 
   # Loci
   loci <- dm$loci[dm$loci$group == group, , drop=FALSE]

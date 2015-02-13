@@ -4,6 +4,7 @@ Feature <- R6Class("Feature", inherit = Base_Object,
   private = list(
     feature_table = NULL,
     parameter = list(),
+    sumstats = list(),
     group = 0,
     inter_locus_var = FALSE
   ),
@@ -51,12 +52,18 @@ Feature <- R6Class("Feature", inherit = Base_Object,
     },
     get_table = function() private$feature_table,
     get_parameters = function() private$parameter,
+    get_sumstats = function() private$sumstats,
     get_group = function() private$group,
     get_inter_locus_var = function() private$inter_locus_var,
     add_parameter = function(parameter) {
       stopifnot(is.par(parameter))
       idx <- as.character(length(private$parameter) + 1)
       private$parameter[[idx]] <- parameter
+    },
+    add_sumstat = function(sumstat) {
+      stopifnot(is.sum_stat(sumstat))
+      idx <- as.character(length(private$sumstats) + 1)
+      private$sumstats[[idx]] <- sumstat
     },
     add_feature = function(feature) {
       stopifnot(is.feature(feature))
@@ -72,3 +79,12 @@ is.feature <- function(feature) {
   'Feature' %in% class(feature)
 }
 
+
+print.Feature <- function(x, ...) {
+  cat('Feature Table: \n')
+  print(x$get_table())
+  cat('\nParameters: \n')
+  for (par in x$get_parameters()) print(par)
+  cat('\nSumStats: \n')
+  for (stat in x$get_sumstats()) print(stat)
+}

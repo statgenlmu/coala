@@ -16,7 +16,8 @@ test_that("parsing positions works", {
 
 test_that("parsing output works", {
   set.seed(25)
-  dm.tt <- model_theta_tau() + sumstat_file()
+  folder <- tempfile('ms-parse-test')
+  dm.tt <- model_theta_tau() + sumstat_file(folder)
   ss <- get_sample_size(dm.tt)
   ln <- get_locus_number(dm.tt)
 
@@ -33,5 +34,5 @@ test_that("parsing output works", {
     expect_true(all(seg_site %in% c(0, 1)))
   }
 
-  unlink(ms.file)
+  unlink(folder, recursive = TRUE)
 })

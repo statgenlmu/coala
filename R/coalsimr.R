@@ -8,5 +8,5 @@
 #' @keywords package
 #' @importFrom Rcpp evalCpp
 #' @useDynLib coalsimr
-#' @importFrom R6 R6Class
+#' @importFrom assertthat assert_that
 NULL

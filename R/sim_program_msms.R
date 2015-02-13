@@ -14,20 +14,20 @@ possible.sum.stats <- getSimProgram('ms')$possible_sum_stats
 callMsms <- function(ms.args, msms.args, subgroup) {
   checkForMsms()
 
-  out.file = tempfile('csr_msms')
+  out_file = tempfile('msms')
   seed <- sampleSeed(1)
 
   # Create the command
   cmd = paste("java -jar", get_msms_path(), as.character(msms.args),
-              "-ms", as.character(ms.args), "-seed", seed, ">", out.file)
+              "-ms", as.character(ms.args), "-seed", seed, ">", out_file)
 
   # Execute the command
   output <- system(cmd)
 
-  if(!file.exists(out.file)) stop("msms simulation failed!")
-  if(file.info(out.file)$size == 0) stop("msms output is empty!")
+  if(!file.exists(out_file)) stop("msms simulation failed!")
+  if(file.info(out_file)$size == 0) stop("msms output is empty!")
 
-  return(out.file)
+  out_file
 }
 
 checkForMsms <- function(throw.error = TRUE, silent = FALSE) {
@@ -112,7 +112,7 @@ msmsSimFunc <- function(dm, parameters) {
   }
 
   # Run the simulation(s)
-  msms.files <- lapply(sim_reps, function(locus) {
+  files <- lapply(sim_reps, function(locus) {
     ms.options <- paste(sum(get_sample_size(dm)), sim_loci,
                         paste(generateMsOptions(dm, parameters, locus),
                               collapse=" "))
@@ -122,8 +122,13 @@ msmsSimFunc <- function(dm, parameters) {
     callMsms(ms.options, msms.options)
   })
 
-  # Parse the simulation output
-  generateSumStats(msms.files, 'ms', parameters, dm)
+  # Parse the output and calculate summary statistics
+  seg_sites <- parseMsOutput(files, get_sample_size(dm), get_locus_number(dm))
+  sum_stats <- calc_sumstats(seg_sites, files, dm, parameters)
+
+  # Clean Up
+  unlink(files)
+  sum_stats
 }
 
 

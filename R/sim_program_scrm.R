@@ -8,14 +8,20 @@ scrm_simulate <- function(dm, parameters) {
                 get_locus_number(dm),
                 paste(generateMsOptions(dm, parameters), collapse = ' '))
 
-  if ('file' %in% get_summary_statistics(dm)) {
-    file <- tempfile('csr_scrm')
-    sum_stats <- scrm(args, file)
-    return(generateSumStats(file, 'ms', parameters, dm))
-  }
+  if ('file' %in% get_summary_statistics(dm)) file <- tempfile('scrm')
+  else file <- ''
 
-  sum_stats <- scrm(args)
-  generateSumStats(sum_stats, "scrm", parameters, dm)
+  sum_stats <- scrm(args, file)
+
+  seg_sites <- lapply(sum_stats$seg_sites, function(x) {
+    attr(x, 'positions') <- as.numeric(colnames(x))
+    x
+  })
+
+  sum_stats <- calc_sumstats(seg_sites, file, dm, parameters)
+  unlink(file)
+
+  sum_stats
 }
 
 
