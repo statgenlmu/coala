@@ -36,7 +36,9 @@ generateSumStats <- function(files, program, parameters, dm, seg_sites) {
 
     # Add JSFS
     else if (sum_stat == 'jsfs') {
-      sum_stats[['jsfs']] <- calcJsfs(seg_sites, get_sample_size(dm))
+      sum_stats[['jsfs']] <- calc_jsfs(seg_sites,
+                                       get_population_indiviuals(dm, 1),
+                                       get_population_indiviuals(dm, 2))
     }
 
     else if (sum_stat == 'file' | sum_stat == 'trees') { }

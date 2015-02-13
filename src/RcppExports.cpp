@@ -73,16 +73,17 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// calcJsfs
-NumericMatrix calcJsfs(const List seg_sites, const NumericVector sample_size);
-RcppExport SEXP coalsimr_calcJsfs(SEXP seg_sitesSEXP, SEXP sample_sizeSEXP) {
+// calc_jsfs
+NumericMatrix calc_jsfs(const List seg_sites, const NumericVector pop1, const NumericVector pop2);
+RcppExport SEXP coalsimr_calc_jsfs(SEXP seg_sitesSEXP, SEXP pop1SEXP, SEXP pop2SEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< const List >::type seg_sites(seg_sitesSEXP );
-        Rcpp::traits::input_parameter< const NumericVector >::type sample_size(sample_sizeSEXP );
-        NumericMatrix __result = calcJsfs(seg_sites, sample_size);
+        Rcpp::traits::input_parameter< const NumericVector >::type pop1(pop1SEXP );
+        Rcpp::traits::input_parameter< const NumericVector >::type pop2(pop2SEXP );
+        NumericMatrix __result = calc_jsfs(seg_sites, pop1, pop2);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

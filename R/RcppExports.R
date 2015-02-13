@@ -17,13 +17,15 @@ parseTrees <- function(in_file, trio_opts, tempfile) {
     .Call('coalsimr_parseTrees', PACKAGE = 'coalsimr', in_file, trio_opts, tempfile)
 }
 
-#' Calculate the JSFS from a list of segregating sites statistics
-#' 
+#' Calculates the JSFS for two populations
+#'
 #' @param seg_sites List of segregating sites
-#' @param sample_size A numberic vector of size 2, giving the sample sizes
-#'        of the two population for which the JSFS is calulated
+#' @param pop1 The rows of \code{seg_sites} that correspond to individuals
+#'   of the first population.
+#' @param pop2 same as \code{pop1}, but for the second population.
+#' @export
 #' @return The Joint Site Frequency Spectrum, as a matrix.
-calcJsfs <- function(seg_sites, sample_size) {
-    .Call('coalsimr_calcJsfs', PACKAGE = 'coalsimr', seg_sites, sample_size)
+calc_jsfs <- function(seg_sites, pop1, pop2) {
+    .Call('coalsimr_calc_jsfs', PACKAGE = 'coalsimr', seg_sites, pop1, pop2)
 }
 
