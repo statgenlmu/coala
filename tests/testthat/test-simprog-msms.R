@@ -82,8 +82,8 @@ test_that("msmsSimFunc works with inter-locus variation", {
 
   set.seed(1100)
   sum_stats <- msmsSimFunc(dm_tmp, c(3))
-  expect_is(sum_stats$seg.sites, 'list')
-  expect_equal(length(sum_stats$seg.sites), 2)
+  expect_is(sum_stats$seg_sites, 'list')
+  expect_equal(length(sum_stats$seg_sites), 2)
 })
 
 

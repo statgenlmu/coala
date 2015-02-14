@@ -75,3 +75,21 @@ test_that("calc_jsfs works with trios", {
                               1, 0, 1,
                               0, 0, 1), 3, 3, byrow=TRUE))
 })
+
+
+test_that("JSFS SumStat works", {
+  stat <- sumstat_jsfs('jsfs_test', c(1,2))
+  model <- CoalModel(c(2,2), 1)
+
+  seg_sites <- list(matrix(c(1, 0, 0, 0,
+                             1, 1, 0, 1,
+                             1, 0, 0, 1,
+                             1, 0, 0, 1), 4, 4, byrow=TRUE))
+  attr(seg_sites[[1]], 'positions') = c(0.1, 0.2, 0.5, 0.7)
+
+  expect_equal(stat$get_name(), 'jsfs_test')
+  expect_equal(stat$calculate(seg_sites, NULL, model),
+               matrix(c(1, 0, 0,
+                        1, 0, 1,
+                        0, 0, 1), 3, 3, byrow=TRUE))
+})

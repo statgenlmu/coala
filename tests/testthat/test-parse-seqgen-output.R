@@ -7,7 +7,7 @@ test_that("parseSeqgenOutput works with a single file", {
     feat_pop_merge(par_expr('2*tau'), 3, 1) #+
    # feat_mutation(par_range('theta', 1, 10), model="HKY")
 
-  seqgen_file <- tempfile('seqgen')
+  seqgen_file <- tempfile('seqgen_parser_test')
   cat(" 11 10
 s11       AATTTTGCCT
 s2        TTCCCAAGTT
@@ -102,7 +102,7 @@ s4        GCTGATAATA", file = seqgen_file)
   expect_equal(attr(seg_sites[[2]], 'locus'), rep(c(-1,0,1), each = 5))
   expect_equal(attr(seg_sites[[2]], 'positions'), rep(c(1,2,3,8,9)/9, 3))
 
-  seqgen_file_1 <- tempfile('seqgen')
+  seqgen_file_1 <- tempfile('seqgen_parser_test')
   cat(" 11 10
 s11       AATTTTGCCT
 s2        TTCCCAAGTT
@@ -116,7 +116,7 @@ s8        GCGGAAGCCT
 s9        CCGGCTGCAG
 s10       CCTCAGGGCC", file = seqgen_file_1)
 
-  seqgen_file_2 <- tempfile('seqgen')
+  seqgen_file_2 <- tempfile('seqgen_parser_test')
   cat(" 11 10
 s11       ATTGAACCGC
 s5        GTATATTTAC

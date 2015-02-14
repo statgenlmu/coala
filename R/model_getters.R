@@ -71,17 +71,6 @@ get_sample_size <- function(dm) {
 }
 
 
-#' @param pop The population for which aspects are returned
-#' @describeIn get_feature_table Returns a vector of populations in the model
-#' @export
-get_summary_statistics <- function(dm, group = 1, pop) {
-  rows <- dm$sum_stats$group %in% c(0,group)
-  if (!missing(pop)) rows <- rows & dm$sum_stats$population == pop
-  if (length(rows) == 0) return(character())
-  unique(dm$sum_stats$name[rows])
-}
-
-
 #' @describeIn get_feature_table Returns a vector of groups in the model
 #' @export
 get_groups <- function(dm) {

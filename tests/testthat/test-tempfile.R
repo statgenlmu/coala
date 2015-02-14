@@ -11,6 +11,7 @@ test_that('Threadsafe tempfile implementation works', {
 test_that('there are no remaining temporary files', {
   temp_files <- list.files(tempdir(), pattern = '^coalsimr-[0-9]+-')
   for (temp_file in temp_files) {
+    cat("temp file not deleted: ", temp_file, "\n")
     warning("temp file not deleted: ", temp_file)
   }
   expect_equal(length(temp_files), 0)

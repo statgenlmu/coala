@@ -36,30 +36,13 @@ addToModel.Par_Range <- function(par, model, par_name) {
 
 addToModel.Feature <- function(feat, model, feat_name) {
   model$features <- rbind(model$features, feat$get_table())
-  for (parameter in feat$get_parameters()) {
-    model <- model + parameter
-  }
+
+  for (para in feat$get_parameters()) model <- model + para
+  for (stat in feat$get_sumstats()) model <- model + stat
+
   if (feat$get_inter_locus_var()) {
     model <- addInterLocusVariation(model, feat$get_group())
   }
-
-  model$id <- get_id()
-  model
-}
-
-
-addToModel.SumStat <- function(sum_stat, model, feat_name) {
-  if (sum_stat$get_name() %in%
-        get_summary_statistics(model,
-                               group = sum_stat$get_group(),
-                               pop = sum_stat$get_population()))
-    stop("Summary Statistic ", sum_stat$get_name(), ' is already in the model.')
-
-  model$sum_stats = rbind(model$sum_stats,
-                          data.frame(name = sum_stat$get_name(),
-                                     population = sum_stat$get_population(),
-                                     group = sum_stat$get_group(),
-                                     stringsAsFactors = FALSE))
 
   model$id <- get_id()
   model
@@ -99,11 +82,13 @@ addToModel.Locus <- function(locus, model, locus_name) {
 addToFeature <- function(x, feat, x_name) {
   if (is.par_model(x)) {
     feat$add_parameter(x)
-    return(feat)
   } else if (is.feature(x)) {
     feat$add_feature(x)
-    return(feat)
+  } else if (is.sum_stat(x)) {
+    feat$add_sumstat(x)
+  } else {
+    stop("Can not add `", x_name, "` to feature")
   }
-  else stop("Can not add `", x_name, "` to feature")
+  feat
 }
 

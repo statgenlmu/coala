@@ -2,15 +2,15 @@
 % Please edit documentation in R/sumstat_jsfs.R
 \name{sumstat_jsfs}
 \alias{sumstat_jsfs}
-\title{Returns the Joint Site Frequency Spectrum from simulations}
+\title{Calculates the Joint Site Frequency Spectrum from simulations}
 \usage{
-sumstat_jsfs(group = 0)
+sumstat_jsfs(name = "jsfs", populations = c(1, 2), group = 0)
 }
 \arguments{
 \item{group}{The locus group for which this summary statistic is reported.
 The default of `0` corresponds to all groups.}
 }
 \description{
-Returns the Joint Site Frequency Spectrum from simulations
+Calculates the Joint Site Frequency Spectrum from simulations
 }
 

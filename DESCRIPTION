@@ -1,6 +1,6 @@
 Package: coalsimr
-Version: 0.0.9006
-Date: 2015-02-12
+Version: 0.0.9007
+Date: 2015-02-13
 License: GPL (>= 3)
 Title: Simulating the evolution of DNA sequences
 Author: Paul R. Staab
@@ -11,6 +11,7 @@ URL: http://evol.bio.lmu.de/_statgen/software/jaatha
 Depends:
     R (>= 3.1.0)
 Imports:
+    assertthat (>= 0.1),
     phyclust (>= 0.1-14),
     Rcpp (>= 0.11.0),
     R6 (>= 2.0.1),
@@ -50,7 +51,6 @@ Collate:
     'sim_program_msms.R'
     'sim_program_scrm.R'
     'sim_program_seqgen.R'
-    'sum_stat_generate.R'
     'sumstat.R'
     'sumstat_file.R'
     'sumstat_jsfs.R'

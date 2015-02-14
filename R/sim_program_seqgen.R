@@ -65,8 +65,8 @@ generateTreeModel <- function(dm, locus, locus_number=1) {
       dm$features[dm$features$type %in% tree.prog$possible_features, ]
 
     # Summary Stastics
-    tree_model <- resetSumStats(tree_model)
-    tree_model <- tree_model + sumstat_trees() + sumstat_file()
+    tree_model$sum_stats <- create_sumstat_container()
+    tree_model <- tree_model + sumstat_sg_trees(locus_length)
 
     # Loci
     tree_model$loci <- tree_model$loci[FALSE, ]
@@ -109,7 +109,7 @@ callSeqgen <- function(opts, ms_files) {
   sapply(seq(along = opts), function(i) {
     if(file.info(ms_files[i])$size == 0 ) stop("No trees in file ", ms_files[i])
 
-    seqgen_file <- tempfile('csr_seqgen')
+    seqgen_file <- tempfile('seqgen')
     cmd <- paste(opts[i], "<", ms_files[i], ">", seqgen_file)
 
     # Do the acctual simulation
@@ -265,24 +265,30 @@ seqgenSingleSimFunc <- function(dm, parameters) {
     # Simulate the trees
     sum_stats_ms <- simulate(tree.model, pars=parameters)
 
-    tree_files <- parseTrees(sum_stats_ms[['file']][[1]],
-                             locus_length[locus,],
-                             tempfile)
-
     # Call seq-gen to distribute mutations
     seqgen.options <- generateSeqgenOptions(dm, parameters, locus,
-                                            sampleSeed(length(tree_files)))
+                                            sampleSeed(length(sum_stats_ms$sg_trees)))
 
-    seqgen.file <- callSeqgen(seqgen.options, tree_files)
+    seqgen.file <- callSeqgen(seqgen.options, sum_stats_ms$sg_trees)
 
     # Delete tree files
-    unlink(c(tree_files, sum_stats_ms[['file']]))
+    unlink(c(sum_stats_ms[['file']], sum_stats_ms$sg_trees))
     seqgen.file
   })
   stopifnot(length(seqgen.files) == length(sim_reps))
 
   # Generate the summary statistics
-  generateSumStats(seqgen.files, 'seqgen', parameters, dm)
+  seg_sites <- parseSeqgenOutput(seqgen.files,
+                                 sum(get_sample_size(dm)),
+                                 get_locus_length_matrix(dm),
+                                 get_locus_number(dm),
+                                 outgroup_size = get_outgroup_size(dm))
+
+  sum_stats <- calc_sumstats(seg_sites, seqgen.files, dm, parameters)
+
+  # Clean Up
+  unlink(unlist(seqgen.files))
+  sum_stats
 }
 
 
