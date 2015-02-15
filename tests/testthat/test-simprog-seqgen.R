@@ -150,6 +150,7 @@ test_that("Simulation of trios with unequal mutation rates works", {
 
 
 test_that('a more complicated model works', {
+  if (!checkForSeqgen(FALSE, TRUE)) skip('seqgen not installed')
   model <- CoalModel(c(5,5,2), 1, 100) +
     feat_mutation(par_range('theta', .1, 40), model = 'HKY',
                   base_frequencies = c(0.26, 0.20, 0.22, 0.32),
