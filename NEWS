@@ -6,3 +6,7 @@ coalsimr 0.1
 * Added a caching mechanism for simulation commands (#7).
 * Re-enabled bulk simulation for seq-gen (#8, #10).
 * Redesigned the summary statistics system in a modular way (#17).
+* Added the following summary statistics: 
+  + Segregating Sites
+  + Site Frequency Spectrum (#24)
+  + Joint Site Frequency Spectrum
