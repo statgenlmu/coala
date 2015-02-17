@@ -8,5 +8,5 @@ coalsimr 0.1
 * Redesigned the summary statistics system in a modular way (#17).
 * Added the following summary statistics: 
   + Segregating Sites
-  + Site Frequency Spectrum (SFS)
-  + Joint Site Frequency Spectrum (JSFS)
+  + Site Frequency Spectrum (#24)
+  + Joint Site Frequency Spectrum
