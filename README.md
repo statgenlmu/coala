@@ -32,3 +32,12 @@ The package supports the coalescent simulators
 All simulators can be combined with _seq-gen_ to simulate finite sites mutation models.
 The programs _msms_ and _seq-gen_ must be installed manually on the system, while the
 R versions of _ms_ and _scrm_ are used automatically.
+
+
+Supported Summary Statistics
+----------------------------
+* sumstat_seg_sites: Segregating Sites
+* sumstat_jsfs: The Joint Site Frequency Spectrum of two populations
+
+Please refer to the statistic's help page for additional information (e.g.
+`help(sumstat_jsfs)`).
