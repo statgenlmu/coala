@@ -37,7 +37,8 @@ R versions of _ms_ and _scrm_ are used automatically.
 Supported Summary Statistics
 ----------------------------
 * sumstat_seg_sites: Segregating Sites
-* sumstat_jsfs: The Joint Site Frequency Spectrum of two populations
+* sumstat_sfs: The Site Frequency Spectrum of a population.
+* sumstat_jsfs: The Joint Site Frequency Spectrum of two populations.
 
 Please refer to the statistic's help page for additional information (e.g.
 `help(sumstat_jsfs)`).
