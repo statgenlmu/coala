@@ -1,6 +1,6 @@
 Package: coalsimr
-Version: 0.0.9008
-Date: 2015-02-17
+Version: 0.0.9009
+Date: 2015-02-18
 License: GPL (>= 3)
 Title: Simulating the evolution of DNA sequences
 Author: Paul R. Staab
@@ -12,6 +12,7 @@ Depends:
     R (>= 3.1.0)
 Imports:
     assertthat (>= 0.1),
+    rehh (>= 1.11),
     phyclust (>= 0.1-14),
     Rcpp (>= 0.11.0),
     R6 (>= 2.0.1),
@@ -53,6 +54,7 @@ Collate:
     'sim_program_seqgen.R'
     'sumstat.R'
     'sumstat_file.R'
+    'sumstat_ihh.R'
     'sumstat_jsfs.R'
     'sumstat_seg_sites.R'
     'sumstat_sfs.R'
