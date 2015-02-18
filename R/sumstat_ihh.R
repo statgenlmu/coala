@@ -1,13 +1,23 @@
 #' @importFrom R6 R6Class
 #' @importFrom rehh data2haplohh calc_ehh
 SumStat_iHH <- R6Class('SumStat_iHH', inherit = SumStat,
+  private = list(position = NA),
   public = list(
+    calculate_for_locus = function(seg_sites, files, model) {
+      assert_that(is.matrix(seg_sites))
+      ehh <- sapply(1:nrow(seg_sites), function(snp) {
+        calc_ehh(self$segsites_to_rehh_data(seg_sites, model),
+                 mrk = snp, plotehh = FALSE)$ihh
+      })
+      colnames(ehh) <- attr(seg_sites, 'positions')
+      ehh
+    },
     calculate = function(seg_sites, files, model) {
-      calc_ehh(self$segsites_to_rehh_data(seg_sites, model),
-               mrk = 2, plotehh = FALSE)
+      assert_that(is.list(seg_sites))
+      assert_that(is.model(model))
+      lapply(seg_sites, function(ss) self$calculate_for_locus(ss, files, model))
     },
     segsites_to_snp_map = function(seg_sites, model) {
-      assert_that(is.matrix(seg_sites))
       if (has_trios(model, private$group))
         stop('iHH does not support trios yet.')
       pos <- attr(seg_sites, 'positions') * get_locus_length(model,
@@ -19,20 +29,16 @@ SumStat_iHH <- R6Class('SumStat_iHH', inherit = SumStat,
       file
     },
     segsites_to_haplo = function(seg_sites) {
-      assert_that(is.matrix(seg_sites))
       file <- tempfile('haplotypes')
       write.table(cbind(1:ncol(seg_sites), t(seg_sites)), file,
                   row.names = FALSE, col.names = FALSE)
       file
     },
     segsites_to_rehh_data = function(seg_sites, model) {
-      output <- tempfile('rehh_output')
-      sink(output)
       haplo <- self$segsites_to_haplo(seg_sites)
       snp_map <- self$segsites_to_snp_map(seg_sites, model)
-      rehh <- data2haplohh(haplo, snp_map, recode.allele = TRUE)
-      sink(NULL)
-      unlink(c(haplo, snp_map, output))
+      capture.output(rehh <- data2haplohh(haplo, snp_map, recode.allele = TRUE))
+      unlink(c(snp_map, haplo))
       rehh
     }
   )
