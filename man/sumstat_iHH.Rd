@@ -18,6 +18,7 @@ introduced by
 Voight et al., A map of recent positive selection in the human genome.
  PLoS Biol, 4(3):e72, Mar 2006
 
+It uses the package rehh to calculate the statistic, please refer to
 their documentation for detailed information.
 }
 

@@ -296,3 +296,40 @@ test_that('get population individuals works', {
   expect_equal(get_population_indiviuals(model_hky(), 2), 4:6)
   expect_equal(get_population_indiviuals(model_hky(), 3), 7)
 })
+
+
+test_that('converting positions for trios works', {
+  model <- CoalModel(5:6) +
+    locus_trio(locus_length = c(10, 30, 50), distance = c(20, 40)) +
+    locus_trio(locus_length = c(50, 30, 10), distance = c(40, 20)) +
+    locus_averaged(2, 100, group = 2)
+
+  expect_equal(conv_middle_to_trio_pos(10, model, relative = FALSE),
+               c(40, 100))
+  expect_equal(conv_middle_to_trio_pos(.5, model, relative = TRUE),
+               c(45/150, 105/150))
+
+  expect_equal(conv_middle_to_trio_pos(10, model, group = 2, relative = FALSE),
+               c(10, 10))
+  expect_equal(conv_middle_to_trio_pos(.5, model, group = 2, relative = TRUE),
+               c(.5, .5))
+
+
+  ss <- matrix(0, 6, 5)
+  attr(ss, 'positions') = c(0.1, 0.5, 0.2, 0.6, 0.5, 1)
+  attr(ss, 'locus') = rep(c(-1, 0, 1), each = 2)
+  expect_equal(get_snp_positions(list(ss, ss), model),
+               list(c(1, 5, 36, 48, 125, 150) / 150,
+                    c(5, 25, 96, 108, 145, 150) / 150))
+  expect_equal(get_snp_positions(list(ss, ss), model, relative = FALSE),
+               list(c(1, 5, 36, 48, 125, 150),
+                    c(5, 25, 96, 108, 145, 150)))
+
+  ss <- matrix(0, 6, 5)
+  attr(ss, 'positions') = c(0.1, 0.3, 0.5, 0.7, 0.9, 1)
+  attr(ss, 'locus') = rep(0, 6)
+  expect_equal(get_snp_positions(list(ss, ss), model, group=2, relative=TRUE),
+               list(c(.1, .3, .5, .7, .9, 1), c(.1, .3, .5, .7, .9, 1)))
+  expect_equal(get_snp_positions(list(ss, ss), model, group=2, relative=FALSE),
+               list(c(10, 30, 50, 70, 90, 100), c(10, 30, 50, 70, 90, 100)))
+})

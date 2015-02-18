@@ -226,3 +226,32 @@ hasInterLocusVariation <- function(dm, group = 0) {
 has_trios <- function(dm, group=0) {
   sum(get_locus_length_matrix(dm, group)[,-3]) > 0
 }
+
+
+# Converts a position on the middle locus to the relative position
+# on the simulated stretch
+conv_middle_to_trio_pos <- function(pos, model, group=0, relative=TRUE) {
+  llm <- get_locus_length_matrix(model, group)
+
+  pos <- ifelse(relative, pos * llm[,3], pos) + llm[,1] + llm[,2]
+  if (relative) pos <- pos / rowSums(llm)
+
+  pos
+}
+
+
+get_snp_positions <- function(seg_sites, model, group=0, relative=TRUE) {
+  assert_that(length(seg_sites) == get_locus_number(model, group))
+  llm <- get_locus_length_matrix(model, group)
+  lapply(1:length(seg_sites), function(locus) {
+    pos <- attr(seg_sites[[locus]], 'position')
+    trio_locus <- attr(seg_sites[[locus]], 'locus')
+    pos[trio_locus == -1] <- pos[trio_locus == -1] * llm[locus, 1]
+    pos[trio_locus == 0] <- pos[trio_locus == 0] * llm[locus, 3] +
+      sum(llm[locus, 1:2])
+    pos[trio_locus == 1] <- pos[trio_locus == 1] * llm[locus, 5] +
+      sum(llm[locus, 1:4])
+    if (relative) pos <- pos / sum(llm[locus,])
+    pos
+  })
+}
