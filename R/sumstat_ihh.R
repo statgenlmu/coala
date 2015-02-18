@@ -3,27 +3,22 @@
 SumStat_iHH <- R6Class('SumStat_iHH', inherit = SumStat,
   private = list(position = NA),
   public = list(
-    calculate_for_locus = function(seg_sites, files, model) {
-      assert_that(is.matrix(seg_sites))
-      ehh <- sapply(1:nrow(seg_sites), function(snp) {
-        calc_ehh(self$segsites_to_rehh_data(seg_sites, model),
-                 mrk = snp, plotehh = FALSE)$ihh
-      })
-      colnames(ehh) <- attr(seg_sites, 'positions')
-      ehh
-    },
     calculate = function(seg_sites, files, model) {
       assert_that(is.list(seg_sites))
       assert_that(is.model(model))
-      lapply(seg_sites, function(ss) self$calculate_for_locus(ss, files, model))
+      pos <- get_snp_positions(seg_sites, model, relative = FALSE)
+      lapply(1:length(seg_sites), function(locus) {
+        assert_that(is.matrix(seg_sites[[locus]]))
+        ehh <- sapply(1:nrow(seg_sites[[locus]]), function(snp) {
+          calc_ehh(self$segsites_to_rehh_data(seg_sites[[locus]], pos[[locus]]),
+                   mrk = snp, plotehh = FALSE)$ihh
+        })
+        colnames(ehh) <- pos[[locus]]
+        ehh
+      })
     },
-    segsites_to_snp_map = function(seg_sites, model) {
-      if (has_trios(model, private$group))
-        stop('iHH does not support trios yet.')
-      pos <- attr(seg_sites, 'positions') * get_locus_length(model,
-                                                             private$group)
+    segsites_to_snp_map = function(seg_sites, pos) {
       map <- data.frame(name=seq(along = pos), chr=1, pos = pos, anc=0, der=1)
-
       file <- tempfile('snp_map')
       write.table(map, file, row.names = FALSE, col.names = FALSE)
       file
@@ -34,9 +29,9 @@ SumStat_iHH <- R6Class('SumStat_iHH', inherit = SumStat,
                   row.names = FALSE, col.names = FALSE)
       file
     },
-    segsites_to_rehh_data = function(seg_sites, model) {
+    segsites_to_rehh_data = function(seg_sites, pos) {
       haplo <- self$segsites_to_haplo(seg_sites)
-      snp_map <- self$segsites_to_snp_map(seg_sites, model)
+      snp_map <- self$segsites_to_snp_map(seg_sites, pos)
       capture.output(rehh <- data2haplohh(haplo, snp_map, recode.allele = TRUE))
       unlink(c(snp_map, haplo))
       rehh
