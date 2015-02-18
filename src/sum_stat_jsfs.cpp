@@ -18,7 +18,9 @@ NumericMatrix calc_jsfs(const List seg_sites,
 
   size_t n_pop1 = pop1.size();
   size_t n_pop2 = pop2.size();
-  size_t nrows_needed = max(NumericVector::create(max(pop1), max(pop2)));
+  size_t nrows_required;
+  if (n_pop2 == 0) nrows_required = max(pop1);
+  else nrows_required = max(NumericVector::create(max(pop1), max(pop2)));
 
   NumericMatrix jsfs(n_pop1+1, n_pop2+1);
   size_t idx1, idx2, ncol;
@@ -27,7 +29,7 @@ NumericMatrix calc_jsfs(const List seg_sites,
 
   for (int locus = 0; locus < seg_sites.size(); ++locus) {
     ss = as<NumericMatrix>(seg_sites[locus]);
-    if (ss.nrow() < nrows_needed) stop("Seg. Sites has too few rows.");
+    if (ss.nrow() < nrows_required) stop("Seg. Sites has too few rows.");
     trio_locus = getTrioLocus(ss);
     ncol = ss.ncol();
 

@@ -35,4 +35,3 @@ test_that('calculation of iHH works', {
   expect_that(iHH[[1]], is_a('matrix'))
   expect_equal(dim(iHH[[1]]), c(2,4))
 })
-
