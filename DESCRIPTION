@@ -26,6 +26,7 @@ Collate:
     'RcppExports.R'
     'cache.R'
     'coalsimr.R'
+    'feat_unphased.R'
     'feature.R'
     'feature_growth.R'
     'feature_migration.R'

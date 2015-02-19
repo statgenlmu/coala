@@ -54,9 +54,13 @@ get_populations <- function(dm) {
 }
 
 
-#' @describeIn get_feature_table Returns a vector of samples sizes per population.
+#' @describeIn get_feature_table Returns a vector of samples sizes per
+#'   population.
+#' @param for_sim If true, the sample size used internally for the simulation
+#'   will be reported rather than the number of actuall samples. The numbers
+#'   can be unequal for the simulation of unphased data.
 #' @export
-get_sample_size <- function(dm) {
+get_sample_size <- function(dm, for_sim=FALSE) {
   feat.samples <- searchFeature(dm, type="sample")
   stopifnot(nrow(feat.samples) > 0)
 
@@ -67,6 +71,11 @@ get_sample_size <- function(dm) {
       as.integer(feat.samples$parameter[row.nr])
   }
 
+  if (for_sim) {
+    feat.ploidy <- searchFeature(dm, type="ploidy")
+    if (nrow(feat.ploidy) == 0) return(sample.size)
+    assert_that(nrow(feat.ploidy) == 1)
+  }
   sample.size
 }
 
