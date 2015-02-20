@@ -64,19 +64,42 @@ get_sample_size <- function(dm, for_sim=FALSE) {
   feat.samples <- searchFeature(dm, type="sample")
   stopifnot(nrow(feat.samples) > 0)
 
-  sample.size <- rep(0, length(get_populations(dm)))
+  sample_size <- rep(0, length(get_populations(dm)))
   for (row.nr in 1:nrow(feat.samples)) {
-    stopifnot(sample.size[feat.samples$pop.source[row.nr]] == 0)
-    sample.size[feat.samples$pop.source[row.nr]] <-
+    stopifnot(sample_size[feat.samples$pop.source[row.nr]] == 0)
+    sample_size[feat.samples$pop.source[row.nr]] <-
       as.integer(feat.samples$parameter[row.nr])
   }
 
   if (for_sim) {
-    feat.ploidy <- searchFeature(dm, type="ploidy")
-    if (nrow(feat.ploidy) == 0) return(sample.size)
-    assert_that(nrow(feat.ploidy) == 1)
+    sample_size <- sample_size * get_ploidy(dm)
+  } else {
+    sample_size <- sample_size * get_samples_per_ind(dm)
   }
-  sample.size
+
+  sample_size
+}
+
+
+get_ploidy <- function(model) {
+  feat_ploidy <- searchFeature(model, type="ploidy")
+  if (nrow(feat_ploidy) == 0) return(1L)
+  assert_that(nrow(feat_ploidy) == 1)
+  as.integer(feat_ploidy$parameter)
+}
+
+get_samples_per_ind <- function(model) {
+  feat_spi <- searchFeature(model, type="samples_per_ind")
+  if (nrow(feat_spi) == 0) return(1L)
+  assert_that(nrow(feat_spi) == 1)
+  as.integer(feat_spi$parameter)
+}
+
+
+is_unphased <- function(model) {
+  feat_spi <- searchFeature(model, type="unphased")
+  if (nrow(feat_spi) == 0) return(FALSE)
+  TRUE
 }
 
 
