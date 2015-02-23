@@ -60,8 +60,9 @@ generateMsmsOptionsCommand <- function(dm) {
     feat <- unlist(dm$features[i, ])
 
     if (type == "selection") {
-      cmd <- c(cmd, '"-SI"', ',', feat['time.point'], ',', length(get_sample_size(dm)), ',')
-      start.freq <- rep(0, length(get_sample_size(dm)))
+      cmd <- c(cmd, '"-SI"', ',', feat['time.point'], ',',
+               length(get_sample_size(dm, for_sim = TRUE)), ',')
+      start.freq <- rep(0, length(get_sample_size(dm, for_sim = TRUE)))
       start.freq[ as.integer(feat['pop.source']) ] <- 0.0005
       cmd <- c(cmd, paste0('"', paste(start.freq, collapse=' '), '"'), ',')
 
@@ -113,7 +114,7 @@ msmsSimFunc <- function(dm, parameters) {
 
   # Run the simulation(s)
   files <- lapply(sim_reps, function(locus) {
-    ms.options <- paste(sum(get_sample_size(dm)), sim_loci,
+    ms.options <- paste(sum(get_sample_size(dm, for_sim = TRUE)), sim_loci,
                         paste(generateMsOptions(dm, parameters, locus),
                               collapse=" "))
     msms.options <- paste(generateMsmsOptions(dm, parameters, locus),
@@ -123,7 +124,14 @@ msmsSimFunc <- function(dm, parameters) {
   })
 
   # Parse the output and calculate summary statistics
-  seg_sites <- parseMsOutput(files, get_sample_size(dm), get_locus_number(dm))
+  seg_sites <- parseMsOutput(files,
+                             get_sample_size(dm, for_sim = TRUE),
+                             get_locus_number(dm))
+
+  if (is_unphased(dm)) seg_sites <- unphase_segsites(seg_sites,
+                                                     get_ploidy(dm),
+                                                     get_samples_per_ind(dm))
+
   sum_stats <- calc_sumstats(seg_sites, files, dm, parameters)
 
   # Clean Up
