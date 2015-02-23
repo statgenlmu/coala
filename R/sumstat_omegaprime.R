@@ -15,7 +15,7 @@ SumStat_OmegaPrime <- R6Class('SumStat_OmegaPrime', inherit = SumStat,
   )
 )
 
-#' Calculates the Joint Site Frequency Spectrum from simulations
+#' Calculates the (experimental) Omega' Statistic
 #'
 #' @inheritParams sumstat_file
 #' @export
