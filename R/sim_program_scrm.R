@@ -4,7 +4,7 @@ scrm_sum_stats <- c("jsfs", "seg.sites", "file", "trees")
 
 #' @importFrom scrm scrm
 scrm_simulate <- function(dm, parameters) {
-  args <- paste(sum(get_sample_size(dm)),
+  args <- paste(sum(get_sample_size(dm, for_sim = TRUE)),
                 get_locus_number(dm),
                 paste(generateMsOptions(dm, parameters), collapse = ' '))
 
@@ -18,6 +18,10 @@ scrm_simulate <- function(dm, parameters) {
     x
   })
 
+  if (is_unphased(dm)) seg_sites <- unphase_segsites(seg_sites,
+                                                     get_ploidy(dm),
+                                                     get_samples_per_ind(dm))
+
   sum_stats <- calc_sumstats(seg_sites, file, dm, parameters)
   unlink(file)
 
@@ -28,4 +32,3 @@ scrm_simulate <- function(dm, parameters) {
 #' @include sim_program.R
 createSimProgram("scrm", scrm_features, scrm_sum_stats,
                   scrm_simulate, ms_get_command, 90)
-rm(scrm_features, scrm_sum_stats, scrm_simulate)
