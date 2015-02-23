@@ -10,3 +10,35 @@ feat_unphased <- function(ploidy, samples_per_ind=ploidy) {
     Feature$new('ploidy', par_const(ploidy)) +
     Feature$new('samples_per_ind', par_const(samples_per_ind))
 }
+
+
+unphase_segsites <- function(seg_sites, ploidy, samples_per_ind) {
+  lapply(seg_sites, function(ss) {
+    do.call(rbind, lapply(seq(1, nrow(ss), by=ploidy), function(ind) {
+      apply(ss[ind:(ind+ploidy-1),], 2, sample, size=samples_per_ind)
+    }))
+  })
+}
+
+
+get_ploidy <- function(model) {
+  feat_ploidy <- searchFeature(model, type="ploidy")
+  if (nrow(feat_ploidy) == 0) return(1L)
+  assert_that(nrow(feat_ploidy) == 1)
+  as.integer(feat_ploidy$parameter)
+}
+
+
+get_samples_per_ind <- function(model) {
+  feat_spi <- searchFeature(model, type="samples_per_ind")
+  if (nrow(feat_spi) == 0) return(1L)
+  assert_that(nrow(feat_spi) == 1)
+  as.integer(feat_spi$parameter)
+}
+
+
+is_unphased <- function(model) {
+  feat_spi <- searchFeature(model, type="unphased")
+  if (nrow(feat_spi) == 0) return(FALSE)
+  TRUE
+}
