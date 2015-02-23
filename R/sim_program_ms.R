@@ -8,14 +8,15 @@
 
 possible.features  <- c("sample", "mutation", "migration", "migration_sym",
                         "pop_merge", "recombination", "size_change", "growth",
-                        "inter_locus_variation", "trees")
+                        "inter_locus_variation", "trees",
+                        "unphased", "ploidy", "samples_per_ind")
 possible.sum.stats <- c("jsfs", "trees", "seg.sites", "file")
 
 
 # This function generates an string that contains an R command for generating
 # an ms call to the current model.
 generateMsOptionsCommand <- function(dm) {
-  nSample <- get_sample_size(dm)
+  nSample <- get_sample_size(dm, for_sim = TRUE)
   cmd <- c('c(')
   cmd <- c(cmd,'"-I"', ",", length(nSample), ',',
            paste(nSample, collapse=","), ',')
@@ -62,7 +63,8 @@ generateMsOptionsCommand <- function(dm) {
 
     else if (type %in% c("sample", "loci.number", "loci.length",
                          "selection", "selection_AA", "selection_Aa",
-                         "inter_locus_variation")) {}
+                         "inter_locus_variation", "unphased",
+                         "ploidy", "samples_per_ind")) {}
     else stop("Unknown feature:", type)
   }
 
@@ -110,7 +112,7 @@ msSingleSimFunc <- function(dm, parameters=numeric()) {
     ms.options <- generateMsOptions(dm, parameters, locus)
     file <- tempfile('csr_ms')
 
-    ms(sum(get_sample_size(dm)), sim_loci,
+    ms(sum(get_sample_size(dm, for_sim = TRUE)), sim_loci,
        unlist(strsplit(ms.options, " ")), file)
 
     if(file.info(file)$size == 0) stop("ms simulation output is empty")
@@ -118,7 +120,10 @@ msSingleSimFunc <- function(dm, parameters=numeric()) {
   })
 
   # Parse the output and calculate summary statistics
-  seg_sites <- parseMsOutput(files, get_sample_size(dm), get_locus_number(dm))
+  seg_sites <- parseMsOutput(files,
+                             get_sample_size(dm, for_sim = TRUE),
+                             get_locus_number(dm))
+
   sum_stats <- calc_sumstats(seg_sites, files, dm, parameters)
 
   # Clean Up

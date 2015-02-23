@@ -25,7 +25,7 @@ get_locus_number(dm, group = 1)
 
 get_populations(dm)
 
-get_sample_size(dm)
+get_sample_size(dm, for_sim = FALSE)
 
 get_groups(dm)
 
@@ -33,7 +33,7 @@ get_locus_length_matrix(dm, group = 1)
 
 get_outgroup(model)
 
-get_outgroup_size(model)
+get_outgroup_size(model, for_sim = FALSE)
 
 get_population_indiviuals(model, pop)
 
@@ -43,6 +43,10 @@ get_summary_statistics(dm, group = 1)
 \item{model}{The coalescent model from which aspects are returned}
 
 \item{group}{The locus group for which aspects are returned}
+
+\item{for_sim}{If true, the sample size used internally for the simulation
+will be reported rather than the number of actuall samples. The numbers
+can be unequal for the simulation of unphased data.}
 
 \item{pop}{The population for which aspects are returned}
 }
@@ -62,7 +66,8 @@ data.frame
 
 \item \code{get_populations}: Returns a vector of populations in the model
 
-\item \code{get_sample_size}: Returns a vector of samples sizes per population.
+\item \code{get_sample_size}: Returns a vector of samples sizes per
+population.
 
 \item \code{get_groups}: Returns a vector of groups in the model
 

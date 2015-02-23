@@ -333,3 +333,19 @@ test_that('converting positions for trios works', {
   expect_equal(get_snp_positions(list(ss, ss), model, group=2, relative=FALSE),
                list(c(10, 30, 50, 70, 90, 100), c(10, 30, 50, 70, 90, 100)))
 })
+
+
+test_that('getting the ploidy and individuals works', {
+  model <- model_theta_tau()
+  expect_equal(get_ploidy(model), 1L)
+  expect_equal(get_samples_per_ind(model), 1L)
+  sample_size <- get_sample_size(model)
+  expect_false(is_unphased(model))
+
+  model <- model_theta_tau() + feat_unphased(4, 2)
+  expect_equal(get_ploidy(model), 4L)
+  expect_equal(get_samples_per_ind(model), 2L)
+  expect_equal(get_sample_size(model), sample_size * 2)
+  expect_equal(get_sample_size(model, TRUE), sample_size * 4)
+  expect_true(is_unphased(model))
+})

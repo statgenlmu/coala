@@ -87,3 +87,14 @@ test_that("msmsSimFunc works with inter-locus variation", {
 })
 
 
+test_that('simulating unphased data works', {
+  model <- model_theta_tau() + feat_unphased(2, 1) + sumstat_seg_sites()
+  stats <- msmsSimFunc(model, c(1,5))
+  expect_equal(dim(stats$jsfs), c(11, 16))
+  expect_equal(nrow(stats$seg_sites[[1]]), 25)
+
+  model <- model_theta_tau() + feat_unphased(3, 2) + sumstat_seg_sites()
+  stats <- msmsSimFunc(model, c(1,5))
+  expect_equal(dim(stats$jsfs), c(21, 31))
+  expect_equal(nrow(stats$seg_sites[[1]]), 50)
+})

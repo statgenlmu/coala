@@ -279,10 +279,10 @@ seqgenSingleSimFunc <- function(dm, parameters) {
 
   # Generate the summary statistics
   seg_sites <- parseSeqgenOutput(seqgen.files,
-                                 sum(get_sample_size(dm)),
+                                 sum(get_sample_size(dm, for_sim = TRUE)),
                                  get_locus_length_matrix(dm),
                                  get_locus_number(dm),
-                                 outgroup_size = get_outgroup_size(dm))
+                                 outgroup_size = get_outgroup_size(dm, TRUE))
 
   sum_stats <- calc_sumstats(seg_sites, seqgen.files, dm, parameters)
 

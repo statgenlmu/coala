@@ -54,21 +54,33 @@ get_populations <- function(dm) {
 }
 
 
-#' @describeIn get_feature_table Returns a vector of samples sizes per population.
+#' @describeIn get_feature_table Returns a vector of samples sizes per
+#'   population.
+#' @param for_sim If true, the sample size used internally for the simulation
+#'   will be reported rather than the number of actuall samples. The numbers
+#'   can be unequal for the simulation of unphased data.
 #' @export
-get_sample_size <- function(dm) {
+get_sample_size <- function(dm, for_sim=FALSE) {
   feat.samples <- searchFeature(dm, type="sample")
   stopifnot(nrow(feat.samples) > 0)
 
-  sample.size <- rep(0, length(get_populations(dm)))
+  sample_size <- rep(0, length(get_populations(dm)))
   for (row.nr in 1:nrow(feat.samples)) {
-    stopifnot(sample.size[feat.samples$pop.source[row.nr]] == 0)
-    sample.size[feat.samples$pop.source[row.nr]] <-
+    stopifnot(sample_size[feat.samples$pop.source[row.nr]] == 0)
+    sample_size[feat.samples$pop.source[row.nr]] <-
       as.integer(feat.samples$parameter[row.nr])
   }
 
-  sample.size
+  if (for_sim) {
+    sample_size <- sample_size * get_ploidy(dm)
+  } else {
+    sample_size <- sample_size * get_samples_per_ind(dm)
+  }
+
+  sample_size
 }
+
+
 
 
 #' @describeIn get_feature_table Returns a vector of groups in the model
@@ -114,8 +126,8 @@ get_outgroup <- function(model) {
 
 #' @describeIn get_feature_table Returns the number of samples in the outgroup
 #' @export
-get_outgroup_size <- function(model) {
-  get_sample_size(model)[get_outgroup(model)]
+get_outgroup_size <- function(model, for_sim = FALSE) {
+  get_sample_size(model, for_sim)[get_outgroup(model)]
 }
 
 

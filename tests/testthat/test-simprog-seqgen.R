@@ -180,7 +180,7 @@ test_that('printing a seqgen command works', {
 
 
 test_that("seqgen works with inter-locus variation", {
-  if (!checkForSeqgen(FALSE, TRUE)) skip('msms not installed')
+  if (!checkForSeqgen(FALSE, TRUE)) skip('seq-gen not installed')
 
   dm_tmp <- CoalModel(c(3, 3, 1), 2) +
     feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
@@ -195,4 +195,18 @@ test_that("seqgen works with inter-locus variation", {
   sum_stats <- seqgenSingleSimFunc(dm_tmp, c(1,5))
   expect_is(sum_stats$jsfs, 'matrix')
   expect_that(sum(sum_stats$jsfs), is_more_than(0))
+})
+
+
+test_that('simulating unphased data works', {
+  if (!checkForSeqgen(FALSE, TRUE)) skip('seq-gen not installed')
+  model <- model_hky() + feat_unphased(2, 1) + sumstat_seg_sites()
+  stats <- seqgenSingleSimFunc(model, c(1,5))
+  expect_equal(dim(stats$jsfs), c(4, 4))
+  expect_equal(nrow(stats$seg_sites[[1]]), 6)
+
+  model <- model_hky() + feat_unphased(2, 2) + sumstat_seg_sites()
+  stats <- seqgenSingleSimFunc(model, c(1,5))
+  expect_equal(dim(stats$jsfs), c(7, 7))
+  expect_equal(nrow(stats$seg_sites[[1]]), 12)
 })
