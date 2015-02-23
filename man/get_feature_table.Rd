@@ -33,7 +33,7 @@ get_locus_length_matrix(dm, group = 1)
 
 get_outgroup(model)
 
-get_outgroup_size(model)
+get_outgroup_size(model, for_sim = FALSE)
 
 get_population_indiviuals(model, pop)
 
