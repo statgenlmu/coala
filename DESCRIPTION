@@ -57,6 +57,7 @@ Collate:
     'sumstat_file.R'
     'sumstat_ihh.R'
     'sumstat_jsfs.R'
+    'sumstat_omegaprime.R'
     'sumstat_seg_sites.R'
     'sumstat_sfs.R'
     'sumstat_trees.R'

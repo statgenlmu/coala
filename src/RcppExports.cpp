@@ -90,3 +90,19 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// calc_omegaprime
+NumericVector calc_omegaprime(List seg_sites, NumericVector individuals);
+RcppExport SEXP coalsimr_calc_omegaprime(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< List >::type seg_sites(seg_sitesSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type individuals(individualsSEXP );
+        NumericVector __result = calc_omegaprime(seg_sites, individuals);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}

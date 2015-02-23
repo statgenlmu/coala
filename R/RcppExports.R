@@ -29,3 +29,7 @@ calc_jsfs <- function(seg_sites, pop1, pop2) {
     .Call('coalsimr_calc_jsfs', PACKAGE = 'coalsimr', seg_sites, pop1, pop2)
 }
 
+calc_omegaprime <- function(seg_sites, individuals) {
+    .Call('coalsimr_calc_omegaprime', PACKAGE = 'coalsimr', seg_sites, individuals)
+}
+
