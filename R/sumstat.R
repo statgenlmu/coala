@@ -66,6 +66,12 @@ calc_sumstats <- function(seg_sites, files, model, pars) {
   sum_stats <- list()
   if (!missing(pars)) sum_stats[['pars']] <- pars
 
+  if (is_unphased(model)) {
+    seg_sites <- unphase_segsites(seg_sites,
+                                  get_ploidy(model),
+                                  get_samples_per_ind(model))
+  }
+
   for (stat in model$sum_stats) {
     sum_stats[[stat$get_name()]] <- stat$calculate(seg_sites, files, model)
   }

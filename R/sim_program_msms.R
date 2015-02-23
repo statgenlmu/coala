@@ -128,10 +128,6 @@ msmsSimFunc <- function(dm, parameters) {
                              get_sample_size(dm, for_sim = TRUE),
                              get_locus_number(dm))
 
-  if (is_unphased(dm)) seg_sites <- unphase_segsites(seg_sites,
-                                                     get_ploidy(dm),
-                                                     get_samples_per_ind(dm))
-
   sum_stats <- calc_sumstats(seg_sites, files, dm, parameters)
 
   # Clean Up
