@@ -1,19 +1,38 @@
 #' @importFrom R6 R6Class
 #' @importFrom rehh data2haplohh calc_ehh
 SumStat_iHH <- R6Class('SumStat_iHH', inherit = SumStat,
-  private = list(position = NA),
+  private = list(
+    position = NA,
+    population = NULL,
+    get_snp = function(positions, model) {
+      if (is.na(private$position)) return(seq(along = positions))
+      pos <- conv_middle_to_trio_pos(private$position, model,
+                                     relative_out = FALSE)
+      which.min(abs(pos - positions))
+    }),
   public = list(
+    initialize = function(name, position, population, group=0) {
+      assert_that(is.numeric(population))
+      assert_that(length(population) == 1)
+      private$population <- population
+      private$position <- position
+      super$initialize(name, group)
+    },
     calculate = function(seg_sites, files, model) {
       assert_that(is.list(seg_sites))
       assert_that(is.model(model))
       pos <- get_snp_positions(seg_sites, model, relative = FALSE)
+      ind <- get_population_indiviuals(model, private$population)
       lapply(1:length(seg_sites), function(locus) {
         assert_that(is.matrix(seg_sites[[locus]]))
-        ehh <- sapply(1:nrow(seg_sites[[locus]]), function(snp) {
-          calc_ehh(self$segsites_to_rehh_data(seg_sites[[locus]], pos[[locus]]),
+        snps <- private$get_snp(pos[[locus]], model)
+        ehh <- sapply(snps, function(snp) {
+          calc_ehh(self$segsites_to_rehh_data(seg_sites[[locus]],
+                                              pos[[locus]],
+                                              ind),
                    mrk = snp, plotehh = FALSE)$ihh
         })
-        colnames(ehh) <- pos[[locus]]
+        colnames(ehh) <- pos[[locus]][snps]
         ehh
       })
     },
@@ -23,14 +42,14 @@ SumStat_iHH <- R6Class('SumStat_iHH', inherit = SumStat,
       write.table(map, file, row.names = FALSE, col.names = FALSE)
       file
     },
-    segsites_to_haplo = function(seg_sites) {
+    segsites_to_haplo = function(seg_sites, ind) {
       file <- tempfile('haplotypes')
-      write.table(cbind(1:ncol(seg_sites), t(seg_sites)), file,
+      write.table(cbind(ind, seg_sites[ind, ]), file,
                   row.names = FALSE, col.names = FALSE)
       file
     },
-    segsites_to_rehh_data = function(seg_sites, pos) {
-      haplo <- self$segsites_to_haplo(seg_sites)
+    segsites_to_rehh_data = function(seg_sites, pos, ind) {
+      haplo <- self$segsites_to_haplo(seg_sites, ind)
       snp_map <- self$segsites_to_snp_map(seg_sites, pos)
       capture.output(rehh <- data2haplohh(haplo, snp_map, recode.allele = TRUE))
       unlink(c(snp_map, haplo))
@@ -52,7 +71,12 @@ SumStat_iHH <- R6Class('SumStat_iHH', inherit = SumStat,
 #' implementation.
 #'
 #' @inheritParams sumstat_file
+#' @param position A position relative to the locus extent, e.g. 0.5 for the
+#'   middle of the locus. If provided, the iHH will be calculate using the SNP
+#'   closest to the given position as focal SNP. Otherwise, all SNPs will be
+#'   used as focal SNPs in turn, and all the values reportet. If trios are used,
+#'   than the position is relative to the middle locus' extend.
 #' @export
-sumstat_iHH <- function(name = 'iHH', group = 0) {
-  SumStat_iHH$new(name, group = group)
+sumstat_iHH <- function(name = 'iHH', position=NA, population=1, group = 0) {
+  SumStat_iHH$new(name, position, population, group = group)
 }
