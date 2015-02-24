@@ -4,9 +4,15 @@
 \alias{sumstat_iHH}
 \title{Integrated Extended Haplotype Homozygosity}
 \usage{
-sumstat_iHH(name = "iHH", group = 0)
+sumstat_iHH(name = "iHH", position = NA, population = 1, group = 0)
 }
 \arguments{
+\item{position}{A position relative to the locus extent, e.g. 0.5 for the
+middle of the locus. If provided, the iHH will be calculate using the SNP
+closest to the given position as focal SNP. Otherwise, all SNPs will be
+used as focal SNPs in turn, and all the values reportet. If trios are used,
+than the position is relative to the middle locus' extend.}
+
 \item{group}{The locus group for which this summary statistic is reported.
 The default of `0` corresponds to all groups.}
 }

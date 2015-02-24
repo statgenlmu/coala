@@ -230,11 +230,12 @@ has_trios <- function(dm, group=0) {
 
 # Converts a position on the middle locus to the relative position
 # on the simulated stretch
-conv_middle_to_trio_pos <- function(pos, model, group=1, relative=TRUE) {
+conv_middle_to_trio_pos <- function(pos, model, group=1,
+                                    relative_out=TRUE, relative_in=TRUE) {
   llm <- get_locus_length_matrix(model, group)
 
-  pos <- ifelse(relative, pos * llm[,3], pos) + llm[,1] + llm[,2]
-  if (relative) pos <- pos / rowSums(llm)
+  pos <- ifelse(relative_in, pos * llm[,3], pos) + llm[,1] + llm[,2]
+  if (relative_out) pos <- pos / rowSums(llm)
 
   pos
 }

@@ -28,12 +28,20 @@ test_that("generation of haplotye file works", {
 
 
 test_that('calculation of iHH works', {
-  stat_iHH <- sumstat_iHH(population = 1)
+  stat_iHH <- sumstat_iHH()
   iHH <- stat_iHH$calculate(list(seg_sites), NULL, model)
   expect_that(iHH, is_a('list'))
   expect_equal(length(iHH), 1)
   expect_that(iHH[[1]], is_a('matrix'))
   expect_equal(dim(iHH[[1]]), c(2,5))
+
+  stat_iHH <- sumstat_iHH(position = 0.5)
+  iHH2 <- stat_iHH$calculate(list(seg_sites), NULL, model)
+  expect_that(iHH2, is_a('list'))
+  expect_equal(length(iHH2), 1)
+  expect_that(iHH2[[1]], is_a('matrix'))
+  expect_equal(dim(iHH2[[1]]), c(2,1))
+  expect_equal(iHH[[1]][,3,drop=FALSE], iHH2[[1]])
 })
 
 
