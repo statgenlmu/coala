@@ -14,9 +14,12 @@ feat_unphased <- function(ploidy, samples_per_ind=ploidy) {
 
 unphase_segsites <- function(seg_sites, ploidy, samples_per_ind) {
   lapply(seg_sites, function(ss) {
-    do.call(rbind, lapply(seq(1, nrow(ss), by=ploidy), function(ind) {
+    ss_up <- do.call(rbind, lapply(seq(1, nrow(ss), by=ploidy), function(ind) {
       apply(ss[ind:(ind+ploidy-1),], 2, sample, size=samples_per_ind)
     }))
+    attr(ss_up, 'positions') <- attr(ss, 'positions')
+    attr(ss_up, 'locus') <- attr(ss, 'locus')
+    ss_up
   })
 }
 
