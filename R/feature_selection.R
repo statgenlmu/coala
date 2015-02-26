@@ -15,12 +15,17 @@
 feat_selection <- function(strength_AA, strength_Aa,
                            population, at_time, group=0) {
 
+  if (!is.par(at_time)) at_time <- par_const(at_time)
   feat <- Feature$new("selection", par_const(NA),
                       pop_source=population, time_point=at_time, group=group)
-  feat$add_feature(Feature$new("selection_AA", strength_AA, pop_source=population,
-                               time_point=at_time, group=group))
-  feat$add_feature(Feature$new("selection_Aa", strength_Aa, pop_source=population,
-                               time_point=at_time, group=group))
+  feat$add_feature(Feature$new("selection_AA", strength_AA,
+                               pop_source=population,
+                               time_point=par_const(at_time$get_expression()),
+                               group=group))
+  feat$add_feature(Feature$new("selection_Aa", strength_Aa,
+                               pop_source=population,
+                               time_point=par_const(at_time$get_expression()),
+                               group=group))
   feat
 }
 
