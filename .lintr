@@ -1,1 +1,2 @@
 linters: with_defaults(single_quotes_linter = NULL)
+exclusions: list("R/RcppExports.R", "R/feature_unphased"=18)
