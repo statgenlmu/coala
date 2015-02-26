@@ -28,9 +28,9 @@ NumericVector parseMsPositions(const std::string line) {
 // Reads one more files with ms output, and generates a list of segregating
 // sites
 // [[Rcpp::export]]
-List parseMsOutput(const List file_names,
-                   const NumericVector sample_size,
-                   const int loci_number) {
+List parse_ms_output(const List file_names,
+                     const NumericVector sample_size,
+                     const int loci_number) {
 
   std::string line;
   size_t individuals = sum(sample_size);

@@ -41,7 +41,7 @@ add_to_model.Feature <- function(feat, model, feat_name) {
   for (stat in feat$get_sumstats()) model <- model + stat
 
   if (feat$get_inter_locus_var()) {
-    model <- addInterLocusVariation(model, feat$get_group())
+    model <- add_inter_locus_var(model, feat$get_group())
   }
 
   model$id <- get_id()

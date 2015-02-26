@@ -5,12 +5,12 @@ parseMsPositions <- function(line) {
     .Call('coalsimr_parseMsPositions', PACKAGE = 'coalsimr', line)
 }
 
-parseMsOutput <- function(file_names, sample_size, loci_number) {
-    .Call('coalsimr_parseMsOutput', PACKAGE = 'coalsimr', file_names, sample_size, loci_number)
+parse_ms_output <- function(file_names, sample_size, loci_number) {
+    .Call('coalsimr_parse_ms_output', PACKAGE = 'coalsimr', file_names, sample_size, loci_number)
 }
 
-parseSeqgenOutput <- function(file_names, sample_size, sequence_length, loci_number, outgroup_size = 1L) {
-    .Call('coalsimr_parseSeqgenOutput', PACKAGE = 'coalsimr', file_names, sample_size, sequence_length, loci_number, outgroup_size)
+parse_sg_output <- function(file_names, sample_size, sequence_length, loci_number, outgroup_size = 1L) {
+    .Call('coalsimr_parse_sg_output', PACKAGE = 'coalsimr', file_names, sample_size, sequence_length, loci_number, outgroup_size)
 }
 
 parseTrees <- function(in_file, trio_opts, tempfile) {

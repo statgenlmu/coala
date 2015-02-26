@@ -1,4 +1,4 @@
-createParameterEnv <- function(model, parameters, ...) {
+create_par_env <- function(model, parameters, ...) {
   par_env <- new.env()
 
   par_names <- get_parameter_table(model)$name

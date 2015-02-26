@@ -22,9 +22,9 @@ test_that("parsing output works", {
   ln <- get_locus_number(dm.tt)
 
   ms.file <- simulate(dm.tt, pars=c(1, 5))$file
-  expect_error(parseMsOutput(list("bulb.txt"), ss, ln))
+  expect_error(parse_ms_output(list("bulb.txt"), ss, ln))
 
-  seg_sites <- parseMsOutput(ms.file, ss, ln)
+  seg_sites <- parse_ms_output(ms.file, ss, ln)
   expect_true(is.list(seg_sites))
   expect_equal(length(seg_sites), get_locus_number(dm.tt))
   for (seg_site in seg_sites) {

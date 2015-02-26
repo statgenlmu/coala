@@ -41,7 +41,7 @@ sg_find_exe <- function(throw.error = TRUE, silent = FALSE) {
 
   if (throw.error) {
     stop("No seqgen executable found. Please provide one using
-          setSeqgenExecutable()")
+          set_seqgen_exe()")
   }
   return(FALSE)
 }
@@ -53,7 +53,7 @@ generateTreeModel <- function(dm, locus, locus_number=1) {
     stopifnot(all(get_groups(dm) == 1))
     locus_length <- get_locus_length_matrix(dm)[locus,]
 
-    if (any(msms.features %in% dm$features$type)) {
+    if (any(msms_features %in% dm$features$type)) {
       tree.prog <- get_sim_prog('msms')
     } else {
       tree.prog <- get_sim_prog('ms')
@@ -89,7 +89,7 @@ generateTreeModel <- function(dm, locus, locus_number=1) {
 #'
 #' @param seqgen.exe Path to seqgen's executable.
 #' @export
-setSeqgenExecutable <- function(seqgen_exe) {
+set_seqgen_exe <- function(seqgen_exe) {
   if (file.exists(seqgen_exe)) {
     set_seqgen_path(seqgen_exe)
   } else {
@@ -141,7 +141,7 @@ generateSeqgenOptions <- function(dm, parameters, locus,
   # Fill the parameters in the template
   sapply(seq(along = locus_lengths), function(i) {
     if (!eval_pars) cmd[[i]] <- escape_par_expr(cmd[[i]])
-    par_envir <- createParameterEnv(dm, parameters, locus = locus,
+    par_envir <- create_par_env(dm, parameters, locus = locus,
                                     locus_length = locus_lengths[i],
                                     seed = seeds[i])
     paste(eval(parse(text=cmd[[i]]), envir=par_envir), collapse=" ")
@@ -260,7 +260,7 @@ sg_simulate <- function(dm, parameters) {
     # Call seq-gen to distribute mutations
     seqgen.options <-
       generateSeqgenOptions(dm, parameters, locus,
-                            sampleSeed(length(sum_stats_ms$sg_trees)))
+                            sample_seed(length(sum_stats_ms$sg_trees)))
 
     seqgen.file <- callSeqgen(seqgen.options, sum_stats_ms$sg_trees)
 
@@ -271,11 +271,11 @@ sg_simulate <- function(dm, parameters) {
   stopifnot(length(seqgen.files) == length(sim_reps))
 
   # Generate the summary statistics
-  seg_sites <- parseSeqgenOutput(seqgen.files,
-                                 sum(get_sample_size(dm, for_sim = TRUE)),
-                                 get_locus_length_matrix(dm),
-                                 get_locus_number(dm),
-                                 outgroup_size = get_outgroup_size(dm, TRUE))
+  seg_sites <- parse_sg_output(seqgen.files,
+                               sum(get_sample_size(dm, for_sim = TRUE)),
+                               get_locus_length_matrix(dm),
+                               get_locus_number(dm),
+                               outgroup_size = get_outgroup_size(dm, TRUE))
 
   sum_stats <- calc_sumstats(seg_sites, seqgen.files, dm, parameters)
 

@@ -122,16 +122,16 @@ test_that("getting the Theta Name works", {
 
 
 test_that("test.parInRange", {
-  checkParInRange(model_theta_tau(), c(1, 5))
-  checkParInRange(model_theta_tau(), c(2, 7))
-  checkParInRange(model_theta_tau(), c(0.5, 7.7))
-  expect_error(checkParInRange(model_theta_tau(), c(0, 5)))
-  expect_error(checkParInRange(model_theta_tau(), c(0, -1)))
-  expect_error(checkParInRange(model_theta_tau(), c(10, 1)))
-  expect_error(checkParInRange(model_theta_tau(), c(100, 100)))
-  expect_error(checkParInRange(model_theta_tau(), 1))
-  expect_error(checkParInRange(model_theta_tau(), matrix(1, 2, 2)))
-  expect_error(checkParInRange(model_theta_tau(), NULL))
+  check_par_range(model_theta_tau(), c(1, 5))
+  check_par_range(model_theta_tau(), c(2, 7))
+  check_par_range(model_theta_tau(), c(0.5, 7.7))
+  expect_error(check_par_range(model_theta_tau(), c(0, 5)))
+  expect_error(check_par_range(model_theta_tau(), c(0, -1)))
+  expect_error(check_par_range(model_theta_tau(), c(10, 1)))
+  expect_error(check_par_range(model_theta_tau(), c(100, 100)))
+  expect_error(check_par_range(model_theta_tau(), 1))
+  expect_error(check_par_range(model_theta_tau(), matrix(1, 2, 2)))
+  expect_error(check_par_range(model_theta_tau(), NULL))
 })
 
 

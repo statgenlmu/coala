@@ -7,15 +7,15 @@
 # Licence:  GPLv3 or later
 # --------------------------------------------------------------
 
-msms.features <- c("selection", "selection_AA", "selection_Aa")
-possible.features  <- c(get_sim_prog('ms')$possible_features, msms.features)
-possible.sum.stats <- get_sim_prog('ms')$possible_sum_stats
+msms_features <- c("selection", "selection_AA", "selection_Aa",
+                   get_sim_prog('ms')$possible_features)
+msms_sum_stats <- get_sim_prog('ms')$possible_sum_stats
 
-callMsms <- function(ms.args, msms.args, subgroup) {
-  checkForMsms()
+call_msms <- function(ms.args, msms.args, subgroup) {
+  msms_find_jar()
 
   out_file <- tempfile('msms')
-  seed <- sampleSeed(1)
+  seed <- sample_seed(1)
 
   # Create the command
   cmd <- paste("java -jar", get_msms_path(), as.character(msms.args),
@@ -30,7 +30,7 @@ callMsms <- function(ms.args, msms.args, subgroup) {
   out_file
 }
 
-checkForMsms <- function(throw.error = TRUE, silent = FALSE) {
+msms_find_jar <- function(throw.error = TRUE, silent = FALSE) {
   if ((!is.null(get_msms_path())) && file.exists(get_msms_path())) return(TRUE)
 
   # Works on Linux only maybe
@@ -52,7 +52,7 @@ checkForMsms <- function(throw.error = TRUE, silent = FALSE) {
 
 # This function generates an string that contains an R command for generating
 # an msms call to the current model.
-generateMsmsOptionsCommand <- function(dm) {
+msms_generate_opts_cmd <- function(dm) {
   cmd <- c('c(')
 
   for (i in 1:dim(dm$features)[1] ) {
@@ -89,19 +89,19 @@ generateMsmsOptionsCommand <- function(dm) {
 }
 
 
-generateMsmsOptions <- function(dm, parameters, locus) {
-  msms.tmp <- createParameterEnv(dm, parameters, locus = locus)
+msms_generate_opts <- function(dm, parameters, locus) {
+  msms.tmp <- create_par_env(dm, parameters, locus = locus)
 
   cmd <- read_cache(dm, 'msms_cmd')
   if (is.null(cmd)) {
-    cmd <- generateMsmsOptionsCommand(dm)
+    cmd <- msms_generate_opts_cmd(dm)
     cache(dm, 'msms_cmd', cmd)
   }
 
   eval(parse(text=cmd), envir=msms.tmp)
 }
 
-msmsSimFunc <- function(dm, parameters) {
+msms_simulate <- function(dm, parameters) {
   # Run all simulation in with one ms call if they loci are identical,
   # or call ms for each locus if there is variation between the loci.
   if (has_inter_locus_var(dm)) {
@@ -115,18 +115,18 @@ msmsSimFunc <- function(dm, parameters) {
   # Run the simulation(s)
   files <- lapply(sim_reps, function(locus) {
     ms.options <- paste(sum(get_sample_size(dm, for_sim = TRUE)), sim_loci,
-                        paste(generateMsOptions(dm, parameters, locus),
+                        paste(ms_generate_opts(dm, parameters, locus),
                               collapse=" "))
-    msms.options <- paste(generateMsmsOptions(dm, parameters, locus),
+    msms.options <- paste(msms_generate_opts(dm, parameters, locus),
                           collapse= " ")
     #print(c(ms.options, msms.options))
-    callMsms(ms.options, msms.options)
+    call_msms(ms.options, msms.options)
   })
 
   # Parse the output and calculate summary statistics
-  seg_sites <- parseMsOutput(files,
-                             get_sample_size(dm, for_sim = TRUE),
-                             get_locus_number(dm))
+  seg_sites <- parse_ms_output(files,
+                               get_sample_size(dm, for_sim = TRUE),
+                               get_locus_number(dm))
 
   sum_stats <- calc_sumstats(seg_sites, files, dm, parameters)
 
@@ -137,10 +137,10 @@ msmsSimFunc <- function(dm, parameters) {
 
 
 msms_get_command <- function(model) {
-  ms_cmd <- paste(generateMsOptions(model, get_parameter_table(model)$name),
+  ms_cmd <- paste(ms_generate_opts(model, get_parameter_table(model)$name),
                   collapse = ' ')
-  msms_cmd <- paste(generateMsmsOptions(model,
-                                        get_parameter_table(model)$name, 1),
+  msms_cmd <- paste(msms_generate_opts(model,
+                                       get_parameter_table(model)$name, 1),
                     collapse = ' ')
 
   paste("msms", msms_cmd,
@@ -149,5 +149,5 @@ msms_get_command <- function(model) {
 
 
 #' @include sim_program.R
-createSimProgram("msms", possible.features, possible.sum.stats,
-                 msmsSimFunc, msms_get_command, priority=40)
+createSimProgram("msms", msms_features, msms_sum_stats,
+                 msms_simulate, msms_get_command, priority=40)

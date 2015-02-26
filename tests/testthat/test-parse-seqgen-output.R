@@ -1,6 +1,6 @@
 context("parsing seq-gen output")
 
-test_that("parseSeqgenOutput works with a single file", {
+test_that("parse_sg_output works with a single file", {
   dm_tmp <- CoalModel(c(4, 6, 1), 2, 10) +
     feat_outgroup(3) +
     feat_pop_merge(par_range('tau', 0.5, 2), 2, 1) +
@@ -33,7 +33,7 @@ s2        CTTGACGGTA
 s3        GCAGACGGTA
 s4        GCTGATAATA", file = seqgen_file)
 
-  seg_sites <- parseSeqgenOutput(list(seqgen_file), 11,
+  seg_sites <- parse_sg_output(list(seqgen_file), 11,
                                  get_locus_length_matrix(dm_tmp), 2)
   expect_is(seg_sites, 'list')
   expect_equal(length(seg_sites), 2)
@@ -67,7 +67,7 @@ s4        GCTGATAATA", file = seqgen_file)
   expect_equal(seg_sites[[2]], seg_sites_2)
 
   # With outgroup of multiple individuals
-  seg_sites <- parseSeqgenOutput(list(seqgen_file), 11,
+  seg_sites <- parse_sg_output(list(seqgen_file), 11,
                                  get_locus_length_matrix(dm_tmp),
                                  2, outgroup_size = 3)
   seg_sites_o1 <- seg_sites_1[1:8, 4, drop=FALSE]
@@ -79,7 +79,7 @@ s4        GCTGATAATA", file = seqgen_file)
   expect_equal(seg_sites[[2]], seg_sites_o2)
 
   # Muliple files
-  seg_sites <- parseSeqgenOutput(list(seqgen_file, seqgen_file),
+  seg_sites <- parse_sg_output(list(seqgen_file, seqgen_file),
                                  sum(get_sample_size(dm_tmp)),
                                  rbind(get_locus_length_matrix(dm_tmp),
                                        get_locus_length_matrix(dm_tmp)), 4)
@@ -91,7 +91,7 @@ s4        GCTGATAATA", file = seqgen_file)
   expect_equal(seg_sites[[4]], seg_sites_2)
 
 
-  seg_sites <- parseSeqgenOutput(list(c(seqgen_file, seqgen_file, seqgen_file)),
+  seg_sites <- parse_sg_output(list(c(seqgen_file, seqgen_file, seqgen_file)),
                                  11, matrix(10, 2, 5, byrow = TRUE), 2)
   expect_equal(seg_sites[[1]][, 1:7], seg_sites_1[, ])
   expect_equal(seg_sites[[1]][, 8:14], seg_sites_1[, ])
@@ -132,7 +132,7 @@ s2        CTTGACGGTA
 s3        GCAGACGGTA
 s4        GCTGATAATA", file = seqgen_file_2)
 
-  seg_sites <- parseSeqgenOutput(list(c(seqgen_file_1,
+  seg_sites <- parse_sg_output(list(c(seqgen_file_1,
                                         seqgen_file_1,
                                         seqgen_file_2)),
                                  11, matrix(10, 2, 5, byrow = TRUE), 1)
@@ -140,7 +140,7 @@ s4        GCTGATAATA", file = seqgen_file_2)
   expect_equal(length(attr(seg_sites[[1]], 'locus')), ncol(seg_sites[[1]]))
   expect_equal(length(attr(seg_sites[[1]], 'positions')), ncol(seg_sites[[1]]))
 
-  seg_sites <- parseSeqgenOutput(list(c(seqgen_file_1,
+  seg_sites <- parse_sg_output(list(c(seqgen_file_1,
                                         seqgen_file_2,
                                         seqgen_file_2)),
                                  11, matrix(10, 2, 5, byrow = TRUE), 1)
@@ -148,7 +148,7 @@ s4        GCTGATAATA", file = seqgen_file_2)
   expect_equal(length(attr(seg_sites[[1]], 'locus')), ncol(seg_sites[[1]]))
   expect_equal(length(attr(seg_sites[[1]], 'positions')), ncol(seg_sites[[1]]))
 
-  seg_sites <- parseSeqgenOutput(list(c(seqgen_file_2,
+  seg_sites <- parse_sg_output(list(c(seqgen_file_2,
                                         seqgen_file_1,
                                         seqgen_file_2)),
                                  11, matrix(10, 2, 5, byrow = TRUE), 1)

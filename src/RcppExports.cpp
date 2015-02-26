@@ -20,9 +20,9 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// parseMsOutput
-List parseMsOutput(const List file_names, const NumericVector sample_size, const int loci_number);
-RcppExport SEXP coalsimr_parseMsOutput(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP loci_numberSEXP) {
+// parse_ms_output
+List parse_ms_output(const List file_names, const NumericVector sample_size, const int loci_number);
+RcppExport SEXP coalsimr_parse_ms_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP loci_numberSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -30,16 +30,16 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const List >::type file_names(file_namesSEXP );
         Rcpp::traits::input_parameter< const NumericVector >::type sample_size(sample_sizeSEXP );
         Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP );
-        List __result = parseMsOutput(file_names, sample_size, loci_number);
+        List __result = parse_ms_output(file_names, sample_size, loci_number);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP
 }
-// parseSeqgenOutput
-List parseSeqgenOutput(const List file_names, const int sample_size, const NumericMatrix sequence_length, const int loci_number, const int outgroup_size = 1);
-RcppExport SEXP coalsimr_parseSeqgenOutput(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP sequence_lengthSEXP, SEXP loci_numberSEXP, SEXP outgroup_sizeSEXP) {
+// parse_sg_output
+List parse_sg_output(const List file_names, const int sample_size, const NumericMatrix sequence_length, const int loci_number, const int outgroup_size = 1);
+RcppExport SEXP coalsimr_parse_sg_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP sequence_lengthSEXP, SEXP loci_numberSEXP, SEXP outgroup_sizeSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -49,7 +49,7 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const NumericMatrix >::type sequence_length(sequence_lengthSEXP );
         Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP );
         Rcpp::traits::input_parameter< const int >::type outgroup_size(outgroup_sizeSEXP );
-        List __result = parseSeqgenOutput(file_names, sample_size, sequence_length, loci_number, outgroup_size);
+        List __result = parse_sg_output(file_names, sample_size, sequence_length, loci_number, outgroup_size);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

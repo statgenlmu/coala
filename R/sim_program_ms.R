@@ -6,16 +6,16 @@
 # Licence:  GPLv3 or later
 # --------------------------------------------------------------
 
-possible.features  <- c("sample", "mutation", "migration", "migration_sym",
-                        "pop_merge", "recombination", "size_change", "growth",
-                        "inter_locus_variation", "trees",
-                        "unphased", "ploidy", "samples_per_ind")
-possible.sum.stats <- c("jsfs", "trees", "seg.sites", "file")
+ms_features  <- c("sample", "mutation", "migration", "migration_sym",
+                  "pop_merge", "recombination", "size_change", "growth",
+                  "inter_locus_variation", "trees",
+                  "unphased", "ploidy", "samples_per_ind")
+ms_sum_stats <- c("jsfs", "trees", "seg.sites", "file")
 
 
 # This function generates an string that contains an R command for generating
 # an ms call to the current model.
-generateMsOptionsCommand <- function(dm) {
+ms_generate_opts_cmd <- function(dm) {
   sample_size <- get_sample_size(dm, for_sim = TRUE)
   cmd <- c('c(')
   cmd <- c(cmd,'"-I"', ",", length(sample_size), ',',
@@ -73,12 +73,12 @@ generateMsOptionsCommand <- function(dm) {
   cmd <- c(cmd, '" ")')
 }
 
-generateMsOptions <- function(dm, parameters, eval_pars = TRUE) {
-  ms.tmp <- createParameterEnv(dm, parameters)
+ms_generate_opts <- function(dm, parameters, eval_pars = TRUE) {
+  ms.tmp <- create_par_env(dm, parameters)
 
   cmd <- read_cache(dm, 'ms_cmd')
   if (is.null(cmd)) {
-    cmd <- generateMsOptionsCommand(dm)
+    cmd <- ms_generate_opts_cmd(dm)
     cache(dm, 'ms_cmd', cmd)
   }
 
@@ -88,14 +88,14 @@ generateMsOptions <- function(dm, parameters, eval_pars = TRUE) {
 
 
 ms_get_command <- function(model) {
-  cmd <- generateMsOptions(model, get_parameter_table(model)$name, FALSE)
+  cmd <- ms_generate_opts(model, get_parameter_table(model)$name, FALSE)
   txt <- paste(cmd, collapse = ' ')
   paste("ms", sum(get_sample_size(model)), get_locus_number(model), txt)
 }
 
 
 #' @importFrom phyclust ms
-msSingleSimFunc <- function(dm, parameters=numeric()) {
+ms_simulate <- function(dm, parameters=numeric()) {
   stopifnot(length(parameters) == 0 | all(is.numeric(parameters)))
 
   # Run all simulation in with one ms call if they loci are identical,
@@ -110,7 +110,7 @@ msSingleSimFunc <- function(dm, parameters=numeric()) {
 
   # Do the actuall simulation
   files <- lapply(sim_reps, function(locus) {
-    ms.options <- generateMsOptions(dm, parameters, locus)
+    ms.options <- ms_generate_opts(dm, parameters, locus)
     file <- tempfile('csr_ms')
 
     ms(sum(get_sample_size(dm, for_sim = TRUE)), sim_loci,
@@ -121,9 +121,9 @@ msSingleSimFunc <- function(dm, parameters=numeric()) {
   })
 
   # Parse the output and calculate summary statistics
-  seg_sites <- parseMsOutput(files,
-                             get_sample_size(dm, for_sim = TRUE),
-                             get_locus_number(dm))
+  seg_sites <- parse_ms_output(files,
+                               get_sample_size(dm, for_sim = TRUE),
+                               get_locus_number(dm))
 
   sum_stats <- calc_sumstats(seg_sites, files, dm, parameters)
 
@@ -134,5 +134,5 @@ msSingleSimFunc <- function(dm, parameters=numeric()) {
 
 
 #' @include sim_program.R
-createSimProgram("ms", possible.features, possible.sum.stats,
-                 msSingleSimFunc, ms_get_command, 100)
+createSimProgram("ms", ms_features, ms_sum_stats,
+                 ms_simulate, ms_get_command, 100)

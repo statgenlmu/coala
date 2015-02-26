@@ -79,7 +79,7 @@ is.model <- function(model) {
 
 
 # Checks if a vector of parameters is within the ranges of the model
-checkParInRange <- function(dm, param) {
+check_par_range <- function(dm, param) {
   if (length(param) != nrow(get_parameter_table(dm))) {
     stop("Wrong number of parameters")
   }
@@ -216,7 +216,7 @@ search_feature <- function(dm, type=NULL, pop.source=NULL,
 }
 
 
-addInterLocusVariation <- function(dm, group = 0) {
+add_inter_locus_var <- function(dm, group = 0) {
   stopifnot(is.numeric(group))
   if (has_inter_locus_var(dm, group)) return(dm)
   dm + Feature$new('inter_locus_variation', par_const(NA), group = group)

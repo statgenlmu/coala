@@ -65,7 +65,7 @@ test_that("test.RateHeterogenity", {
 
 test_that("test.seqgenWithMsms", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  if (!checkForMsms(FALSE, TRUE)) skip('msms not installed')
+  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
 
   m1 <- model_hky() + feat_selection(500, 250, 1, 0.1)
   set.seed(4444)
