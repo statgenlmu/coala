@@ -23,7 +23,7 @@ simulate.CoalModel <- function(object, nsim = 1, seed, pars=NULL, ...) {
 
   if (sim_prog != "groups") {
     model <- get_group_model(object, 1)
-    return(getSimProgram(sim_prog)$sim_func(model, pars))
+    return(get_sim_prog(sim_prog)$sim_func(model, pars))
   }
 
   sum_stats <- list(pars=pars)

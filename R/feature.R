@@ -47,8 +47,8 @@ Feature <- R6Class("Feature", inherit = Base_Object,
                             ', 0, ', par_expr, ')')
       }
 
-      private$feature_table <- createFeatureTable(type, par_expr, pop_source,
-                                                  pop_sink, time_point, group)
+      private$feature_table <- create_feature_table(type, par_expr, pop_source,
+                                                    pop_sink, time_point, group)
     },
     get_table = function() private$feature_table,
     get_parameters = function() private$parameter,

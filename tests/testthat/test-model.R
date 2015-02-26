@@ -28,11 +28,11 @@ test_that("adding parameters works", {
 test_that("adding features works", {
   dm <- CoalModel(11:12, 100)
   dm <- dm + Feature$new('blub', 5)
-  expect_equal(nrow(searchFeature(dm, 'blub')), 1)
+  expect_equal(nrow(search_feature(dm, 'blub')), 1)
 
   dm <- CoalModel(11:12, 100)
   dm <- dm + Feature$new('bli', par_range('bla', 1, 5))
-  expect_equal(nrow(searchFeature(dm, 'bli')), 1)
+  expect_equal(nrow(search_feature(dm, 'bli')), 1)
   expect_true('bla' %in% get_parameter_table(dm)$name)
 
   dm <- CoalModel(11:12, 100)
@@ -63,12 +63,12 @@ test_that("test get_summary_statistics", {
 
 
 test_that("generation of group models", {
-  dm <- generateGroupModel(model_theta_tau(), 1)
+  dm <- create_group_model(model_theta_tau(), 1)
   expect_equal(dm$features, model_theta_tau()$features)
   expect_equal(dm$sum_stats, model_theta_tau()$sum_stats)
 
   dm <- model_theta_tau() + locus_averaged(10, 23, group = 1)
-  dm <- generateGroupModel(dm, 1)
+  dm <- create_group_model(dm, 1)
   expect_equal(nrow(dm$features), nrow(model_theta_tau()$features))
   expect_true(all(dm$features$group == 0))
   expect_equal(get_locus_length(dm), 23)
@@ -76,20 +76,20 @@ test_that("generation of group models", {
   dm.3 <- model_theta_tau() +
     locus_averaged(5, 23, group = 1) +
     locus_averaged(31, 30, group = 2)
-  dm <- generateGroupModel(dm.3, 1)
+  dm <- create_group_model(dm.3, 1)
   expect_equal(nrow(dm$features), nrow(model_theta_tau()$features))
   expect_true(all(dm$features$group == 0))
   expect_equal(get_locus_length(dm), 23)
-  dm <- generateGroupModel(dm.3, 2)
+  dm <- create_group_model(dm.3, 2)
   expect_equal(nrow(dm$features), nrow(model_theta_tau()$features))
   expect_true(all(dm$features$group == 0))
   expect_equal(get_locus_length(dm), 30)
   expect_equal(get_locus_number(dm), 31)
 
   dm <- model_theta_tau() + sumstat_seg_sites(group = 2)
-  dm_1 <- generateGroupModel(dm, 1)
+  dm_1 <- create_group_model(dm, 1)
   expect_equal(get_summary_statistics(dm, 1), get_summary_statistics(dm_1))
-  dm_2 <- generateGroupModel(dm, 2)
+  dm_2 <- create_group_model(dm, 2)
   expect_equal(get_summary_statistics(dm, 2),
                get_summary_statistics(dm_2, 'all'))
 })
@@ -110,14 +110,14 @@ test_that("test.getSampleSize", {
 })
 
 
-test_that("test.getThetaName", {
-  expect_equal(getThetaName(model_theta_tau()), "theta")
-  expect_equal(getThetaName(model_hky()), "theta")
-  expect_equal(getThetaName(model_f84()), "theta")
+test_that("getting the Theta Name works", {
+  expect_equal(get_mutation_par(model_theta_tau()), "theta")
+  expect_equal(get_mutation_par(model_hky()), "theta")
+  expect_equal(get_mutation_par(model_f84()), "theta")
 
   dm.test <- CoalModel(11:12, 100) +
     feat_mutation(par_range('abcd', 1, 5))
-  expect_equal(getThetaName(dm.test), "abcd")
+  expect_equal(get_mutation_par(dm.test), "abcd")
 })
 
 
@@ -150,16 +150,16 @@ test_that("test that scaling of model works", {
 })
 
 
-test_that("searchFeature", {
+test_that("searching features works", {
   model <- model_theta_tau()
-  expect_equal(nrow(searchFeature(model, type = "sample")), 2)
-  expect_equal(nrow(searchFeature(model, type = c("pop_merge", "sample"))), 3)
-  expect_equal(nrow(searchFeature(model, type = c("pop_merge", "sample"),
+  expect_equal(nrow(search_feature(model, type = "sample")), 2)
+  expect_equal(nrow(search_feature(model, type = c("pop_merge", "sample"))), 3)
+  expect_equal(nrow(search_feature(model, type = c("pop_merge", "sample"),
                                   pop.sink = NA)), 2)
-  expect_equal(nrow(searchFeature(model, time.point = "tau")), 1)
-  expect_equal(nrow(searchFeature(model, time.point = NA)), 1)
+  expect_equal(nrow(search_feature(model, time.point = "tau")), 1)
+  expect_equal(nrow(search_feature(model, time.point = NA)), 1)
 
-  expect_equal(nrow(searchFeature(model, type = "sample")), 2)
+  expect_equal(nrow(search_feature(model, type = "sample")), 2)
 })
 
 
@@ -258,10 +258,10 @@ test_that("test.printGroupDM", {
 test_that('setTrioMutationsRates works', {
   warning("test about model with trio mutation rates deactivated")
 #   dm <- dm.setTrioMutationRates(dm_trios, '17', 'theta', group=2)
-#   expect_equal(nrow(searchFeature(dm, 'mutation', group=2)), 1)
-#   expect_equal(searchFeature(dm, 'mutation', group=2)$parameter, "17")
-#   expect_equal(nrow(searchFeature(dm, 'mutation_outer', group=2)), 1)
-#   expect_equal(searchFeature(dm, 'mutation_outer', group=2)$parameter,
+#   expect_equal(nrow(search_feature(dm, 'mutation', group=2)), 1)
+#   expect_equal(search_feature(dm, 'mutation', group=2)$parameter, "17")
+#   expect_equal(nrow(search_feature(dm, 'mutation_outer', group=2)), 1)
+#   expect_equal(search_feature(dm, 'mutation_outer', group=2)$parameter,
 #                "theta")
 })
 

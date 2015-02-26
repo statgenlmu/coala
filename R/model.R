@@ -14,7 +14,7 @@
 # Initialization
 #-----------------------------------------------------------------------
 
-createFeatureTable <- function(type=character(), parameter=character(),
+create_feature_table <- function(type=character(), parameter=character(),
                                pop.source=numeric(), pop.sink=numeric(),
                                time.point=character(), group=numeric()) {
 
@@ -39,7 +39,7 @@ CoalModel <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model <- list()
   class(model) <- c("CoalModel", class(Base_Object))
 
-  model$features <- createFeatureTable()
+  model$features <- create_feature_table()
 
   model$loci <- data.frame(group=numeric(), number=numeric(),
                            name=character(), name_l=character(),
@@ -100,7 +100,7 @@ determine_sim_prog <- function(dm) {
       priority <- -Inf
 
       for (sim_prog_name in ls(sim_programs)) {
-        sim_prog <- getSimProgram(sim_prog_name)
+        sim_prog <- get_sim_prog(sim_prog_name)
         if (all(dm$features$type %in% sim_prog$possible_features) &
               all(dm$sum_stats$name %in% sim_prog$possible_sum_stats)) {
 
@@ -120,23 +120,23 @@ determine_sim_prog <- function(dm) {
 }
 
 
-getThetaName <- function(dm, outer=FALSE, group=0) {
+get_mutation_par <- function(dm, outer=FALSE, group=0) {
   if (outer) {
-    feat <- searchFeature(dm, "mutation_outer", group=group)
+    feat <- search_feature(dm, "mutation_outer", group=group)
     if (nrow(feat) == 0) {
-      feat <- searchFeature(dm, "mutation", group=group)
+      feat <- search_feature(dm, "mutation", group=group)
     }
   }  else {
-    feat <- searchFeature(dm, "mutation", group=group)
+    feat <- search_feature(dm, "mutation", group=group)
   }
   if (nrow(feat) != 1) stop("Failed to determine mutation rate")
   feat[1, 'parameter']
 }
 
 
-generateGroupModel <- function(dm, group) {
+create_group_model <- function(dm, group) {
   # Features
-  dm$features <- searchFeature(dm, group = group)
+  dm$features <- search_feature(dm, group = group)
   dm$features$group <- 0
 
   # sum_stats
@@ -156,14 +156,14 @@ generateGroupModel <- function(dm, group) {
 get_group_model <- function(model, group) {
   grp_model <- read_cache(model, paste0('grp_model_', group))
   if (is.null(grp_model)) {
-    grp_model <- generateGroupModel(model, group)
+    grp_model <- create_group_model(model, group)
     cache(model, paste0('grp_model_', group), grp_model)
   }
   grp_model
 }
 
 
-searchFeature <- function(dm, type=NULL, pop.source=NULL,
+search_feature <- function(dm, type=NULL, pop.source=NULL,
                           pop.sink=NULL, time.point=NULL, group=NULL) {
 
   mask <- rep(TRUE, nrow(get_feature_table(dm)))
@@ -203,7 +203,7 @@ searchFeature <- function(dm, type=NULL, pop.source=NULL,
       grp_0 <- dm$features$group == 0
       overwritten <- grp_0[mask]
       for (i in which(overwritten)) {
-        duplicats <- searchFeature(dm, type=dm$features$type[mask][i],
+        duplicats <- search_feature(dm, type=dm$features$type[mask][i],
                                    pop.source=dm$features$pop.source[mask][i],
                                    pop.sink=dm$features$pop.sink[mask][i])
         if (sum(duplicats$group == group) == 0) overwritten[i] <- FALSE
@@ -223,7 +223,7 @@ addInterLocusVariation <- function(dm, group = 0) {
 }
 
 has_inter_locus_var <- function(dm, group = 0) {
-  nrow(searchFeature(dm, 'inter_locus_variation', group = group)) > 0
+  nrow(search_feature(dm, 'inter_locus_variation', group = group)) > 0
 }
 
 

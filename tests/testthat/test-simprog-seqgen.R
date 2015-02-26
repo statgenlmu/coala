@@ -28,7 +28,7 @@ test_that("generation of tree models works", {
 
 test_that("simulation with seq-gen works", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  sg_simulate <- getSimProgram("seq-gen")$sim_func
+  sg_simulate <- get_sim_prog("seq-gen")$sim_func
 
   set.seed(100)
   sum.stats <- sg_simulate(model_hky(), c(1, 10))
@@ -108,17 +108,17 @@ test_that("Simulation of trios with unequal mutation rates works", {
 #   if (!isJaathaVariable('seqgen.exe'))
 #     setJaathaVariable('seqgen.exe', 'seq-gen')
 #   dm <- dm.setTrioMutationRates(dm_trios, '17', 'theta', group=2)
-#   expect_equal(getThetaName(dm, outer = FALSE, group = 2), '17')
-#   expect_equal(getThetaName(dm, outer = TRUE, group = 2), 'theta')
-#   expect_equal(getThetaName(dm, outer = FALSE, group = 1), 'theta')
+#   expect_equal(get_mutation_par(dm, outer = FALSE, group = 2), '17')
+#   expect_equal(get_mutation_par(dm, outer = TRUE, group = 2), 'theta')
+#   expect_equal(get_mutation_par(dm, outer = FALSE, group = 1), 'theta')
 #
-#   expect_equal(getThetaName(dm_trios, outer = FALSE, group = 2), 'theta')
-#   expect_equal(getThetaName(dm_trios, outer = TRUE, group = 2), 'theta')
+#   expect_equal(get_mutation_par(dm_trios, outer = FALSE, group = 2), 'theta')
+#   expect_equal(get_mutation_par(dm_trios, outer = TRUE, group = 2), 'theta')
 #
 #
 #   # generateSeqgenOptionsCmd
 #   dm <- dm.setTrioMutationRates(dm_trios, 'BLUB', 'BLA', group=2)
-#   grp_mdl <- generateGroupModel(dm, 2)
+#   grp_mdl <- create_group_model(dm, 2)
 #   cmd <- lapply(generateSeqgenOptionsCmd(grp_mdl), paste0, collapse = "")
 #   expect_equal(length(cmd), 3)
 #   expect_equal(grep("BLUB", cmd[[2]]), 1)
@@ -130,7 +130,7 @@ test_that("Simulation of trios with unequal mutation rates works", {
 #
 #   # generateSeqgenOptions
 #   dm <- dm.setTrioMutationRates(dm_trios, '1', '2', group=2)
-#   grp_mdl <- generateGroupModel(dm, 2)
+#   grp_mdl <- create_group_model(dm, 2)
 #   ll <- get_locus_length_matrix(grp_mdl)[1,]
 #   cmds <- generateSeqgenOptions(grp_mdl, c(1, 5), locus = 1,
 #                                 locus_lengths = ll, 1)

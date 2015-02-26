@@ -31,7 +31,7 @@ test_that("msSimFunc works with inter-locus variation", {
 
 
 test_that("the ms sim program exists", {
-  expect_false(is.null(getSimProgram('ms')))
+  expect_false(is.null(get_sim_prog('ms')))
 })
 
 

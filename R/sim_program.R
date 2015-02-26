@@ -25,6 +25,6 @@ createSimProgram <- function(name, possible_features, possible_sum_stats,
                                priority=priority)
 }
 
-getSimProgram <- function(name) {
+get_sim_prog <- function(name) {
   return(sim_programs[[name]])
 }

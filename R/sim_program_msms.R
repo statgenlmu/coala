@@ -8,8 +8,8 @@
 # --------------------------------------------------------------
 
 msms.features <- c("selection", "selection_AA", "selection_Aa")
-possible.features  <- c(getSimProgram('ms')$possible_features, msms.features)
-possible.sum.stats <- getSimProgram('ms')$possible_sum_stats
+possible.features  <- c(get_sim_prog('ms')$possible_features, msms.features)
+possible.sum.stats <- get_sim_prog('ms')$possible_sum_stats
 
 callMsms <- function(ms.args, msms.args, subgroup) {
   checkForMsms()
@@ -68,13 +68,13 @@ generateMsmsOptionsCommand <- function(dm) {
 
       cmd <- c(cmd, '"-N 10000"', ',')
 
-      s_AA <- searchFeature(dm, 'selection_AA',
+      s_AA <- search_feature(dm, 'selection_AA',
                             pop.source = feat['pop.source'],
                             time.point = feat['time.point'])$parameter
       stopifnot(length(s_AA) == 1)
       cmd <- c(cmd, '"-SAA"', ',', s_AA, ',')
 
-      s_Aa <- searchFeature(dm, 'selection_Aa',
+      s_Aa <- search_feature(dm, 'selection_Aa',
                             pop.source = feat['pop.source'],
                             time.point = feat['time.point'])$parameter
       stopifnot(length(s_Aa) == 1)

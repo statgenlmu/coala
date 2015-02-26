@@ -8,8 +8,8 @@
 # --------------------------------------------------------------
 
 # list ms's features + FS related features
-sg_features <- unique(c(getSimProgram('ms')$possible_features,
-                        getSimProgram('msms')$possible_features,
+sg_features <- unique(c(get_sim_prog('ms')$possible_features,
+                        get_sim_prog('msms')$possible_features,
                         'mutation_model', 'tstv_ratio',
                         'base_freq_A', 'base_freq_C', 'base_freq_G',
                         'base_freq_T',
@@ -54,9 +54,9 @@ generateTreeModel <- function(dm, locus, locus_number=1) {
     locus_length <- get_locus_length_matrix(dm)[locus,]
 
     if (any(msms.features %in% dm$features$type)) {
-      tree.prog <- getSimProgram('msms')
+      tree.prog <- get_sim_prog('msms')
     } else {
-      tree.prog <- getSimProgram('ms')
+      tree.prog <- get_sim_prog('ms')
     }
 
     # Features
@@ -208,7 +208,7 @@ generateSeqgenOptionsCmd <- function(dm) {
 
     opts <- c(opts, '"-l"', ',', 'locus_length', ',')
     opts <- c(opts, '"-s"', ',',
-              s=paste(getThetaName(dm, outer), ' / locus_length'), ',')
+              s=paste(get_mutation_par(dm, outer), ' / locus_length'), ',')
     opts <- c(opts, '"-p"', ',', 'locus_length + 1', ',')
     opts <- c(opts, '"-z"', ',', 'seed', ',')
     opts <- c(opts, '"-q"', ')')
@@ -220,7 +220,7 @@ generateSeqgenOptionsCmd <- function(dm) {
 sg_get_command <- function(dm) {
   tree_model <- generateTreeModel(dm, 1)
   tree_cmd <-
-    getSimProgram(determine_sim_prog(tree_model))$print_cmd_func(tree_model)
+    get_sim_prog(determine_sim_prog(tree_model))$print_cmd_func(tree_model)
 
   sg_cmd <- paste(generateSeqgenOptions(dm, get_parameter_table(dm)$name,
                                         locus = 1, seeds = 'seed',

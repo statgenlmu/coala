@@ -24,7 +24,7 @@ create_sumstat_container <- function() {
 
 
 # Add a summary statistic to a model
-addToModel.SumStat <- function(sum_stat, model, feat_name) {
+add_to_model.SumStat <- function(sum_stat, model, feat_name) {
   if (sum_stat$get_name() %in% names(model$sum_stats))
     stop("Can't add ", feat_name, " to model: ",
          "There is already a statistic with name ", sum_stat$get_name())
