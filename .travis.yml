@@ -1,22 +1,15 @@
-language: c
+language: r
 
-before_install:
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-  - chmod 755 ./travis-tool.sh
-  - ./travis-tool.sh bootstrap
+apt_packages:
+  - seq-gen
+
+r_github_packages:
+  - hadley/testthat 
+  - jimhester/covr
+  - jimhester/lintr
 
 install:
-  - ./travis-tool.sh install_deps
-  - ./travis-tool.sh aptget_install seq-gen
-  - ./travis-tool.sh github_package hadley/testthat 
-  - ./travis-tool.sh github_package jimhester/covr
-  - ./travis-tool.sh github_package jimhester/lintr
   - wget http://www.mabs.at/ewing/msms/msms3.2rc-b163.jar && sudo mv msms3.2rc-b163.jar /usr/local/bin/msms.jar
-
-script: ./travis-tool.sh run_tests
-
-after_failure:
-  - ./travis-tool.sh dump_logs
 
 after_success:
   - Rscript -e 'library(covr);coveralls()'
