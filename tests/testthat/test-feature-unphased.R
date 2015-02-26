@@ -7,8 +7,8 @@ test_that("unphasing works", {
                                1, 1, 0, 1,
                                1, 0, 0, 1,
                                1, 0, 0, 1), 4, 4, byrow=TRUE)
-  attr(seg_sites[[1]], 'positions') = c(0.1, 0.2, 0.5, 0.7)
-  attr(seg_sites[[1]], 'locus') = rep(0, each = 4)
+  attr(seg_sites[[1]], 'positions') <- c(0.1, 0.2, 0.5, 0.7)
+  attr(seg_sites[[1]], 'locus') <- rep(0, each = 4)
 
   phased <- unphase_segsites(seg_sites, 2, 1)
   expect_that(phased, is_a('list'))

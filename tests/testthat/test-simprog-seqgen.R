@@ -166,7 +166,7 @@ test_that('a more complicated model works', {
     feat_size_change(par_expr(s1 + s2), population = 1,
                      at.time = par_expr(tau)) +
     feat_pop_merge(par_range('tau', 0.001, 5), 2, 1) +
-    feat_pop_merge(par_expr(2*tau), 3, 1) +
+    feat_pop_merge(par_expr(2 * tau), 3, 1) +
     feat_recombination(par_const(10)) +
     feat_outgroup(3) +
     sumstat_jsfs()

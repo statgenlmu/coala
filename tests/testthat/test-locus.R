@@ -35,7 +35,7 @@ test_that('Adding a locus to a model works', {
   expect_equal(get_locus_number(model2), 10)
   expect_equal(get_locus_length(model2), 1010)
   expect_equal(get_locus_number(model2, 2), 3)
-  expect_equal(get_locus_length(model2, 2), 1:3+1016)
+  expect_equal(get_locus_length(model2, 2), 1:3 + 1016)
 })
 
 
@@ -52,5 +52,5 @@ test_that('Adding a locus trio works', {
                distance = c(middle_right=40, left_middle=20))
 
   expect_equivalent(get_locus_length_matrix(m),
-                    matrix(1:5*10, 3, 5, byrow = TRUE))
+                    matrix(1:5 * 10, 3, 5, byrow = TRUE))
 })

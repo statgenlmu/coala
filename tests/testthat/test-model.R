@@ -265,7 +265,8 @@ test_that('setTrioMutationsRates works', {
 #   expect_equal(nrow(searchFeature(dm, 'mutation', group=2)), 1)
 #   expect_equal(searchFeature(dm, 'mutation', group=2)$parameter, "17")
 #   expect_equal(nrow(searchFeature(dm, 'mutation_outer', group=2)), 1)
-#   expect_equal(searchFeature(dm, 'mutation_outer', group=2)$parameter, "theta")
+#   expect_equal(searchFeature(dm, 'mutation_outer', group=2)$parameter,
+#                "theta")
 })
 
 
@@ -278,11 +279,11 @@ test_that('getting the available Populations works', {
 
 
 test_that('Outgroup setting and getting works', {
-  model <- CoalModel(1:4*2, 100)
+  model <- CoalModel(1:4 * 2, 100)
 
   for (i in 1:4) {
     expect_equal(get_outgroup(model + feat_outgroup(i)), i)
-    expect_equal(get_outgroup_size(model + feat_outgroup(i)), 2*i)
+    expect_equal(get_outgroup_size(model + feat_outgroup(i)), 2 * i)
   }
 })
 
@@ -305,10 +306,10 @@ test_that('converting positions for trios works', {
     locus_averaged(2, 100, group = 2)
 
   expect_equal(conv_middle_to_trio_pos(.5, model),
-               c(45/150, 105/150))
+               c(45 / 150, 105 / 150))
 
   expect_equal(conv_middle_to_trio_pos(15, model, relative_in = FALSE),
-               c(45/150, 105/150))
+               c(45 / 150, 105 / 150))
 
   expect_equal(conv_middle_to_trio_pos(.5, model, relative_out = FALSE),
                c(45, 105))
@@ -319,13 +320,14 @@ test_that('converting positions for trios works', {
 
 
   expect_equal(conv_middle_to_trio_pos(10, model, group = 2,
-                                       relative_out = FALSE, relative_in = FALSE),
+                                       relative_out = FALSE,
+                                       relative_in = FALSE),
                c(10, 10))
   expect_equal(conv_middle_to_trio_pos(.5, model, group = 2), c(.5, .5))
 
   ss <- matrix(0, 6, 5)
-  attr(ss, 'positions') = c(0.1, 0.5, 0.2, 0.6, 0.5, 1)
-  attr(ss, 'locus') = rep(c(-1, 0, 1), each = 2)
+  attr(ss, 'positions') <- c(0.1, 0.5, 0.2, 0.6, 0.5, 1)
+  attr(ss, 'locus') <- rep(c(-1, 0, 1), each = 2)
   expect_equal(get_snp_positions(list(ss, ss), model),
                list(c(1, 5, 36, 48, 125, 150) / 150,
                     c(5, 25, 96, 108, 145, 150) / 150))
@@ -334,8 +336,8 @@ test_that('converting positions for trios works', {
                     c(5, 25, 96, 108, 145, 150)))
 
   ss <- matrix(0, 6, 5)
-  attr(ss, 'positions') = c(0.1, 0.3, 0.5, 0.7, 0.9, 1)
-  attr(ss, 'locus') = rep(0, 6)
+  attr(ss, 'positions') <- c(0.1, 0.3, 0.5, 0.7, 0.9, 1)
+  attr(ss, 'locus') <- rep(0, 6)
   expect_equal(get_snp_positions(list(ss, ss), model, group=2, relative=TRUE),
                list(c(.1, .3, .5, .7, .9, 1), c(.1, .3, .5, .7, .9, 1)))
   expect_equal(get_snp_positions(list(ss, ss), model, group=2, relative=FALSE),

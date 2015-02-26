@@ -2,7 +2,7 @@ context('Simulation Program Creation')
 
 test_that("test.createSimProgram", {
     expect_true(exists("sim_programs"))
-    sim_prog_nr = length(sim_programs)
+    sim_prog_nr <- length(sim_programs)
     #expect_error(createSimProgram("name", "feature", sin, cos))
     #expect_error(createSimProgram("name"))
 
@@ -15,4 +15,3 @@ test_that("test.createSimProgram", {
     createSimProgram("test2", "feature", "sum.stat", sin, cos, tan)
     expect_equal(length(sim_programs), sim_prog_nr + 2)
 })
-

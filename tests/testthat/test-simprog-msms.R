@@ -5,14 +5,14 @@ test_that("calling msms works", {
   ms.args <- "5 1 -r 10 100 -t 5 -I 2 3 2 1"
   msms.args <- ""
   set.seed(17)
-  out.file <- callMsms(ms.args, msms.args)
+  out_file <- callMsms(ms.args, msms.args)
   set.seed(17)
-  out.file.2 <- callMsms(ms.args, msms.args)
+  out_file_2 <- callMsms(ms.args, msms.args)
   set.seed(20)
-  out.file.3 <- callMsms(ms.args, msms.args)
-  expect_equal(file.info(out.file.2)$size, file.info(out.file)$size)
-  expect_true(file.info(out.file)$size != file.info(out.file.3)$size)
-  unlink(c(out.file, out.file.2, out.file.3))
+  out_file_3 <- callMsms(ms.args, msms.args)
+  expect_equal(file.info(out_file_2)$size, file.info(out_file)$size)
+  expect_true(file.info(out_file)$size != file.info(out_file_3)$size)
+  unlink(c(out_file, out_file_2, out_file_3))
 })
 
 
@@ -24,7 +24,8 @@ test_that("Creation of parameter enviroment works", {
   par_envir <- createParameterEnv(model_theta_tau(), c(1,5), locus = 17)
   expect_equal(par_envir[['locus']], 17)
 
-  par_envir <- createParameterEnv(model_theta_tau(), c(1,5), locus = 23, seed = 115)
+  par_envir <- createParameterEnv(model_theta_tau(), c(1,5),
+                                  locus = 23, seed = 115)
   expect_equal(par_envir[['locus']], 23)
   expect_equal(par_envir[['seed']], 115)
 })
@@ -32,7 +33,8 @@ test_that("Creation of parameter enviroment works", {
 
 test_that("generating msms options works", {
   dm <- model_theta_tau() +
-    feat_selection(par_const(500), par_const(250), population = 1, at_time = 1.7)
+    feat_selection(par_const(500), par_const(250),
+                   population = 1, at_time = 1.7)
 
   opts <- paste(eval(parse(text = generateMsmsOptionsCommand(dm))),
                 collapse = " ")
