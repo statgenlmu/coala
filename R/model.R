@@ -42,7 +42,8 @@ CoalModel <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model$features <- createFeatureTable()
 
   model$loci <- data.frame(group=numeric(), number=numeric(),
-                           name=character(), name_l=character(), name_r=character(),
+                           name=character(), name_l=character(),
+                           name_r=character(),
                            length_l=numeric(), length_il=numeric(),
                            length_m=numeric(),
                            length_ir=numeric(), length_r=numeric(),
@@ -59,7 +60,8 @@ CoalModel <- function(sample_size=0, loci_number=0, loci_length=1000) {
 
   # Add sample sizes
   for (pop in seq(along = sample_size)) {
-    if (sample_size[pop] > 0) model <- model + feat_sample(sample_size[pop], pop)
+    if (sample_size[pop] > 0) model <- model +
+      feat_sample(sample_size[pop], pop)
   }
 
   # Add locus
@@ -78,10 +80,12 @@ is.model <- function(model) {
 
 # Checks if a vector of parameters is within the ranges of the model
 checkParInRange <- function(dm, param) {
-  if (length(param) != nrow(get_parameter_table(dm))) stop("Wrong number of parameters")
+  if (length(param) != nrow(get_parameter_table(dm))) {
+    stop("Wrong number of parameters")
+  }
 
   ranges <- get_parameter_table(dm)[,2:3]
-  in.range <- all(ranges[, 1]-1e-11 <= param & param <= ranges[, 2]+1e-11)
+  in.range <- all(ranges[, 1] - 1e-11 <= param & param <= ranges[, 2] + 1e-11)
   if (!in.range) stop("Parameter combination out of range")
 }
 
@@ -96,7 +100,7 @@ determine_sim_prog <- function(dm) {
       priority <- -Inf
 
       for (sim_prog_name in ls(sim_programs)) {
-        sim_prog = getSimProgram(sim_prog_name)
+        sim_prog <- getSimProgram(sim_prog_name)
         if (all(dm$features$type %in% sim_prog$possible_features) &
               all(dm$sum_stats$name %in% sim_prog$possible_sum_stats)) {
 
@@ -214,11 +218,11 @@ searchFeature <- function(dm, type=NULL, pop.source=NULL,
 
 addInterLocusVariation <- function(dm, group = 0) {
   stopifnot(is.numeric(group))
-  if (hasInterLocusVariation(dm, group)) return(dm)
+  if (has_inter_locus_var(dm, group)) return(dm)
   dm + Feature$new('inter_locus_variation', par_const(NA), group = group)
 }
 
-hasInterLocusVariation <- function(dm, group = 0) {
+has_inter_locus_var <- function(dm, group = 0) {
   nrow(searchFeature(dm, 'inter_locus_variation', group = group)) > 0
 }
 

@@ -29,7 +29,7 @@ Feature <- R6Class("Feature", inherit = Base_Object,
         self$add_parameter(time_point)
         time_point <- as.character(time_point$get_expression())
       }
-      else if (is.character(time_point) | is.na(time_point)) {}
+      else if (is.character(time_point) | is.na(time_point)) NULL
       else stop("Unexpected type of argument 'time_point'")
 
       private$group <- group

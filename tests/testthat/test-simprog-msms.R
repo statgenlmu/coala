@@ -80,7 +80,7 @@ test_that("msmsSimFunc works with inter-locus variation", {
   dm_tmp <- CoalModel(5, 2) +
     feat_mutation(par_range('theta', 1, 5), variance = 17) +
     sumstat_seg_sites()
-  expect_true(hasInterLocusVariation(dm_tmp))
+  expect_true(has_inter_locus_var(dm_tmp))
 
   set.seed(1100)
   sum_stats <- msmsSimFunc(dm_tmp, c(3))

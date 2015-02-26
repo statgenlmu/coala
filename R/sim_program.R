@@ -17,12 +17,12 @@ createSimProgram <- function(name, possible_features, possible_sum_stats,
                              priority=50) {
 
   # Create the simulation program
-  sim_programs[[name]] = list(name=name,
-                              possible_features=possible_features,
-                              possible_sum_stats=possible_sum_stats,
-                              sim_func=sim_func,
-                              print_cmd_func=print_cmd_func,
-                              priority=priority)
+  sim_programs[[name]] <- list(name=name,
+                               possible_features=possible_features,
+                               possible_sum_stats=possible_sum_stats,
+                               sim_func=sim_func,
+                               print_cmd_func=print_cmd_func,
+                               priority=priority)
 }
 
 getSimProgram <- function(name) {

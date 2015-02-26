@@ -14,15 +14,15 @@ possible.sum.stats <- getSimProgram('ms')$possible_sum_stats
 callMsms <- function(ms.args, msms.args, subgroup) {
   checkForMsms()
 
-  out_file = tempfile('msms')
+  out_file <- tempfile('msms')
   seed <- sampleSeed(1)
 
   # Create the command
-  cmd = paste("java -jar", get_msms_path(), as.character(msms.args),
-              "-ms", as.character(ms.args), "-seed", seed, ">", out_file)
+  cmd <- paste("java -jar", get_msms_path(), as.character(msms.args),
+               "-ms", as.character(ms.args), "-seed", seed, ">", out_file)
 
   # Execute the command
-  output <- system(cmd)
+  capture.output(system(cmd))
 
   if(!file.exists(out_file)) stop("msms simulation failed!")
   if(file.info(out_file)$size == 0) stop("msms output is empty!")
@@ -35,7 +35,7 @@ checkForMsms <- function(throw.error = TRUE, silent = FALSE) {
 
   # Works on Linux only maybe
   run.path <- strsplit(Sys.getenv("PATH"), ":")[[1]]
-  executables <- paste(c(run.path, getwd()), "/msms.jar", sep="")
+  executables <- file.path(c(run.path, getwd()), "msms.jar")
   for (exe in executables) {
     if (file.exists(exe)) {
       if (!silent) message(paste("Using", exe, "as msms implementation\n"))
@@ -104,7 +104,7 @@ generateMsmsOptions <- function(dm, parameters, locus) {
 msmsSimFunc <- function(dm, parameters) {
   # Run all simulation in with one ms call if they loci are identical,
   # or call ms for each locus if there is variation between the loci.
-  if (hasInterLocusVariation(dm)) {
+  if (has_inter_locus_var(dm)) {
     sim_reps <- 1:get_locus_number(dm)
     sim_loci <- 1
   } else {

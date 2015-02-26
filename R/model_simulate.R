@@ -32,7 +32,7 @@ simulate.CoalModel <- function(object, nsim = 1, seed, pars=NULL, ...) {
     sum_stats.grp <- simulate(grp_model, pars = pars)
 
     for (i in seq(along = sum_stats.grp)) {
-      if (names(sum_stats.grp)[i] == 'pars') next()
+      if (names(sum_stats.grp)[i] == 'pars') next
       name <- paste(names(sum_stats.grp)[i], group, sep='.')
       sum_stats[[name]] <- sum_stats.grp[[i]]
     }

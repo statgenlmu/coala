@@ -3,10 +3,10 @@ createParameterEnv <- function(model, parameters, ...) {
 
   par_names <- get_parameter_table(model)$name
   for (i in seq(along = par_names)){
-    par_env[[ par_names[i] ]] <- parameters[i]
+    par_env[[par_names[i]]] <- parameters[i]
   }
 
-  additional_pars = list(...)
+  additional_pars <- list(...)
   for (i in seq(along = additional_pars)) {
     par_env[[names(additional_pars)[i]]] <- additional_pars[[i]]
   }
@@ -18,7 +18,7 @@ createParameterEnv <- function(model, parameters, ...) {
 escape_par_expr <- function(cmd) {
   if (is.null(names(cmd))) return(cmd)
   for (i in seq(along = cmd)) {
-    if (names(cmd)[i] == '') next()
+    if (names(cmd)[i] == '') next
     cmd[i] <- paste0('\"', cmd[i], '\"')
   }
   cmd

@@ -37,12 +37,12 @@ test_that("adding features works", {
 
   dm <- CoalModel(11:12, 100)
   dm <- dm + Feature$new('bli', par_range('bla', 1, 5), variance='15')
-  expect_true(hasInterLocusVariation(dm))
+  expect_true(has_inter_locus_var(dm))
 
   dm <- CoalModel(11:12, 100)
   dm <- dm + Feature$new('bli', par_range('bla', 1, 5), group=1, variance='15')
-  expect_false(hasInterLocusVariation(dm, 0))
-  expect_true(hasInterLocusVariation(dm, 1))
+  expect_false(has_inter_locus_var(dm, 0))
+  expect_true(has_inter_locus_var(dm, 1))
 
   dm <- CoalModel(11:12, 100) + (Feature$new('blub', 5) + par_range('a', 1, 5))
   expect_equal(nrow(get_parameter_table(dm)), 1)
@@ -224,19 +224,15 @@ test_that("simulation works", {
 
 
 test_that("Adding and Getting inter locus variation works", {
-  skip('model test for inter-locus-variation deactivated')
-  expect_false(dm.hasInterLocusVariation(model_theta_tau()))
+  expect_false(has_inter_locus_var(model_theta_tau()))
 
-  dm_tmp <- dm.addInterLocusVariation(model_theta_tau(), 0)
-  expect_true(dm.hasInterLocusVariation(dm_tmp))
-  dm_tmp <- dm.addInterLocusVariation(dm_tmp, 0)
-  expect_true(dm.hasInterLocusVariation(dm_tmp))
-  expect_equal(nrow(searchFeature(dm_tmp, 'inter_locus_variation')), 1)
+  dm_tmp <- model_theta_tau() + feat_recombination(5, variance = 3)
+  expect_true(has_inter_locus_var(dm_tmp))
 
-  dm_tmp <- dm.addInterLocusVariation(model_theta_tau(), 2)
-  expect_false(dm.hasInterLocusVariation(dm_tmp))
-  expect_false(dm.hasInterLocusVariation(dm_tmp, 1))
-  expect_true(dm.hasInterLocusVariation(dm_tmp, 2))
+  dm_tmp <- model_theta_tau() + feat_recombination(5, group = 2, variance = 3)
+  expect_false(has_inter_locus_var(dm_tmp))
+  expect_false(has_inter_locus_var(dm_tmp, 1))
+  expect_true(has_inter_locus_var(dm_tmp, 2))
 })
 
 

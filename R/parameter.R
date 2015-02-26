@@ -105,4 +105,3 @@ Par_Range <- R6Class('Par_Range', inherit = Par_Model,
 par_range <- function(name, lower, upper) {
   Par_Range$new(lower, upper, name)
 }
-

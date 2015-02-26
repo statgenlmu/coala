@@ -8,7 +8,7 @@
 # --------------------------------------------------------------
 
 # list ms's features + FS related features
-sg.features <- unique(c(getSimProgram('ms')$possible_features,
+sg_features <- unique(c(getSimProgram('ms')$possible_features,
                         getSimProgram('msms')$possible_features,
                         'mutation_model', 'tstv_ratio',
                         'base_freq_A', 'base_freq_C', 'base_freq_G',
@@ -19,18 +19,18 @@ sg.features <- unique(c(getSimProgram('ms')$possible_features,
                         'locus_trios', 'outgroup',
                         'mutation_outer'))
 
-sg.sum.stats <- c('jsfs', 'file', 'seg.sites')
-sg.mutation.models <- c('HKY', 'F84', 'GTR')
+sg_sum_stats <- c('jsfs', 'file', 'seg.sites')
+sg_mutation_models <- c('HKY', 'F84', 'GTR')
 
-checkForSeqgen <- function(throw.error = TRUE, silent = FALSE) {
+sg_find_exe <- function(throw.error = TRUE, silent = FALSE) {
   if ((!is.null(get_seqgen_path())) && file.exists(get_seqgen_path())) {
     return(TRUE)
   }
 
   # Works on Linux only maybe
   run.path <- strsplit(Sys.getenv("PATH"), ":")[[1]]
-  executables <- c(paste(run.path, "/seq-gen", sep=""),
-                   paste(run.path, "/seqgen", sep=""))
+  executables <- c(file.path(run.path, "seq-gen"),
+                   file.path(run.path, "seqgen"))
   for (exe in executables) {
     if (file.exists(exe)) {
       if (!silent) message(paste("Using", exe, "as seqgen executable\n"))
@@ -102,7 +102,7 @@ setSeqgenExecutable <- function(seqgen_exe) {
 # @param opts The options to pass to ms. Must either be a character or character
 # vector.
 callSeqgen <- function(opts, ms_files) {
-  checkForSeqgen()
+  sg_find_exe()
   stopifnot(!missing(opts))
   stopifnot(length(opts) == length(ms_files))
 
@@ -151,9 +151,6 @@ generateSeqgenOptions <- function(dm, parameters, locus,
 
 generateSeqgenOptionsCmd <- function(dm) {
   stopifnot(is.model(dm))
-  base.freqs <- F
-  gtr.rates <- F
-  includes.model <- F
 
   if (length(get_outgroup_size(dm)) == 0) {
     stop("Finite Sites models need an outgroup.")
@@ -172,7 +169,6 @@ generateSeqgenOptionsCmd <- function(dm) {
       feat <- unlist(dm$features[i, ])
 
       if (type == "mutation_model") {
-        includes.model <- T
         opts <- c(opts, paste('"-m', feat['parameter'], '"', sep=""), ",")
       }
 
@@ -210,12 +206,9 @@ generateSeqgenOptionsCmd <- function(dm) {
                 ',', gtr.rates[['gtr_rate_6']], ',')
     }
 
-#     if (!includes.model) {
-#       stop("You must specify a finite sites mutation model for this demographic model")
-#     }
-
     opts <- c(opts, '"-l"', ',', 'locus_length', ',')
-    opts <- c(opts, '"-s"', ',', s=paste(getThetaName(dm, outer), ' / locus_length'), ',')
+    opts <- c(opts, '"-s"', ',',
+              s=paste(getThetaName(dm, outer), ' / locus_length'), ',')
     opts <- c(opts, '"-p"', ',', 'locus_length + 1', ',')
     opts <- c(opts, '"-z"', ',', 'seed', ',')
     opts <- c(opts, '"-q"', ')')
@@ -226,7 +219,8 @@ generateSeqgenOptionsCmd <- function(dm) {
 
 sg_get_command <- function(dm) {
   tree_model <- generateTreeModel(dm, 1)
-  tree_cmd <- getSimProgram(determine_sim_prog(tree_model))$print_cmd_func(tree_model)
+  tree_cmd <-
+    getSimProgram(determine_sim_prog(tree_model))$print_cmd_func(tree_model)
 
   sg_cmd <- paste(generateSeqgenOptions(dm, get_parameter_table(dm)$name,
                                         locus = 1, seeds = 'seed',
@@ -238,8 +232,8 @@ sg_get_command <- function(dm) {
 }
 
 
-seqgenSingleSimFunc <- function(dm, parameters) {
-  checkForSeqgen()
+sg_simulate <- function(dm, parameters) {
+  sg_find_exe()
   if (length(get_outgroup_size(dm)) == 0) {
     stop("Finite site models need an outgroup")
   }
@@ -247,15 +241,13 @@ seqgenSingleSimFunc <- function(dm, parameters) {
   # Run all simulation in with one seqgen call if they loci are identical,
   # or call ms for each locus if there is variation between the loci.
 
-  if (hasInterLocusVariation(dm)) {
+  if (has_inter_locus_var(dm)) {
     sim_reps <- 1:get_locus_number(dm)
     sim_loci <- 1
   } else {
     sim_reps <- 1
     sim_loci <- get_locus_number(dm)
   }
-
-  locus_length <- get_locus_length_matrix(dm)
 
   seqgen.files <- lapply(sim_reps, function(locus) {
     # Generate options for seqgen
@@ -266,8 +258,9 @@ seqgenSingleSimFunc <- function(dm, parameters) {
     sum_stats_ms <- simulate(tree.model, pars=parameters)
 
     # Call seq-gen to distribute mutations
-    seqgen.options <- generateSeqgenOptions(dm, parameters, locus,
-                                            sampleSeed(length(sum_stats_ms$sg_trees)))
+    seqgen.options <-
+      generateSeqgenOptions(dm, parameters, locus,
+                            sampleSeed(length(sum_stats_ms$sg_trees)))
 
     seqgen.file <- callSeqgen(seqgen.options, sum_stats_ms$sg_trees)
 
@@ -293,6 +286,6 @@ seqgenSingleSimFunc <- function(dm, parameters) {
 
 
 #' @include sim_program.R
-createSimProgram("seq-gen", sg.features, sg.sum.stats,
-                 seqgenSingleSimFunc, sg_get_command,
+createSimProgram("seq-gen", sg_features, sg_sum_stats,
+                 sg_simulate, sg_get_command,
                  priority=10)

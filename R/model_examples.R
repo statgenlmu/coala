@@ -38,7 +38,7 @@ model_gtr <- function() {
     feat_recombination(par_const(1)) +
     feat_outgroup(3) +
     feat_mutation(par_range('theta', 1, 10),
-                  model='GTR', gtr_rates=1:6/sum(1:6)) +
+                  model='GTR', gtr_rates=1:6 / sum(1:6)) +
     sumstat_jsfs()
 }
 

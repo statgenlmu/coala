@@ -16,10 +16,10 @@ possible.sum.stats <- c("jsfs", "trees", "seg.sites", "file")
 # This function generates an string that contains an R command for generating
 # an ms call to the current model.
 generateMsOptionsCommand <- function(dm) {
-  nSample <- get_sample_size(dm, for_sim = TRUE)
+  sample_size <- get_sample_size(dm, for_sim = TRUE)
   cmd <- c('c(')
-  cmd <- c(cmd,'"-I"', ",", length(nSample), ',',
-           paste(nSample, collapse=","), ',')
+  cmd <- c(cmd,'"-I"', ",", length(sample_size), ',',
+           paste(sample_size, collapse=","), ',')
 
   for (i in 1:dim(dm$features)[1] ) {
     type <- as.character(dm$features[i,"type"])
@@ -45,7 +45,8 @@ generateMsOptionsCommand <- function(dm) {
                feat['parameter'], ',')
 
     else if (type == "recombination")
-      cmd <- c(cmd, '"-r"', ',', feat['parameter'], ',', get_locus_length(dm), ',')
+      cmd <- c(cmd, '"-r"', ',', feat['parameter'], ',',
+               get_locus_length(dm), ',')
 
     else if (type == "size_change"){
       cmd <- c(cmd, '"-en"', ',', feat['time.point'], ',',
@@ -64,7 +65,7 @@ generateMsOptionsCommand <- function(dm) {
     else if (type %in% c("sample", "loci.number", "loci.length",
                          "selection", "selection_AA", "selection_Aa",
                          "inter_locus_variation", "unphased",
-                         "ploidy", "samples_per_ind")) {}
+                         "ploidy", "samples_per_ind")) NULL
     else stop("Unknown feature:", type)
   }
 
@@ -99,7 +100,7 @@ msSingleSimFunc <- function(dm, parameters=numeric()) {
 
   # Run all simulation in with one ms call if they loci are identical,
   # or call ms for each locus if there is variation between the loci.
-  if (hasInterLocusVariation(dm)) {
+  if (has_inter_locus_var(dm)) {
     sim_reps <- 1:get_locus_number(dm)
     sim_loci <- 1
   } else {
