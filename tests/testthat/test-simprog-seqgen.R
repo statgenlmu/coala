@@ -18,7 +18,7 @@ test_that("test.generateSeqgenOptions", {
 test_that("generation of tree models works", {
   if (!checkForSeqgen(FALSE, TRUE)) skip('seqgen not installed')
   for (dm in list(model_hky(), model_f84(), model_gtr())) {
-    dm.ms <-generateTreeModel(dm, 1)
+    dm.ms <- generateTreeModel(dm, 1)
     sum.stats <- simulate(dm.ms, pars=c(1, 5))
     expect_false(is.null(sum.stats$sg_trees))
     unlink(sum.stats$sg_trees)
@@ -28,7 +28,7 @@ test_that("generation of tree models works", {
 
 test_that("test.seqgenSingleSimFunc", {
   if (!checkForSeqgen(FALSE, TRUE)) skip('seqgen not installed')
-  seqgenSingleSimFunc = getSimProgram("seq-gen")$sim_func
+  seqgenSingleSimFunc <- getSimProgram("seq-gen")$sim_func
 
   set.seed(100)
   sum.stats <- seqgenSingleSimFunc(model_hky(), c(1, 10))
@@ -85,7 +85,8 @@ test_that("seq-gen can simulate trios", {
     sumstat_seg_sites()
 
   sum.stats <- simulate(dm.lt, pars=c(1, 10))
-  expect_that(sum(sum.stats$jsfs), is_less_than(sum(sapply(sum.stats$seg_sites, ncol))))
+  expect_that(sum(sum.stats$jsfs),
+              is_less_than(sum(sapply(sum.stats$seg_sites, ncol))))
 })
 
 
@@ -103,7 +104,8 @@ test_that("Error is thrown without an outgroup", {
 test_that("Simulation of trios with unequal mutation rates works", {
   skip("Temporarily deactivated")
 #   if (!test_seqgen) skip('seq-gen not installed')
-#   if (!isJaathaVariable('seqgen.exe')) setJaathaVariable('seqgen.exe', 'seq-gen')
+#   if (!isJaathaVariable('seqgen.exe'))
+#     setJaathaVariable('seqgen.exe', 'seq-gen')
 #   dm <- dm.setTrioMutationRates(dm_trios, '17', 'theta', group=2)
 #   expect_equal(getThetaName(dm, outer = FALSE, group = 2), '17')
 #   expect_equal(getThetaName(dm, outer = TRUE, group = 2), 'theta')
@@ -159,9 +161,10 @@ test_that('a more complicated model works', {
     feat_migration(par_range('m21', 0.001, 5), 2, 1) +
     feat_size_change(par_range('q', 0.05, 40), population = 2, at.time = 0) +
     par_range("s1", 0.01, 2) + par_range("s2", 0.01, 2) +
-    feat_growth(par_expr(log(1/s1)/tau), population = 1, at.time = 0) +
-    feat_growth(par_expr(log(q/s2)/tau), population = 2, at.time = 0) +
-    feat_size_change(par_expr(s1+s2), population = 1, at.time = par_expr(tau)) +
+    feat_growth(par_expr(log(1 / s1) / tau), population = 1, at.time = 0) +
+    feat_growth(par_expr(log(q / s2) / tau), population = 2, at.time = 0) +
+    feat_size_change(par_expr(s1 + s2), population = 1,
+                     at.time = par_expr(tau)) +
     feat_pop_merge(par_range('tau', 0.001, 5), 2, 1) +
     feat_pop_merge(par_expr(2*tau), 3, 1) +
     feat_recombination(par_const(10)) +
