@@ -122,12 +122,12 @@ sg_call <- function(opts, ms_files) {
   })
 }
 
-generateSeqgenOptions <- function(dm, parameters, locus,
+sg_generate_opts <- function(dm, parameters, locus,
                                   seeds, eval_pars = TRUE) {
 
   cmd <- read_cache(dm, 'seqgen_cmd')
   if (is.null(cmd)) {
-    cmd <- generateSeqgenOptionsCmd(dm)
+    cmd <- sg_generate_opt_cmd(dm)
     cache(dm, 'seqgen_cmd', cmd)
   }
 
@@ -149,7 +149,7 @@ generateSeqgenOptions <- function(dm, parameters, locus,
 }
 
 
-generateSeqgenOptionsCmd <- function(dm) {
+sg_generate_opt_cmd <- function(dm) {
   stopifnot(is.model(dm))
 
   if (length(get_outgroup_size(dm)) == 0) {
@@ -222,7 +222,7 @@ sg_get_command <- function(dm) {
   tree_cmd <-
     get_simprog(determine_simprog(tree_model))$print_cmd_func(tree_model)
 
-  sg_cmd <- paste(generateSeqgenOptions(dm, get_parameter_table(dm)$name,
+  sg_cmd <- paste(sg_generate_opts(dm, get_parameter_table(dm)$name,
                                         locus = 1, seeds = 'seed',
                                         eval_pars=FALSE),
                   collapse = ' ')
@@ -259,7 +259,7 @@ sg_simulate <- function(dm, parameters) {
 
     # Call seq-gen to distribute mutations
     seqgen.options <-
-      generateSeqgenOptions(dm, parameters, locus,
+      sg_generate_opts(dm, parameters, locus,
                             sample_seed(length(sum_stats_ms$sg_trees)))
 
     seqgen.file <- sg_call(seqgen.options, sum_stats_ms$sg_trees)

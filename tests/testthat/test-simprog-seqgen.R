@@ -1,9 +1,9 @@
 context("Simulation Program seqgen")
 
-test_that("test.generateSeqgenOptions", {
+test_that("test.sg_generate_opts", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
   dm.hky <- model_hky()
-  opts <- generateSeqgenOptions(dm.hky, c(1, 10), 1, c(0, 0, 10, 0, 0), 1)
+  opts <- sg_generate_opts(dm.hky, c(1, 10), 1, c(0, 0, 10, 0, 0), 1)
   opts <- strsplit(opts, " ")[[1]]
   expect_true("-l" %in% opts)
   expect_true("-p" %in% opts)
@@ -97,7 +97,7 @@ test_that("Error is thrown without an outgroup", {
     feat_mutation(par_range('theta', 5, 10), model = 'HKY') +
     feat_pop_merge(par_range('tau', .5, 1), 2, 1) +
     sumstat_jsfs()
-  expect_error(generateSeqgenOptionsCmd(model))
+  expect_error(sg_generate_opt_cmd(model))
   expect_error(simulate(model, pars = c(7.5, .75)))
 })
 
@@ -116,10 +116,10 @@ test_that("Simulation of trios with unequal mutation rates works", {
 #   expect_equal(get_mutation_par(dm_trios, outer = TRUE, group = 2), 'theta')
 #
 #
-#   # generateSeqgenOptionsCmd
+#   # sg_generate_opt_cmd
 #   dm <- dm.setTrioMutationRates(dm_trios, 'BLUB', 'BLA', group=2)
 #   grp_mdl <- create_group_model(dm, 2)
-#   cmd <- lapply(generateSeqgenOptionsCmd(grp_mdl), paste0, collapse = "")
+#   cmd <- lapply(sg_generate_opt_cmd(grp_mdl), paste0, collapse = "")
 #   expect_equal(length(cmd), 3)
 #   expect_equal(grep("BLUB", cmd[[2]]), 1)
 #   expect_equal(grep("theta", cmd[[2]]), integer(0))
@@ -128,18 +128,18 @@ test_that("Simulation of trios with unequal mutation rates works", {
 #   expect_equal(grep("theta", cmd[[1]]), integer(0))
 #   expect_equal(grep("theta", cmd[[3]]), integer(0))
 #
-#   # generateSeqgenOptions
+#   # sg_generate_opts
 #   dm <- dm.setTrioMutationRates(dm_trios, '1', '2', group=2)
 #   grp_mdl <- create_group_model(dm, 2)
 #   ll <- get_locus_length_matrix(grp_mdl)[1,]
-#   cmds <- generateSeqgenOptions(grp_mdl, c(1, 5), locus = 1,
+#   cmds <- sg_generate_opts(grp_mdl, c(1, 5), locus = 1,
 #                                 locus_lengths = ll, 1)
 #   expect_equal(grep(as.character(2/ll[1]), cmds[[1]]), 1)
 #   expect_equal(grep(as.character(1/ll[3]), cmds[[2]]), 1)
 #   expect_equal(grep(as.character(2/ll[5]), cmds[[3]]), 1)
 #
 #   ll <- get_locus_length_matrix(grp_mdl)[2,]
-#   cmds <- generateSeqgenOptions(grp_mdl, c(1, 5), locus = 2,
+#   cmds <- sg_generate_opts(grp_mdl, c(1, 5), locus = 2,
 #                                 locus_lengths = ll, 1)
 #   expect_equal(grep(as.character(2/ll[1]), cmds[[1]]), 1)
 #   expect_equal(grep(as.character(1/ll[3]), cmds[[2]]), 1)
