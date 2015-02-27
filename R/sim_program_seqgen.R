@@ -101,7 +101,7 @@ set_seqgen_exe <- function(seqgen_exe) {
 #
 # @param opts The options to pass to ms. Must either be a character or character
 # vector.
-callSeqgen <- function(opts, ms_files) {
+sg_call <- function(opts, ms_files) {
   sg_find_exe()
   stopifnot(!missing(opts))
   stopifnot(length(opts) == length(ms_files))
@@ -262,7 +262,7 @@ sg_simulate <- function(dm, parameters) {
       generateSeqgenOptions(dm, parameters, locus,
                             sample_seed(length(sum_stats_ms$sg_trees)))
 
-    seqgen.file <- callSeqgen(seqgen.options, sum_stats_ms$sg_trees)
+    seqgen.file <- sg_call(seqgen.options, sum_stats_ms$sg_trees)
 
     # Delete tree files
     unlink(c(sum_stats_ms[['file']], sum_stats_ms$sg_trees))
