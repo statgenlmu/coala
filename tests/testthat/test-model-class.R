@@ -332,3 +332,11 @@ test_that('print works on models', {
   out <- capture.output(print(coal_model(5) + par_range("abc", 1, 5)))
   expect_that(length(grep("abc", out)), is_more_than(0))
 })
+
+
+test_that('getting par names works', {
+  expect_equal(get_par_names(coal_model()), character(0))
+
+  model <- coal_model() + par_range("a", 1, 2) + par_range("b", 2, 3)
+  expect_equal(get_par_names(model), c("a", "b"))
+})

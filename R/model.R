@@ -51,11 +51,6 @@ coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
                            stringsAsFactors=F )
 
   model$parameter <- list()
-  model$par_table <- data.frame(parameter=character(),
-                                lower.range=numeric(),
-                                upper.range=numeric(),
-                                stringsAsFactors=F)
-
   model$sum_stats <- create_sumstat_container()
 
   model$id <- get_id()

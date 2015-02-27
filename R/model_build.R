@@ -29,17 +29,11 @@ add_to_model.Parameter <- function(par, model, par_name) model
 
 
 add_to_model.Par_Range <- function(par, model, par_name) {
-  if (par$get_name() %in% get_parameter_table(model))
+  if (par$get_name() %in% get_par_names(model))
     stop("There is already a parameter with name ", par_name)
 
   model$parameter[[length(model$parameter) + 1]] <- par
 
-  new_par <- data.frame(name=par$get_name(),
-                        lower.range=par$get_range()[1],
-                        upper.range=par$get_range()[2],
-                        stringsAsFactors=F)
-
-  model$par_table <- rbind(model$par_table, new_par)
   model$id <- get_id()
   model
 }

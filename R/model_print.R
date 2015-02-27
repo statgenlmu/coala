@@ -12,4 +12,3 @@ print.coal_model <- function(x, ...) {
     for (par in get_parameter(x)) print(par)
   }
 }
-

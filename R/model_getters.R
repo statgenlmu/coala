@@ -18,9 +18,28 @@ get_features <- function(model) model$features
 #'   data.frame
 get_parameter_table <- function(model) {
   stopifnot(is.model(model))
-  stopifnot(!is.null(model$par_table))
-  model$par_table
+
+  par_table <- read_cache(model, "par_table")
+  if (is.null(par_table)) {
+    if (length(get_parameter(model)) == 0) {
+      par_table <- (data.frame(name=character(),
+                               lower.range=numeric(),
+                               upper.range=numeric(),
+                               stringsAsFactors=F))
+    } else {
+      par_table <- do.call(rbind, lapply(get_parameter(model), function (par) {
+        data.frame(name=par$get_name(),
+                   lower.range=par$get_range()[1],
+                   upper.range=par$get_range()[2],
+                   stringsAsFactors=F)
+      }))
+    }
+    cache(model, "par_table", par_table)
+  }
+
+  par_table
 }
+
 
 #' @export
 #' @describeIn get_feature_table Returns the ranged parameters of a model
@@ -148,4 +167,10 @@ get_population_indiviuals <- function(model, pop) {
   from <- cumsum(c(0, sample_size)) + 1
   to <- cumsum(sample_size)
   from[pop]:to[pop]
+}
+
+
+get_par_names <- function(model) {
+  if (length(get_parameter(model)) == 0) return(character(0))
+  sapply(get_parameter(model), function(par) par$get_name())
 }
