@@ -9,9 +9,9 @@ using namespace Rcpp;
 // be done with a few grep's, but this function should give us some platform
 // independence.
 // [[Rcpp::export]]
-CharacterVector parseTrees(const std::string in_file,
-                           const NumericVector trio_opts,
-                           Function tempfile) {
+CharacterVector parse_trees(const std::string in_file,
+                            const NumericVector trio_opts,
+                            Function tempfile) {
 
   std::string line;
   bool trio = false;

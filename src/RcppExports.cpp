@@ -56,9 +56,9 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// parseTrees
-CharacterVector parseTrees(const std::string in_file, const NumericVector trio_opts, Function tempfile);
-RcppExport SEXP coalsimr_parseTrees(SEXP in_fileSEXP, SEXP trio_optsSEXP, SEXP tempfileSEXP) {
+// parse_trees
+CharacterVector parse_trees(const std::string in_file, const NumericVector trio_opts, Function tempfile);
+RcppExport SEXP coalsimr_parse_trees(SEXP in_fileSEXP, SEXP trio_optsSEXP, SEXP tempfileSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -66,7 +66,7 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const std::string >::type in_file(in_fileSEXP );
         Rcpp::traits::input_parameter< const NumericVector >::type trio_opts(trio_optsSEXP );
         Rcpp::traits::input_parameter< Function >::type tempfile(tempfileSEXP );
-        CharacterVector __result = parseTrees(in_file, trio_opts, tempfile);
+        CharacterVector __result = parse_trees(in_file, trio_opts, tempfile);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

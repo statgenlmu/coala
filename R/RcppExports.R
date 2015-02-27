@@ -13,8 +13,8 @@ parse_sg_output <- function(file_names, sample_size, sequence_length, loci_numbe
     .Call('coalsimr_parse_sg_output', PACKAGE = 'coalsimr', file_names, sample_size, sequence_length, loci_number, outgroup_size)
 }
 
-parseTrees <- function(in_file, trio_opts, tempfile) {
-    .Call('coalsimr_parseTrees', PACKAGE = 'coalsimr', in_file, trio_opts, tempfile)
+parse_trees <- function(in_file, trio_opts, tempfile) {
+    .Call('coalsimr_parse_trees', PACKAGE = 'coalsimr', in_file, trio_opts, tempfile)
 }
 
 #' Calculates the JSFS for two populations

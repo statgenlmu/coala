@@ -6,7 +6,7 @@ SumStat_Trees <- R6Class('SumStat_Trees', inherit = SumStat,
       super$initialize('sg_trees', group)
     },
     calculate = function(seg_sites, files, model) {
-      parseTrees(files[[1]], private$loci_length, tempfile)
+      parse_trees(files[[1]], private$loci_length, tempfile)
     }
   )
 )
