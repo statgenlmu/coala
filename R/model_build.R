@@ -44,7 +44,6 @@ add_to_model.Feature <- function(feat, model, feat_name) {
   feat$reset_parameters()
 
   model$features[[length(model$features) + 1]] <- feat
-  model$feature_table <- rbind(model$feature_table, feat$get_table())
 
   if (feat$get_inter_locus_var()) {
     model <- add_inter_locus_var(model, feat$get_group())

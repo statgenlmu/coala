@@ -39,7 +39,6 @@ coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model <- list()
   class(model) <- c("coal_model")
 
-  model$feature_table <- create_feature_table()
   model$features <- list()
 
   model$loci <- data.frame(group=numeric(), number=numeric(),
@@ -131,29 +130,24 @@ get_mutation_par <- function(dm, outer=FALSE, group=0) {
 }
 
 
-create_group_model <- function(dm, group) {
-  # Features
-  dm$feature_table <- search_feature(dm, group = group)
-  dm$feature_table$group <- 0
-
-  # sum_stats
-  dm$sum_stats <- get_group_statistics(dm, group)
-
-  # Loci
-  loci <- dm$loci[dm$loci$group == group, , drop=FALSE]
-  if (nrow(loci) > 0) dm$loci <- loci
-  else dm$loci <- dm$loci[dm$loci$group == 0, , drop=FALSE]
-  dm$loci$group <- 0
-
-  dm$id <- get_id()
-  dm
-}
-
-
 get_group_model <- function(model, group) {
   grp_model <- read_cache(model, paste0('grp_model_', group))
   if (is.null(grp_model)) {
-    grp_model <- create_group_model(model, group)
+    grp_model <- model
+    # Features
+    grp_model$features <-
+      search_feature(model, group = group, feat_table = FALSE)
+
+    # sum_stats
+    grp_model$sum_stats <- get_group_statistics(model, group)
+
+    # Loci
+    loci <- model$loci[model$loci$group == group, , drop=FALSE]
+    if (nrow(loci) > 0) grp_model$loci <- loci
+    else grp_model$loci <- model$loci[model$loci$group == 0, , drop=FALSE]
+    grp_model$loci$group <- 0
+
+    grp_model$id <- get_id()
     cache(model, paste0('grp_model_', group), grp_model)
   }
   grp_model
@@ -161,7 +155,8 @@ get_group_model <- function(model, group) {
 
 
 search_feature <- function(dm, type=NULL, pop.source=NULL,
-                          pop.sink=NULL, time.point=NULL, group=NULL) {
+                          pop.sink=NULL, time.point=NULL, group=NULL,
+                          feat_table=TRUE) {
 
   feat_tbl <- get_feature_table(dm)
   mask <- rep(TRUE, nrow(feat_tbl))
@@ -210,6 +205,7 @@ search_feature <- function(dm, type=NULL, pop.source=NULL,
     }
   }
 
+  if(!feat_table) return(get_features(dm)[mask])
   feat_tbl[mask, ]
 }
 

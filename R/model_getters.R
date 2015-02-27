@@ -7,11 +7,25 @@
 #' @describeIn get_feature_table Returns the features of a model as a data.frame
 get_feature_table <- function(model) {
   stopifnot(is.model(model))
-  stopifnot(!is.null(model$feature_table))
-  model$feature_table
+
+  feat_table <- read_cache(model, "feature_table")
+  if (is.null(feat_table)) {
+    if (length(get_features(model)) == 0) {
+      feat_table <- create_feature_table()
+    } else {
+      feat_table <- do.call(rbind, lapply(get_features(model), function (feat) {
+        feat$get_table()
+      }))
+    }
+    cache(model, "feature_table", feat_table)
+  }
+
+  feat_table
 }
 
+
 get_features <- function(model) model$features
+
 
 #' @export
 #' @describeIn get_feature_table Returns the ranged parameters of a model as a

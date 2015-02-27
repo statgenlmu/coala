@@ -59,10 +59,11 @@ generate_tree_model <- function(dm, locus, locus_number=1) {
       tree.prog <- get_simprog('ms')
     }
 
-    # Features
     tree_model <- dm
-    tree_model$feature_table <-
-      dm$feature_table[dm$feature_table$type %in% tree.prog$possible_features, ]
+
+    # Features
+    tree_model$features <-
+      dm$features[get_feature_table(dm)$type %in% tree.prog$possible_features]
 
     # Summary Stastics
     tree_model$sum_stats <- create_sumstat_container()

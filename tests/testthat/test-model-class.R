@@ -65,12 +65,12 @@ test_that("test get_summary_statistics", {
 
 
 test_that("generation of group models", {
-  dm <- create_group_model(model_theta_tau(), 1)
+  dm <- get_group_model(model_theta_tau(), 1)
   expect_equal(get_feature_table(dm), get_feature_table(model_theta_tau()))
   expect_equal(dm$sum_stats, model_theta_tau()$sum_stats)
 
   dm <- model_theta_tau() + locus_averaged(10, 23, group = 1)
-  dm <- create_group_model(dm, 1)
+  dm <- get_group_model(dm, 1)
   expect_equal(nrow(get_feature_table(dm)),
                nrow(get_feature_table(model_theta_tau())))
   expect_true(all(get_feature_table(dm)$group == 0))
@@ -79,12 +79,12 @@ test_that("generation of group models", {
   dm.3 <- model_theta_tau() +
     locus_averaged(5, 23, group = 1) +
     locus_averaged(31, 30, group = 2)
-  dm <- create_group_model(dm.3, 1)
+  dm <- get_group_model(dm.3, 1)
   expect_equal(nrow(get_feature_table(dm)),
                nrow(get_feature_table(model_theta_tau())))
   expect_true(all(get_feature_table(dm)$group == 0))
   expect_equal(get_locus_length(dm), 23)
-  dm <- create_group_model(dm.3, 2)
+  dm <- get_group_model(dm.3, 2)
   expect_equal(nrow(get_feature_table(dm)),
                nrow(get_feature_table(model_theta_tau())))
   expect_true(all(get_feature_table(dm)$group == 0))
@@ -92,9 +92,9 @@ test_that("generation of group models", {
   expect_equal(get_locus_number(dm), 31)
 
   dm <- model_theta_tau() + sumstat_seg_sites(group = 2)
-  dm_1 <- create_group_model(dm, 1)
+  dm_1 <- get_group_model(dm, 1)
   expect_equal(get_summary_statistics(dm, 1), get_summary_statistics(dm_1))
-  dm_2 <- create_group_model(dm, 2)
+  dm_2 <- get_group_model(dm, 2)
   expect_equal(get_summary_statistics(dm, 2),
                get_summary_statistics(dm_2, 'all'))
 })
