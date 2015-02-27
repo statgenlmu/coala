@@ -5,15 +5,15 @@
 
 using namespace Rcpp;
 
-// parseMsPositions
-NumericVector parseMsPositions(const std::string line);
-RcppExport SEXP coalsimr_parseMsPositions(SEXP lineSEXP) {
+// parse_ms_positions
+NumericVector parse_ms_positions(const std::string line);
+RcppExport SEXP coalsimr_parse_ms_positions(SEXP lineSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< const std::string >::type line(lineSEXP );
-        NumericVector __result = parseMsPositions(line);
+        NumericVector __result = parse_ms_positions(line);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
