@@ -9,13 +9,13 @@ test_that('get id works', {
 
 
 test_that('caching values works', {
-  model1 <- CoalModel(5:6, 100)
+  model1 <- coal_model(5:6, 100)
   cache(model1, 'a', 1)
   expect_equal(read_cache(model1, 'a'), 1)
   cache(model1, 'b', 2)
   expect_equal(read_cache(model1, 'b'), 2)
 
-  model2 <- CoalModel(5:6, 100)
+  model2 <- coal_model(5:6, 100)
   cache(model2, 'a', 2)
   expect_equal(read_cache(model1, 'a'), 1)
   expect_equal(read_cache(model2, 'a'), 2)

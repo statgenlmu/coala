@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-Locus <- R6Class('Locus', inherit = Base_Object,
+Locus <- R6Class('Locus', inherit = base_class,
   private = list(
     group = 0,
     length = NA,
@@ -38,17 +38,17 @@ is.locus <- function(locus) 'Locus' %in% class(locus)
 #' @export
 #' @examples
 #' # A model with one locus of length 1005 bp
-#' CoalModel(5:7, 0) + locus_single(1005)
+#' coal_model(5:7, 0) + locus_single(1005)
 #'
 #' # A model with ten loci of average length 950bp
-#' CoalModel(15, 0) + locus_averaged(10, 950)
+#' coal_model(15, 0) + locus_averaged(10, 950)
 #' # or just
-#' CoalModel(15, 10, 950)
+#' coal_model(15, 10, 950)
 #'
 #' # A model with two groups of loci. The first group consists of 10 loci with
 #' # a length 560bp each, the second one of two loci with length 750bp and 560pb,
 #' # repectively.
-#' CoalModel(20, 10, 560) +
+#' coal_model(20, 10, 560) +
 #'   locus_single(750, group = 2) +
 #'   locus_single(430, group = 2)
 locus_single <- function(length, group = 0, name = '') {
@@ -75,7 +75,7 @@ locus_averaged <- function(number, length, group = 0) {
 #'   and middle an right locus, in basepairs.
 #' @export
 #' @examples
-#' CoalModel(c(25,25)) +
+#' coal_model(c(25,25)) +
 #'   locus_trio(locus_names = c('Solyc00g00500.2',
 #'                              'Solyc00g00520.1',
 #'                              'Solyc00g00540.1'),

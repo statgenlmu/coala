@@ -33,23 +33,25 @@
 #'
 #' @examples
 #' # A model with a constant scaled mutation rate of 5:
-#' dm <- CoalModel(c(15,20), 100) + feat_mutation(par_const(5))
+#' dm <- coal_model(c(15,20), 100) + feat_mutation(par_const(5))
 #'
 #' # A model with a mutation rate that can be estimated with Jaatha:
-#' dm <- CoalModel(c(15,20), 100) +
+#' dm <- coal_model(c(15,20), 100) +
 #'   feat_mutation(par_range('theta', 1, 20))
 #'
 #' # A model with variable gamma distributed mutation rate
-#' dm <- CoalModel(c(15,20), 100) +
+#' dm <- coal_model(c(15,20), 100) +
 #'   feat_mutation(par_range('theta', 1, 20), variance=100)
 feat_mutation <- function(rate, group = 0, variance = 0, model='IFS',
                           base_frequencies, tstv_ratio, gtr_rates) {
-  feat <- Feature$new('mutation', parameter=rate,  group=group, variance=variance)
+  feat <- Feature$new('mutation', parameter=rate,
+                      group=group, variance=variance)
 
   # Add the mutation model
   if (model != 'IFS') {
-    if (! model %in% sg.mutation.models)
-      stop("Possible mutation models: ", paste(sg.mutation.models, collapse=" "))
+    if (! model %in% sg_mutation_models)
+      stop("Possible mutation models: ",
+           paste(sg_mutation_models, collapse=" "))
     feat$add_feature(Feature$new("mutation_model", par_const(model)))
   }
 
@@ -95,71 +97,33 @@ feat_mutation <- function(rate, group = 0, variance = 0, model='IFS',
 # As default, we simulate mutation using the Infinite Sites Model.
 # Using the function, you can change it either to the Hasegawa, Kishino and
 # Yano (HKY), to the Felsenstein and Churchill 96 (F84) or to the Generalised
-# time reversible (GTR) model. This requires that seq-gen is installed on our system.
+# time reversible (GTR) model.
+# This requires that seq-gen is installed on our system.
 #
 # The HKY and F84 models use the the arguments 'base.frequencies' and
 # 'tstv.ratio'. The GTR model uses 'gtr.rates'.
 
 
-
-#-------------------------------------------------------------------
-# dm.addMutationRateHeterogenity
-#-------------------------------------------------------------------
-#' Allows the mutation rate on different sites within one locus to
-#' vary according to a Gamma Distribution.
-#'
-#' This function adds a Gamma distributed rate heterogeneity as implemented
-#' in 'seq-gen' to the model.
-#'
-#' "The [...] model of rate heterogeneity assigns different rates to different
-#' sites according to a gamma distribution (Yang, 1993). The distribution is scaled
-#' such that the mean rate for all the sites is 1 but
-#' the user must supply a parameter which describes its shape. A low value for this
-#' parameter (<1.0) simulates a large degree of site-specific rate heterogeneity
-#' and as this value increases the simulated data becomes more rate-homogeneous.
-#' This can be performed as a continuous model, i.e. every site has a different
-#' rate sampled from the gamma distribution of the given shape, or as a discrete
-#' model, i.e. each site falls into one of N rate categories approximating the
-#' gamma distribution. For a review of site-specific rate heterogeneity and its
-#' implications for phylogenetic analyses, see Yang (1996)."
-#' [From the seq-gen homepage http://bioweb2.pasteur.fr/docs/seq-gen ]
-#'
-#' The Parameter in this text will be referred to as 'alpha'. Simulation a model
-#' with rate heterogeneity requires that 'seq-gen' is installed on your system.
-#'
-#' @param dm  The demographic model to which the rate heterogeneity should be added.
-#' @param min.alpha  If you want to estimate the rate heterogeneity, this will be
-#'            used as the smallest possible value.
-#' @param max.alpha  Same as min.growth.rate, but the largest possible value.
-#' @param categories.number If this is set, a fixed number of categories will be
-#'            used to model the gamma distribution instead of drawing every parameter
-#'            seperately (see text).
-#' @param parameter  Instead of creating a new parameter, you can also
-#'            set the mutation rate to an expression based on existing
-#'            parameters. For example setting this to "alpha" will use
-#'            a parameter with name alpha that you have previously
-#'            created. You can also use R expression here, i.e. "2*alpha"
-#'            or "5*M+2*alpha" (if M is another parameter) will also
-#'            work (also the latter does not make much sense).
-#' @return    The demographic model with a size change.
-dm.addMutationRateHeterogenity <-
-  function(dm, min.alpha, max.alpha, parameter="alpha", categories.number) {
-
-    dm <- addFeature(dm, "gamma.rate", parameter, min.alpha, max.alpha, NA, NA, NA)
-
-    if (!missing(categories.number)) {
-      dm <- addFeature(dm, "gamma.categories", parameter=categories.number)
-    }
-
-    return(dm)
-  }
+# dm.addMutationRateHeterogenity <-
+#   function(dm, min.alpha, max.alpha, parameter="alpha", categories.number) {
+#
+#     dm <- addFeature(dm, "gamma.rate", parameter, min.alpha,
+#                      max.alpha, NA, NA, NA)
+#
+#     if (!missing(categories.number)) {
+#       dm <- addFeature(dm, "gamma.categories", parameter=categories.number)
+#     }
+#
+#     return(dm)
+#   }
 
 
-#' Set the mutation rates for trios
-#' @param middle_rate The mutation rate used for the middle locus
-#' @param outer_rate The mutation rate for the two outer loci
-#' @export
-dm.setTrioMutationRates <- function(dm, middle_rate, outer_rate, group = 0) {
-  dm <- addFeature(dm, 'mutation', parameter = middle_rate, group = group)
-  dm <- addFeature(dm, 'mutation_outer', parameter = outer_rate, group = group)
-}
+# Set the mutation rates for trios
+# @param middle_rate The mutation rate used for the middle locus
+# @param outer_rate The mutation rate for the two outer loci
+# @export
+# dm.setTrioMutationRates <- function(dm, middle_rate, outer_rate, group = 0) {
+#   dm <- addFeature(dm, 'mutation', parameter = middle_rate, group = group)
+#   dm <- addFeature(dm, 'mutation_outer', parameter = outer_rate,
+#                    group = group)
+# }

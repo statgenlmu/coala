@@ -15,7 +15,7 @@ feat_unphased <- function(ploidy, samples_per_ind=ploidy) {
 unphase_segsites <- function(seg_sites, ploidy, samples_per_ind) {
   lapply(seg_sites, function(ss) {
     ss_up <- do.call(rbind, lapply(seq(1, nrow(ss), by=ploidy), function(ind) {
-      apply(ss[ind:(ind+ploidy-1),], 2, sample, size=samples_per_ind)
+      apply(ss[ind:(ind + ploidy - 1),], 2, sample, size=samples_per_ind)
     }))
     attr(ss_up, 'positions') <- attr(ss, 'positions')
     attr(ss_up, 'locus') <- attr(ss, 'locus')
@@ -25,7 +25,7 @@ unphase_segsites <- function(seg_sites, ploidy, samples_per_ind) {
 
 
 get_ploidy <- function(model) {
-  feat_ploidy <- searchFeature(model, type="ploidy")
+  feat_ploidy <- search_feature(model, type="ploidy")
   if (nrow(feat_ploidy) == 0) return(1L)
   assert_that(nrow(feat_ploidy) == 1)
   as.integer(feat_ploidy$parameter)
@@ -33,7 +33,7 @@ get_ploidy <- function(model) {
 
 
 get_samples_per_ind <- function(model) {
-  feat_spi <- searchFeature(model, type="samples_per_ind")
+  feat_spi <- search_feature(model, type="samples_per_ind")
   if (nrow(feat_spi) == 0) return(1L)
   assert_that(nrow(feat_spi) == 1)
   as.integer(feat_spi$parameter)
@@ -41,7 +41,7 @@ get_samples_per_ind <- function(model) {
 
 
 is_unphased <- function(model) {
-  feat_spi <- searchFeature(model, type="unphased")
+  feat_spi <- search_feature(model, type="unphased")
   if (nrow(feat_spi) == 0) return(FALSE)
   TRUE
 }

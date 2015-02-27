@@ -1,6 +1,7 @@
 ^README.md$
 ^Makefile$
 .tar.gz$
-^.travis.yml
+^.travis.yml$
+^.lintr$
 ^.*\.Rproj$
 ^\.Rproj\.user$

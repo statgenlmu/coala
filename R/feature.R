@@ -1,6 +1,6 @@
-Base_Object <- R6Class("CSR_OBJ")
+base_class <- R6Class("CSR_OBJ")
 
-Feature <- R6Class("Feature", inherit = Base_Object,
+Feature <- R6Class("Feature", inherit = base_class,
   private = list(
     feature_table = NULL,
     parameter = list(),
@@ -29,7 +29,7 @@ Feature <- R6Class("Feature", inherit = Base_Object,
         self$add_parameter(time_point)
         time_point <- as.character(time_point$get_expression())
       }
-      else if (is.character(time_point) | is.na(time_point)) {}
+      else if (is.character(time_point) | is.na(time_point)) NULL
       else stop("Unexpected type of argument 'time_point'")
 
       private$group <- group
@@ -47,8 +47,8 @@ Feature <- R6Class("Feature", inherit = Base_Object,
                             ', 0, ', par_expr, ')')
       }
 
-      private$feature_table <- createFeatureTable(type, par_expr, pop_source,
-                                                  pop_sink, time_point, group)
+      private$feature_table <- create_feature_table(type, par_expr, pop_source,
+                                                    pop_sink, time_point, group)
     },
     get_table = function() private$feature_table,
     get_parameters = function() private$parameter,
@@ -85,6 +85,6 @@ print.Feature <- function(x, ...) {
   print(x$get_table())
   cat('\nParameters: \n')
   for (par in x$get_parameters()) print(par)
-  cat('\nSumStats: \n')
+  cat('\nsumstats: \n')
   for (stat in x$get_sumstats()) print(stat)
 }

@@ -10,6 +10,7 @@ install:
   - ./travis-tool.sh aptget_install seq-gen
   - ./travis-tool.sh github_package hadley/testthat 
   - ./travis-tool.sh github_package jimhester/covr
+  - ./travis-tool.sh github_package jimhester/lintr
   - wget http://www.mabs.at/ewing/msms/msms3.2rc-b163.jar && sudo mv msms3.2rc-b163.jar /usr/local/bin/msms.jar
 
 script: ./travis-tool.sh run_tests
@@ -19,6 +20,7 @@ after_failure:
 
 after_success:
   - Rscript -e 'library(covr);coveralls()'
+  - Rscript -e 'lintr::lint_package()'
 
 notifications:
   email:

@@ -1,7 +1,7 @@
 # Base class for all parameters.
 # Contains an expression that can be assigned to some part of a feature.
 #' @importFrom R6 R6Class
-Parameter <- R6Class('Parameter',  inherit = Base_Object,
+Parameter <- R6Class('Parameter',  inherit = base_class,
   private = list(
     expr = NA
   ),
@@ -105,4 +105,3 @@ Par_Range <- R6Class('Par_Range', inherit = Par_Model,
 par_range <- function(name, lower, upper) {
   Par_Range$new(lower, upper, name)
 }
-

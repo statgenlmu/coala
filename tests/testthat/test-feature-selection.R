@@ -1,7 +1,7 @@
 context("Feature Selection")
 
 test_that("a variable start works", {
-  model <- CoalModel(5) +
+  model <- coal_model(5) +
     feat_selection(strength_AA = par_const(0),
                    strength_Aa = par_const(1000),
                    population = 1,
@@ -13,7 +13,7 @@ test_that("a variable start works", {
                                                       stringsAsFactors = FALSE))
   expect_true(all(get_feature_table(model)$time.point %in% c('0', 't_sel')))
 
-  model <- CoalModel(5) +
+  model <- coal_model(5) +
     feat_selection(strength_AA = par_const(0),
                    strength_Aa = par_const(1000),
                    population = 1,
@@ -21,7 +21,7 @@ test_that("a variable start works", {
 
   expect_true(all(get_feature_table(model)$time.point %in% c('0', '2 * x')))
 
-  model <- CoalModel(5) +
+  model <- coal_model(5) +
     feat_selection(strength_AA = par_const(0),
                    strength_Aa = par_const(1000),
                    population = 1,

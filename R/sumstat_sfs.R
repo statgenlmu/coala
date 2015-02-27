@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-SumStat_SFS <- R6Class('SumStat_SFS', inherit = SumStat,
+sumstat_sfs_class <- R6Class('sumstat_SFS', inherit = sumstat,
   private = list(population = NULL),
   public = list(
     initialize = function(name, population, group=0) {
@@ -26,5 +26,5 @@ SumStat_SFS <- R6Class('SumStat_SFS', inherit = SumStat,
 #'   populations.
 #' @export
 sumstat_sfs <- function(name='sfs', population='all', group = 0) {
-  SumStat_SFS$new(name, population, group)
+  sumstat_sfs_class$new(name, population, group)
 }

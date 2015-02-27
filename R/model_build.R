@@ -5,23 +5,23 @@
 #' @return The extended model
 "+.CSR_OBJ" <- function(e1, e2) {
   e2name <- deparse(substitute(e2)) # Passed throw for error messages
-  if (is.model(e1)) return(addToModel(e2, e1, e2name))
-  else if (is.feature(e1)) return(addToFeature(e2, e1, e2name))
+  if (is.model(e1)) return(add_to_model(e2, e1, e2name))
+  else if (is.feature(e1)) return(add_to_feature(e2, e1, e2name))
   else stop('Can not add ', e2name, ' to ', e1)
 }
 
 
-addToModel <- function(x, model, x_name) UseMethod("addToModel")
-addToModel.default <- function(x, model, x_name) {
+add_to_model <- function(x, model, x_name) UseMethod("add_to_model")
+add_to_model.default <- function(x, model, x_name) {
   stop("Can not add `", x_name, "` to model")
 }
 
-addToModel.Parameter <- function(par, model, par_name) model
+add_to_model.Parameter <- function(par, model, par_name) model
 
 
-addToModel.Par_Range <- function(par, model, par_name) {
+add_to_model.Par_Range <- function(par, model, par_name) {
   if (par$get_name() %in% get_parameter_table(model))
-    stop("There is already a parameter with name ", par.name)
+    stop("There is already a parameter with name ", par_name)
 
   new_par <- data.frame(name=par$get_name(),
                         lower.range=par$get_range()[1],
@@ -34,14 +34,14 @@ addToModel.Par_Range <- function(par, model, par_name) {
 }
 
 
-addToModel.Feature <- function(feat, model, feat_name) {
+add_to_model.Feature <- function(feat, model, feat_name) {
   model$features <- rbind(model$features, feat$get_table())
 
   for (para in feat$get_parameters()) model <- model + para
   for (stat in feat$get_sumstats()) model <- model + stat
 
   if (feat$get_inter_locus_var()) {
-    model <- addInterLocusVariation(model, feat$get_group())
+    model <- add_inter_locus_var(model, feat$get_group())
   }
 
   model$id <- get_id()
@@ -49,7 +49,7 @@ addToModel.Feature <- function(feat, model, feat_name) {
 }
 
 
-addToModel.Locus <- function(locus, model, locus_name) {
+add_to_model.Locus <- function(locus, model, locus_name) {
   if (length(locus$get_name()) == 1) {
     locus_names <- c('', locus$get_name(), '')
   } else if (length(locus$get_name()) == 3) {
@@ -79,7 +79,7 @@ addToModel.Locus <- function(locus, model, locus_name) {
 }
 
 
-addToFeature <- function(x, feat, x_name) {
+add_to_feature <- function(x, feat, x_name) {
   if (is.par_model(x)) {
     feat$add_parameter(x)
   } else if (is.feature(x)) {
@@ -91,4 +91,3 @@ addToFeature <- function(x, feat, x_name) {
   }
   feat
 }
-

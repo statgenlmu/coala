@@ -15,5 +15,3 @@ cache <- function(model, name, variable) {
 read_cache <- function(model, name) {
   cache_env[[model$id]][[name]]
 }
-
-

@@ -1,6 +1,6 @@
 #' @importFrom R6 R6Class
 #' @importFrom rehh data2haplohh calc_ehh
-SumStat_iHH <- R6Class('SumStat_iHH', inherit = SumStat,
+sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
   private = list(
     position = NA,
     population = NULL,
@@ -77,6 +77,6 @@ SumStat_iHH <- R6Class('SumStat_iHH', inherit = SumStat,
 #'   used as focal SNPs in turn, and all the values reportet. If trios are used,
 #'   than the position is relative to the middle locus' extend.
 #' @export
-sumstat_iHH <- function(name = 'iHH', position=NA, population=1, group = 0) {
-  SumStat_iHH$new(name, position, population, group = group)
+sumstat_ihh <- function(name = 'ihh', position=NA, population=1, group = 0) {
+  sumstat_ihh_class$new(name, position, population, group = group)
 }

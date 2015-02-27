@@ -5,24 +5,24 @@
 
 using namespace Rcpp;
 
-// parseMsPositions
-NumericVector parseMsPositions(const std::string line);
-RcppExport SEXP coalsimr_parseMsPositions(SEXP lineSEXP) {
+// parse_ms_positions
+NumericVector parse_ms_positions(const std::string line);
+RcppExport SEXP coalsimr_parse_ms_positions(SEXP lineSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< const std::string >::type line(lineSEXP );
-        NumericVector __result = parseMsPositions(line);
+        NumericVector __result = parse_ms_positions(line);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP
 }
-// parseMsOutput
-List parseMsOutput(const List file_names, const NumericVector sample_size, const int loci_number);
-RcppExport SEXP coalsimr_parseMsOutput(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP loci_numberSEXP) {
+// parse_ms_output
+List parse_ms_output(const List file_names, const NumericVector sample_size, const int loci_number);
+RcppExport SEXP coalsimr_parse_ms_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP loci_numberSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -30,16 +30,16 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const List >::type file_names(file_namesSEXP );
         Rcpp::traits::input_parameter< const NumericVector >::type sample_size(sample_sizeSEXP );
         Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP );
-        List __result = parseMsOutput(file_names, sample_size, loci_number);
+        List __result = parse_ms_output(file_names, sample_size, loci_number);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP
 }
-// parseSeqgenOutput
-List parseSeqgenOutput(const List file_names, const int sample_size, const NumericMatrix sequence_length, const int loci_number, const int outgroup_size = 1);
-RcppExport SEXP coalsimr_parseSeqgenOutput(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP sequence_lengthSEXP, SEXP loci_numberSEXP, SEXP outgroup_sizeSEXP) {
+// parse_sg_output
+List parse_sg_output(const List file_names, const int sample_size, const NumericMatrix sequence_length, const int loci_number, const int outgroup_size = 1);
+RcppExport SEXP coalsimr_parse_sg_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP sequence_lengthSEXP, SEXP loci_numberSEXP, SEXP outgroup_sizeSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -49,16 +49,16 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const NumericMatrix >::type sequence_length(sequence_lengthSEXP );
         Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP );
         Rcpp::traits::input_parameter< const int >::type outgroup_size(outgroup_sizeSEXP );
-        List __result = parseSeqgenOutput(file_names, sample_size, sequence_length, loci_number, outgroup_size);
+        List __result = parse_sg_output(file_names, sample_size, sequence_length, loci_number, outgroup_size);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP
 }
-// parseTrees
-CharacterVector parseTrees(const std::string in_file, const NumericVector trio_opts, Function tempfile);
-RcppExport SEXP coalsimr_parseTrees(SEXP in_fileSEXP, SEXP trio_optsSEXP, SEXP tempfileSEXP) {
+// parse_trees
+CharacterVector parse_trees(const std::string in_file, const NumericVector trio_opts, Function tempfile);
+RcppExport SEXP coalsimr_parse_trees(SEXP in_fileSEXP, SEXP trio_optsSEXP, SEXP tempfileSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -66,7 +66,7 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const std::string >::type in_file(in_fileSEXP );
         Rcpp::traits::input_parameter< const NumericVector >::type trio_opts(trio_optsSEXP );
         Rcpp::traits::input_parameter< Function >::type tempfile(tempfileSEXP );
-        CharacterVector __result = parseTrees(in_file, trio_opts, tempfile);
+        CharacterVector __result = parse_trees(in_file, trio_opts, tempfile);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

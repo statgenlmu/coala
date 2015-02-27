@@ -8,7 +8,7 @@ test_that('Creation of simple mutation features works', {
 
 
 test_that('Creation of finite sites models works', {
-  for (model in sg.mutation.models) {
+  for (model in sg_mutation_models) {
     feat <- feat_mutation(par_const(5), model=model)
     expect_equal(feat$get_table()$parameter, c('5', model))
   }

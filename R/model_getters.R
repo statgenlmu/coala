@@ -50,7 +50,7 @@ get_locus_number <- function(dm, group=1) {
 #' @describeIn get_feature_table Returns a vector of populations in the model
 #' @export
 get_populations <- function(dm) {
-  unique(searchFeature(dm, 'sample')$pop.source)
+  unique(search_feature(dm, 'sample')$pop.source)
 }
 
 
@@ -61,7 +61,7 @@ get_populations <- function(dm) {
 #'   can be unequal for the simulation of unphased data.
 #' @export
 get_sample_size <- function(dm, for_sim=FALSE) {
-  feat.samples <- searchFeature(dm, type="sample")
+  feat.samples <- search_feature(dm, type="sample")
   stopifnot(nrow(feat.samples) > 0)
 
   sample_size <- rep(0, length(get_populations(dm)))
@@ -120,7 +120,7 @@ get_locus_length_matrix <- function(dm, group=1) {
 #' @describeIn get_feature_table Returns the population that is marked as outgroup
 #' @export
 get_outgroup <- function(model) {
-  as.integer(searchFeature(model, 'outgroup')$parameter)
+  as.integer(search_feature(model, 'outgroup')$parameter)
 }
 
 

@@ -27,7 +27,7 @@ positions: 0.3718 0.8443
 10
 ", file=sim_output);
 
-  tree_files <- parseTrees(sim_output, c(0, 0, 20, 0, 0), tempfile)
+  tree_files <- parse_trees(sim_output, c(0, 0, 20, 0, 0), tempfile)
   expect_true(file.exists(tree_files))
   trees <- scan(tree_files, "character", quiet=TRUE)
   expect_equal(length(trees), 6)
@@ -39,7 +39,7 @@ positions: 0.3718 0.8443
   expect_equal(trees[6], '[18](3:0.460,(1:0.076,2:0.076):0.384);')
   unlink(tree_files)
 
-  tree_files <- parseTrees(sim_output, c(2, 4, 8, 2, 4), tempfile)
+  tree_files <- parse_trees(sim_output, c(2, 4, 8, 2, 4), tempfile)
   expect_true(all(sapply(tree_files, file.exists)))
   trees <- lapply(tree_files, scan, what="character", quiet=TRUE)
   expect_equal(trees[[1]][1], '[2](2:0.865,(1:0.015,3:0.015):0.850);')
@@ -52,7 +52,7 @@ positions: 0.3718 0.8443
   expect_equal(trees[[3]][2], '[4](3:0.460,(1:0.076,2:0.076):0.384);')
   unlink(tree_files)
 
-  tree_files <- parseTrees(sim_output, c(9, 2, 2, 5, 2), tempfile)
+  tree_files <- parse_trees(sim_output, c(9, 2, 2, 5, 2), tempfile)
   expect_true(all(sapply(tree_files, file.exists)))
   trees <- lapply(tree_files, scan, what="character", quiet=TRUE)
   expect_equal(trees[[1]][1], '[2](2:0.865,(1:0.015,3:0.015):0.850);')
@@ -66,8 +66,8 @@ positions: 0.3718 0.8443
   expect_equal(trees[[2]][2], '[2](3:0.460,(1:0.076,2:0.076):0.384);')
   expect_equal(trees[[3]][2], '[2](3:0.460,(1:0.076,2:0.076):0.384);')
 
-  #expect_error(parseTrees(sim_output, c(9, 2, 2, 5, 1)))
-  #expect_error(parseTrees(sim_output, c(19, 2, 2, 5, 1)))
+  #expect_error(parse_trees(sim_output, c(9, 2, 2, 5, 1)))
+  #expect_error(parse_trees(sim_output, c(19, 2, 2, 5, 1)))
   unlink(tree_files)
 
   unlink(sim_output)

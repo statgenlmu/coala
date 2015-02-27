@@ -9,21 +9,21 @@
 #' @importFrom stats simulate
 #'
 #' @examples
-#' model <- CoalModel(c(5,10), 20) +
+#' model <- coal_model(c(5,10), 20) +
 #'   feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
 #'   feat_mutation(par_range('theta', 1, 10)) +
 #'   sumstat_jsfs()
 #'
 #' simulate(model, pars=c(1, 5))
-simulate.CoalModel <- function(object, nsim = 1, seed, pars=NULL, ...) {
+simulate.coal_model <- function(object, nsim = 1, seed, pars=NULL, ...) {
   stopifnot(!is.null(pars))
-  checkParInRange(object, pars)
+  check_par_range(object, pars)
 
-  sim_prog <- determine_sim_prog(object)
+  simprog <- determine_simprog(object)
 
-  if (sim_prog != "groups") {
+  if (simprog != "groups") {
     model <- get_group_model(object, 1)
-    return(getSimProgram(sim_prog)$sim_func(model, pars))
+    return(get_simprog(simprog)$sim_func(model, pars))
   }
 
   sum_stats <- list(pars=pars)
@@ -32,7 +32,7 @@ simulate.CoalModel <- function(object, nsim = 1, seed, pars=NULL, ...) {
     sum_stats.grp <- simulate(grp_model, pars = pars)
 
     for (i in seq(along = sum_stats.grp)) {
-      if (names(sum_stats.grp)[i] == 'pars') next()
+      if (names(sum_stats.grp)[i] == 'pars') next
       name <- paste(names(sum_stats.grp)[i], group, sep='.')
       sum_stats[[name]] <- sum_stats.grp[[i]]
     }

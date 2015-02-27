@@ -1,4 +1,4 @@
-context('SumStat File')
+context('sumstat File')
 
 test_that('File statistic works', {
   folder <- tempfile('sumstat_file_test')

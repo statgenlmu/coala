@@ -6,7 +6,7 @@ using namespace Rcpp;
 // Reads the 'positions:' line of ms' output and converts it into an
 // NumericVector
 // [[Rcpp::export]]
-NumericVector parseMsPositions(const std::string line) {
+NumericVector parse_ms_positions(const std::string line) {
   std::stringstream stream(line);
   std::vector<double> data;
 
@@ -28,9 +28,9 @@ NumericVector parseMsPositions(const std::string line) {
 // Reads one more files with ms output, and generates a list of segregating
 // sites
 // [[Rcpp::export]]
-List parseMsOutput(const List file_names,
-                   const NumericVector sample_size,
-                   const int loci_number) {
+List parse_ms_output(const List file_names,
+                     const NumericVector sample_size,
+                     const int loci_number) {
 
   std::string line;
   size_t individuals = sum(sample_size);
@@ -66,7 +66,7 @@ List parseMsOutput(const List file_names,
           std::getline(output, line);
 
           // Parse Seg.Sites
-          NumericVector positions = parseMsPositions(line);
+          NumericVector positions = parse_ms_positions(line);
           NumericMatrix ss(individuals, positions.size());
           ss.attr("positions") = positions;
 
