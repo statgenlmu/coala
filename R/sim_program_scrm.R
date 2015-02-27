@@ -26,5 +26,5 @@ scrm_simulate <- function(dm, parameters) {
 
 
 #' @include sim_program.R
-createSimProgram("scrm", scrm_features, scrm_sum_stats,
+create_simprog("scrm", scrm_features, scrm_sum_stats,
                   scrm_simulate, ms_get_command, 90)

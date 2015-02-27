@@ -134,5 +134,5 @@ ms_simulate <- function(dm, parameters=numeric()) {
 
 
 #' @include sim_program.R
-createSimProgram("ms", ms_features, ms_sum_stats,
+create_simprog("ms", ms_features, ms_sum_stats,
                  ms_simulate, ms_get_command, 100)

@@ -19,11 +19,11 @@ simulate.coal_model <- function(object, nsim = 1, seed, pars=NULL, ...) {
   stopifnot(!is.null(pars))
   check_par_range(object, pars)
 
-  sim_prog <- determine_sim_prog(object)
+  simprog <- determine_simprog(object)
 
-  if (sim_prog != "groups") {
+  if (simprog != "groups") {
     model <- get_group_model(object, 1)
-    return(get_sim_prog(sim_prog)$sim_func(model, pars))
+    return(get_simprog(simprog)$sim_func(model, pars))
   }
 
   sum_stats <- list(pars=pars)

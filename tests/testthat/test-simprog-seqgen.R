@@ -28,7 +28,7 @@ test_that("generation of tree models works", {
 
 test_that("simulation with seq-gen works", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  sg_simulate <- get_sim_prog("seq-gen")$sim_func
+  sg_simulate <- get_simprog("seq-gen")$sim_func
 
   set.seed(100)
   sum.stats <- sg_simulate(model_hky(), c(1, 10))

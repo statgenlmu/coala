@@ -90,8 +90,8 @@ check_par_range <- function(dm, param) {
 }
 
 # Selects a program for simulation that is capable of all current features
-determine_sim_prog <- function(dm) {
-  name <- read_cache(dm, 'sim_prog')
+determine_simprog <- function(dm) {
+  name <- read_cache(dm, 'simprog')
 
   if (is.null(name)) {
     if (length(get_groups(dm)) > 1) {
@@ -99,21 +99,21 @@ determine_sim_prog <- function(dm) {
     } else {
       priority <- -Inf
 
-      for (sim_prog_name in ls(sim_programs)) {
-        sim_prog <- get_sim_prog(sim_prog_name)
-        if (all(dm$features$type %in% sim_prog$possible_features) &
-              all(dm$sum_stats$name %in% sim_prog$possible_sum_stats)) {
+      for (simprog_name in ls(simprograms)) {
+        simprog <- get_simprog(simprog_name)
+        if (all(dm$features$type %in% simprog$possible_features) &
+              all(dm$sum_stats$name %in% simprog$possible_sum_stats)) {
 
-          if (sim_prog$priority > priority) {
-            name <- sim_prog$name
-            priority <- sim_prog$priority
+          if (simprog$priority > priority) {
+            name <- simprog$name
+            priority <- simprog$priority
           }
         }
       }
     }
 
     if (is.null(name)) stop("No suitable simulation software found!")
-    cache(dm, 'sim_prog', name)
+    cache(dm, 'simprog', name)
   }
 
   name

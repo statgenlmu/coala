@@ -2,7 +2,7 @@ context("Simulation Program scrm")
 
 test_that("simulation with scrm works", {
   model <- model_theta_tau()
-  sum_stats <- get_sim_prog('scrm')$sim_func(model, c(1, 5))
+  sum_stats <- get_simprog('scrm')$sim_func(model, c(1, 5))
   expect_true(is.list(sum_stats))
   expect_equal(length(sum_stats), 2)
   expect_false(is.null(sum_stats$pars))
@@ -13,7 +13,7 @@ test_that("simulation with scrm works", {
 test_that("simulating files works", {
   folder <- tempfile('scrm_test')
   model <- model_theta_tau() + sumstat_file(folder)
-  sum_stats <- get_sim_prog('scrm')$sim_func(model, c(1, 5))
+  sum_stats <- get_simprog('scrm')$sim_func(model, c(1, 5))
   expect_true(is.list(sum_stats))
   expect_equal(length(sum_stats), 3)
   expect_false(is.null(sum_stats$file))

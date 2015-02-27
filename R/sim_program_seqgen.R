@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# sim_prog_seqgen.R
+# simprog_seqgen.R
 # Adaptor to calling ms from a demographic model.
 #
 # Authors:  Paul R. Staab
@@ -8,8 +8,8 @@
 # --------------------------------------------------------------
 
 # list ms's features + FS related features
-sg_features <- unique(c(get_sim_prog('ms')$possible_features,
-                        get_sim_prog('msms')$possible_features,
+sg_features <- unique(c(get_simprog('ms')$possible_features,
+                        get_simprog('msms')$possible_features,
                         'mutation_model', 'tstv_ratio',
                         'base_freq_A', 'base_freq_C', 'base_freq_G',
                         'base_freq_T',
@@ -54,9 +54,9 @@ generateTreeModel <- function(dm, locus, locus_number=1) {
     locus_length <- get_locus_length_matrix(dm)[locus,]
 
     if (any(msms_features %in% dm$features$type)) {
-      tree.prog <- get_sim_prog('msms')
+      tree.prog <- get_simprog('msms')
     } else {
-      tree.prog <- get_sim_prog('ms')
+      tree.prog <- get_simprog('ms')
     }
 
     # Features
@@ -220,7 +220,7 @@ generateSeqgenOptionsCmd <- function(dm) {
 sg_get_command <- function(dm) {
   tree_model <- generateTreeModel(dm, 1)
   tree_cmd <-
-    get_sim_prog(determine_sim_prog(tree_model))$print_cmd_func(tree_model)
+    get_simprog(determine_simprog(tree_model))$print_cmd_func(tree_model)
 
   sg_cmd <- paste(generateSeqgenOptions(dm, get_parameter_table(dm)$name,
                                         locus = 1, seeds = 'seed',
@@ -286,6 +286,6 @@ sg_simulate <- function(dm, parameters) {
 
 
 #' @include sim_program.R
-createSimProgram("seq-gen", sg_features, sg_sum_stats,
+create_simprog("seq-gen", sg_features, sg_sum_stats,
                  sg_simulate, sg_get_command,
                  priority=10)

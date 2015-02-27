@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# sim_prog_msms.R
+# simprog_msms.R
 # Calling msms from a demographic model.
 #
 # Authors:  Paul R. Staab
@@ -8,8 +8,8 @@
 # --------------------------------------------------------------
 
 msms_features <- c("selection", "selection_AA", "selection_Aa",
-                   get_sim_prog('ms')$possible_features)
-msms_sum_stats <- get_sim_prog('ms')$possible_sum_stats
+                   get_simprog('ms')$possible_features)
+msms_sum_stats <- get_simprog('ms')$possible_sum_stats
 
 call_msms <- function(ms.args, msms.args, subgroup) {
   msms_find_jar()
@@ -149,5 +149,5 @@ msms_get_command <- function(model) {
 
 
 #' @include sim_program.R
-createSimProgram("msms", msms_features, msms_sum_stats,
+create_simprog("msms", msms_features, msms_sum_stats,
                  msms_simulate, msms_get_command, priority=40)
