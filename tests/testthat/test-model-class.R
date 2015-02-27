@@ -203,26 +203,6 @@ test_that('locus length matrix generations works', {
 })
 
 
-test_that("simulation works", {
-  expect_error(simulate(model_theta_tau(), pars=1))
-  expect_error(simulate(model_theta_tau(), pars=1:3))
-  expect_error(simulate(model_theta_tau(), pars=c(2, 50)))
-  sum.stats <- simulate(model_theta_tau(), pars=c(1, 5))
-  expect_true(is.list(sum.stats))
-  expect_false(is.null(sum.stats$jsfs))
-  expect_true(sum(sum.stats$jsfs) > 0)
-
-  sum.stats <- simulate(model_grps(), pars=c(1, 5))
-  expect_false(is.null(sum.stats))
-  expect_false(is.null(sum.stats$jsfs.1))
-  expect_true(sum(sum.stats$jsfs.1) > 0)
-  expect_false(is.null(sum.stats$jsfs.2))
-  expect_true(sum(sum.stats$jsfs.2) > 0)
-  expect_false(is.null(sum.stats$jsfs.3))
-  expect_true(sum(sum.stats$jsfs.3) > 0)
-})
-
-
 test_that("Adding and Getting inter locus variation works", {
   expect_false(has_inter_locus_var(model_theta_tau()))
 

@@ -1,4 +1,4 @@
-context("sumstat iHH")
+context("SumStat iHH")
 
 seg_sites <- matrix(c(1, 0, 0, 0, 1,
                       1, 1, 0, 1, 0,

@@ -1,4 +1,4 @@
-context('tempfile')
+context('Tempfiles')
 
 test_that('Threadsafe tempfile implementation works', {
   tmp <- tempfile('blub')

@@ -1,4 +1,4 @@
-context("sumstat OmegaPrime")
+context("SumStat OmegaPrime")
 
 test_that('calculation is correct', {
   ss <- matrix(c(1, 0, 0, 1,

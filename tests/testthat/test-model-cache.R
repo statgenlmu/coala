@@ -1,4 +1,4 @@
-context('cache')
+context('Model Cache')
 
 test_that('get id works', {
   id <- as.numeric(get_id())
