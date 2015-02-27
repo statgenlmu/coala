@@ -1,4 +1,4 @@
-context('sumstat Class')
+context('SumStat Class')
 
 test_that('sumstat initialization works', {
   ss1 <- sumstat$new('1')
