@@ -35,12 +35,12 @@
 #'
 #' @examples
 #' # Asymmetric migration for two populations
-#' dm <- CoalModel(c(25,25), 100) +
+#' dm <- coal_model(c(25,25), 100) +
 #'   feat_migration(par_const(0.5), 1, 2) +
 #'   feat_migration(par_const(0.75), 2, 1)
 #'
 #' # Symmetric Migration
-#' dm <- CoalModel(c(25,25), 100) +
+#' dm <- coal_model(c(25,25), 100) +
 #'   feat_migration(par_range('m', 0.1, 2), symmetric=TRUE)
 feat_migration <- function(rate, pop_from, pop_to,
                            symmetric=FALSE, time_start="0") {

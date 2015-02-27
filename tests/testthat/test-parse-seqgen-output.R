@@ -1,7 +1,7 @@
 context("parsing seq-gen output")
 
 test_that("parse_sg_output works with a single file", {
-  dm_tmp <- CoalModel(c(4, 6, 1), 2, 10) +
+  dm_tmp <- coal_model(c(4, 6, 1), 2, 10) +
     feat_outgroup(3) +
     feat_pop_merge(par_range('tau', 0.5, 2), 2, 1) +
     feat_pop_merge(par_expr('2*tau'), 3, 1) #+

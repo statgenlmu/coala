@@ -12,7 +12,7 @@
 #'   a value of 3 to a thrid an so on.
 #' @export
 #' @examples
-#' model <- CoalModel(10, loci_number = 10) + locus_single(100, group = 2)
+#' model <- coal_model(10, loci_number = 10) + locus_single(100, group = 2)
 #' get_locus_number(model, group = 1) # 10
 #' get_locus_number(model, group = 2) # 1
 #' model <- scale_model(model, 3)

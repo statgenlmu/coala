@@ -30,7 +30,7 @@ test_that('getting the name works', {
 
 
 test_that('Adding SumStats to a model works', {
-  model <- CoalModel(5:6, 10) + SumStat$new('1')
+  model <- coal_model(5:6, 10) + SumStat$new('1')
   expect_equal(get_summary_statistics(model), '1')
   expect_error(model + SumStat$new('1'))
 
@@ -44,7 +44,7 @@ test_that('Adding SumStats to a model works', {
 
 
 test_that('Getting SumStats groups works', {
-  model <- CoalModel(5:6, 10) + SumStat$new('1')
+  model <- coal_model(5:6, 10) + SumStat$new('1')
   expect_equal(get_sumstat_groups(model), 0)
 
   model <- model + SumStat$new('2', 15)
@@ -61,7 +61,7 @@ test_that('Calculation of SumStats works', {
       sapply(seg_sites, sum)
     })
   )
-  model <- CoalModel(5:6, 10) + Stat_Sum$new('sum')
+  model <- coal_model(5:6, 10) + Stat_Sum$new('sum')
   stats <- calc_sumstats(list(1:3, 1:5, 7), '', model)
   expect_equal(stats, list(sum=c(6, 15, 7)))
 

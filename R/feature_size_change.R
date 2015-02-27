@@ -19,7 +19,7 @@
 #' @export
 #' @examples
 #' # A model with one smaller population
-#' dm <- CoalModel(c(20,37), 88) +
+#' dm <- coal_model(c(20,37), 88) +
 #'   feat_size_change(par_const(.1), 2, at.time='1')
 feat_size_change <- function(new_size, population, at.time="0") {
   Feature$new("size_change", new_size, pop_source=population,

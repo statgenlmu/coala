@@ -9,13 +9,13 @@
 #' @importFrom stats simulate
 #'
 #' @examples
-#' model <- CoalModel(c(5,10), 20) +
+#' model <- coal_model(c(5,10), 20) +
 #'   feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
 #'   feat_mutation(par_range('theta', 1, 10)) +
 #'   sumstat_jsfs()
 #'
 #' simulate(model, pars=c(1, 5))
-simulate.CoalModel <- function(object, nsim = 1, seed, pars=NULL, ...) {
+simulate.coal_model <- function(object, nsim = 1, seed, pars=NULL, ...) {
   stopifnot(!is.null(pars))
   check_par_range(object, pars)
 

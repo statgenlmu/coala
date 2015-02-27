@@ -27,7 +27,7 @@ and middle an right locus, in basepairs.}
 Adds a trio of loci to a group
 }
 \examples{
-CoalModel(c(25,25)) +
+coal_model(c(25,25)) +
   locus_trio(locus_names = c('Solyc00g00500.2',
                              'Solyc00g00520.1',
                              'Solyc00g00540.1'),

@@ -1,7 +1,7 @@
 # Example models used in unittests
 
 model_theta_tau <- function() {
-  CoalModel(c(10, 15), 10) +
+  coal_model(c(10, 15), 10) +
     feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
     feat_mutation(par_range('theta', 1, 10)) +
     sumstat_jsfs()
@@ -9,7 +9,7 @@ model_theta_tau <- function() {
 
 
 model_hky <- function() {
-  CoalModel(c(3, 3, 1), 2) +
+  coal_model(c(3, 3, 1), 2) +
     feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
     feat_recombination(par_const(1)) +
     feat_pop_merge(par_expr('2*tau'), 3, 1) +
@@ -20,7 +20,7 @@ model_hky <- function() {
 
 
 model_f84 <- function() {
-  CoalModel(c(3, 3, 1), 2) +
+  coal_model(c(3, 3, 1), 2) +
     feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
     feat_pop_merge(par_expr('2*tau'), 3, 1) +
     feat_recombination(par_const(1)) +
@@ -32,7 +32,7 @@ model_f84 <- function() {
 
 
 model_gtr <- function() {
-  CoalModel(c(3, 3, 2), 2) +
+  coal_model(c(3, 3, 2), 2) +
     feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
     feat_pop_merge(par_expr('2*tau'), 3, 1) +
     feat_recombination(par_const(1)) +

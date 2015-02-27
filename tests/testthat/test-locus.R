@@ -24,7 +24,7 @@ test_that('Creating loci works', {
 
 
 test_that('Adding a locus to a model works', {
-  model2 <- CoalModel(10) + locus_averaged(10, 1010)
+  model2 <- coal_model(10) + locus_averaged(10, 1010)
   expect_equal(get_locus_number(model2), 10)
   expect_equal(get_locus_length(model2), 1010)
 
@@ -40,7 +40,7 @@ test_that('Adding a locus to a model works', {
 
 
 test_that('Adding a locus trio works', {
-  m <- CoalModel(10) +
+  m <- coal_model(10) +
     locus_trio(locus_names = c(left='a', middle='b', right='c'),
                locus_length = c(10, 30, 50),
                distance = c(20, 40)) +

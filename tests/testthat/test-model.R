@@ -2,7 +2,7 @@ context("Model Class")
 
 
 test_that("creating models works", {
-  model <- CoalModel(11:12, 111, 1234)
+  model <- coal_model(11:12, 111, 1234)
   expect_true(is.model(model))
   expect_equal(get_sample_size(model), 11:12)
   expect_equal(get_locus_number(model), 111)
@@ -13,7 +13,7 @@ test_that("creating models works", {
 
 
 test_that("adding parameters works", {
-  model <- CoalModel(11:12, 100) + par_range("theta", 1, 5)
+  model <- coal_model(11:12, 100) + par_range("theta", 1, 5)
   par_table <- get_parameter_table(model)
   expect_equal("theta", par_table$name)
   expect_equal(1, par_table$lower.range)
@@ -26,34 +26,34 @@ test_that("adding parameters works", {
 
 
 test_that("adding features works", {
-  dm <- CoalModel(11:12, 100)
+  dm <- coal_model(11:12, 100)
   dm <- dm + Feature$new('blub', 5)
   expect_equal(nrow(search_feature(dm, 'blub')), 1)
 
-  dm <- CoalModel(11:12, 100)
+  dm <- coal_model(11:12, 100)
   dm <- dm + Feature$new('bli', par_range('bla', 1, 5))
   expect_equal(nrow(search_feature(dm, 'bli')), 1)
   expect_true('bla' %in% get_parameter_table(dm)$name)
 
-  dm <- CoalModel(11:12, 100)
+  dm <- coal_model(11:12, 100)
   dm <- dm + Feature$new('bli', par_range('bla', 1, 5), variance='15')
   expect_true(has_inter_locus_var(dm))
 
-  dm <- CoalModel(11:12, 100)
+  dm <- coal_model(11:12, 100)
   dm <- dm + Feature$new('bli', par_range('bla', 1, 5), group=1, variance='15')
   expect_false(has_inter_locus_var(dm, 0))
   expect_true(has_inter_locus_var(dm, 1))
 
-  dm <- CoalModel(11:12, 100) + (Feature$new('blub', 5) + par_range('a', 1, 5))
+  dm <- coal_model(11:12, 100) + (Feature$new('blub', 5) + par_range('a', 1, 5))
   expect_equal(nrow(get_parameter_table(dm)), 1)
 
-  dm <- CoalModel(11:12, 100) + (Feature$new('blub', 5) + SumStat$new('5'))
+  dm <- coal_model(11:12, 100) + (Feature$new('blub', 5) + SumStat$new('5'))
   expect_equal(get_summary_statistics(dm), '5')
 })
 
 
 test_that("test get_summary_statistics", {
-  expect_equal(get_summary_statistics(CoalModel(1:2, 2)), character())
+  expect_equal(get_summary_statistics(coal_model(1:2, 2)), character())
   expect_equal(get_summary_statistics(model_theta_tau()),  "jsfs")
 
   expect_equal(get_summary_statistics(model_grps(), 1), "jsfs")
@@ -115,7 +115,7 @@ test_that("getting the Theta Name works", {
   expect_equal(get_mutation_par(model_hky()), "theta")
   expect_equal(get_mutation_par(model_f84()), "theta")
 
-  dm.test <- CoalModel(11:12, 100) +
+  dm.test <- coal_model(11:12, 100) +
     feat_mutation(par_range('abcd', 1, 5))
   expect_equal(get_mutation_par(dm.test), "abcd")
 })
@@ -136,7 +136,7 @@ test_that("test.parInRange", {
 
 
 test_that("test that scaling of model works", {
-  model <- CoalModel(11:12, 10) +
+  model <- coal_model(11:12, 10) +
     locus_averaged(25, 10, group = 1) +
     locus_averaged(25, 15, group = 2) +
     locus_single(101, group = 3) +
@@ -164,7 +164,7 @@ test_that("searching features works", {
 
 
 test_that("get loci length and number works", {
-  model <- CoalModel(10, 11, 101) + locus_averaged(12, 102, group = 2)
+  model <- coal_model(10, 11, 101) + locus_averaged(12, 102, group = 2)
   expect_equal(get_locus_number(model), 11)
   expect_equal(get_locus_number(model, 1), 11)
   expect_equal(get_locus_number(model, 2), 12)
@@ -239,7 +239,7 @@ test_that("Adding and Getting inter locus variation works", {
 test_that("test.printEmptyDM", {
   tmp_file <- tempfile()
   sink(tmp_file)
-  dm <- CoalModel(25:26, 100)
+  dm <- coal_model(25:26, 100)
   print(dm)
   sink(NULL)
   unlink(tmp_file)
@@ -267,7 +267,7 @@ test_that('setTrioMutationsRates works', {
 
 
 test_that('getting the available Populations works', {
-  dm <- CoalModel(10:11, 100)
+  dm <- coal_model(10:11, 100)
   expect_equal(get_populations(dm), 1:2)
   expect_equal(get_populations(model_theta_tau()), 1:2)
   expect_equal(get_populations(model_hky()), 1:3)
@@ -275,7 +275,7 @@ test_that('getting the available Populations works', {
 
 
 test_that('Outgroup setting and getting works', {
-  model <- CoalModel(1:4 * 2, 100)
+  model <- coal_model(1:4 * 2, 100)
 
   for (i in 1:4) {
     expect_equal(get_outgroup(model + feat_outgroup(i)), i)
@@ -296,7 +296,7 @@ test_that('get population individuals works', {
 
 
 test_that('converting positions for trios works', {
-  model <- CoalModel(5:6) +
+  model <- coal_model(5:6) +
     locus_trio(locus_length = c(10, 30, 50), distance = c(20, 40)) +
     locus_trio(locus_length = c(50, 30, 10), distance = c(40, 20)) +
     locus_averaged(2, 100, group = 2)

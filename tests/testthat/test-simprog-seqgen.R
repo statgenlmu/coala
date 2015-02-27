@@ -93,7 +93,7 @@ test_that("seq-gen can simulate trios", {
 
 test_that("Error is thrown without an outgroup", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  model <- CoalModel(c(3, 3), 10) +
+  model <- coal_model(c(3, 3), 10) +
     feat_mutation(par_range('theta', 5, 10), model = 'HKY') +
     feat_pop_merge(par_range('tau', .5, 1), 2, 1) +
     sumstat_jsfs()
@@ -154,7 +154,7 @@ test_that("Simulation of trios with unequal mutation rates works", {
 
 test_that('a more complicated model works', {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  model <- CoalModel(c(5,5,2), 1, 100) +
+  model <- coal_model(c(5,5,2), 1, 100) +
     feat_mutation(par_range('theta', .1, 40), model = 'HKY',
                   base_frequencies = c(0.26, 0.20, 0.22, 0.32),
                   tstv_ratio = 1.26) +
@@ -186,7 +186,7 @@ test_that('printing a seqgen command works', {
 test_that("seqgen works with inter-locus variation", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
 
-  dm_tmp <- CoalModel(c(3, 3, 1), 2) +
+  dm_tmp <- coal_model(c(3, 3, 1), 2) +
     feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
     feat_pop_merge(par_expr('2*tau'), 3, 1) +
     feat_recombination(par_const(1)) +

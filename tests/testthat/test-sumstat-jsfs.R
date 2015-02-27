@@ -79,7 +79,7 @@ test_that("calc_jsfs works with trios", {
 
 test_that("JSFS SumStat works", {
   stat <- sumstat_jsfs('jsfs_test', c(1,2))
-  model <- CoalModel(c(2,2), 1)
+  model <- coal_model(c(2,2), 1)
 
   seg_sites <- list(matrix(c(1, 0, 0, 0,
                              1, 1, 0, 1,

@@ -5,7 +5,7 @@ seg_sites <- matrix(c(1, 0, 0, 0, 1,
                       1, 0, 0, 1, 1,
                       1, 0, 0, 1, 0), 4, 5, byrow=TRUE)
 attr(seg_sites, 'positions') <- c(0.1, 0.2, 0.5, 0.7, 0.9)
-model <- CoalModel(4, 1, 337)
+model <- coal_model(4, 1, 337)
 pos <- get_snp_positions(list(seg_sites), model, relative = FALSE)[[1]]
 
 

@@ -77,7 +77,7 @@ test_that("msms_simulate works", {
 test_that("msms_simulate works with inter-locus variation", {
   if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
 
-  dm_tmp <- CoalModel(5, 2) +
+  dm_tmp <- coal_model(5, 2) +
     feat_mutation(par_range('theta', 1, 5), variance = 17) +
     sumstat_seg_sites()
   expect_true(has_inter_locus_var(dm_tmp))

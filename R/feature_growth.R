@@ -20,7 +20,7 @@
 #' @return    The demographic model with a size change.
 #' @export
 #' @examples
-#' dm <- CoalModel(c(20,37), 88) +
+#' dm <- coal_model(c(20,37), 88) +
 #'   feat_growth(par_range('alpha', 0.1, 2), population=2, at.time="0")
 feat_growth <- function(rate, population, at.time="0") {
   Feature$new("growth", rate, pop_source=population, time_point=at.time)

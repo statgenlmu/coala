@@ -35,9 +35,9 @@ create_feature_table <- function(type=character(), parameter=character(),
 }
 
 #' @export
-CoalModel <- function(sample_size=0, loci_number=0, loci_length=1000) {
+coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model <- list()
-  class(model) <- c("CoalModel", class(Base_Object))
+  class(model) <- c("coal_model", class(Base_Object))
 
   model$features <- create_feature_table()
 
@@ -74,7 +74,7 @@ CoalModel <- function(sample_size=0, loci_number=0, loci_length=1000) {
 
 
 is.model <- function(model) {
-  "CoalModel" %in% class(model)
+  "coal_model" %in% class(model)
 }
 
 
