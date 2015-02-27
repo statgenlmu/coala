@@ -44,21 +44,22 @@
 #'   feat_mutation(par_range('theta', 1, 20), variance=100)
 feat_mutation <- function(rate, group = 0, variance = 0, model='IFS',
                           base_frequencies, tstv_ratio, gtr_rates) {
-  feat <- Feature$new('mutation', parameter=rate,
-                      group=group, variance=variance)
+
+  container <- coal_model() + Feature$new('mutation', parameter=rate,
+                                          group=group, variance=variance)
 
   # Add the mutation model
   if (model != 'IFS') {
-    if (! model %in% sg_mutation_models)
+    if (!model %in% sg_mutation_models)
       stop("Possible mutation models: ",
            paste(sg_mutation_models, collapse=" "))
-    feat$add_feature(Feature$new("mutation_model", par_const(model)))
+    container <- container + Feature$new("mutation_model", par_const(model))
   }
 
   if ( !missing(tstv_ratio) ) {
     if (!model %in% c("HKY", "F84"))
       stop("This mutation model does not support a ts/tv ratio")
-    feat$add_feature(Feature$new("tstv_ratio", tstv_ratio))
+    container <- container + Feature$new("tstv_ratio", tstv_ratio)
   }
 
   if ( !missing(base_frequencies) ) {
@@ -67,10 +68,10 @@ feat_mutation <- function(rate, group = 0, variance = 0, model='IFS',
     if (!model %in% c("HKY", "F84"))
       stop("This mutation model does not support base frequencies")
 
-    feat$add_feature(Feature$new("base_freq_A", base_frequencies[1]))
-    feat$add_feature(Feature$new("base_freq_C", base_frequencies[2]))
-    feat$add_feature(Feature$new("base_freq_G", base_frequencies[3]))
-    feat$add_feature(Feature$new("base_freq_T", base_frequencies[4]))
+    container <- container + Feature$new("base_freq_A", base_frequencies[1])
+    container <- container + Feature$new("base_freq_C", base_frequencies[2])
+    container <- container + Feature$new("base_freq_G", base_frequencies[3])
+    container <- container + Feature$new("base_freq_T", base_frequencies[4])
   }
 
   if (!missing(gtr_rates)) {
@@ -78,15 +79,15 @@ feat_mutation <- function(rate, group = 0, variance = 0, model='IFS',
     if (!model %in% c("GTR"))
       stop("You can specify gtr_rates only with the GTR model")
 
-    feat$add_feature(Feature$new("gtr_rate_1", gtr_rates[1]))
-    feat$add_feature(Feature$new("gtr_rate_2", gtr_rates[2]))
-    feat$add_feature(Feature$new("gtr_rate_3", gtr_rates[3]))
-    feat$add_feature(Feature$new("gtr_rate_4", gtr_rates[4]))
-    feat$add_feature(Feature$new("gtr_rate_5", gtr_rates[5]))
-    feat$add_feature(Feature$new("gtr_rate_6", gtr_rates[6]))
+    container <- container + Feature$new("gtr_rate_1", gtr_rates[1])
+    container <- container + Feature$new("gtr_rate_2", gtr_rates[2])
+    container <- container + Feature$new("gtr_rate_3", gtr_rates[3])
+    container <- container + Feature$new("gtr_rate_4", gtr_rates[4])
+    container <- container + Feature$new("gtr_rate_5", gtr_rates[5])
+    container <- container + Feature$new("gtr_rate_6", gtr_rates[6])
   }
 
-  feat
+  container
 }
 
 #-------------------------------------------------------------------

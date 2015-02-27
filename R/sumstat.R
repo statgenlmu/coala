@@ -1,4 +1,4 @@
-sumstat <- R6Class('sumstat', inherit = base_class,
+sumstat <- R6Class('sumstat',
   private = list(name=NA, group=NA),
   public = list(
     initialize = function(name, group=0) {

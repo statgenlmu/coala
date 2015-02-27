@@ -1,7 +1,7 @@
 # Base class for all parameters.
 # Contains an expression that can be assigned to some part of a feature.
 #' @importFrom R6 R6Class
-Parameter <- R6Class('Parameter',  inherit = base_class,
+Parameter <- R6Class('Parameter',
   private = list(
     expr = NA
   ),

@@ -6,7 +6,8 @@
 #' @return The feature, which can be added to a model using `+`.
 #' @export
 feat_unphased <- function(ploidy, samples_per_ind=ploidy) {
-  Feature$new('unphased', par_const(NA)) +
+  coal_model() +
+    Feature$new('unphased', par_const(NA)) +
     Feature$new('ploidy', par_const(ploidy)) +
     Feature$new('samples_per_ind', par_const(samples_per_ind))
 }

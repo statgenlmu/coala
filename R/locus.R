@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-Locus <- R6Class('Locus', inherit = base_class,
+Locus <- R6Class('Locus',
   private = list(
     group = 0,
     length = NA,

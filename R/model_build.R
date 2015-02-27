@@ -3,11 +3,9 @@
 #' @param e1 The Model to which the feature/parameter should be added
 #' @param e2 The feature/parameter to add
 #' @return The extended model
-"+.CSR_OBJ" <- function(e1, e2) {
+"+.coal_model" <- function(e1, e2) {
   e2name <- deparse(substitute(e2)) # Passed throw for error messages
-  if (is.model(e1)) return(add_to_model(e2, e1, e2name))
-  else if (is.feature(e1)) return(add_to_feature(e2, e1, e2name))
-  else stop('Can not add ', e2name, ' to ', e1)
+  add_to_model(e2, e1, e2name)
 }
 
 
@@ -15,6 +13,17 @@ add_to_model <- function(x, model, x_name) UseMethod("add_to_model")
 add_to_model.default <- function(x, model, x_name) {
   stop("Can not add `", x_name, "` to model")
 }
+
+
+add_to_model.coal_model <- function(add, model, par_name) {
+  for (feat in get_features(add)) model <- model + feat
+  for (par in get_parameter(add)) model <- model + par
+  for (stat in add$sum_stats) model <- model + stat
+
+  model$loci <- rbind(model$loci, add$loci)
+  model
+}
+
 
 add_to_model.Parameter <- function(par, model, par_name) model
 
@@ -37,11 +46,11 @@ add_to_model.Par_Range <- function(par, model, par_name) {
 
 
 add_to_model.Feature <- function(feat, model, feat_name) {
+  for (para in feat$get_parameters()) model <- model + para
+  feat$reset_parameters()
+
   model$features[[length(model$features) + 1]] <- feat
   model$feature_table <- rbind(model$feature_table, feat$get_table())
-
-  for (para in feat$get_parameters()) model <- model + para
-  for (stat in feat$get_sumstats()) model <- model + stat
 
   if (feat$get_inter_locus_var()) {
     model <- add_inter_locus_var(model, feat$get_group())
@@ -79,18 +88,4 @@ add_to_model.Locus <- function(locus, model, locus_name) {
 
   model$id <- get_id()
   model
-}
-
-
-add_to_feature <- function(x, feat, x_name) {
-  if (is.par_model(x)) {
-    feat$add_parameter(x)
-  } else if (is.feature(x)) {
-    feat$add_feature(x)
-  } else if (is.sum_stat(x)) {
-    feat$add_sumstat(x)
-  } else {
-    stop("Can not add `", x_name, "` to feature")
-  }
-  feat
 }

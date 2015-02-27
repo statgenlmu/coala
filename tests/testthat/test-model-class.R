@@ -51,12 +51,6 @@ test_that("adding features works", {
   dm <- dm + Feature$new('bli', par_range('bla', 1, 5), group=1, variance='15')
   expect_false(has_inter_locus_var(dm, 0))
   expect_true(has_inter_locus_var(dm, 1))
-
-  dm <- coal_model(11:12, 100) + (Feature$new('blub', 5) + par_range('a', 1, 5))
-  expect_equal(nrow(get_parameter_table(dm)), 1)
-
-  dm <- coal_model(11:12, 100) + (Feature$new('blub', 5) + sumstat$new('5'))
-  expect_equal(get_summary_statistics(dm), '5')
 })
 
 

@@ -1,10 +1,7 @@
-base_class <- R6Class("CSR_OBJ")
-
-Feature <- R6Class("Feature", inherit = base_class,
+Feature <- R6Class("Feature",
   private = list(
     feature_table = NULL,
     parameter = list(),
-    sumstats = list(),
     group = 0,
     inter_locus_var = FALSE
   ),
@@ -52,25 +49,13 @@ Feature <- R6Class("Feature", inherit = base_class,
     },
     get_table = function() private$feature_table,
     get_parameters = function() private$parameter,
-    get_sumstats = function() private$sumstats,
+    reset_parameters = function() private$parameter <- list(),
     get_group = function() private$group,
     get_inter_locus_var = function() private$inter_locus_var,
     add_parameter = function(parameter) {
       stopifnot(is.par(parameter))
       idx <- as.character(length(private$parameter) + 1)
       private$parameter[[idx]] <- parameter
-    },
-    add_sumstat = function(sumstat) {
-      stopifnot(is.sum_stat(sumstat))
-      idx <- as.character(length(private$sumstats) + 1)
-      private$sumstats[[idx]] <- sumstat
-    },
-    add_feature = function(feature) {
-      stopifnot(is.feature(feature))
-      private$feature_table <- rbind(private$feature_table, feature$get_table())
-      for (par in feature$get_parameters()) {
-        self$add_parameter(par)
-      }
     },
     print = function() cat("Feature of type", private$name, "\n")
   )

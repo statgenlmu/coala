@@ -15,6 +15,7 @@ sumstat_sgtrees_class <- R6Class('sumstat_Trees', inherit = sumstat,
 #'
 #' @inheritParams sumstat_file
 sumstat_sg_trees <- function(locus_length, group = 0) {
-  Feature$new('trees', par_const(NA), group = group) +
+  coal_model() +
+    Feature$new('trees', par_const(NA), group = group) +
     sumstat_sgtrees_class$new(locus_length, group)
 }

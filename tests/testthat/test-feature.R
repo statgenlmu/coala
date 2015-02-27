@@ -65,35 +65,3 @@ test_that('Creating features works', {
   expect_equal(sum(sim == 5), 0)
   expect_true(sum(sim == 0) > 80)
 })
-
-
-test_that("Adding features to features works", {
-  feat <- Feature$new('abc', 5)
-  feat$add_feature(Feature$new('def', par_range('a', 1, 5)))
-  expect_equal(feat$get_table(),
-               rbind(create_feature_table('abc', '5', NA, NA, NA, 0),
-                     create_feature_table('def', 'a', NA, NA, NA, 0)))
-  expect_equal(length(feat$get_parameters()), 1)
-
-  feat <- Feature$new('abc', 5) + Feature$new('def', par_range('a', 1, 5))
-  expect_equal(feat$get_table(),
-               rbind(create_feature_table('abc', '5', NA, NA, NA, 0),
-                     create_feature_table('def', 'a', NA, NA, NA, 0)))
-  expect_equal(length(feat$get_parameters()), 1)
-
-  feat <- Feature$new('abc', 5) + Feature$new('def', 2) + par_range('a', 1, 5)
-  expect_equal(feat$get_table(),
-               rbind(create_feature_table('abc', '5', NA, NA, NA, 0),
-                     create_feature_table('def', '2', NA, NA, NA, 0)))
-  expect_equal(length(feat$get_parameters()), 1)
-  expect_error(feat + 5)
-})
-
-
-test_that("Adding parameters to features works", {
-  feat <- Feature$new('abc', 5) + par_range('blub', 1, 5)
-  expect_equal(length(feat$get_parameters()), 1)
-
-  feat <- feat + par_range('bla', 1, 5)
-  expect_equal(length(feat$get_parameters()), 2)
-})
