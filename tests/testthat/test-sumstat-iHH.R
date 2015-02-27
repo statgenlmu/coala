@@ -42,6 +42,11 @@ test_that('calculation of ihh works', {
   expect_that(ihh2[[1]], is_a('matrix'))
   expect_equal(dim(ihh2[[1]]), c(2,1))
   expect_equal(ihh[[1]][,3,drop=FALSE], ihh2[[1]])
+
+  model <- coal_model(4, 3, 337)
+  ihh2 <- stat_ihh$calculate(list(seg_sites, seg_sites, seg_sites), NULL, model)
+  expect_that(ihh2, is_a('list'))
+  expect_equal(length(ihh2), 3)
 })
 
 

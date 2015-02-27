@@ -4,10 +4,10 @@ sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
   private = list(
     position = NA,
     population = NULL,
-    get_snp = function(positions, model) {
+    get_snp = function(positions, locus, model) {
       if (is.na(private$position)) return(seq(along = positions))
       pos <- conv_middle_to_trio_pos(private$position, model,
-                                     relative_out = FALSE)
+                                     relative_out = FALSE)[locus]
       which.min(abs(pos - positions))
     }),
   public = list(
@@ -25,7 +25,7 @@ sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
       ind <- get_population_indiviuals(model, private$population)
       lapply(1:length(seg_sites), function(locus) {
         assert_that(is.matrix(seg_sites[[locus]]))
-        snps <- private$get_snp(pos[[locus]], model)
+        snps <- private$get_snp(pos[[locus]], locus, model)
         ehh <- sapply(snps, function(snp) {
           calc_ehh(self$segsites_to_rehh_data(seg_sites[[locus]],
                                               pos[[locus]],
