@@ -1,4 +1,4 @@
-SumStat_Trees <- R6Class('SumStat_Trees', inherit = SumStat,
+sumstat_sgtrees_class <- R6Class('sumstat_Trees', inherit = sumstat,
   private = list(loci_length = NULL),
   public = list(
     initialize = function(loci_length, group) {
@@ -16,5 +16,5 @@ SumStat_Trees <- R6Class('SumStat_Trees', inherit = SumStat,
 #' @inheritParams sumstat_file
 sumstat_sg_trees <- function(locus_length, group = 0) {
   Feature$new('trees', par_const(NA), group = group) +
-    SumStat_Trees$new(locus_length, group)
+    sumstat_sgtrees_class$new(locus_length, group)
 }

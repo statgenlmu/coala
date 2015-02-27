@@ -47,7 +47,7 @@ test_that("adding features works", {
   dm <- coal_model(11:12, 100) + (Feature$new('blub', 5) + par_range('a', 1, 5))
   expect_equal(nrow(get_parameter_table(dm)), 1)
 
-  dm <- coal_model(11:12, 100) + (Feature$new('blub', 5) + SumStat$new('5'))
+  dm <- coal_model(11:12, 100) + (Feature$new('blub', 5) + sumstat$new('5'))
   expect_equal(get_summary_statistics(dm), '5')
 })
 

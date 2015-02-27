@@ -1,4 +1,4 @@
-context("SumStat JSFS")
+context("sumstat JSFS")
 
 test_that("calculation of the JSFS is correct", {
     seg.sites <- list(matrix(c(1, 0, 0, 0,
@@ -77,7 +77,7 @@ test_that("calc_jsfs works with trios", {
 })
 
 
-test_that("JSFS SumStat works", {
+test_that("JSFS sumstat works", {
   stat <- sumstat_jsfs('jsfs_test', c(1,2))
   model <- coal_model(c(2,2), 1)
 

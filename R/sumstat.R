@@ -1,4 +1,4 @@
-SumStat <- R6Class('SumStat', inherit = Base_Object,
+sumstat <- R6Class('sumstat', inherit = base_class,
   private = list(name=NA, group=NA),
   public = list(
     initialize = function(name, group=0) {
@@ -14,7 +14,7 @@ SumStat <- R6Class('SumStat', inherit = Base_Object,
 )
 
 
-is.sum_stat <- function(sum_stat) 'SumStat' %in% class(sum_stat)
+is.sum_stat <- function(sum_stat) 'sumstat' %in% class(sum_stat)
 
 
 # Written to `model$sum_stats` on initialization
@@ -24,7 +24,7 @@ create_sumstat_container <- function() {
 
 
 # Add a summary statistic to a model
-add_to_model.SumStat <- function(sum_stat, model, feat_name) {
+add_to_model.sumstat <- function(sum_stat, model, feat_name) {
   if (sum_stat$get_name() %in% names(model$sum_stats))
     stop("Can't add ", feat_name, " to model: ",
          "There is already a statistic with name ", sum_stat$get_name())

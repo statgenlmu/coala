@@ -1,4 +1,4 @@
-context("SumStat SFS")
+context("sumstat SFS")
 
 test_that("calculation of the SFS is correct", {
   seg.sites <- list(matrix(c(1, 0, 0, 0,

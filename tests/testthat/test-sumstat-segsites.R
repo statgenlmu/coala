@@ -1,4 +1,4 @@
-context('SumStat SegSites')
+context('sumstat SegSites')
 
 test_that('SegSites statistic works', {
   stat <- sumstat_seg_sites('segsites_test')

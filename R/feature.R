@@ -1,6 +1,6 @@
-Base_Object <- R6Class("CSR_OBJ")
+base_class <- R6Class("CSR_OBJ")
 
-Feature <- R6Class("Feature", inherit = Base_Object,
+Feature <- R6Class("Feature", inherit = base_class,
   private = list(
     feature_table = NULL,
     parameter = list(),
@@ -85,6 +85,6 @@ print.Feature <- function(x, ...) {
   print(x$get_table())
   cat('\nParameters: \n')
   for (par in x$get_parameters()) print(par)
-  cat('\nSumStats: \n')
+  cat('\nsumstats: \n')
   for (stat in x$get_sumstats()) print(stat)
 }

@@ -1,4 +1,4 @@
-SumStat_File <- R6Class('SumStat_File', inherit = SumStat,
+sumstat_file_class <- R6Class('sumstat_file', inherit = sumstat,
   private = list(folder=NULL),
   public = list(
     initialize = function(folder, group) {
@@ -23,5 +23,5 @@ SumStat_File <- R6Class('SumStat_File', inherit = SumStat,
 #'   The default of `0` corresponds to all groups.
 #' @export
 sumstat_file <- function(folder, groups = 0) {
-  SumStat_File$new(folder, groups)
+  sumstat_file_class$new(folder, groups)
 }

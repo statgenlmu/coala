@@ -1,6 +1,6 @@
 #' @importFrom R6 R6Class
 #' @importFrom rehh data2haplohh calc_ehh
-SumStat_ihh <- R6Class('SumStat_ihh', inherit = SumStat,
+sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
   private = list(
     position = NA,
     population = NULL,
@@ -78,5 +78,5 @@ SumStat_ihh <- R6Class('SumStat_ihh', inherit = SumStat,
 #'   than the position is relative to the middle locus' extend.
 #' @export
 sumstat_ihh <- function(name = 'ihh', position=NA, population=1, group = 0) {
-  SumStat_ihh$new(name, position, population, group = group)
+  sumstat_ihh_class$new(name, position, population, group = group)
 }
