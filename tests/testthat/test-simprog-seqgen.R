@@ -18,7 +18,7 @@ test_that("test.generateSeqgenOptions", {
 test_that("generation of tree models works", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
   for (dm in list(model_hky(), model_f84(), model_gtr())) {
-    dm.ms <- generateTreeModel(dm, 1)
+    dm.ms <- generate_tree_model(dm, 1)
     sum.stats <- simulate(dm.ms, pars=c(1, 5))
     expect_false(is.null(sum.stats$sg_trees))
     unlink(sum.stats$sg_trees)

@@ -46,7 +46,7 @@ sg_find_exe <- function(throw.error = TRUE, silent = FALSE) {
   return(FALSE)
 }
 
-generateTreeModel <- function(dm, locus, locus_number=1) {
+generate_tree_model <- function(dm, locus, locus_number=1) {
   tree_model <- read_cache(dm, paste0('tree_model_', locus))
 
   if (is.null(tree_model)) {
@@ -218,7 +218,7 @@ generateSeqgenOptionsCmd <- function(dm) {
 
 
 sg_get_command <- function(dm) {
-  tree_model <- generateTreeModel(dm, 1)
+  tree_model <- generate_tree_model(dm, 1)
   tree_cmd <-
     get_simprog(determine_simprog(tree_model))$print_cmd_func(tree_model)
 
@@ -251,7 +251,7 @@ sg_simulate <- function(dm, parameters) {
 
   seqgen.files <- lapply(sim_reps, function(locus) {
     # Generate options for seqgen
-    tree.model <- generateTreeModel(dm, locus, sim_loci)
+    tree.model <- generate_tree_model(dm, locus, sim_loci)
     stopifnot(!is.null(tree.model))
 
     # Simulate the trees
