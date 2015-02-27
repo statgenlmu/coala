@@ -16,7 +16,6 @@
 #'
 #' simulate(model, pars=c(1, 5))
 simulate.coal_model <- function(object, nsim = 1, seed, pars=NULL, ...) {
-  stopifnot(!is.null(pars))
   check_par_range(object, pars)
 
   simprog <- determine_simprog(object)
