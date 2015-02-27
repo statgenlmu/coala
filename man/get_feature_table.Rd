@@ -8,6 +8,7 @@
 \alias{get_locus_number}
 \alias{get_outgroup}
 \alias{get_outgroup_size}
+\alias{get_parameter}
 \alias{get_parameter_table}
 \alias{get_population_indiviuals}
 \alias{get_populations}
@@ -18,6 +19,8 @@
 get_feature_table(model)
 
 get_parameter_table(model)
+
+get_parameter(model)
 
 get_locus_length(dm, group = 1)
 
@@ -59,6 +62,8 @@ Getters for coalescent models
 
 \item \code{get_parameter_table}: Returns the ranged parameters of a model as a
 data.frame
+
+\item \code{get_parameter}: Returns the ranged parameters of a model
 
 \item \code{get_locus_length}: Returns the length of the loci in a locus group
 

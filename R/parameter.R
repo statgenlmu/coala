@@ -92,7 +92,9 @@ Par_Range <- R6Class('Par_Range', inherit = Par_Model,
       super$initialize(name)
       private$range <- c(lower, upper)
     },
-    get_range = function() private$range
+    get_range = function() private$range,
+    print = function() cat(private$name, ": range between", private$range[1],
+                           'and', private$range[2], "\n")
   )
 )
 

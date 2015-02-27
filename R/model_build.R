@@ -23,19 +23,22 @@ add_to_model.Par_Range <- function(par, model, par_name) {
   if (par$get_name() %in% get_parameter_table(model))
     stop("There is already a parameter with name ", par_name)
 
+  model$parameter[[length(model$parameter) + 1]] <- par
+
   new_par <- data.frame(name=par$get_name(),
                         lower.range=par$get_range()[1],
                         upper.range=par$get_range()[2],
                         stringsAsFactors=F)
 
-  model$parameters <- rbind(model$parameters, new_par)
+  model$par_table <- rbind(model$par_table, new_par)
   model$id <- get_id()
   model
 }
 
 
 add_to_model.Feature <- function(feat, model, feat_name) {
-  model$features <- rbind(model$features, feat$get_table())
+  model$features[[length(model$features) + 1]] <- feat
+  model$feature_table <- rbind(model$feature_table, feat$get_table())
 
   for (para in feat$get_parameters()) model <- model + para
   for (stat in feat$get_sumstats()) model <- model + stat

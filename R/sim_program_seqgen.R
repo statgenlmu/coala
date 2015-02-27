@@ -53,7 +53,7 @@ generate_tree_model <- function(dm, locus, locus_number=1) {
     stopifnot(all(get_groups(dm) == 1))
     locus_length <- get_locus_length_matrix(dm)[locus,]
 
-    if (any(msms_features %in% dm$features$type)) {
+    if (any(msms_features %in% get_feature_table(dm)$type)) {
       tree.prog <- get_simprog('msms')
     } else {
       tree.prog <- get_simprog('ms')
@@ -61,8 +61,8 @@ generate_tree_model <- function(dm, locus, locus_number=1) {
 
     # Features
     tree_model <- dm
-    tree_model$features <-
-      dm$features[dm$features$type %in% tree.prog$possible_features, ]
+    tree_model$feature_table <-
+      dm$feature_table[dm$feature_table$type %in% tree.prog$possible_features, ]
 
     # Summary Stastics
     tree_model$sum_stats <- create_sumstat_container()
@@ -164,9 +164,9 @@ sg_generate_opt_cmd <- function(dm) {
     base.freqs <- list()
     gtr.rates <- list()
 
-    for (i in 1:dim(dm$features)[1] ) {
-      type <- as.character(dm$features[i,"type"])
-      feat <- unlist(dm$features[i, ])
+    for (i in 1:dim(get_feature_table(dm))[1] ) {
+      type <- as.character(get_feature_table(dm)[i,"type"])
+      feat <- unlist(get_feature_table(dm)[i, ])
 
       if (type == "mutation_model") {
         opts <- c(opts, paste('"-m', feat['parameter'], '"', sep=""), ",")

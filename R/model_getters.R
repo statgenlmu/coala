@@ -7,18 +7,26 @@
 #' @describeIn get_feature_table Returns the features of a model as a data.frame
 get_feature_table <- function(model) {
   stopifnot(is.model(model))
-  stopifnot(!is.null(model$features))
-  model$features
+  stopifnot(!is.null(model$feature_table))
+  model$feature_table
 }
 
+get_features <- function(model) model$features
 
 #' @export
 #' @describeIn get_feature_table Returns the ranged parameters of a model as a
 #'   data.frame
 get_parameter_table <- function(model) {
   stopifnot(is.model(model))
-  stopifnot(!is.null(model$parameters))
-  model$parameters
+  stopifnot(!is.null(model$par_table))
+  model$par_table
+}
+
+#' @export
+#' @describeIn get_feature_table Returns the ranged parameters of a model
+get_parameter <- function(model) {
+  stopifnot(is.model(model))
+  model$parameter
 }
 
 
@@ -86,12 +94,12 @@ get_sample_size <- function(dm, for_sim=FALSE) {
 #' @describeIn get_feature_table Returns a vector of groups in the model
 #' @export
 get_groups <- function(dm) {
-  if (all(c(dm$features$group == 0,
+  if (all(c(get_feature_table(dm)$group == 0,
             dm$sum_stats$group == 0,
             dm$loci$group == 0))) return(1)
 
   groups <- sort(unique(c(1,
-                          dm$features$group,
+                          get_feature_table(dm)$group,
                           dm$sum_stats$group,
                           dm$loci$group)))
 

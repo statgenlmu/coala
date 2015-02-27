@@ -13,11 +13,18 @@ test_that("creating models works", {
 
 
 test_that("adding parameters works", {
-  model <- coal_model(11:12, 100) + par_range("theta", 1, 5)
+  model <- coal_model(11:12, 100) + par_range("p1", 1, 5)
   par_table <- get_parameter_table(model)
-  expect_equal("theta", par_table$name)
+  expect_equal("p1", par_table$name)
   expect_equal(1, par_table$lower.range)
   expect_equal(5, par_table$upper.range)
+
+  expect_that(get_parameter(model), is_a("list"))
+  expect_equal(length(get_parameter(model)), 1)
+  expect_true(is.par(get_parameter(model)[[1]]))
+
+  model <- model + par_range("p2", 1, 5)
+  expect_equal(length(get_parameter(model)), 2)
 
   test <- list (1:10)
   class(test) <- 'CSR_OBJ'
@@ -29,6 +36,7 @@ test_that("adding features works", {
   dm <- coal_model(11:12, 100)
   dm <- dm + Feature$new('blub', 5)
   expect_equal(nrow(search_feature(dm, 'blub')), 1)
+  expect_that(length(get_features(dm)), is_more_than(0))
 
   dm <- coal_model(11:12, 100)
   dm <- dm + Feature$new('bli', par_range('bla', 1, 5))
@@ -64,25 +72,28 @@ test_that("test get_summary_statistics", {
 
 test_that("generation of group models", {
   dm <- create_group_model(model_theta_tau(), 1)
-  expect_equal(dm$features, model_theta_tau()$features)
+  expect_equal(get_feature_table(dm), get_feature_table(model_theta_tau()))
   expect_equal(dm$sum_stats, model_theta_tau()$sum_stats)
 
   dm <- model_theta_tau() + locus_averaged(10, 23, group = 1)
   dm <- create_group_model(dm, 1)
-  expect_equal(nrow(dm$features), nrow(model_theta_tau()$features))
-  expect_true(all(dm$features$group == 0))
+  expect_equal(nrow(get_feature_table(dm)),
+               nrow(get_feature_table(model_theta_tau())))
+  expect_true(all(get_feature_table(dm)$group == 0))
   expect_equal(get_locus_length(dm), 23)
 
   dm.3 <- model_theta_tau() +
     locus_averaged(5, 23, group = 1) +
     locus_averaged(31, 30, group = 2)
   dm <- create_group_model(dm.3, 1)
-  expect_equal(nrow(dm$features), nrow(model_theta_tau()$features))
-  expect_true(all(dm$features$group == 0))
+  expect_equal(nrow(get_feature_table(dm)),
+               nrow(get_feature_table(model_theta_tau())))
+  expect_true(all(get_feature_table(dm)$group == 0))
   expect_equal(get_locus_length(dm), 23)
   dm <- create_group_model(dm.3, 2)
-  expect_equal(nrow(dm$features), nrow(model_theta_tau()$features))
-  expect_true(all(dm$features$group == 0))
+  expect_equal(nrow(get_feature_table(dm)),
+               nrow(get_feature_table(model_theta_tau())))
+  expect_true(all(get_feature_table(dm)$group == 0))
   expect_equal(get_locus_length(dm), 30)
   expect_equal(get_locus_number(dm), 31)
 
@@ -216,25 +227,6 @@ test_that("Adding and Getting inter locus variation works", {
 })
 
 
-test_that("test.printEmptyDM", {
-  tmp_file <- tempfile()
-  sink(tmp_file)
-  dm <- coal_model(25:26, 100)
-  print(dm)
-  sink(NULL)
-  unlink(tmp_file)
-})
-
-
-test_that("test.printGroupDM", {
-  tmp_file <- tempfile()
-  sink(tmp_file)
-  print(model_grps())
-  sink(NULL)
-  unlink(tmp_file)
-})
-
-
 test_that('setTrioMutationsRates works', {
   warning("test about model with trio mutation rates deactivated")
 #   dm <- dm.setTrioMutationRates(dm_trios, '17', 'theta', group=2)
@@ -334,4 +326,15 @@ test_that('getting the ploidy and individuals works', {
   expect_equal(get_sample_size(model), sample_size * 2)
   expect_equal(get_sample_size(model, TRUE), sample_size * 4)
   expect_true(is_unphased(model))
+})
+
+
+test_that('print works on models', {
+  # Printing an empty model works
+  out <- capture.output(print(coal_model()))
+  expect_that(length(out), is_more_than(0))
+
+  # Printing parameters works
+  out <- capture.output(print(coal_model(5) + par_range("abc", 1, 5)))
+  expect_that(length(grep("abc", out)), is_more_than(0))
 })

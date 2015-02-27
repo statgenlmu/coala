@@ -39,7 +39,8 @@ coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model <- list()
   class(model) <- c("coal_model", class(base_class))
 
-  model$features <- create_feature_table()
+  model$feature_table <- create_feature_table()
+  model$features <- list()
 
   model$loci <- data.frame(group=numeric(), number=numeric(),
                            name=character(), name_l=character(),
@@ -49,10 +50,11 @@ coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
                            length_ir=numeric(), length_r=numeric(),
                            stringsAsFactors=F )
 
-  model$parameters <- data.frame(parameter=character(),
-                                 lower.range=numeric(),
-                                 upper.range=numeric(),
-                                 stringsAsFactors=F)
+  model$parameter <- list()
+  model$par_table <- data.frame(parameter=character(),
+                                lower.range=numeric(),
+                                upper.range=numeric(),
+                                stringsAsFactors=F)
 
   model$sum_stats <- create_sumstat_container()
 
@@ -101,7 +103,7 @@ determine_simprog <- function(dm) {
 
       for (simprog_name in ls(simprograms)) {
         simprog <- get_simprog(simprog_name)
-        if (all(dm$features$type %in% simprog$possible_features) &
+        if (all(get_feature_table(dm)$type %in% simprog$possible_features) &
               all(dm$sum_stats$name %in% simprog$possible_sum_stats)) {
 
           if (simprog$priority > priority) {
@@ -136,8 +138,8 @@ get_mutation_par <- function(dm, outer=FALSE, group=0) {
 
 create_group_model <- function(dm, group) {
   # Features
-  dm$features <- search_feature(dm, group = group)
-  dm$features$group <- 0
+  dm$feature_table <- search_feature(dm, group = group)
+  dm$feature_table$group <- 0
 
   # sum_stats
   dm$sum_stats <- get_group_statistics(dm, group)
@@ -166,53 +168,54 @@ get_group_model <- function(model, group) {
 search_feature <- function(dm, type=NULL, pop.source=NULL,
                           pop.sink=NULL, time.point=NULL, group=NULL) {
 
-  mask <- rep(TRUE, nrow(get_feature_table(dm)))
+  feat_tbl <- get_feature_table(dm)
+  mask <- rep(TRUE, nrow(feat_tbl))
 
-  if (!is.null(type)) mask <- mask & dm$features$type %in% type
+  if (!is.null(type)) mask <- mask & feat_tbl$type %in% type
 
   if (!is.null(pop.source)) {
     if (is.na(pop.source)) {
-      mask <- mask & is.na(dm$features$pop.source)
+      mask <- mask & is.na(feat_tbl$pop.source)
     } else {
-      mask <- mask & dm$features$pop.source %in% pop.source
+      mask <- mask & feat_tbl$pop.source %in% pop.source
     }
   }
 
   if (!is.null(pop.sink)) {
     if (is.na(pop.sink)) {
-      mask <- mask & is.na(dm$features$pop.sink)
+      mask <- mask & is.na(feat_tbl$pop.sink)
     } else {
-      mask <- mask & dm$features$pop.sink %in% pop.sink
+      mask <- mask & feat_tbl$pop.sink %in% pop.sink
     }
   }
 
   if (!is.null(time.point)) {
     if (is.na(time.point)) {
-      mask <- mask & is.na(dm$features$time.point)
+      mask <- mask & is.na(feat_tbl$time.point)
     } else {
-      mask <- mask & dm$features$time.point %in% time.point
+      mask <- mask & feat_tbl$time.point %in% time.point
     }
   }
 
   if (!is.null(group)) {
-    if (group == 0) mask <- mask & dm$features$group == 0
+    if (group == 0) mask <- mask & feat_tbl$group == 0
     else {
-      mask <- mask & dm$features$group %in% c(0, group)
+      mask <- mask & feat_tbl$group %in% c(0, group)
 
       # Check if values for the default group are overwritten in the focal group
-      grp_0 <- dm$features$group == 0
+      grp_0 <- feat_tbl$group == 0
       overwritten <- grp_0[mask]
       for (i in which(overwritten)) {
-        duplicats <- search_feature(dm, type=dm$features$type[mask][i],
-                                   pop.source=dm$features$pop.source[mask][i],
-                                   pop.sink=dm$features$pop.sink[mask][i])
+        duplicats <- search_feature(dm, type=feat_tbl$type[mask][i],
+                                    pop.source=feat_tbl$pop.source[mask][i],
+                                    pop.sink=feat_tbl$pop.sink[mask][i])
         if (sum(duplicats$group == group) == 0) overwritten[i] <- FALSE
       }
       mask[mask] <- !overwritten
     }
   }
 
-  dm$features[mask, ]
+  feat_tbl[mask, ]
 }
 
 

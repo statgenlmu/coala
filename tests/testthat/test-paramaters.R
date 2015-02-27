@@ -68,14 +68,14 @@ test_that("Adding an expression par to a model give no error", {
 
 test_that('Adding ranged parameters to a model works', {
   model <- coal_model(5:6, 10, 100) + par_range('theta', 1, 2)
-  expect_equal(model$parameters,
+  expect_equal(model$par_table,
                data.frame(name='theta', lower.range=1, upper.range=2,
                           stringsAsFactors = FALSE))
 
   model <- coal_model(5:6, 10, 100) +
     par_range('theta', 1, 2) +
     par_range('tau', 5, 6)
-  expect_equal(model$parameters,
+  expect_equal(model$par_table,
                data.frame(name=c('theta','tau'),
                           lower.range=c(1, 5),
                           upper.range=c(2, 6),

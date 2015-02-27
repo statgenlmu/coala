@@ -71,20 +71,11 @@ Feature <- R6Class("Feature", inherit = base_class,
       for (par in feature$get_parameters()) {
         self$add_parameter(par)
       }
-    }
+    },
+    print = function() cat("Feature of type", private$name, "\n")
   )
 )
 
 is.feature <- function(feature) {
   'Feature' %in% class(feature)
-}
-
-
-print.Feature <- function(x, ...) {
-  cat('Feature Table: \n')
-  print(x$get_table())
-  cat('\nParameters: \n')
-  for (par in x$get_parameters()) print(par)
-  cat('\nsumstats: \n')
-  for (stat in x$get_sumstats()) print(stat)
 }
