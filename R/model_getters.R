@@ -67,12 +67,8 @@ get_parameter <- function(model) {
 #' @export
 #' @describeIn get_feature_table Returns the length of the loci in a locus group
 get_locus_length <- function(dm, group=1) {
-  length <- dm$loci[dm$loci$group == group, c(6,8,10), drop = FALSE]
-  if (nrow(length) == 0) {
-    length <- dm$loci[dm$loci$group == 0, c(6,8,10), drop = FALSE]
-  }
-  if (nrow(length) == 0) stop("Failed to determine loci length")
-  as.integer(rowSums(length))
+  llm <- get_locus_length_matrix(dm, group)[, c(1, 3, 5), drop = FALSE]
+  as.integer(rowSums(llm))
 }
 
 
@@ -127,34 +123,42 @@ get_sample_size <- function(dm, for_sim=FALSE) {
 #' @describeIn get_feature_table Returns a vector of groups in the model
 #' @export
 get_groups <- function(dm) {
-  if (all(c(get_feature_table(dm)$group == 0,
-            dm$sum_stats$group == 0,
-            dm$loci$group == 0))) return(1)
+  groups <- read_cache(dm, 'groups')
+  if (is.null(groups)) {
+    groups <- sort(unique(c(1,
+                            sapply(dm$features, function(f) f$get_group()),
+                            sapply(dm$sum_stats, function(s) s$get_group()),
+                            sapply(dm$loci, function(l) l$get_group()))))
 
-  groups <- sort(unique(c(1,
-                          get_feature_table(dm)$group,
-                          dm$sum_stats$group,
-                          dm$loci$group)))
-
-  groups[groups != 0]
+    groups <- groups[groups != 0]
+    cache(dm, 'groups', groups)
+  }
+  groups
 }
 
 
 #' @describeIn get_feature_table Returns a matrix with detailed length
 #' information about the loci in the model.
 #' @export
-get_locus_length_matrix <- function(dm, group=1) {
-  # Select the rows of the group
-  rows <- which(dm$loci$group == group)
-  if (sum(rows) == 0) rows <- which(dm$loci$group == 0)
+get_locus_length_matrix <- function(dm, group=1, individual=TRUE) {
+  cache_name <- paste0('llm', group)
+  llm <- read_cache(dm, cache_name)
+  if (is.null(llm)) {
+    # Select the relevant loci in dm$loci
+    loci <- which(sapply(dm$loci, function(l) l$get_group() == group))
+    if (length(loci) == 0) {
+      loci <- which(sapply(dm$loci, function(l) l$get_group() == 0))
+    }
 
-  # Repeat the row if number > 1
-  if (length(rows) == 1) rows <- rep(rows, dm$loci$number[rows])
+    # Repeat the row if number > 1
+    if (individual && length(loci) == 1) {
+      loci <- rep(loci, dm$loci[[loci]]$get_number())
+    }
 
-  # Return the matrix
-  llm <- dm$loci[rows, 6:10, drop = FALSE]
-  row.names(llm) <- NULL
-  as.matrix(llm)
+    llm <- do.call(rbind, lapply(dm$loci[loci], function(l) l$get_length(TRUE)))
+    cache(dm, cache_name, llm)
+  }
+  llm
 }
 
 

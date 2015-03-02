@@ -21,16 +21,9 @@ coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
   class(model) <- c("Coalmodel")
 
   model$features <- list()
-
-  model$loci <- data.frame(group=numeric(), number=numeric(),
-                           name=character(), name_l=character(),
-                           name_r=character(),
-                           length_l=numeric(), length_il=numeric(),
-                           length_m=numeric(),
-                           length_ir=numeric(), length_r=numeric(),
-                           stringsAsFactors=F )
-
+  model$loci <- list()
   model$parameter <- list()
+
   model$sum_stats <- create_sumstat_container()
 
   model$id <- get_id()

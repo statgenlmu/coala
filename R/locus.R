@@ -7,23 +7,63 @@ Locus <- R6Class('Locus',
     name = NA
   ),
   public = list(
-    initialize = function(length, number = 1, name = '', group = 0) {
-      stopifnot(is.numeric(length))
-      stopifnot(length > 0)
-      private$length <- length
-      stopifnot(is.numeric(number))
-      stopifnot(number > 0)
-      private$number <- number
-      stopifnot(is.character(name))
-      private$name <- name
-      stopifnot(is.numeric(group))
-      stopifnot(group >= 0)
+    initialize = function(locus_length,
+                          locus_number = 1,
+                          locus_name = '',
+                          group = 0) {
+
+      assert_that(is.numeric(locus_length))
+      assert_that(length(locus_length) == 1 || length(locus_length) == 5)
+      private$length <- locus_length
+
+      assert_that(is.numeric(locus_number))
+      assert_that(locus_number > 0)
+      assert_that(length(locus_number) == 1)
+      private$number <- locus_number
+
+      assert_that(is.character(locus_name))
+      private$name <- locus_name
+
+      assert_that(is.numeric(group))
+      assert_that(group >= 0)
       private$group <- group
     },
     get_name = function() private$name,
-    get_length = function() private$length,
+    get_length = function(trios = FALSE) {
+      if (!trios) return(sum(private$length))
+
+      if (length(private$length) == 1) {
+        locus_length <- c(0, 0, private$length, 0, 0)
+      } else if (length(private$length) == 5) {
+        locus_length <- private$length
+      } else stop("Failed to get locus length")
+
+      names(locus_length) <- c('length_l', 'length_il', 'length_m',
+                               'length_ir', 'length_r')
+      locus_length
+    },
     get_number = function() private$number,
-    get_group = function() private$group
+    get_group = function() private$group,
+    get_table = function() {
+      if (length(self$get_name()) == 1) {
+        locus_names <- c("", self$get_name(), "")
+      } else if (length(self$get_name()) == 3) {
+        locus_names <- self$get_name()
+      } else stop("Failed to get locus names")
+
+      locus_length <- self$get_length(TRUE)
+      create_locus_table(group = self$get_group(),
+                         number = self$get_number(),
+                         name = locus_names[2],
+                         name_l = locus_names[1],
+                         name_r = locus_names[3],
+                         length_l = locus_length[1],
+                         length_il = locus_length[2],
+                         length_m = locus_length[3],
+                         length_ir = locus_length[4],
+                         length_r = locus_length[5],
+                         stringsAsFactors = FALSE)
+    }
   )
 )
 
@@ -52,7 +92,7 @@ is.locus <- function(locus) 'Locus' %in% class(locus)
 #'   locus_single(750, group = 2) +
 #'   locus_single(430, group = 2)
 locus_single <- function(length, group = 0, name = '') {
-  Locus$new(length, 1, name = name, group = group)
+  Locus$new(length, 1, name, group = group)
 }
 
 
@@ -100,8 +140,24 @@ locus_trio <- function(locus_names = c(left='', middle='', right=''),
     distance <- distance[c('left_middle', 'middle_right')]
   }
 
-  Locus$new(length = c(locus_length, distance)[c(1,4,2,5,3)],
-            number = number,
-            name = locus_names,
+  Locus$new(locus_length = c(locus_length, distance)[c(1,4,2,5,3)],
+            locus_number = number,
+            locus_name = locus_names,
             group = group)
+}
+
+
+create_locus_table <- function(group=numeric(), number=numeric(),
+                               name=character(), name_l=character(),
+                               name_r=character(),
+                               length_l=numeric(), length_il=numeric(),
+                               length_m=numeric(),
+                               length_ir=numeric(), length_r=numeric()) {
+
+  data.frame(group=group, number=number,
+             name=name, name_l=name_l, name_r=name_r,
+             length_l=length_l, length_il=length_il,
+             length_m=length_m,
+             length_ir=length_ir, length_r=length_r,
+             stringsAsFactors=F)
 }

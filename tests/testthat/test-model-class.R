@@ -107,6 +107,12 @@ test_that("test.getGroups", {
   expect_equal(get_groups(dm), 1:2)
   dm <- dm + locus_averaged(10, 32, group = 4)
   expect_equal(get_groups(dm), c(1:2, 4))
+
+  dm <- dm + feat_selection(par_const(5), par_const(10), 1, 0, group = 5)
+  expect_equal(get_groups(dm), c(1:2, 4:5))
+
+  dm <- dm + sumstat_sfs(group = 6)
+  expect_equal(get_groups(dm), c(1:2, 4:6))
 })
 
 
