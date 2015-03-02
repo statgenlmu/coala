@@ -14,25 +14,6 @@
 # Initialization
 #-----------------------------------------------------------------------
 
-create_feature_table <- function(type=character(), parameter=character(),
-                               pop.source=numeric(), pop.sink=numeric(),
-                               time.point=character(), group=numeric()) {
-
-  stopifnot(is.character(type))
-  stopifnot(is.character(parameter))
-  stopifnot(is.na(pop.source) | is.numeric(pop.source))
-  stopifnot(is.na(pop.sink) | is.numeric(pop.sink))
-  stopifnot(is.na(time.point) | is.character(time.point))
-  stopifnot(is.numeric(group))
-
-  data.frame(type=type,
-             parameter=parameter,
-             pop.source=pop.source,
-             pop.sink=pop.sink,
-             time.point=time.point,
-             group=group,
-             stringsAsFactors=F)
-}
 
 #' @export
 coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
