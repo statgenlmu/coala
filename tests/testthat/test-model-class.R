@@ -27,7 +27,7 @@ test_that("adding parameters works", {
   expect_equal(length(get_parameter(model)), 2)
 
   test <- list (1:10)
-  class(test) <- 'CSR_OBJ'
+  class(test) <- 'BLUB'
   expect_error(model + test)
 })
 

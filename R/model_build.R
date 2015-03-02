@@ -3,7 +3,7 @@
 #' @param e1 The Model to which the feature/parameter should be added
 #' @param e2 The feature/parameter to add
 #' @return The extended model
-"+.coal_model" <- function(e1, e2) {
+"+.Coalmodel" <- function(e1, e2) {
   e2name <- deparse(substitute(e2)) # Passed throw for error messages
   add_to_model(e2, e1, e2name)
 }
@@ -15,7 +15,7 @@ add_to_model.default <- function(x, model, x_name) {
 }
 
 
-add_to_model.coal_model <- function(add, model, par_name) {
+add_to_model.Coalmodel <- function(add, model, par_name) {
   for (feat in get_features(add)) model <- model + feat
   for (par in get_parameter(add)) model <- model + par
   for (stat in add$sum_stats) model <- model + stat

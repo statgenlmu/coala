@@ -18,7 +18,7 @@
 #' @export
 coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model <- list()
-  class(model) <- c("coal_model")
+  class(model) <- c("Coalmodel")
 
   model$features <- list()
 
@@ -51,7 +51,7 @@ coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
 
 
 is.model <- function(model) {
-  "coal_model" %in% class(model)
+  "Coalmodel" %in% class(model)
 }
 
 

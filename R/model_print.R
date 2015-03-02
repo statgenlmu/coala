@@ -1,5 +1,5 @@
 #' @export
-print.coal_model <- function(x, ...) {
+print.Coalmodel <- function(x, ...) {
   if (length(get_features(x)) == 0) cat("The model has no features\n")
   else {
     cat("Features:\n")
