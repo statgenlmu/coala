@@ -48,7 +48,7 @@ determine_simprog <- function(dm) {
   name <- read_cache(dm, 'simprog')
 
   if (is.null(name)) {
-    if ((!dm$is_grp_model) && any(get_groups(dm) != 0)) {
+    if ( (!dm$is_grp_model) && any(get_groups(dm) != 0) ) {
       name <- 'groups'
     } else {
       priority <- -Inf
