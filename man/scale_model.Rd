@@ -22,10 +22,11 @@ and might be unsuitable for other purposes.
 }
 \examples{
 model <- coal_model(10, loci_number = 10) + locus_single(100, group = 2)
-get_locus_number(model, group = 1) # 10
-get_locus_number(model, group = 2) # 1
+model
+# Group 1: 10 loci; group 2: 1 locus
+
 model <- scale_model(model, 3)
-get_locus_number(model, group = 1) # 3
-get_locus_number(model, group = 2) # 1
+model
+# Group 1: 3 loci; group 2: 1 locus
 }
 

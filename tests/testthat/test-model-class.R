@@ -84,6 +84,7 @@ test_that("generation of group models", {
                nrow(get_feature_table(model_theta_tau())))
   expect_true(all(get_feature_table(dm)$group == 0))
   expect_equal(get_locus_length(dm), 23)
+
   dm <- get_group_model(dm.3, 2)
   expect_equal(nrow(get_feature_table(dm)),
                nrow(get_feature_table(model_theta_tau())))
@@ -97,12 +98,16 @@ test_that("generation of group models", {
   dm_2 <- get_group_model(dm, 2)
   expect_equal(get_summary_statistics(dm, 2),
                get_summary_statistics(dm_2, 'all'))
+
+  expect_true(length(get_group_model(model_grps(), 2)$loci) > 0)
 })
 
-test_that("test.getGroups", {
-  expect_equal(get_groups(model_theta_tau()), 1)
+test_that("getting the available groups works", {
+  expect_equal(get_groups(model_theta_tau()), 0)
+
   dm <- model_theta_tau() + locus_averaged(10, 23, group = 1)
   expect_equal(get_groups(dm), 1)
+
   dm <- model_theta_tau() + locus_averaged(10, 32, group = 2)
   expect_equal(get_groups(dm), 1:2)
   dm <- dm + locus_averaged(10, 32, group = 4)
@@ -116,7 +121,7 @@ test_that("test.getGroups", {
 })
 
 
-test_that("test.getSampleSize", {
+test_that("sample sizes are reported corrently", {
   expect_equal(get_sample_size(model_theta_tau()), c(10L, 15L))
 })
 
@@ -154,10 +159,10 @@ test_that("test that scaling of model works", {
     locus_single(102, group = 3)
 
   model <- scale_model(model, 5)
-  expect_equal(get_locus_number(model, 0), 2L)
-  expect_equal(get_locus_number(model, 1), 5L)
-  expect_equal(get_locus_number(model, 2), 5L)
-  expect_equal(get_locus_number(model, 3), 2L)
+
+  expect_equal(get_locus_number(get_group_model(model, 1)), 5L)
+  expect_equal(get_locus_number(get_group_model(model, 2)), 5L)
+  expect_equal(get_locus_number(get_group_model(model, 3)), 2L)
 })
 
 
@@ -176,20 +181,23 @@ test_that("searching features works", {
 
 test_that("get loci length and number works", {
   model <- coal_model(10, 11, 101) + locus_averaged(12, 102, group = 2)
-  expect_equal(get_locus_number(model), 11)
-  expect_equal(get_locus_number(model, 1), 11)
-  expect_equal(get_locus_number(model, 2), 12)
-  expect_equal(get_locus_length(model, 1), 101)
-  expect_equal(get_locus_length(model), 101)
-  expect_equal(get_locus_length(model, 2), 102)
+  model_1 <- get_group_model(model, 1)
+  model_2 <- get_group_model(model, 2)
+
+  expect_equal(get_locus_number(model_1), 11)
+  expect_equal(get_locus_number(model_2), 12)
+  expect_equal(get_locus_length(model_1), 101)
+  expect_equal(get_locus_length(model_2), 102)
+
 
   model <- model + locus_averaged(21, 201, group = 1)
-  expect_equal(get_locus_number(model), 21)
-  expect_equal(get_locus_number(model, 1), 21)
-  expect_equal(get_locus_number(model, 2), 12)
-  expect_equal(get_locus_length(model, 1), 201)
-  expect_equal(get_locus_length(model), 201)
-  expect_equal(get_locus_length(model, 2), 102)
+  model_1 <- get_group_model(model, 1)
+  model_2 <- get_group_model(model, 2)
+
+  expect_equal(get_locus_number(model_1), 21)
+  expect_equal(get_locus_number(model_2), 12)
+  expect_equal(get_locus_length(model_1), 201)
+  expect_equal(get_locus_length(model_2), 102)
 })
 
 
@@ -207,7 +215,7 @@ test_that('locus length matrix generations works', {
     locus_single(22, group = 2) +
     locus_single(23, group = 2)
 
-  expect_equal(get_locus_length_matrix(dm, group = 2),
+  expect_equal(get_locus_length_matrix(get_group_model(dm, 2)),
                matrix(c(0, 0, 21, 0, 0,
                         0, 0, 22, 0, 0,
                         0, 0, 23, 0, 0), 3, 5, TRUE, dimnames))
@@ -273,42 +281,45 @@ test_that('converting positions for trios works', {
     locus_trio(locus_length = c(50, 30, 10), distance = c(40, 20)) +
     locus_averaged(2, 100, group = 2)
 
-  expect_equal(conv_middle_to_trio_pos(.5, model),
+  model_1 <- get_group_model(model, 1)
+  model_2 <- get_group_model(model, 2)
+
+  expect_equal(conv_middle_to_trio_pos(.5, model_1),
                c(45 / 150, 105 / 150))
 
-  expect_equal(conv_middle_to_trio_pos(15, model, relative_in = FALSE),
+  expect_equal(conv_middle_to_trio_pos(15, model_1, relative_in = FALSE),
                c(45 / 150, 105 / 150))
 
-  expect_equal(conv_middle_to_trio_pos(.5, model, relative_out = FALSE),
+  expect_equal(conv_middle_to_trio_pos(.5, model_1, relative_out = FALSE),
                c(45, 105))
 
-  expect_equal(conv_middle_to_trio_pos(10, model,
+  expect_equal(conv_middle_to_trio_pos(10, model_1,
                                        relative_out = FALSE,
                                        relative_in = FALSE), c(40, 100))
 
 
-  expect_equal(conv_middle_to_trio_pos(10, model, group = 2,
+  expect_equal(conv_middle_to_trio_pos(10, model_2,
                                        relative_out = FALSE,
                                        relative_in = FALSE),
                c(10, 10))
-  expect_equal(conv_middle_to_trio_pos(.5, model, group = 2), c(.5, .5))
+  expect_equal(conv_middle_to_trio_pos(.5, model_2), c(.5, .5))
 
   ss <- matrix(0, 6, 5)
   attr(ss, 'positions') <- c(0.1, 0.5, 0.2, 0.6, 0.5, 1)
   attr(ss, 'locus') <- rep(c(-1, 0, 1), each = 2)
-  expect_equal(get_snp_positions(list(ss, ss), model),
+  expect_equal(get_snp_positions(list(ss, ss), model_1),
                list(c(1, 5, 36, 48, 125, 150) / 150,
                     c(5, 25, 96, 108, 145, 150) / 150))
-  expect_equal(get_snp_positions(list(ss, ss), model, relative = FALSE),
+  expect_equal(get_snp_positions(list(ss, ss), model_1, relative = FALSE),
                list(c(1, 5, 36, 48, 125, 150),
                     c(5, 25, 96, 108, 145, 150)))
 
   ss <- matrix(0, 6, 5)
   attr(ss, 'positions') <- c(0.1, 0.3, 0.5, 0.7, 0.9, 1)
   attr(ss, 'locus') <- rep(0, 6)
-  expect_equal(get_snp_positions(list(ss, ss), model, group=2, relative=TRUE),
+  expect_equal(get_snp_positions(list(ss, ss), model_2, relative=TRUE),
                list(c(.1, .3, .5, .7, .9, 1), c(.1, .3, .5, .7, .9, 1)))
-  expect_equal(get_snp_positions(list(ss, ss), model, group=2, relative=FALSE),
+  expect_equal(get_snp_positions(list(ss, ss), model_2, relative=FALSE),
                list(c(10, 30, 50, 70, 90, 100), c(10, 30, 50, 70, 90, 100)))
 })
 

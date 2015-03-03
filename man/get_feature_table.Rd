@@ -22,9 +22,9 @@ get_parameter_table(model)
 
 get_parameter(model)
 
-get_locus_length(dm, group = 1)
+get_locus_length(dm)
 
-get_locus_number(dm, group = 1)
+get_locus_number(dm)
 
 get_populations(dm)
 
@@ -32,7 +32,7 @@ get_sample_size(dm, for_sim = FALSE)
 
 get_groups(dm)
 
-get_locus_length_matrix(dm, group = 1)
+get_locus_length_matrix(dm, individual = TRUE)
 
 get_outgroup(model)
 
@@ -45,13 +45,13 @@ get_summary_statistics(dm, group = 1)
 \arguments{
 \item{model}{The coalescent model from which aspects are returned}
 
-\item{group}{The locus group for which aspects are returned}
-
 \item{for_sim}{If true, the sample size used internally for the simulation
 will be reported rather than the number of actuall samples. The numbers
 can be unequal for the simulation of unphased data.}
 
 \item{pop}{The population for which aspects are returned}
+
+\item{group}{The locus group for which aspects are returned}
 }
 \description{
 Getters for coalescent models

@@ -50,7 +50,6 @@ generate_tree_model <- function(dm, locus, locus_number=1) {
   tree_model <- read_cache(dm, paste0('tree_model_', locus))
 
   if (is.null(tree_model)) {
-    stopifnot(all(get_groups(dm) == 1))
     locus_length <- get_locus_length_matrix(dm)[locus,]
 
     if (any(msms_features %in% get_feature_table(dm)$type)) {
@@ -72,11 +71,10 @@ generate_tree_model <- function(dm, locus, locus_number=1) {
     # Loci
     tree_model$loci <- tree_model$loci[FALSE, ]
     if (locus_number == 1) {
-      tree_model <- tree_model + locus_single(sum(locus_length), group = 0)
+      tree_model <- tree_model + locus_single(sum(locus_length))
     } else {
       tree_model <- tree_model + locus_averaged(locus_number,
-                                                sum(locus_length),
-                                                group = 0)
+                                                sum(locus_length))
     }
 
     cache(dm, paste0('tree_model_', locus), tree_model)
@@ -157,7 +155,7 @@ sg_generate_opt_cmd <- function(dm) {
     stop("Finite Sites models need an outgroup.")
   }
 
-  if (has_trios(dm, 0)) is_outer <- c(TRUE, FALSE, TRUE)
+  if (has_trios(dm)) is_outer <- c(TRUE, FALSE, TRUE)
   else is_outer <- FALSE
 
   lapply(is_outer, function(outer) {

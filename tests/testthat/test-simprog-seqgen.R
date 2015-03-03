@@ -86,8 +86,7 @@ test_that("seq-gen can simulate trios", {
     sumstat_seg_sites()
 
   sum.stats <- simulate(dm.lt, pars=c(1, 10))
-  expect_that(sum(sum.stats$jsfs),
-              is_less_than(sum(sapply(sum.stats$seg_sites, ncol))))
+  expect_true(sum(sum.stats$jsfs) <= sum(sapply(sum.stats$seg_sites, ncol)))
 })
 
 

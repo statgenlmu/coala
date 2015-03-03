@@ -14,6 +14,7 @@ Locus <- R6Class('Locus',
 
       assert_that(is.numeric(locus_length))
       assert_that(length(locus_length) == 1 || length(locus_length) == 5)
+      assert_that(all(locus_length >= 0))
       private$length <- locus_length
 
       assert_that(is.numeric(locus_number))
@@ -63,6 +64,10 @@ Locus <- R6Class('Locus',
                          length_ir = locus_length[4],
                          length_r = locus_length[5],
                          stringsAsFactors = FALSE)
+    },
+    print = function() {
+      cat(self$get_number(), "loci of length", self$get_length(),
+          "in group", self$get_group())
     }
   )
 )

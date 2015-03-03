@@ -51,7 +51,7 @@ test_that('calculation of ihh works', {
 
 
 test_that('ihh works with trios', {
-  model <- model_trios()
+  model <- get_group_model(model_trios(), 2)
   stats <- simulate(model, pars=c(1,5))
   ihh <- sumstat_ihh(population = 2)
   ihh$calculate(stats$seg_sites, NULL, model)

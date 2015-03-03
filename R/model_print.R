@@ -11,4 +11,10 @@ print.Coalmodel <- function(x, ...) {
     cat("Parameters:\n")
     for (par in get_parameter(x)) print(par)
   }
+
+  if (length(get_loci(x)) == 0) cat("The model has no loci\n")
+  else {
+    cat("Loci:\n")
+    for (locus in get_loci(x)) print(locus)
+  }
 }

@@ -32,10 +32,14 @@ test_that('Adding a locus to a model works', {
     locus_single(1017, 2) +
     locus_single(1018, 2) +
     locus_single(1019, 2)
-  expect_equal(get_locus_number(model2), 10)
-  expect_equal(get_locus_length(model2), 1010)
-  expect_equal(get_locus_number(model2, 2), 3)
-  expect_equal(get_locus_length(model2, 2), 1:3 + 1016)
+
+  model2_1 <- get_group_model(model2, 1)
+  model2_2 <- get_group_model(model2, 2)
+
+  expect_equal(get_locus_number(model2_1), 10)
+  expect_equal(get_locus_length(model2_1), 1010)
+  expect_equal(get_locus_number(model2_2), 3)
+  expect_equal(get_locus_length(model2_2), 1:3 + 1016)
 })
 
 

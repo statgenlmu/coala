@@ -1,20 +1,3 @@
-#---------------------------------------------------------------
-# DemographicModel.R
-# Class for representing a model of the evolutionary development
-# of two different species.
-#
-# Authors:  Paul R. Staab & Lisha Mathew
-# Email:    staab ( at ) bio.lmu.de
-# Licence:  GPLv3 or later
-#--------------------------------------------------------------
-
-#' @include sim_program.R
-
-#-----------------------------------------------------------------------
-# Initialization
-#-----------------------------------------------------------------------
-
-
 #' @export
 coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model <- list()
@@ -23,9 +6,10 @@ coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model$features <- list()
   model$loci <- list()
   model$parameter <- list()
-
   model$sum_stats <- create_sumstat_container()
 
+  model$scaling_factor <- 1
+  model$is_grp_model <- FALSE
   model$id <- get_id()
 
   # Add sample sizes
@@ -64,7 +48,7 @@ determine_simprog <- function(dm) {
   name <- read_cache(dm, 'simprog')
 
   if (is.null(name)) {
-    if (length(get_groups(dm)) > 1) {
+    if ((!dm$is_grp_model) && any(get_groups(dm) != 0)) {
       name <- 'groups'
     } else {
       priority <- -Inf
@@ -116,12 +100,10 @@ get_group_model <- function(model, group) {
     grp_model$sum_stats <- get_group_statistics(model, group)
 
     # Loci
-    loci <- model$loci[model$loci$group == group, , drop=FALSE]
-    if (nrow(loci) > 0) grp_model$loci <- loci
-    else grp_model$loci <- model$loci[model$loci$group == 0, , drop=FALSE]
-    grp_model$loci$group <- 0
+    grp_model$loci <- get_loci(model, group)
 
     grp_model$id <- get_id()
+    grp_model$is_grp_model <- TRUE
     cache(model, paste0('grp_model_', group), grp_model)
   }
   grp_model
@@ -195,16 +177,16 @@ has_inter_locus_var <- function(dm, group = 0) {
 }
 
 
-has_trios <- function(dm, group=0) {
-  sum(get_locus_length_matrix(dm, group)[,-3]) > 0
+has_trios <- function(dm) {
+  sum(get_locus_length_matrix(dm)[,-3]) > 0
 }
 
 
 # Converts a position on the middle locus to the relative position
 # on the simulated stretch
-conv_middle_to_trio_pos <- function(pos, model, group=1,
+conv_middle_to_trio_pos <- function(pos, model,
                                     relative_out=TRUE, relative_in=TRUE) {
-  llm <- get_locus_length_matrix(model, group)
+  llm <- get_locus_length_matrix(model)
 
   pos <- ifelse(relative_in, pos * llm[,3], pos) + llm[,1] + llm[,2]
   if (relative_out) pos <- pos / rowSums(llm)
@@ -213,9 +195,9 @@ conv_middle_to_trio_pos <- function(pos, model, group=1,
 }
 
 
-get_snp_positions <- function(seg_sites, model, group=1, relative=TRUE) {
-  assert_that(length(seg_sites) == get_locus_number(model, group))
-  llm <- get_locus_length_matrix(model, group)
+get_snp_positions <- function(seg_sites, model, relative=TRUE) {
+  assert_that(length(seg_sites) == get_locus_number(model))
+  llm <- get_locus_length_matrix(model)
   lapply(1:length(seg_sites), function(locus) {
     pos <- attr(seg_sites[[locus]], 'position')
     trio_locus <- attr(seg_sites[[locus]], 'locus')
