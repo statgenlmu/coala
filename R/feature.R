@@ -57,7 +57,9 @@ Feature <- R6Class("Feature",
       idx <- as.character(length(private$parameter) + 1)
       private$parameter[[idx]] <- parameter
     },
-    print = function() cat("Feature of type", private$name, "\n")
+    print = function() {
+      cat("Feature of type", private$feature_table$type[1], "\n")
+    }
   )
 )
 
