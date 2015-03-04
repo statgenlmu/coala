@@ -1,6 +1,6 @@
 Package: coalsimr
-Version: 0.0.9016
-Date: 2015-02-27
+Version: 0.0.9017
+Date: 2015-03-04
 License: GPL (>= 3)
 Title: Simulating the evolution of DNA sequences
 Author: Paul R. Staab
@@ -48,10 +48,9 @@ Collate:
     'options.R'
     'parameter.R'
     'sample_seed.R'
-    'sim_program_helpers.R'
     'simulator_class.R'
+    'simulator_helpers.R'
     'simulator_ms.R'
-    'sim_program_scrm.R'
     'simulator_msms.R'
     'simulator_scrm.R'
     'simulator_seqgen.R'
