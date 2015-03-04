@@ -1,4 +1,4 @@
-context('Simulation Program msms')
+context('Simulator msms')
 
 test_that("calling msms works", {
   if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
