@@ -45,11 +45,12 @@ test_that("generating msms options works", {
 
 
 test_that("generating text command works", {
+  msms <- get_simulator("msms")
   model2 <- model_theta_tau() +
     feat_selection(par_range('s', 1, 10), par_expr(s),
                    population = 1, at_time = 1.7)
 
-  cmd <- msms_get_command(model2)
+  cmd <- msms$get_cmd(model2)
   expect_equal(grep('^msms', cmd), 1)
   expect_equal(grep('-ms 25 10', cmd), 1)
   expect_equal(grep('-SAA s', cmd), 1)
@@ -59,23 +60,25 @@ test_that("generating text command works", {
 
 test_that("msms_simulate works", {
   if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  msms <- get_simulator("msms")
   dm <- model_theta_tau() +
     feat_selection(par_const(500), par_const(250),
                    population = 1, at_time = 1.7)
 
   set.seed(6688)
-  sum_stats <- msms_simulate(dm, c(1, 5))
+  sum_stats <- msms$simulate(dm, c(1, 5))
   expect_true(is.matrix(sum_stats$jsfs))
   expect_true(sum(sum_stats$jsfs) > 0)
 
   set.seed(6688)
-  sum_stats2 <- msms_simulate(dm, c(1, 5))
+  sum_stats2 <- msms$simulate(dm, c(1, 5))
   expect_equal(sum_stats, sum_stats2)
 })
 
 
 test_that("msms_simulate works with inter-locus variation", {
   if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  msms <- get_simulator("msms")
 
   dm_tmp <- coal_model(5, 2) +
     feat_mutation(par_range('theta', 1, 5), variance = 17) +
@@ -83,20 +86,22 @@ test_that("msms_simulate works with inter-locus variation", {
   expect_true(has_inter_locus_var(dm_tmp))
 
   set.seed(1100)
-  sum_stats <- msms_simulate(dm_tmp, c(3))
+  sum_stats <- msms$simulate(dm_tmp, c(3))
   expect_is(sum_stats$seg_sites, 'list')
   expect_equal(length(sum_stats$seg_sites), 2)
 })
 
 
 test_that('simulating unphased data works', {
+  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  msms <- get_simulator("msms")
   model <- model_theta_tau() + feat_unphased(2, 1) + sumstat_seg_sites()
-  stats <- msms_simulate(model, c(1,5))
+  stats <- msms$simulate(model, c(1,5))
   expect_equal(dim(stats$jsfs), c(11, 16))
   expect_equal(nrow(stats$seg_sites[[1]]), 25)
 
   model <- model_theta_tau() + feat_unphased(3, 2) + sumstat_seg_sites()
-  stats <- msms_simulate(model, c(1,5))
+  stats <- msms$simulate(model, c(1,5))
   expect_equal(dim(stats$jsfs), c(21, 31))
   expect_equal(nrow(stats$seg_sites[[1]]), 50)
 })
