@@ -53,14 +53,14 @@ determine_simprog <- function(dm) {
     } else {
       priority <- -Inf
 
-      for (simprog_name in ls(simprograms)) {
-        simprog <- get_simprog(simprog_name)
-        if (all(get_feature_table(dm)$type %in% simprog$possible_features) &
-              all(dm$sum_stats$name %in% simprog$possible_sum_stats)) {
+      for (simprog_name in ls(simulators)) {
+        simprog <- get_simulator(simprog_name)
+        if (all(get_feature_table(dm)$type %in% simprog$get_features()) &
+              all(dm$sum_stats$name %in% simprog$get_sumstats())) {
 
-          if (simprog$priority > priority) {
-            name <- simprog$name
-            priority <- simprog$priority
+          if (simprog$get_priority() > priority) {
+            name <- simprog
+            priority <- simprog$get_priority()
           }
         }
       }
