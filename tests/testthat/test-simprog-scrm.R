@@ -1,8 +1,9 @@
 context("Simulation Program scrm")
 
 test_that("simulation with scrm works", {
+  scrm <- get_simulator("scrm")
   model <- model_theta_tau()
-  sum_stats <- get_simprog('scrm')$sim_func(model, c(1, 5))
+  sum_stats <- scrm$simulate(model, c(1, 5))
   expect_true(is.list(sum_stats))
   expect_equal(length(sum_stats), 2)
   expect_false(is.null(sum_stats$pars))
