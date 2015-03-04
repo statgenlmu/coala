@@ -15,25 +15,24 @@
 #'   sumstat_jsfs()
 #'
 #' simulate(model, pars=c(1, 5))
-simulate.coal_model <- function(object, nsim = 1, seed, pars=NULL, ...) {
+simulate.Coalmodel <- function(object, nsim = 1, seed, pars=NULL, ...) {
   check_par_range(object, pars)
 
   simprog <- determine_simprog(object)
 
   if (simprog != "groups") {
-    model <- get_group_model(object, 1)
-    return(get_simprog(simprog)$sim_func(model, pars))
+    return(get_simprog(simprog)$sim_func(object, pars))
   }
 
   sum_stats <- list(pars=pars)
   for (group in get_groups(object)) {
     grp_model <- get_group_model(object, group)
-    sum_stats.grp <- simulate(grp_model, pars = pars)
+    sum_stats_grp <- simulate.Coalmodel(grp_model, pars = pars)
 
-    for (i in seq(along = sum_stats.grp)) {
-      if (names(sum_stats.grp)[i] == 'pars') next
-      name <- paste(names(sum_stats.grp)[i], group, sep='.')
-      sum_stats[[name]] <- sum_stats.grp[[i]]
+    for (i in seq(along = sum_stats_grp)) {
+      if (names(sum_stats_grp)[i] == 'pars') next
+      name <- paste(names(sum_stats_grp)[i], group, sep='.')
+      sum_stats[[name]] <- sum_stats_grp[[i]]
     }
   }
 

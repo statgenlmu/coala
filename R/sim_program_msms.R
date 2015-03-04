@@ -55,9 +55,9 @@ msms_find_jar <- function(throw.error = TRUE, silent = FALSE) {
 msms_generate_opts_cmd <- function(dm) {
   cmd <- c('c(')
 
-  for (i in 1:dim(dm$features)[1] ) {
-    type <- as.character(dm$features[i,"type"])
-    feat <- unlist(dm$features[i, ])
+  for (i in 1:dim(get_feature_table(dm))[1] ) {
+    type <- as.character(get_feature_table(dm)[i,"type"])
+    feat <- unlist(get_feature_table(dm)[i, ])
 
     if (type == "selection") {
       cmd <- c(cmd, '"-SI"', ',', feat['time.point'], ',',

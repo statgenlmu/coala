@@ -8,6 +8,7 @@
 \alias{get_locus_number}
 \alias{get_outgroup}
 \alias{get_outgroup_size}
+\alias{get_parameter}
 \alias{get_parameter_table}
 \alias{get_population_indiviuals}
 \alias{get_populations}
@@ -19,9 +20,11 @@ get_feature_table(model)
 
 get_parameter_table(model)
 
-get_locus_length(dm, group = 1)
+get_parameter(model)
 
-get_locus_number(dm, group = 1)
+get_locus_length(dm)
+
+get_locus_number(dm)
 
 get_populations(dm)
 
@@ -29,7 +32,7 @@ get_sample_size(dm, for_sim = FALSE)
 
 get_groups(dm)
 
-get_locus_length_matrix(dm, group = 1)
+get_locus_length_matrix(dm, individual = TRUE)
 
 get_outgroup(model)
 
@@ -42,13 +45,13 @@ get_summary_statistics(dm, group = 1)
 \arguments{
 \item{model}{The coalescent model from which aspects are returned}
 
-\item{group}{The locus group for which aspects are returned}
-
 \item{for_sim}{If true, the sample size used internally for the simulation
 will be reported rather than the number of actuall samples. The numbers
 can be unequal for the simulation of unphased data.}
 
 \item{pop}{The population for which aspects are returned}
+
+\item{group}{The locus group for which aspects are returned}
 }
 \description{
 Getters for coalescent models
@@ -59,6 +62,8 @@ Getters for coalescent models
 
 \item \code{get_parameter_table}: Returns the ranged parameters of a model as a
 data.frame
+
+\item \code{get_parameter}: Returns the ranged parameters of a model
 
 \item \code{get_locus_length}: Returns the length of the loci in a locus group
 

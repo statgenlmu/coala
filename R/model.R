@@ -1,61 +1,15 @@
-#---------------------------------------------------------------
-# DemographicModel.R
-# Class for representing a model of the evolutionary development
-# of two different species.
-#
-# Authors:  Paul R. Staab & Lisha Mathew
-# Email:    staab ( at ) bio.lmu.de
-# Licence:  GPLv3 or later
-#--------------------------------------------------------------
-
-#' @include sim_program.R
-
-#-----------------------------------------------------------------------
-# Initialization
-#-----------------------------------------------------------------------
-
-create_feature_table <- function(type=character(), parameter=character(),
-                               pop.source=numeric(), pop.sink=numeric(),
-                               time.point=character(), group=numeric()) {
-
-  stopifnot(is.character(type))
-  stopifnot(is.character(parameter))
-  stopifnot(is.na(pop.source) | is.numeric(pop.source))
-  stopifnot(is.na(pop.sink) | is.numeric(pop.sink))
-  stopifnot(is.na(time.point) | is.character(time.point))
-  stopifnot(is.numeric(group))
-
-  data.frame(type=type,
-             parameter=parameter,
-             pop.source=pop.source,
-             pop.sink=pop.sink,
-             time.point=time.point,
-             group=group,
-             stringsAsFactors=F)
-}
-
 #' @export
 coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model <- list()
-  class(model) <- c("coal_model", class(base_class))
+  class(model) <- c("Coalmodel")
 
-  model$features <- create_feature_table()
-
-  model$loci <- data.frame(group=numeric(), number=numeric(),
-                           name=character(), name_l=character(),
-                           name_r=character(),
-                           length_l=numeric(), length_il=numeric(),
-                           length_m=numeric(),
-                           length_ir=numeric(), length_r=numeric(),
-                           stringsAsFactors=F )
-
-  model$parameters <- data.frame(parameter=character(),
-                                 lower.range=numeric(),
-                                 upper.range=numeric(),
-                                 stringsAsFactors=F)
-
+  model$features <- list()
+  model$loci <- list()
+  model$parameter <- list()
   model$sum_stats <- create_sumstat_container()
 
+  model$scaling_factor <- 1
+  model$is_grp_model <- FALSE
   model$id <- get_id()
 
   # Add sample sizes
@@ -74,7 +28,7 @@ coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
 
 
 is.model <- function(model) {
-  "coal_model" %in% class(model)
+  "Coalmodel" %in% class(model)
 }
 
 
@@ -94,14 +48,14 @@ determine_simprog <- function(dm) {
   name <- read_cache(dm, 'simprog')
 
   if (is.null(name)) {
-    if (length(get_groups(dm)) > 1) {
+    if ( (!dm$is_grp_model) && any(get_groups(dm) != 0) ) {
       name <- 'groups'
     } else {
       priority <- -Inf
 
       for (simprog_name in ls(simprograms)) {
         simprog <- get_simprog(simprog_name)
-        if (all(dm$features$type %in% simprog$possible_features) &
+        if (all(get_feature_table(dm)$type %in% simprog$possible_features) &
               all(dm$sum_stats$name %in% simprog$possible_sum_stats)) {
 
           if (simprog$priority > priority) {
@@ -134,29 +88,22 @@ get_mutation_par <- function(dm, outer=FALSE, group=0) {
 }
 
 
-create_group_model <- function(dm, group) {
-  # Features
-  dm$features <- search_feature(dm, group = group)
-  dm$features$group <- 0
-
-  # sum_stats
-  dm$sum_stats <- get_group_statistics(dm, group)
-
-  # Loci
-  loci <- dm$loci[dm$loci$group == group, , drop=FALSE]
-  if (nrow(loci) > 0) dm$loci <- loci
-  else dm$loci <- dm$loci[dm$loci$group == 0, , drop=FALSE]
-  dm$loci$group <- 0
-
-  dm$id <- get_id()
-  dm
-}
-
-
 get_group_model <- function(model, group) {
   grp_model <- read_cache(model, paste0('grp_model_', group))
   if (is.null(grp_model)) {
-    grp_model <- create_group_model(model, group)
+    grp_model <- model
+    # Features
+    grp_model$features <-
+      search_feature(model, group = group, feat_table = FALSE)
+
+    # sum_stats
+    grp_model$sum_stats <- get_group_statistics(model, group)
+
+    # Loci
+    grp_model$loci <- get_loci(model, group)
+
+    grp_model$id <- get_id()
+    grp_model$is_grp_model <- TRUE
     cache(model, paste0('grp_model_', group), grp_model)
   }
   grp_model
@@ -164,55 +111,58 @@ get_group_model <- function(model, group) {
 
 
 search_feature <- function(dm, type=NULL, pop.source=NULL,
-                          pop.sink=NULL, time.point=NULL, group=NULL) {
+                          pop.sink=NULL, time.point=NULL, group=NULL,
+                          feat_table=TRUE) {
 
-  mask <- rep(TRUE, nrow(get_feature_table(dm)))
+  feat_tbl <- get_feature_table(dm)
+  mask <- rep(TRUE, nrow(feat_tbl))
 
-  if (!is.null(type)) mask <- mask & dm$features$type %in% type
+  if (!is.null(type)) mask <- mask & feat_tbl$type %in% type
 
   if (!is.null(pop.source)) {
     if (is.na(pop.source)) {
-      mask <- mask & is.na(dm$features$pop.source)
+      mask <- mask & is.na(feat_tbl$pop.source)
     } else {
-      mask <- mask & dm$features$pop.source %in% pop.source
+      mask <- mask & feat_tbl$pop.source %in% pop.source
     }
   }
 
   if (!is.null(pop.sink)) {
     if (is.na(pop.sink)) {
-      mask <- mask & is.na(dm$features$pop.sink)
+      mask <- mask & is.na(feat_tbl$pop.sink)
     } else {
-      mask <- mask & dm$features$pop.sink %in% pop.sink
+      mask <- mask & feat_tbl$pop.sink %in% pop.sink
     }
   }
 
   if (!is.null(time.point)) {
     if (is.na(time.point)) {
-      mask <- mask & is.na(dm$features$time.point)
+      mask <- mask & is.na(feat_tbl$time.point)
     } else {
-      mask <- mask & dm$features$time.point %in% time.point
+      mask <- mask & feat_tbl$time.point %in% time.point
     }
   }
 
   if (!is.null(group)) {
-    if (group == 0) mask <- mask & dm$features$group == 0
+    if (group == 0) mask <- mask & feat_tbl$group == 0
     else {
-      mask <- mask & dm$features$group %in% c(0, group)
+      mask <- mask & feat_tbl$group %in% c(0, group)
 
       # Check if values for the default group are overwritten in the focal group
-      grp_0 <- dm$features$group == 0
+      grp_0 <- feat_tbl$group == 0
       overwritten <- grp_0[mask]
       for (i in which(overwritten)) {
-        duplicats <- search_feature(dm, type=dm$features$type[mask][i],
-                                   pop.source=dm$features$pop.source[mask][i],
-                                   pop.sink=dm$features$pop.sink[mask][i])
+        duplicats <- search_feature(dm, type=feat_tbl$type[mask][i],
+                                    pop.source=feat_tbl$pop.source[mask][i],
+                                    pop.sink=feat_tbl$pop.sink[mask][i])
         if (sum(duplicats$group == group) == 0) overwritten[i] <- FALSE
       }
       mask[mask] <- !overwritten
     }
   }
 
-  dm$features[mask, ]
+  if(!feat_table) return(get_features(dm)[mask])
+  feat_tbl[mask, ]
 }
 
 
@@ -227,16 +177,16 @@ has_inter_locus_var <- function(dm, group = 0) {
 }
 
 
-has_trios <- function(dm, group=0) {
-  sum(get_locus_length_matrix(dm, group)[,-3]) > 0
+has_trios <- function(dm) {
+  sum(get_locus_length_matrix(dm)[,-3]) > 0
 }
 
 
 # Converts a position on the middle locus to the relative position
 # on the simulated stretch
-conv_middle_to_trio_pos <- function(pos, model, group=1,
+conv_middle_to_trio_pos <- function(pos, model,
                                     relative_out=TRUE, relative_in=TRUE) {
-  llm <- get_locus_length_matrix(model, group)
+  llm <- get_locus_length_matrix(model)
 
   pos <- ifelse(relative_in, pos * llm[,3], pos) + llm[,1] + llm[,2]
   if (relative_out) pos <- pos / rowSums(llm)
@@ -245,9 +195,9 @@ conv_middle_to_trio_pos <- function(pos, model, group=1,
 }
 
 
-get_snp_positions <- function(seg_sites, model, group=1, relative=TRUE) {
-  assert_that(length(seg_sites) == get_locus_number(model, group))
-  llm <- get_locus_length_matrix(model, group)
+get_snp_positions <- function(seg_sites, model, relative=TRUE) {
+  assert_that(length(seg_sites) == get_locus_number(model))
+  llm <- get_locus_length_matrix(model)
   lapply(1:length(seg_sites), function(locus) {
     pos <- attr(seg_sites[[locus]], 'position')
     trio_locus <- attr(seg_sites[[locus]], 'locus')

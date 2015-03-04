@@ -1,10 +1,7 @@
-base_class <- R6Class("CSR_OBJ")
-
-Feature <- R6Class("Feature", inherit = base_class,
+Feature <- R6Class("Feature",
   private = list(
     feature_table = NULL,
     parameter = list(),
-    sumstats = list(),
     group = 0,
     inter_locus_var = FALSE
   ),
@@ -52,7 +49,7 @@ Feature <- R6Class("Feature", inherit = base_class,
     },
     get_table = function() private$feature_table,
     get_parameters = function() private$parameter,
-    get_sumstats = function() private$sumstats,
+    reset_parameters = function() private$parameter <- list(),
     get_group = function() private$group,
     get_inter_locus_var = function() private$inter_locus_var,
     add_parameter = function(parameter) {
@@ -60,17 +57,8 @@ Feature <- R6Class("Feature", inherit = base_class,
       idx <- as.character(length(private$parameter) + 1)
       private$parameter[[idx]] <- parameter
     },
-    add_sumstat = function(sumstat) {
-      stopifnot(is.sum_stat(sumstat))
-      idx <- as.character(length(private$sumstats) + 1)
-      private$sumstats[[idx]] <- sumstat
-    },
-    add_feature = function(feature) {
-      stopifnot(is.feature(feature))
-      private$feature_table <- rbind(private$feature_table, feature$get_table())
-      for (par in feature$get_parameters()) {
-        self$add_parameter(par)
-      }
+    print = function() {
+      cat("Feature of type", private$feature_table$type[1], "\n")
     }
   )
 )
@@ -80,11 +68,22 @@ is.feature <- function(feature) {
 }
 
 
-print.Feature <- function(x, ...) {
-  cat('Feature Table: \n')
-  print(x$get_table())
-  cat('\nParameters: \n')
-  for (par in x$get_parameters()) print(par)
-  cat('\nsumstats: \n')
-  for (stat in x$get_sumstats()) print(stat)
+create_feature_table <- function(type=character(), parameter=character(),
+                                 pop.source=numeric(), pop.sink=numeric(),
+                                 time.point=character(), group=numeric()) {
+
+  stopifnot(is.character(type))
+  stopifnot(is.character(parameter))
+  stopifnot(is.na(pop.source) | is.numeric(pop.source))
+  stopifnot(is.na(pop.sink) | is.numeric(pop.sink))
+  stopifnot(is.na(time.point) | is.character(time.point))
+  stopifnot(is.numeric(group))
+
+  data.frame(type=type,
+             parameter=parameter,
+             pop.source=pop.source,
+             pop.sink=pop.sink,
+             time.point=time.point,
+             group=group,
+             stringsAsFactors=F)
 }

@@ -21,9 +21,9 @@ ms_generate_opts_cmd <- function(dm) {
   cmd <- c(cmd,'"-I"', ",", length(sample_size), ',',
            paste(sample_size, collapse=","), ',')
 
-  for (i in 1:dim(dm$features)[1] ) {
-    type <- as.character(dm$features[i,"type"])
-    feat <- unlist(dm$features[i, ])
+  for (i in 1:dim(get_feature_table(dm))[1] ) {
+    type <- as.character(get_feature_table(dm)[i,"type"])
+    feat <- unlist(get_feature_table(dm)[i, ])
 
     if ( type == "mutation" ) {
       cmd <- c(cmd,'"-t"', ',', feat["parameter"], ',')

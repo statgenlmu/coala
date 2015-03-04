@@ -6,7 +6,8 @@
 #' @return The feature, which can be added to a model using `+`.
 #' @export
 feat_unphased <- function(ploidy, samples_per_ind=ploidy) {
-  Feature$new('unphased', par_const(NA)) +
+  coal_model() +
+    Feature$new('unphased', par_const(NA)) +
     Feature$new('ploidy', par_const(ploidy)) +
     Feature$new('samples_per_ind', par_const(samples_per_ind))
 }
@@ -15,7 +16,7 @@ feat_unphased <- function(ploidy, samples_per_ind=ploidy) {
 unphase_segsites <- function(seg_sites, ploidy, samples_per_ind) {
   lapply(seg_sites, function(ss) {
     ss_up <- do.call(rbind, lapply(seq(1, nrow(ss), by=ploidy), function(ind) {
-      apply(ss[ind:(ind + ploidy - 1),], 2, sample, size=samples_per_ind)
+      apply(ss[ind: (ind + ploidy - 1), ], 2, sample, size=samples_per_ind)
     }))
     attr(ss_up, 'positions') <- attr(ss, 'positions')
     attr(ss_up, 'locus') <- attr(ss, 'locus')

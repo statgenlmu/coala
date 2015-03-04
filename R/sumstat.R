@@ -1,4 +1,4 @@
-sumstat <- R6Class('sumstat', inherit = base_class,
+sumstat <- R6Class('sumstat',
   private = list(name=NA, group=NA),
   public = list(
     initialize = function(name, group=0) {
@@ -31,6 +31,7 @@ add_to_model.sumstat <- function(sum_stat, model, feat_name) {
 
   # Save the statistic
   model$sum_stats[[sum_stat$get_name()]] <- sum_stat
+  model$id <- get_id()
   model
 }
 

@@ -13,14 +13,21 @@ test_that("creating models works", {
 
 
 test_that("adding parameters works", {
-  model <- coal_model(11:12, 100) + par_range("theta", 1, 5)
+  model <- coal_model(11:12, 100) + par_range("p1", 1, 5)
   par_table <- get_parameter_table(model)
-  expect_equal("theta", par_table$name)
+  expect_equal("p1", par_table$name)
   expect_equal(1, par_table$lower.range)
   expect_equal(5, par_table$upper.range)
 
+  expect_that(get_parameter(model), is_a("list"))
+  expect_equal(length(get_parameter(model)), 1)
+  expect_true(is.par(get_parameter(model)[[1]]))
+
+  model <- model + par_range("p2", 1, 5)
+  expect_equal(length(get_parameter(model)), 2)
+
   test <- list (1:10)
-  class(test) <- 'CSR_OBJ'
+  class(test) <- 'BLUB'
   expect_error(model + test)
 })
 
@@ -29,6 +36,7 @@ test_that("adding features works", {
   dm <- coal_model(11:12, 100)
   dm <- dm + Feature$new('blub', 5)
   expect_equal(nrow(search_feature(dm, 'blub')), 1)
+  expect_that(length(get_features(dm)), is_more_than(0))
 
   dm <- coal_model(11:12, 100)
   dm <- dm + Feature$new('bli', par_range('bla', 1, 5))
@@ -43,12 +51,6 @@ test_that("adding features works", {
   dm <- dm + Feature$new('bli', par_range('bla', 1, 5), group=1, variance='15')
   expect_false(has_inter_locus_var(dm, 0))
   expect_true(has_inter_locus_var(dm, 1))
-
-  dm <- coal_model(11:12, 100) + (Feature$new('blub', 5) + par_range('a', 1, 5))
-  expect_equal(nrow(get_parameter_table(dm)), 1)
-
-  dm <- coal_model(11:12, 100) + (Feature$new('blub', 5) + sumstat$new('5'))
-  expect_equal(get_summary_statistics(dm), '5')
 })
 
 
@@ -63,49 +65,63 @@ test_that("test get_summary_statistics", {
 
 
 test_that("generation of group models", {
-  dm <- create_group_model(model_theta_tau(), 1)
-  expect_equal(dm$features, model_theta_tau()$features)
+  dm <- get_group_model(model_theta_tau(), 1)
+  expect_equal(get_feature_table(dm), get_feature_table(model_theta_tau()))
   expect_equal(dm$sum_stats, model_theta_tau()$sum_stats)
 
   dm <- model_theta_tau() + locus_averaged(10, 23, group = 1)
-  dm <- create_group_model(dm, 1)
-  expect_equal(nrow(dm$features), nrow(model_theta_tau()$features))
-  expect_true(all(dm$features$group == 0))
+  dm <- get_group_model(dm, 1)
+  expect_equal(nrow(get_feature_table(dm)),
+               nrow(get_feature_table(model_theta_tau())))
+  expect_true(all(get_feature_table(dm)$group == 0))
   expect_equal(get_locus_length(dm), 23)
 
   dm.3 <- model_theta_tau() +
     locus_averaged(5, 23, group = 1) +
     locus_averaged(31, 30, group = 2)
-  dm <- create_group_model(dm.3, 1)
-  expect_equal(nrow(dm$features), nrow(model_theta_tau()$features))
-  expect_true(all(dm$features$group == 0))
+  dm <- get_group_model(dm.3, 1)
+  expect_equal(nrow(get_feature_table(dm)),
+               nrow(get_feature_table(model_theta_tau())))
+  expect_true(all(get_feature_table(dm)$group == 0))
   expect_equal(get_locus_length(dm), 23)
-  dm <- create_group_model(dm.3, 2)
-  expect_equal(nrow(dm$features), nrow(model_theta_tau()$features))
-  expect_true(all(dm$features$group == 0))
+
+  dm <- get_group_model(dm.3, 2)
+  expect_equal(nrow(get_feature_table(dm)),
+               nrow(get_feature_table(model_theta_tau())))
+  expect_true(all(get_feature_table(dm)$group == 0))
   expect_equal(get_locus_length(dm), 30)
   expect_equal(get_locus_number(dm), 31)
 
   dm <- model_theta_tau() + sumstat_seg_sites(group = 2)
-  dm_1 <- create_group_model(dm, 1)
+  dm_1 <- get_group_model(dm, 1)
   expect_equal(get_summary_statistics(dm, 1), get_summary_statistics(dm_1))
-  dm_2 <- create_group_model(dm, 2)
+  dm_2 <- get_group_model(dm, 2)
   expect_equal(get_summary_statistics(dm, 2),
                get_summary_statistics(dm_2, 'all'))
+
+  expect_true(length(get_group_model(model_grps(), 2)$loci) > 0)
 })
 
-test_that("test.getGroups", {
-  expect_equal(get_groups(model_theta_tau()), 1)
+test_that("getting the available groups works", {
+  expect_equal(get_groups(model_theta_tau()), 0)
+
   dm <- model_theta_tau() + locus_averaged(10, 23, group = 1)
   expect_equal(get_groups(dm), 1)
+
   dm <- model_theta_tau() + locus_averaged(10, 32, group = 2)
   expect_equal(get_groups(dm), 1:2)
   dm <- dm + locus_averaged(10, 32, group = 4)
   expect_equal(get_groups(dm), c(1:2, 4))
+
+  dm <- dm + feat_selection(par_const(5), par_const(10), 1, 0, group = 5)
+  expect_equal(get_groups(dm), c(1:2, 4:5))
+
+  dm <- dm + sumstat_sfs(group = 6)
+  expect_equal(get_groups(dm), c(1:2, 4:6))
 })
 
 
-test_that("test.getSampleSize", {
+test_that("sample sizes are reported corrently", {
   expect_equal(get_sample_size(model_theta_tau()), c(10L, 15L))
 })
 
@@ -143,10 +159,10 @@ test_that("test that scaling of model works", {
     locus_single(102, group = 3)
 
   model <- scale_model(model, 5)
-  expect_equal(get_locus_number(model, 0), 2L)
-  expect_equal(get_locus_number(model, 1), 5L)
-  expect_equal(get_locus_number(model, 2), 5L)
-  expect_equal(get_locus_number(model, 3), 2L)
+
+  expect_equal(get_locus_number(get_group_model(model, 1)), 5L)
+  expect_equal(get_locus_number(get_group_model(model, 2)), 5L)
+  expect_equal(get_locus_number(get_group_model(model, 3)), 2L)
 })
 
 
@@ -165,20 +181,23 @@ test_that("searching features works", {
 
 test_that("get loci length and number works", {
   model <- coal_model(10, 11, 101) + locus_averaged(12, 102, group = 2)
-  expect_equal(get_locus_number(model), 11)
-  expect_equal(get_locus_number(model, 1), 11)
-  expect_equal(get_locus_number(model, 2), 12)
-  expect_equal(get_locus_length(model, 1), 101)
-  expect_equal(get_locus_length(model), 101)
-  expect_equal(get_locus_length(model, 2), 102)
+  model_1 <- get_group_model(model, 1)
+  model_2 <- get_group_model(model, 2)
+
+  expect_equal(get_locus_number(model_1), 11)
+  expect_equal(get_locus_number(model_2), 12)
+  expect_equal(get_locus_length(model_1), 101)
+  expect_equal(get_locus_length(model_2), 102)
+
 
   model <- model + locus_averaged(21, 201, group = 1)
-  expect_equal(get_locus_number(model), 21)
-  expect_equal(get_locus_number(model, 1), 21)
-  expect_equal(get_locus_number(model, 2), 12)
-  expect_equal(get_locus_length(model, 1), 201)
-  expect_equal(get_locus_length(model), 201)
-  expect_equal(get_locus_length(model, 2), 102)
+  model_1 <- get_group_model(model, 1)
+  model_2 <- get_group_model(model, 2)
+
+  expect_equal(get_locus_number(model_1), 21)
+  expect_equal(get_locus_number(model_2), 12)
+  expect_equal(get_locus_length(model_1), 201)
+  expect_equal(get_locus_length(model_2), 102)
 })
 
 
@@ -196,7 +215,7 @@ test_that('locus length matrix generations works', {
     locus_single(22, group = 2) +
     locus_single(23, group = 2)
 
-  expect_equal(get_locus_length_matrix(dm, group = 2),
+  expect_equal(get_locus_length_matrix(get_group_model(dm, 2)),
                matrix(c(0, 0, 21, 0, 0,
                         0, 0, 22, 0, 0,
                         0, 0, 23, 0, 0), 3, 5, TRUE, dimnames))
@@ -213,25 +232,6 @@ test_that("Adding and Getting inter locus variation works", {
   expect_false(has_inter_locus_var(dm_tmp))
   expect_false(has_inter_locus_var(dm_tmp, 1))
   expect_true(has_inter_locus_var(dm_tmp, 2))
-})
-
-
-test_that("test.printEmptyDM", {
-  tmp_file <- tempfile()
-  sink(tmp_file)
-  dm <- coal_model(25:26, 100)
-  print(dm)
-  sink(NULL)
-  unlink(tmp_file)
-})
-
-
-test_that("test.printGroupDM", {
-  tmp_file <- tempfile()
-  sink(tmp_file)
-  print(model_grps())
-  sink(NULL)
-  unlink(tmp_file)
 })
 
 
@@ -281,42 +281,45 @@ test_that('converting positions for trios works', {
     locus_trio(locus_length = c(50, 30, 10), distance = c(40, 20)) +
     locus_averaged(2, 100, group = 2)
 
-  expect_equal(conv_middle_to_trio_pos(.5, model),
+  model_1 <- get_group_model(model, 1)
+  model_2 <- get_group_model(model, 2)
+
+  expect_equal(conv_middle_to_trio_pos(.5, model_1),
                c(45 / 150, 105 / 150))
 
-  expect_equal(conv_middle_to_trio_pos(15, model, relative_in = FALSE),
+  expect_equal(conv_middle_to_trio_pos(15, model_1, relative_in = FALSE),
                c(45 / 150, 105 / 150))
 
-  expect_equal(conv_middle_to_trio_pos(.5, model, relative_out = FALSE),
+  expect_equal(conv_middle_to_trio_pos(.5, model_1, relative_out = FALSE),
                c(45, 105))
 
-  expect_equal(conv_middle_to_trio_pos(10, model,
+  expect_equal(conv_middle_to_trio_pos(10, model_1,
                                        relative_out = FALSE,
                                        relative_in = FALSE), c(40, 100))
 
 
-  expect_equal(conv_middle_to_trio_pos(10, model, group = 2,
+  expect_equal(conv_middle_to_trio_pos(10, model_2,
                                        relative_out = FALSE,
                                        relative_in = FALSE),
                c(10, 10))
-  expect_equal(conv_middle_to_trio_pos(.5, model, group = 2), c(.5, .5))
+  expect_equal(conv_middle_to_trio_pos(.5, model_2), c(.5, .5))
 
   ss <- matrix(0, 6, 5)
   attr(ss, 'positions') <- c(0.1, 0.5, 0.2, 0.6, 0.5, 1)
   attr(ss, 'locus') <- rep(c(-1, 0, 1), each = 2)
-  expect_equal(get_snp_positions(list(ss, ss), model),
+  expect_equal(get_snp_positions(list(ss, ss), model_1),
                list(c(1, 5, 36, 48, 125, 150) / 150,
                     c(5, 25, 96, 108, 145, 150) / 150))
-  expect_equal(get_snp_positions(list(ss, ss), model, relative = FALSE),
+  expect_equal(get_snp_positions(list(ss, ss), model_1, relative = FALSE),
                list(c(1, 5, 36, 48, 125, 150),
                     c(5, 25, 96, 108, 145, 150)))
 
   ss <- matrix(0, 6, 5)
   attr(ss, 'positions') <- c(0.1, 0.3, 0.5, 0.7, 0.9, 1)
   attr(ss, 'locus') <- rep(0, 6)
-  expect_equal(get_snp_positions(list(ss, ss), model, group=2, relative=TRUE),
+  expect_equal(get_snp_positions(list(ss, ss), model_2, relative=TRUE),
                list(c(.1, .3, .5, .7, .9, 1), c(.1, .3, .5, .7, .9, 1)))
-  expect_equal(get_snp_positions(list(ss, ss), model, group=2, relative=FALSE),
+  expect_equal(get_snp_positions(list(ss, ss), model_2, relative=FALSE),
                list(c(10, 30, 50, 70, 90, 100), c(10, 30, 50, 70, 90, 100)))
 })
 
@@ -334,4 +337,23 @@ test_that('getting the ploidy and individuals works', {
   expect_equal(get_sample_size(model), sample_size * 2)
   expect_equal(get_sample_size(model, TRUE), sample_size * 4)
   expect_true(is_unphased(model))
+})
+
+
+test_that('print works on models', {
+  # Printing an empty model works
+  out <- capture.output(print(coal_model()))
+  expect_that(length(out), is_more_than(0))
+
+  # Printing parameters works
+  out <- capture.output(print(coal_model(5) + par_range("abc", 1, 5)))
+  expect_that(length(grep("abc", out)), is_more_than(0))
+})
+
+
+test_that('getting par names works', {
+  expect_equal(get_par_names(coal_model()), character(0))
+
+  model <- coal_model() + par_range("a", 1, 2) + par_range("b", 2, 3)
+  expect_equal(get_par_names(model), c("a", "b"))
 })
