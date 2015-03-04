@@ -8,8 +8,8 @@
 # --------------------------------------------------------------
 
 # list ms's features + FS related features
-sg_features <- unique(c(get_simprog('ms')$possible_features,
-                        get_simprog('msms')$possible_features,
+sg_features <- unique(c(#get_simprog('ms')$possible_features,
+                        #get_simprog('msms')$possible_features,
                         'mutation_model', 'tstv_ratio',
                         'base_freq_A', 'base_freq_C', 'base_freq_G',
                         'base_freq_T',
@@ -284,7 +284,7 @@ sg_simulate <- function(dm, parameters) {
 }
 
 
-#' @include sim_program.R
-create_simprog("seq-gen", sg_features, sg_sum_stats,
-                 sg_simulate, sg_get_command,
-                 priority=10)
+# @include sim_program.R
+#create_simprog("seq-gen", sg_features, sg_sum_stats,
+#                 sg_simulate, sg_get_command,
+#                 priority=10)

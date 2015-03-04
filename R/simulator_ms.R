@@ -80,6 +80,7 @@ ms_generate_opts <- function(dm, parameters, eval_pars = TRUE) {
 
 
 #' @importFrom phyclust ms
+#' @importFrom R6 R6Class
 #' @include simulator_class.R
 Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
   private = list(

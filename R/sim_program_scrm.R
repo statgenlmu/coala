@@ -1,6 +1,6 @@
 #' @importFrom scrm scrm
-#' @importFrom phyclust ms
 #' @include simulator_class.R
+#' @include simulator_ms.R
 Simulator_scrm <- R6Class('Simulator_scrm', inherit = Simulator,
   private = list(
     name = 'scrm',
