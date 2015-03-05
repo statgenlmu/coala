@@ -1,7 +1,7 @@
 ---
 title: "Introduction to coalsimr"
 author: "Paul Staab"
-date: "`r Sys.Date()`"
+date: "coalsimr `r packageVersion('coalsimr')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction}
@@ -30,8 +30,17 @@ Printing the model gives a short summary of this content:
 print(model)
 ```
 
-simulate trees.
+simulate trees. Models consist of 
 
+* _features_, which represent evolutionary forces and events present in the 
+  model, 
+* _parameters_, which are the model parameters, 
+* _loci_, which describe the genetic regions that are simualted and 
+* _summary statistics_, which describe the format of the simulated data.
+
+In our basic model, the sampling of 5 individuals the only feature. 
+
+simulated trees
 
 # Adding features
 
