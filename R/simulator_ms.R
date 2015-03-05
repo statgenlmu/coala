@@ -1,11 +1,3 @@
-# --------------------------------------------------------------
-# Translates an demographic model to an ms command and
-# executes the simulation.
-#
-# Authors:  Lisha Mathew & Paul R. Staab
-# Licence:  GPLv3 or later
-# --------------------------------------------------------------
-
 ms_features  <- c("sample", "mutation", "migration", "migration_sym",
                   "pop_merge", "recombination", "size_change", "growth",
                   "inter_locus_variation", "trees",
@@ -26,7 +18,7 @@ ms_generate_opts_cmd <- function(dm) {
     feat <- unlist(get_feature_table(dm)[i, ])
 
     if ( type == "mutation" ) {
-      cmd <- c(cmd,'"-t"', ',', feat["parameter"], ',')
+      cmd <- c(cmd, '"-t"', ',', feat["parameter"], ',')
     }
 
     else if (type == "pop_merge") {
@@ -87,52 +79,60 @@ ms_generate_opts <- function(dm, parameters, eval_pars = TRUE) {
 }
 
 
-ms_get_command <- function(model) {
-  cmd <- ms_generate_opts(model, get_parameter_table(model)$name, FALSE)
-  txt <- paste(cmd, collapse = ' ')
-  paste("ms", sum(get_sample_size(model)), get_locus_number(model), txt)
-}
-
-
 #' @importFrom phyclust ms
-ms_simulate <- function(dm, parameters=numeric()) {
-  stopifnot(length(parameters) == 0 | all(is.numeric(parameters)))
+#' @importFrom R6 R6Class
+#' @include simulator_class.R
+Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
+  private = list(
+    name = 'ms',
+    features = ms_features,
+    sumstats = ms_sum_stats,
+    priority = 100
+  ),
+  public = list(
+    simulate = function(dm, parameters=numeric()) {
+      stopifnot(length(parameters) == 0 | all(is.numeric(parameters)))
 
-  # Run all simulation in with one ms call if they loci are identical,
-  # or call ms for each locus if there is variation between the loci.
-  if (has_inter_locus_var(dm)) {
-    sim_reps <- 1:get_locus_number(dm)
-    sim_loci <- 1
-  } else {
-    sim_reps <- 1
-    sim_loci <- get_locus_number(dm)
-  }
+      # Run all simulation in with one ms call if they loci are identical,
+      # or call ms for each locus if there is variation between the loci.
+      if (has_inter_locus_var(dm)) {
+        sim_reps <- 1:get_locus_number(dm)
+        sim_loci <- 1
+      } else {
+        sim_reps <- 1
+        sim_loci <- get_locus_number(dm)
+      }
 
-  # Do the actuall simulation
-  files <- lapply(sim_reps, function(locus) {
-    ms.options <- ms_generate_opts(dm, parameters, locus)
-    file <- tempfile('csr_ms')
+      # Do the actuall simulation
+      files <- lapply(sim_reps, function(locus) {
+        ms.options <- ms_generate_opts(dm, parameters, locus)
+        file <- tempfile('csr_ms')
 
-    ms(sum(get_sample_size(dm, for_sim = TRUE)), sim_loci,
-       unlist(strsplit(ms.options, " ")), file)
+        ms(sum(get_sample_size(dm, for_sim = TRUE)), sim_loci,
+           unlist(strsplit(ms.options, " ")), file)
 
-    if(file.info(file)$size == 0) stop("ms simulation output is empty")
-    file
-  })
+        if(file.info(file)$size == 0) stop("ms simulation output is empty")
+        file
+      })
 
-  # Parse the output and calculate summary statistics
-  seg_sites <- parse_ms_output(files,
-                               get_sample_size(dm, for_sim = TRUE),
-                               get_locus_number(dm))
+      # Parse the output and calculate summary statistics
+      seg_sites <- parse_ms_output(files,
+                                   get_sample_size(dm, for_sim = TRUE),
+                                   get_locus_number(dm))
 
-  sum_stats <- calc_sumstats(seg_sites, files, dm, parameters)
+      sum_stats <- calc_sumstats(seg_sites, files, dm, parameters)
 
-  # Clean Up
-  unlink(files)
-  sum_stats
-}
+      # Clean Up
+      unlink(files)
+      sum_stats
+    },
+    get_cmd = function(model) {
+      cmd <- ms_generate_opts(model, get_parameter_table(model)$name, FALSE)
+      txt <- paste(cmd, collapse = ' ')
+      paste("ms", sum(get_sample_size(model)), get_locus_number(model), txt)
+    }
+  )
+)
 
 
-#' @include sim_program.R
-create_simprog("ms", ms_features, ms_sum_stats,
-                 ms_simulate, ms_get_command, 100)
+register_simulator(Simulator_ms)

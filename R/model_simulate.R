@@ -20,8 +20,8 @@ simulate.Coalmodel <- function(object, nsim = 1, seed, pars=NULL, ...) {
 
   simprog <- determine_simprog(object)
 
-  if (simprog != "groups") {
-    return(get_simprog(simprog)$sim_func(object, pars))
+  if (is_simulator(simprog)) {
+    return(simprog$simulate(object, pars))
   }
 
   sum_stats <- list(pars=pars)

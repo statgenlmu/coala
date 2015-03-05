@@ -1,16 +1,3 @@
-# --------------------------------------------------------------
-# simprog_msms.R
-# Calling msms from a demographic model.
-#
-# Authors:  Paul R. Staab
-# Date:     2014-06-30
-# Licence:  GPLv3 or later
-# --------------------------------------------------------------
-
-msms_features <- c("selection", "selection_AA", "selection_Aa",
-                   get_simprog('ms')$possible_features)
-msms_sum_stats <- get_simprog('ms')$possible_sum_stats
-
 call_msms <- function(ms.args, msms.args, subgroup) {
   msms_find_jar()
 
@@ -101,53 +88,62 @@ msms_generate_opts <- function(dm, parameters, locus) {
   eval(parse(text=cmd), envir=msms.tmp)
 }
 
-msms_simulate <- function(dm, parameters) {
-  # Run all simulation in with one ms call if they loci are identical,
-  # or call ms for each locus if there is variation between the loci.
-  if (has_inter_locus_var(dm)) {
-    sim_reps <- 1:get_locus_number(dm)
-    sim_loci <- 1
-  } else {
-    sim_reps <- 1
-    sim_loci <- get_locus_number(dm)
-  }
 
-  # Run the simulation(s)
-  files <- lapply(sim_reps, function(locus) {
-    ms.options <- paste(sum(get_sample_size(dm, for_sim = TRUE)), sim_loci,
-                        paste(ms_generate_opts(dm, parameters, locus),
-                              collapse=" "))
-    msms.options <- paste(msms_generate_opts(dm, parameters, locus),
-                          collapse= " ")
-    #print(c(ms.options, msms.options))
-    call_msms(ms.options, msms.options)
-  })
+#' @include simulator_class.R
+#' @include simulator_ms.R
+Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
+  private = list(
+    name = 'msms',
+    features = c("selection", "selection_AA", "selection_Aa",
+                 get_simulator("ms")$get_features()),
+    sumstats = get_simulator("ms")$get_sumstats(),
+    priority = 40
+  ),
+  public = list(
+    get_cmd = function(model) {
+      ms_cmd <- paste(ms_generate_opts(model, get_parameter_table(model)$name),
+                      collapse = ' ')
+      msms_cmd <- paste(msms_generate_opts(model,
+                                           get_parameter_table(model)$name, 1),
+                        collapse = ' ')
 
-  # Parse the output and calculate summary statistics
-  seg_sites <- parse_ms_output(files,
-                               get_sample_size(dm, for_sim = TRUE),
-                               get_locus_number(dm))
+      paste("msms", msms_cmd,
+            "-ms", sum(get_sample_size(model)), get_locus_number(model), ms_cmd)
+    },
+    simulate = function(dm, parameters) {
+      # Run all simulation in with one ms call if they loci are identical,
+      # or call ms for each locus if there is variation between the loci.
+      if (has_inter_locus_var(dm)) {
+        sim_reps <- 1:get_locus_number(dm)
+        sim_loci <- 1
+      } else {
+        sim_reps <- 1
+        sim_loci <- get_locus_number(dm)
+      }
 
-  sum_stats <- calc_sumstats(seg_sites, files, dm, parameters)
+      # Run the simulation(s)
+      files <- lapply(sim_reps, function(locus) {
+        ms.options <- paste(sum(get_sample_size(dm, for_sim = TRUE)), sim_loci,
+                            paste(ms_generate_opts(dm, parameters, locus),
+                                  collapse=" "))
+        msms.options <- paste(msms_generate_opts(dm, parameters, locus),
+                              collapse= " ")
+        #print(c(ms.options, msms.options))
+        call_msms(ms.options, msms.options)
+      })
 
-  # Clean Up
-  unlink(files)
-  sum_stats
-}
+      # Parse the output and calculate summary statistics
+      seg_sites <- parse_ms_output(files,
+                                   get_sample_size(dm, for_sim = TRUE),
+                                   get_locus_number(dm))
 
+      sum_stats <- calc_sumstats(seg_sites, files, dm, parameters)
 
-msms_get_command <- function(model) {
-  ms_cmd <- paste(ms_generate_opts(model, get_parameter_table(model)$name),
-                  collapse = ' ')
-  msms_cmd <- paste(msms_generate_opts(model,
-                                       get_parameter_table(model)$name, 1),
-                    collapse = ' ')
+      # Clean Up
+      unlink(files)
+      sum_stats
+    }
+  )
+)
 
-  paste("msms", msms_cmd,
-        "-ms", sum(get_sample_size(model)), get_locus_number(model), ms_cmd)
-}
-
-
-#' @include sim_program.R
-create_simprog("msms", msms_features, msms_sum_stats,
-                 msms_simulate, msms_get_command, priority=40)
+register_simulator(Simulator_msms)

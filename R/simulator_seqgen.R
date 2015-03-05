@@ -7,17 +7,23 @@
 # Licence:  GPLv3 or later
 # --------------------------------------------------------------
 
-# list ms's features + FS related features
-sg_features <- unique(c(get_simprog('ms')$possible_features,
-                        get_simprog('msms')$possible_features,
-                        'mutation_model', 'tstv_ratio',
-                        'base_freq_A', 'base_freq_C', 'base_freq_G',
-                        'base_freq_T',
-                        'gtr_rate_1', 'gtr_rate_2', 'gtr_rate_3',
-                        'gtr_rate_4','gtr_rate_5','gtr_rate_6',
-                        'gamma_categories', 'gamma_rate',
-                        'locus_trios', 'outgroup',
-                        'mutation_outer'))
+
+sg_only_features <- c('mutation_model', 'tstv_ratio',
+                      'base_freq_A', 'base_freq_C', 'base_freq_G',
+                      'base_freq_T',
+                      'gtr_rate_1', 'gtr_rate_2', 'gtr_rate_3',
+                      'gtr_rate_4','gtr_rate_5','gtr_rate_6',
+                      'gamma_categories', 'gamma_rate',
+                      'locus_trios', 'outgroup',
+                      'mutation_outer')
+
+#' @include simulator_ms.R
+#' @include simulator_msms.R
+#' @include simulator_scrm.R
+sg_features <- unique(c(get_simulator("ms")$get_features(),
+                        get_simulator("msms")$get_features(),
+                        get_simulator("scrm")$get_features(),
+                        sg_only_features))
 
 sg_sum_stats <- c('jsfs', 'file', 'seg.sites')
 sg_mutation_models <- c('HKY', 'F84', 'GTR')
@@ -51,18 +57,11 @@ generate_tree_model <- function(dm, locus, locus_number=1) {
 
   if (is.null(tree_model)) {
     locus_length <- get_locus_length_matrix(dm)[locus,]
-
-    if (any(msms_features %in% get_feature_table(dm)$type)) {
-      tree.prog <- get_simprog('msms')
-    } else {
-      tree.prog <- get_simprog('ms')
-    }
-
     tree_model <- dm
 
     # Features
     tree_model$features <-
-      dm$features[get_feature_table(dm)$type %in% tree.prog$possible_features]
+      dm$features[!get_feature_table(dm)$type %in% sg_only_features]
 
     # Summary Stastics
     tree_model$sum_stats <- create_sumstat_container()
@@ -219,7 +218,7 @@ sg_generate_opt_cmd <- function(dm) {
 sg_get_command <- function(dm) {
   tree_model <- generate_tree_model(dm, 1)
   tree_cmd <-
-    get_simprog(determine_simprog(tree_model))$print_cmd_func(tree_model)
+    determine_simprog(tree_model)$get_cmd(tree_model)
 
   sg_cmd <- paste(sg_generate_opts(dm, get_parameter_table(dm)$name,
                                         locus = 1, seeds = 'seed',
@@ -284,7 +283,20 @@ sg_simulate <- function(dm, parameters) {
 }
 
 
-#' @include sim_program.R
-create_simprog("seq-gen", sg_features, sg_sum_stats,
-                 sg_simulate, sg_get_command,
-                 priority=10)
+#' @importFrom R6 R6Class
+#' @include simulator_class.R
+Simulator_seqgen <- R6Class('Simulator_seqgen', inherit = Simulator,
+  private = list(
+    name = 'seqgen',
+    features = sg_features,
+    sumstats = sg_sum_stats,
+    priority = 10
+   ),
+   public = list(
+     simulate = sg_simulate,
+     get_cmd = sg_get_command
+   )
+)
+
+
+register_simulator(Simulator_seqgen)
