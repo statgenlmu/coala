@@ -18,7 +18,7 @@ ms_generate_opts_cmd <- function(dm) {
     feat <- unlist(get_feature_table(dm)[i, ])
 
     if ( type == "mutation" ) {
-      cmd <- c(cmd,'"-t"', ',', feat["parameter"], ',')
+      cmd <- c(cmd, '"-t"', ',', feat["parameter"], ',')
     }
 
     else if (type == "pop_merge") {

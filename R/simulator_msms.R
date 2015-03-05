@@ -147,4 +147,3 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
 )
 
 register_simulator(Simulator_msms)
-

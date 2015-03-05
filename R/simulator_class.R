@@ -13,7 +13,7 @@ Simulator <- R6Class("Simulator",
     get_features = function() private$features,
     get_sumstats = function() private$sumstats,
     get_priority = function() private$priority,
-    initialize = function() {}
+    initialize = function() NULL
   )
 )
 
