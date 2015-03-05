@@ -9,4 +9,38 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-test
+Coalescent simulation referrers to the idea to simulate the evolution of 
+biological sequences like DNA by tracing their ancestry back in time. The
+`coalsimr` package is an interface for calling a number of commonly used
+coalescent simulators from R.
+
+# Creating a model
+A basic model can be created using the function `coal_model`:
+
+```{r}
+library(coalsimr)
+model <- coal_model(sample_size = 5, loci_number = 1)
+```
+
+This creates a basic model of a population of constant size.
+Simulated is one genetic locus in 5 individuals taken from the population. 
+
+Printing the model gives a short summary of this content:
+```{r}
+print(model)
+```
+
+simulate trees.
+
+
+# Adding features
+
+mutations, simulate dna
+
+two populations, migration
+
+# Parameters
+
+# Loci
+
+# Summary statistics
