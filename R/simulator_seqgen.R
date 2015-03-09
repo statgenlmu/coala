@@ -15,7 +15,8 @@ sg_only_features <- c('mutation_model', 'tstv_ratio',
                       'gtr_rate_4','gtr_rate_5','gtr_rate_6',
                       'gamma_categories', 'gamma_rate',
                       'locus_trios', 'outgroup',
-                      'mutation_outer')
+                      'mutation_outer',
+                      'sumstat_dna')
 
 #' @include simulator_ms.R
 #' @include simulator_msms.R

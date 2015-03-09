@@ -5,16 +5,14 @@
 
 using namespace Rcpp;
 
-NumericMatrix parseSeqgenSegSites(std::ifstream &output,
-                                  const int individuals,
-                                  const int locus_length,
-                                  const int outgroup_size) {
+NumericMatrix read_sequence(std::ifstream &output,
+                            const int individuals,
+                            const int locus_length) {
 
+  NumericMatrix seq(individuals, locus_length);
   std::string tmp;
   size_t seq_nr;
 
-  // First read the complete locus and save it in `sequence`.
-  std::vector<std::vector<char> > sequence(individuals);
   for (int i=0; i<individuals; ++i) {
     // Read sequence number
     if (!output.good())
@@ -22,13 +20,35 @@ NumericMatrix parseSeqgenSegSites(std::ifstream &output,
     output >> tmp;
     // ms from phyclust adds an "s" to the seqName. Remove it if there.
     if (tmp.compare(0, 1, "s") == 0) tmp.erase(0,1);
-    seq_nr = atoi(tmp.c_str());
+    seq_nr = atoi(tmp.c_str()) - 1;
+    if (seq_nr >= individuals) stop("Too many sequences in seqgen file.");
 
     // Read sequence
     output >> tmp;
-    const char* cstr=tmp.c_str();
-    sequence.at(seq_nr-1).assign(cstr, cstr+tmp.length());
+    //Rcout << i << ":" << seq_nr << " " << tmp << std::endl;
+    if (tmp.size() != locus_length) stop("unexpected sequence length");
+    for(std::string::size_type j = 0; j < locus_length; ++j) {
+      if (tmp[j] == 'A') seq(seq_nr, j) = 0;
+      else if (tmp[j] == 'C') seq(seq_nr, j) = 1;
+      else if (tmp[j] == 'G') seq(seq_nr, j) = 2;
+      else if (tmp[j] == 'T') seq(seq_nr, j) = 3;
+      else stop("unexpected sequence character");
+    }
   }
+
+  return(seq);
+}
+
+
+
+NumericMatrix parseSeqgenSegSites(std::ifstream &output,
+                                  const int individuals,
+                                  const int locus_length,
+                                  const int outgroup_size) {
+
+
+  // First read the complete locus and save it in `sequence`.
+  NumericMatrix sequence = read_sequence(output, individuals, locus_length);
 
   // Determine which positions are SNPs
   std::vector<double> positions;
@@ -39,13 +59,13 @@ NumericMatrix parseSeqgenSegSites(std::ifstream &output,
     // ignore SNPs with a polymorphic outgroup
     outgroup_count = 0;
     for (int i=individuals-outgroup_size; i<individuals-1; ++i) {
-      outgroup_count += (sequence.at(i).at(j) != sequence.at(individuals-1).at(j));
+      outgroup_count += (sequence(i, j) != sequence(individuals-1, j));
     }
     if (outgroup_count > 0) continue;
 
     derived_count = 0;
     for (int i=0; i<individuals-outgroup_size; ++i) {
-      derived_count += (sequence.at(i).at(j) != sequence.at(individuals-1).at(j));
+      derived_count += (sequence(i, j) != sequence(individuals-1, j));
     }
     if (derived_count > 0 && derived_count < (individuals - outgroup_size)) {
       positions.push_back(j);
@@ -58,7 +78,7 @@ NumericMatrix parseSeqgenSegSites(std::ifstream &output,
     for (int i=0; i<individuals-outgroup_size; ++i) {
       derived_count = 0;
       for (std::vector<double>::iterator it = positions.begin(); it != positions.end(); ++it) {
-        seg_sites(i, derived_count) = (sequence[i][*it] != sequence[individuals-1][*it]);
+        seg_sites(i, derived_count) = (sequence(i, *it) != sequence(individuals-1, *it));
         ++derived_count;
       }
     }

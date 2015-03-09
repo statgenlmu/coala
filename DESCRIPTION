@@ -55,6 +55,7 @@ Collate:
     'simulator_scrm.R'
     'simulator_seqgen.R'
     'sumstat.R'
+    'sumstat_dna.R'
     'sumstat_file.R'
     'sumstat_ihh.R'
     'sumstat_jsfs.R'
