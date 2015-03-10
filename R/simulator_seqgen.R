@@ -15,7 +15,8 @@ sg_only_features <- c('mutation_model', 'tstv_ratio',
                       'gtr_rate_4','gtr_rate_5','gtr_rate_6',
                       'gamma_categories', 'gamma_rate',
                       'locus_trios', 'outgroup',
-                      'mutation_outer')
+                      'mutation_outer',
+                      'sumstat_dna')
 
 #' @include simulator_ms.R
 #' @include simulator_msms.R
@@ -52,16 +53,16 @@ sg_find_exe <- function(throw.error = TRUE, silent = FALSE) {
   return(FALSE)
 }
 
-generate_tree_model <- function(dm, locus, locus_number=1) {
-  tree_model <- read_cache(dm, paste0('tree_model_', locus))
+generate_tree_model <- function(model, locus, locus_number=1) {
+  tree_model <- read_cache(model, paste0('tree_model_', locus))
 
   if (is.null(tree_model)) {
-    locus_length <- get_locus_length_matrix(dm)[locus,]
-    tree_model <- dm
+    locus_length <- get_locus_length_matrix(model)[locus,]
+    tree_model <- model
 
     # Features
     tree_model$features <-
-      dm$features[!get_feature_table(dm)$type %in% sg_only_features]
+      model$features[!get_feature_table(model)$type %in% sg_only_features]
 
     # Summary Stastics
     tree_model$sum_stats <- create_sumstat_container()
@@ -76,7 +77,7 @@ generate_tree_model <- function(dm, locus, locus_number=1) {
                                                 sum(locus_length))
     }
 
-    cache(dm, paste0('tree_model_', locus), tree_model)
+    cache(model, paste0('tree_model_', locus), tree_model)
   }
 
   tree_model
@@ -120,16 +121,16 @@ sg_call <- function(opts, ms_files) {
   })
 }
 
-sg_generate_opts <- function(dm, parameters, locus,
+sg_generate_opts <- function(model, parameters, locus,
                                   seeds, eval_pars = TRUE) {
 
-  cmd <- read_cache(dm, 'seqgen_cmd')
+  cmd <- read_cache(model, 'seqgen_cmd')
   if (is.null(cmd)) {
-    cmd <- sg_generate_opt_cmd(dm)
-    cache(dm, 'seqgen_cmd', cmd)
+    cmd <- sg_generate_opt_cmd(model)
+    cache(model, 'seqgen_cmd', cmd)
   }
 
-  locus_lengths <- get_locus_length_matrix(dm)[locus,]
+  locus_lengths <- get_locus_length_matrix(model)[locus,]
   if (locus_lengths[1] == 0 & locus_lengths[5] == 0) {
     locus_lengths <- locus_lengths[3]
   } else {
@@ -139,7 +140,7 @@ sg_generate_opts <- function(dm, parameters, locus,
   # Fill the parameters in the template
   sapply(seq(along = locus_lengths), function(i) {
     if (!eval_pars) cmd[[i]] <- escape_par_expr(cmd[[i]])
-    par_envir <- create_par_env(dm, parameters, locus = locus,
+    par_envir <- create_par_env(model, parameters, locus = locus,
                                     locus_length = locus_lengths[i],
                                     seed = seeds[i])
     paste(eval(parse(text=cmd[[i]]), envir=par_envir), collapse=" ")
@@ -147,14 +148,10 @@ sg_generate_opts <- function(dm, parameters, locus,
 }
 
 
-sg_generate_opt_cmd <- function(dm) {
-  stopifnot(is.model(dm))
+sg_generate_opt_cmd <- function(model) {
+  stopifnot(is.model(model))
 
-  if (length(get_outgroup_size(dm)) == 0) {
-    stop("Finite Sites models need an outgroup.")
-  }
-
-  if (has_trios(dm)) is_outer <- c(TRUE, FALSE, TRUE)
+  if (has_trios(model)) is_outer <- c(TRUE, FALSE, TRUE)
   else is_outer <- FALSE
 
   lapply(is_outer, function(outer) {
@@ -162,9 +159,9 @@ sg_generate_opt_cmd <- function(dm) {
     base.freqs <- list()
     gtr.rates <- list()
 
-    for (i in 1:dim(get_feature_table(dm))[1] ) {
-      type <- as.character(get_feature_table(dm)[i,"type"])
-      feat <- unlist(get_feature_table(dm)[i, ])
+    for (i in 1:dim(get_feature_table(model))[1] ) {
+      type <- as.character(get_feature_table(model)[i,"type"])
+      feat <- unlist(get_feature_table(model)[i, ])
 
       if (type == "mutation_model") {
         opts <- c(opts, paste('"-m', feat['parameter'], '"', sep=""), ",")
@@ -206,7 +203,7 @@ sg_generate_opt_cmd <- function(dm) {
 
     opts <- c(opts, '"-l"', ',', 'locus_length', ',')
     opts <- c(opts, '"-s"', ',',
-              s=paste(get_mutation_par(dm, outer), ' / locus_length'), ',')
+              s=paste(get_mutation_par(model, outer), ' / locus_length'), ',')
     opts <- c(opts, '"-p"', ',', 'locus_length + 1', ',')
     opts <- c(opts, '"-z"', ',', 'seed', ',')
     opts <- c(opts, '"-q"', ')')
@@ -215,12 +212,12 @@ sg_generate_opt_cmd <- function(dm) {
 }
 
 
-sg_get_command <- function(dm) {
-  tree_model <- generate_tree_model(dm, 1)
+sg_get_command <- function(model) {
+  tree_model <- generate_tree_model(model, 1)
   tree_cmd <-
     determine_simprog(tree_model)$get_cmd(tree_model)
 
-  sg_cmd <- paste(sg_generate_opts(dm, get_parameter_table(dm)$name,
+  sg_cmd <- paste(sg_generate_opts(model, get_parameter_table(model)$name,
                                         locus = 1, seeds = 'seed',
                                         eval_pars=FALSE),
                   collapse = ' ')
@@ -230,35 +227,32 @@ sg_get_command <- function(dm) {
 }
 
 
-sg_simulate <- function(dm, parameters) {
+sg_simulate <- function(model, parameters) {
   sg_find_exe()
-  if (length(get_outgroup_size(dm)) == 0) {
-    stop("Finite site models need an outgroup")
-  }
 
   # Run all simulation in with one seqgen call if they loci are identical,
   # or call ms for each locus if there is variation between the loci.
 
-  if (has_inter_locus_var(dm)) {
-    sim_reps <- 1:get_locus_number(dm)
+  if (has_inter_locus_var(model)) {
+    sim_reps <- 1:get_locus_number(model)
     sim_loci <- 1
   } else {
     sim_reps <- 1
-    sim_loci <- get_locus_number(dm)
+    sim_loci <- get_locus_number(model)
   }
 
-  seqgen.files <- lapply(sim_reps, function(locus) {
+  seqgen_files <- lapply(sim_reps, function(locus) {
     # Generate options for seqgen
-    tree.model <- generate_tree_model(dm, locus, sim_loci)
-    stopifnot(!is.null(tree.model))
+    tree_model <- generate_tree_model(model, locus, sim_loci)
+    stopifnot(!is.null(tree_model))
 
     # Simulate the trees
-    sum_stats_ms <- simulate(tree.model, pars=parameters)
+    sum_stats_ms <- simulate(tree_model, pars=parameters)
 
     # Call seq-gen to distribute mutations
     seqgen.options <-
-      sg_generate_opts(dm, parameters, locus,
-                            sample_seed(length(sum_stats_ms$sg_trees)))
+      sg_generate_opts(model, parameters, locus,
+                       sample_seed(length(sum_stats_ms$sg_trees)))
 
     seqgen.file <- sg_call(seqgen.options, sum_stats_ms$sg_trees)
 
@@ -266,19 +260,23 @@ sg_simulate <- function(dm, parameters) {
     unlink(c(sum_stats_ms[['file']], sum_stats_ms$sg_trees))
     seqgen.file
   })
-  stopifnot(length(seqgen.files) == length(sim_reps))
+  stopifnot(length(seqgen_files) == length(sim_reps))
 
   # Generate the summary statistics
-  seg_sites <- parse_sg_output(seqgen.files,
-                               sum(get_sample_size(dm, for_sim = TRUE)),
-                               get_locus_length_matrix(dm),
-                               get_locus_number(dm),
-                               outgroup_size = get_outgroup_size(dm, TRUE))
+  if (any(get_summary_statistics(model) != "dna")) {
+    seg_sites <- parse_sg_output(seqgen_files,
+                                 sum(get_sample_size(model, for_sim = TRUE)),
+                                 get_locus_length_matrix(model),
+                                 get_locus_number(model),
+                                 outgroup_size = get_outgroup_size(model, TRUE))
+  } else {
+    seg_sites <- NULL
+  }
 
-  sum_stats <- calc_sumstats(seg_sites, seqgen.files, dm, parameters)
+  sum_stats <- calc_sumstats(seg_sites, seqgen_files, model, parameters)
 
   # Clean Up
-  unlink(unlist(seqgen.files))
+  unlink(unlist(seqgen_files))
   sum_stats
 }
 

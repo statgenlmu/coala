@@ -9,8 +9,8 @@ parse_ms_output <- function(file_names, sample_size, loci_number) {
     .Call('coalsimr_parse_ms_output', PACKAGE = 'coalsimr', file_names, sample_size, loci_number)
 }
 
-parse_sg_output <- function(file_names, sample_size, sequence_length, loci_number, outgroup_size = 1L) {
-    .Call('coalsimr_parse_sg_output', PACKAGE = 'coalsimr', file_names, sample_size, sequence_length, loci_number, outgroup_size)
+parse_sg_output <- function(file_names, sample_size, sequence_length, loci_number, outgroup_size = 1L, calc_seg_sites = TRUE) {
+    .Call('coalsimr_parse_sg_output', PACKAGE = 'coalsimr', file_names, sample_size, sequence_length, loci_number, outgroup_size, calc_seg_sites)
 }
 
 parse_trees <- function(in_file, trio_opts, tempfile) {

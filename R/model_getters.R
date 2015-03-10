@@ -179,7 +179,9 @@ get_outgroup <- function(model) {
 #' @describeIn get_feature_table Returns the number of samples in the outgroup
 #' @export
 get_outgroup_size <- function(model, for_sim = FALSE) {
-  get_sample_size(model, for_sim)[get_outgroup(model)]
+  outgroup_size <- get_sample_size(model, for_sim)[get_outgroup(model)]
+  if (length(outgroup_size) == 0) outgroup_size <- 0
+  outgroup_size
 }
 
 
