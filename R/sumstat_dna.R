@@ -1,10 +1,14 @@
 #' @importFrom R6 R6Class
 sumstat_dna_class <- R6Class('sumstat_DNA', inherit = sumstat,
   public = list(
-    calculate = function(seg_sites, files, model) seg_sites,
-    parse_files = function(files) {
-      lapply(files, function(file) {
-        scan(file, what="character")
+    calculate = function(seg_sites, files, model) {
+      dna <-parse_sg_output(files,
+                            sum(get_sample_size(model, for_sim = TRUE)),
+                            get_locus_length_matrix(model),
+                            get_locus_number(model),
+                            calc_seg_sites = FALSE)
+      lapply(dna, function(locus) {
+        apply(locus, 2, function(x) attr(locus, 'levels')[x])
       })
     }
   )
@@ -14,6 +18,8 @@ sumstat_dna_class <- R6Class('sumstat_DNA', inherit = sumstat,
 #'
 #' @inheritParams sumstat_file
 #' @export
-sumstat_seg_sites <- function(name = 'dna', group = 0) {
-  sumstat_dna_class$new(name, group = group)
+sumstat_dna <- function(name = 'dna', group = 0) {
+  coal_model() +
+    Feature$new('sumstat_dna', par_const(NA)) +
+    sumstat_dna_class$new(name, group = group)
 }

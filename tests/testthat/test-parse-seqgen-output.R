@@ -4,8 +4,7 @@ test_that("parse_sg_output works with a single file", {
   dm_tmp <- coal_model(c(4, 6, 1), 2, 10) +
     feat_outgroup(3) +
     feat_pop_merge(par_range('tau', 0.5, 2), 2, 1) +
-    feat_pop_merge(par_expr('2*tau'), 3, 1) #+
-   # feat_mutation(par_range('theta', 1, 10), model="HKY")
+    feat_pop_merge(par_expr('2*tau'), 3, 1)
 
   seqgen_file <- tempfile('seqgen_parser_test')
   cat(" 11 10
@@ -65,6 +64,14 @@ s4        GCTGATAATA", file = seqgen_file)
                         10, 5, byrow=TRUE)
   attr(seg_sites_2, 'positions') <- c(1, 2, 3, 8, 9) / 9
   expect_equal(seg_sites[[2]], seg_sites_2)
+
+  # get DNA
+  seg_sites <- parse_sg_output(list(seqgen_file), 11,
+                               get_locus_length_matrix(dm_tmp), 2,
+                               calc_seg_sites = FALSE)
+  expect_is(seg_sites, 'list')
+  expect_equal(length(seg_sites), 2)
+  expect_true(all(seg_sites[[1]] %in% 1:4))
 
   # With outgroup of multiple individuals
   seg_sites <- parse_sg_output(list(seqgen_file), 11,

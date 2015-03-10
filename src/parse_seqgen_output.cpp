@@ -28,14 +28,15 @@ NumericMatrix read_sequence(std::ifstream &output,
     //Rcout << i << ":" << seq_nr << " " << tmp << std::endl;
     if (tmp.size() != locus_length) stop("unexpected sequence length");
     for(std::string::size_type j = 0; j < locus_length; ++j) {
-      if (tmp[j] == 'A') seq(seq_nr, j) = 0;
-      else if (tmp[j] == 'C') seq(seq_nr, j) = 1;
-      else if (tmp[j] == 'G') seq(seq_nr, j) = 2;
-      else if (tmp[j] == 'T') seq(seq_nr, j) = 3;
+      if (tmp[j] == 'A') seq(seq_nr, j) = 1;
+      else if (tmp[j] == 'C') seq(seq_nr, j) = 2;
+      else if (tmp[j] == 'G') seq(seq_nr, j) = 3;
+      else if (tmp[j] == 'T') seq(seq_nr, j) = 4;
       else stop("unexpected sequence character");
     }
   }
 
+  seq.attr("levels") = CharacterVector::create("A", "C", "G", "T");
   return(seq);
 }
 
@@ -45,7 +46,6 @@ NumericMatrix parseSeqgenSegSites(std::ifstream &output,
                                   const int individuals,
                                   const int locus_length,
                                   const int outgroup_size) {
-
 
   // First read the complete locus and save it in `sequence`.
   NumericMatrix sequence = read_sequence(output, individuals, locus_length);
@@ -143,7 +143,12 @@ List parse_sg_output(const List file_names,
                      const int sample_size,
                      const NumericMatrix sequence_length,
                      const int loci_number,
-                     const int outgroup_size = 1) {
+                     const int outgroup_size = 1,
+                     const bool calc_seg_sites = true) {
+
+  if (calc_seg_sites && outgroup_size == 0) {
+    stop("Finite sites model need an outgroup to calculate segregating sites.");
+  }
 
   std::string line_l, line_m, line_r;
 
@@ -164,10 +169,14 @@ List parse_sg_output(const List file_names,
         if (line_m == "") continue;
         if (line_m.substr(0, 1) == " ") {
           ++locus;
-          seg_sites[locus] = parseSeqgenSegSites(output_m, sample_size,
-                                                 sequence_length(i, 2),
-                                                 outgroup_size);
-
+          if (calc_seg_sites) {
+            seg_sites[locus] = parseSeqgenSegSites(output_m, sample_size,
+                                                   sequence_length(i, 2),
+                                                   outgroup_size);
+          } else {
+            seg_sites[locus] = read_sequence(output_m, sample_size,
+                                             sequence_length(i, 2));
+          }
         } else {
           stop(std::string("Unexpected line in seq-gen output: '") + line_m + "'");
         }

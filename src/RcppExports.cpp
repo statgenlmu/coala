@@ -30,8 +30,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // parse_sg_output
-List parse_sg_output(const List file_names, const int sample_size, const NumericMatrix sequence_length, const int loci_number, const int outgroup_size);
-RcppExport SEXP coalsimr_parse_sg_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP sequence_lengthSEXP, SEXP loci_numberSEXP, SEXP outgroup_sizeSEXP) {
+List parse_sg_output(const List file_names, const int sample_size, const NumericMatrix sequence_length, const int loci_number, const int outgroup_size, const bool calc_seg_sites);
+RcppExport SEXP coalsimr_parse_sg_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP sequence_lengthSEXP, SEXP loci_numberSEXP, SEXP outgroup_sizeSEXP, SEXP calc_seg_sitesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -40,7 +40,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericMatrix >::type sequence_length(sequence_lengthSEXP);
     Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP);
     Rcpp::traits::input_parameter< const int >::type outgroup_size(outgroup_sizeSEXP);
-    __result = Rcpp::wrap(parse_sg_output(file_names, sample_size, sequence_length, loci_number, outgroup_size));
+    Rcpp::traits::input_parameter< const bool >::type calc_seg_sites(calc_seg_sitesSEXP);
+    __result = Rcpp::wrap(parse_sg_output(file_names, sample_size, sequence_length, loci_number, outgroup_size, calc_seg_sites));
     return __result;
 END_RCPP
 }
