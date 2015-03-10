@@ -11,4 +11,5 @@ coalsimr 0.1
   + Site Frequency Spectrum (#24)
   + Joint Site Frequency Spectrum
   + iHH (#25)
+  + DNA (#40)
 * Added the feature to simulate unphased data (#26).
