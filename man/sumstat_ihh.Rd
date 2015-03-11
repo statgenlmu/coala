@@ -26,6 +26,7 @@ Voight et al., A map of recent positive selection in the human genome.
 
 coalsimr relies on the package rehh to calculate this statistic. Please refer
 to their documentation for detailed information on the concrete
-implementation.
+implementation. It is required to install the package \code{rehh} to use this
+function.
 }
 

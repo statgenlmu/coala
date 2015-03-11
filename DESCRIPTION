@@ -1,18 +1,17 @@
 Package: coalsimr
-Version: 0.0.9017
-Date: 2015-03-04
+Version: 0.0.9018
+Date: 2015-03-11
 License: GPL (>= 3)
 Title: Simulating the evolution of DNA sequences
 Author: Paul R. Staab
 Maintainer: Paul R. Staab <develop@paulstaab.de>
-BugReports: https://github.com/paulstaab/jaatha
+BugReports: https://github.com/paulstaab/coalsimr/issues
 Description: Blub
-URL: http://evol.bio.lmu.de/_statgen/software/jaatha
+URL: https://github.com/paulstaab/coalsimr
 Depends:
     R (>= 3.1.0)
 Imports:
     assertthat (>= 0.1),
-    rehh (>= 1.11),
     phyclust (>= 0.1-14),
     Rcpp (>= 0.11.0),
     R6 (>= 2.0.1),
@@ -20,7 +19,8 @@ Imports:
     settings (>= 0.1.1),
     stats
 Suggests:
-    testthat (>= 0.9.1.9000)
+    testthat (>= 0.9.1.9000),
+    rehh (>= 1.11)
 LinkingTo: Rcpp
 Collate:
     'RcppExports.R'

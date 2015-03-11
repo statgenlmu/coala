@@ -1,5 +1,4 @@
 #' @importFrom R6 R6Class
-#' @importFrom rehh data2haplohh calc_ehh
 sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
   private = list(
     position = NA,
@@ -12,6 +11,10 @@ sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
     }),
   public = list(
     initialize = function(name, position, population, group=0) {
+      if (!requireNamespace("rehh", quietly = TRUE)) {
+        stop("Package rehh is required to calculate the iHH summary statistic.",
+             " Please install it.", call. = FALSE)
+      }
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
       private$population <- population
@@ -27,10 +30,10 @@ sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
         assert_that(is.matrix(seg_sites[[locus]]))
         snps <- private$get_snp(pos[[locus]], locus, model)
         ehh <- sapply(snps, function(snp) {
-          calc_ehh(self$segsites_to_rehh_data(seg_sites[[locus]],
-                                              pos[[locus]],
-                                              ind),
-                   mrk = snp, plotehh = FALSE)$ihh
+          rehh::calc_ehh(self$segsites_to_rehh_data(seg_sites[[locus]],
+                                                    pos[[locus]],
+                                                    ind),
+                         mrk = snp, plotehh = FALSE)$ihh
         })
         colnames(ehh) <- pos[[locus]][snps]
         ehh
@@ -51,7 +54,7 @@ sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
     segsites_to_rehh_data = function(seg_sites, pos, ind) {
       haplo <- self$segsites_to_haplo(seg_sites, ind)
       snp_map <- self$segsites_to_snp_map(seg_sites, pos)
-      capture.output(rehh <- data2haplohh(haplo, snp_map, recode.allele = TRUE))
+      capture.output(rehh <- rehh::data2haplohh(haplo, snp_map, recode.allele = TRUE))
       unlink(c(snp_map, haplo))
       rehh
     }
@@ -68,7 +71,8 @@ sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
 #'
 #' coalsimr relies on the package rehh to calculate this statistic. Please refer
 #' to their documentation for detailed information on the concrete
-#' implementation.
+#' implementation. It is required to install the package \code{rehh} to use this
+#' function.
 #'
 #' @inheritParams sumstat_file
 #' @param position A position relative to the locus extent, e.g. 0.5 for the
