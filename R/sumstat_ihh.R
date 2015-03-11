@@ -54,7 +54,9 @@ sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
     segsites_to_rehh_data = function(seg_sites, pos, ind) {
       haplo <- self$segsites_to_haplo(seg_sites, ind)
       snp_map <- self$segsites_to_snp_map(seg_sites, pos)
-      capture.output(rehh <- rehh::data2haplohh(haplo, snp_map, recode.allele = TRUE))
+      capture.output(rehh <- rehh::data2haplohh(haplo,
+                                                snp_map,
+                                                recode.allele = TRUE))
       unlink(c(snp_map, haplo))
       rehh
     }
