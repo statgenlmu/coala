@@ -126,26 +126,6 @@ get_sample_size <- function(model, for_sim=FALSE) {
 }
 
 
-
-
-#' @describeIn get_feature_table Returns a vector of groups in the model
-#' @export
-get_groups <- function(model) {
-  groups <- read_cache(model, 'groups')
-  if (is.null(groups)) {
-    groups <- sort(unique(c(sapply(model$features, function(f) f$get_group()),
-                            sapply(model$sum_stats, function(s) s$get_group()),
-                            sapply(model$loci, function(l) l$get_group()))))
-
-    if (all(groups == 0)) return(0)
-    if (!1 %in% groups) groups <- c(1, groups)
-    groups <- groups[groups != 0]
-    cache(model, 'groups', groups)
-  }
-  groups
-}
-
-
 #' @describeIn get_feature_table Returns a matrix with detailed length
 #' information about the loci in the model.
 #' @export

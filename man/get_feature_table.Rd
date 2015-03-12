@@ -2,7 +2,6 @@
 % Please edit documentation in R/model_getters.R, R/sumstat.R
 \name{get_feature_table}
 \alias{get_feature_table}
-\alias{get_groups}
 \alias{get_locus_length}
 \alias{get_locus_length_matrix}
 \alias{get_locus_number}
@@ -29,8 +28,6 @@ get_locus_number(model)
 get_populations(model)
 
 get_sample_size(model, for_sim = FALSE)
-
-get_groups(model)
 
 get_locus_length_matrix(model, individual = TRUE)
 
@@ -77,8 +74,6 @@ data.frame
 
 \item \code{get_sample_size}: Returns a vector of samples sizes per
 population.
-
-\item \code{get_groups}: Returns a vector of groups in the model
 
 \item \code{get_locus_length_matrix}: Returns a matrix with detailed length
 information about the loci in the model.

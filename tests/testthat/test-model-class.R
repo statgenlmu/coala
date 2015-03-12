@@ -33,10 +33,15 @@ test_that("adding parameters works", {
 
 
 test_that("adding features works", {
+  expect_equal(length(get_features(coal_model())), 0)
+  expect_equal(nrow(get_feature_table(coal_model())), 0)
+
   dm <- coal_model(11:12, 100)
   dm <- dm + Feature$new('blub', 5)
   expect_equal(nrow(search_feature(dm, 'blub')), 1)
   expect_that(length(get_features(dm)), is_more_than(0))
+  expect_true('blub' %in% get_feature_table(dm)$type)
+
 
   dm <- coal_model(11:12, 100)
   dm <- dm + Feature$new('bli', par_range('bla', 1, 5))
