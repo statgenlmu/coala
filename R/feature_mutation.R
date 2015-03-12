@@ -1,3 +1,11 @@
+Feature_mutation <- R6Class("Feature_mutation", inherit = Feature,
+  public = list(
+    print = function() {
+      cat("Mutations with rate", self$get_par(), "\n")
+    }
+  )
+)
+
 #' Creates a Mutation Feature
 #'
 #' This functions adds the assumption to the model that neutral mutations
@@ -41,8 +49,8 @@
 feat_mutation <- function(rate, variance = 0, model='IFS',
                           base_frequencies, tstv_ratio, gtr_rates) {
 
-  container <- coal_model() + Feature$new('mutation', parameter=rate,
-                                          variance=variance)
+  container <- coal_model() +
+    Feature_mutation$new('mutation', parameter=rate, variance=variance)
 
   # Add the mutation model
   if (model != 'IFS') {
