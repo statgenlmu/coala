@@ -25,5 +25,11 @@ print.Coalmodel <- function(x, ...) {
       cat("* ")
       locus$print()
     }
+    cat("\n")
   }
+
+  cat("\nSimulator:", select_simprog(x)$get_name(), "\n")
+  cmd <- "Can not simulate model"
+  tryCatch(cmd <- get_cmd(x), error = function(e) NULL)
+  cat("Command:", paste(cmd, collapse="\n"), "\n")
 }
