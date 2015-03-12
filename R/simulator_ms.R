@@ -10,8 +10,10 @@ ms_sum_stats <- c("jsfs", "trees", "seg.sites", "file")
 ms_generate_opts_cmd <- function(model) {
   sample_size <- get_sample_size(model, for_sim = TRUE)
   cmd <- c('c(')
-  cmd <- c(cmd,'"-I"', ', ', length(sample_size), ', ',
-           paste(sample_size, collapse=","), ', ')
+  if (length(sample_size) > 1) {
+    cmd <- c(cmd,'"-I"', ', ', length(sample_size), ', ',
+             paste(sample_size, collapse=","), ', ')
+  }
 
   for (i in 1:dim(get_feature_table(model))[1] ) {
     type <- as.character(get_feature_table(model)[i,"type"])
