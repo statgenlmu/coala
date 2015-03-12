@@ -2,13 +2,12 @@ Feature <- R6Class("Feature",
   private = list(
     feature_table = NULL,
     parameter = list(),
-    group = 0,
     inter_locus_var = FALSE
   ),
   public = list(
     initialize = function(type, parameter,
                           pop_source=NA, pop_sink=NA,
-                          time_point=NA, group=0,
+                          time_point=NA,
                           variance=0, zero_inflation=0) {
 
       # Add the parameter
@@ -29,8 +28,6 @@ Feature <- R6Class("Feature",
       else if (is.character(time_point) | is.na(time_point)) NULL
       else stop("Unexpected type of argument 'time_point'")
 
-      private$group <- group
-
       if (variance != 0) {
         private$inter_locus_var <- TRUE
         par_expr <- paste0('rgamma(1, ', par_expr, '^2/', variance,
@@ -45,12 +42,11 @@ Feature <- R6Class("Feature",
       }
 
       private$feature_table <- create_feature_table(type, par_expr, pop_source,
-                                                    pop_sink, time_point, group)
+                                                    pop_sink, time_point)
     },
     get_table = function() private$feature_table,
     get_parameters = function() private$parameter,
     reset_parameters = function() private$parameter <- list(),
-    get_group = function() private$group,
     get_inter_locus_var = function() private$inter_locus_var,
     add_parameter = function(parameter) {
       stopifnot(is.par(parameter))
@@ -70,20 +66,18 @@ is.feature <- function(feature) {
 
 create_feature_table <- function(type=character(), parameter=character(),
                                  pop.source=numeric(), pop.sink=numeric(),
-                                 time.point=character(), group=numeric()) {
+                                 time.point=character()) {
 
   stopifnot(is.character(type))
   stopifnot(is.character(parameter))
   stopifnot(is.na(pop.source) | is.numeric(pop.source))
   stopifnot(is.na(pop.sink) | is.numeric(pop.sink))
   stopifnot(is.na(time.point) | is.character(time.point))
-  stopifnot(is.numeric(group))
 
   data.frame(type=type,
              parameter=parameter,
              pop.source=pop.source,
              pop.sink=pop.sink,
              time.point=time.point,
-             group=group,
              stringsAsFactors=F)
 }

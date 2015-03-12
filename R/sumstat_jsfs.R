@@ -2,11 +2,11 @@
 sumstat_jsfs_class <- R6Class('sumstat_Jsfs', inherit = sumstat,
   private = list(populations = NULL),
   public = list(
-    initialize = function(name, populations, group=0) {
+    initialize = function(name, populations) {
       assert_that(is.numeric(populations))
       assert_that(length(populations) == 2)
       private$populations <- populations
-      super$initialize(name, group)
+      super$initialize(name)
     },
     calculate = function(seg_sites, files, model) {
       calc_jsfs(seg_sites,
@@ -20,6 +20,6 @@ sumstat_jsfs_class <- R6Class('sumstat_Jsfs', inherit = sumstat,
 #'
 #' @inheritParams sumstat_file
 #' @export
-sumstat_jsfs <- function(name='jsfs', populations=c(1,2), group = 0) {
-  sumstat_jsfs_class$new(name, populations, group)
+sumstat_jsfs <- function(name='jsfs', populations=c(1,2)) {
+  sumstat_jsfs_class$new(name, populations)
 }

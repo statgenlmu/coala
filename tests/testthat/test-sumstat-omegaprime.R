@@ -40,6 +40,6 @@ test_that('initialzation of statistic works', {
   model <- model_trios() + sumstat_omegaprime(name = 'omega_prime', 1, 1)
   stats <- simulate(model, pars=c(1,5))
   expect_that(stats$omega_prime, is_a('numeric'))
-  expect_equal(length(stats$omega_prime), 2)
+  expect_equal(length(stats$omega_prime), 4)
   expect_true(all(stats$omega_prime >= 0 & stats$omega_prime <= 1))
 })

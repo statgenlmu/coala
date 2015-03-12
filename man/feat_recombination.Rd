@@ -4,16 +4,11 @@
 \alias{feat_recombination}
 \title{Creates a Recombination feature}
 \usage{
-feat_recombination(rate, group = 0, variance = 0)
+feat_recombination(rate, variance = 0)
 }
 \arguments{
 \item{rate}{A \code{\link{Parameter}} defining the recombination rate
 (see above).}
-
-\item{group}{Group of loci for with this feature is added. 0 means that
-the feature applies to all groups, and 1 is the default group.
-Set to 1 or an greater integer to set this feature only for
-the corresponding group of loci.}
 
 \item{variance}{Set to a value different from 0 to introduce variation in the
 the parameter value for different loci. The

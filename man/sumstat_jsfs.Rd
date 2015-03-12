@@ -4,11 +4,7 @@
 \alias{sumstat_jsfs}
 \title{Calculates the Joint Site Frequency Spectrum from simulations}
 \usage{
-sumstat_jsfs(name = "jsfs", populations = c(1, 2), group = 0)
-}
-\arguments{
-\item{group}{The locus group for which this summary statistic is reported.
-The default of `0` corresponds to all groups.}
+sumstat_jsfs(name = "jsfs", populations = c(1, 2))
 }
 \description{
 Calculates the Joint Site Frequency Spectrum from simulations

@@ -13,10 +13,6 @@
 #'                 the value provided as \code{parameter}, and variance as given
 #'                 here. Can also be set to a previously
 #'                 created parameter, or an expression based on parameters.
-#' @param group    Group of loci for with this feature is added. 0 means that
-#'                 the feature applies to all groups, and 1 is the default group.
-#'                 Set to 1 or an greater integer to set this feature only for
-#'                 the corresponding group of loci.
 #' @param model    The mutation model you want to use. Can be IFS (default),
 #'                 HKY, F84 or GTR.
 #' @param tstv.ratio The ratio of transitions to transversions. The default is
@@ -42,11 +38,11 @@
 #' # A model with variable gamma distributed mutation rate
 #' dm <- coal_model(c(15,20), 100) +
 #'   feat_mutation(par_range('theta', 1, 20), variance=100)
-feat_mutation <- function(rate, group = 0, variance = 0, model='IFS',
+feat_mutation <- function(rate, variance = 0, model='IFS',
                           base_frequencies, tstv_ratio, gtr_rates) {
 
   container <- coal_model() + Feature$new('mutation', parameter=rate,
-                                          group=group, variance=variance)
+                                          variance=variance)
 
   # Add the mutation model
   if (model != 'IFS') {

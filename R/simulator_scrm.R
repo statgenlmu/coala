@@ -11,9 +11,14 @@ Simulator_scrm <- R6Class('Simulator_scrm', inherit = Simulator,
   ),
   public = list(
     simulate = function(dm, parameters) {
+      if (nrow(get_locus_length_matrix(dm, has_inter_locus_var(dm))) > 1) {
+        stop("scrm can only simulate one group of loci at the moment.")
+      }
       args <- paste(sum(get_sample_size(dm, for_sim = TRUE)),
                     get_locus_number(dm),
-                    paste(ms_generate_opts(dm, parameters), collapse = ' '))
+                    paste(ms_generate_opts(dm, parameters,
+                                           get_locus_length(dm, 1)),
+                          collapse = ' '))
 
       if ('file' %in% get_summary_statistics(dm)) file <- tempfile('scrm')
       else file <- ''

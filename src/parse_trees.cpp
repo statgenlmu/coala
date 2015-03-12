@@ -3,11 +3,6 @@
 
 using namespace Rcpp;
 
-// Function that reads a file containing output from ms or msms ('in_file')
-// and copies the trees in newick format into a separate file ('out_file').
-// This new file can be used as input for seq-gen. Only Unix system, this could
-// be done with a few grep's, but this function should give us some platform
-// independence.
 // [[Rcpp::export]]
 CharacterVector parse_trees(const std::string in_file,
                             const NumericVector trio_opts,

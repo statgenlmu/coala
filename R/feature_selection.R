@@ -13,21 +13,18 @@
 #'                  population = 2, at_time=par_expr(tau))
 #'
 feat_selection <- function(strength_AA, strength_Aa,
-                           population, at_time, group=0) {
+                           population, at_time) {
 
   if (!is.par(at_time)) at_time <- par_const(at_time)
 
   coal_model() +
     Feature$new("selection", par_const(NA),
                 pop_source=population,
-                time_point=at_time,
-                group=group) +
+                time_point=at_time) +
     Feature$new("selection_AA", strength_AA,
                 pop_source=population,
-                time_point=par_const(at_time$get_expression()),
-                group=group) +
+                time_point=par_const(at_time$get_expression())) +
     Feature$new("selection_Aa", strength_Aa,
                 pop_source=population,
-                time_point=par_const(at_time$get_expression()),
-                group=group)
+                time_point=par_const(at_time$get_expression()))
 }

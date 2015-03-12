@@ -45,26 +45,6 @@ Locus <- R6Class('Locus',
     },
     get_number = function() private$number,
     get_group = function() private$group,
-    get_table = function() {
-      if (length(self$get_name()) == 1) {
-        locus_names <- c("", self$get_name(), "")
-      } else if (length(self$get_name()) == 3) {
-        locus_names <- self$get_name()
-      } else stop("Failed to get locus names")
-
-      locus_length <- self$get_length(TRUE)
-      create_locus_table(group = self$get_group(),
-                         number = self$get_number(),
-                         name = locus_names[2],
-                         name_l = locus_names[1],
-                         name_r = locus_names[3],
-                         length_l = locus_length[1],
-                         length_il = locus_length[2],
-                         length_m = locus_length[3],
-                         length_ir = locus_length[4],
-                         length_r = locus_length[5],
-                         stringsAsFactors = FALSE)
-    },
     print = function() {
       cat(self$get_number(), "loci of length", self$get_length(),
           "in group", self$get_group())
@@ -152,17 +132,15 @@ locus_trio <- function(locus_names = c(left='', middle='', right=''),
 }
 
 
-create_locus_table <- function(group=numeric(), number=numeric(),
-                               name=character(), name_l=character(),
-                               name_r=character(),
-                               length_l=numeric(), length_il=numeric(),
-                               length_m=numeric(),
-                               length_ir=numeric(), length_r=numeric()) {
+# Converts a position on the middle locus to the relative position
+# on the simulated stretch
+conv_middle_to_trio_pos <- function(pos, model,
+                                    relative_out=TRUE, relative_in=TRUE) {
+  llm <- get_locus_length_matrix(model)
 
-  data.frame(group=group, number=number,
-             name=name, name_l=name_l, name_r=name_r,
-             length_l=length_l, length_il=length_il,
-             length_m=length_m,
-             length_ir=length_ir, length_r=length_r,
-             stringsAsFactors=F)
+  if (relative_in) pos <- pos * llm[,3]
+  pos <- pos + llm[,1] + llm[,2]
+  if (relative_out) pos <- pos / rowSums(llm[,1:5])
+
+  pos
 }

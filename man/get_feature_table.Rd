@@ -2,7 +2,6 @@
 % Please edit documentation in R/model_getters.R, R/sumstat.R
 \name{get_feature_table}
 \alias{get_feature_table}
-\alias{get_groups}
 \alias{get_locus_length}
 \alias{get_locus_length_matrix}
 \alias{get_locus_number}
@@ -22,17 +21,15 @@ get_parameter_table(model)
 
 get_parameter(model)
 
-get_locus_length(dm)
+get_locus_length(model, locus, total = TRUE)
 
-get_locus_number(dm)
+get_locus_number(model)
 
-get_populations(dm)
+get_populations(model)
 
-get_sample_size(dm, for_sim = FALSE)
+get_sample_size(model, for_sim = FALSE)
 
-get_groups(dm)
-
-get_locus_length_matrix(dm, individual = TRUE)
+get_locus_length_matrix(model, individual = TRUE)
 
 get_outgroup(model)
 
@@ -45,13 +42,17 @@ get_summary_statistics(dm, group = 1)
 \arguments{
 \item{model}{The coalescent model from which aspects are returned}
 
+\item{locus}{The number of the locus.}
+
+\item{total}{If \code{FALSE}, the length of loci in a trio will be reported
+  individually. If \code{TRUE} the sum of the loci's length will be reported.
+  This does not affect non-trio loci.}
+
 \item{for_sim}{If true, the sample size used internally for the simulation
 will be reported rather than the number of actuall samples. The numbers
 can be unequal for the simulation of unphased data.}
 
 \item{pop}{The population for which aspects are returned}
-
-\item{group}{The locus group for which aspects are returned}
 }
 \description{
 Getters for coalescent models
@@ -73,8 +74,6 @@ data.frame
 
 \item \code{get_sample_size}: Returns a vector of samples sizes per
 population.
-
-\item \code{get_groups}: Returns a vector of groups in the model
 
 \item \code{get_locus_length_matrix}: Returns a matrix with detailed length
 information about the loci in the model.

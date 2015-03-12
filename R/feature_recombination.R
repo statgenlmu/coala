@@ -22,6 +22,6 @@
 #' # A model where the recombination is given by a parameter 'rho'
 #' dm <- coal_model(c(25,25), 100) +
 #'   feat_recombination(par_range('rho', 1, 5))
-feat_recombination <- function(rate, group = 0, variance = 0) {
-  Feature$new("recombination", rate, group = group, variance = variance)
+feat_recombination <- function(rate, variance = 0) {
+  Feature$new("recombination", rate, variance = variance)
 }

@@ -38,11 +38,11 @@ s10       CCTCAGGGCC", file = seqgen_file)
 
 
 test_that("DNA can be simulated", {
-  dm_tmp <- coal_model(c(5, 5), 1, 10) +
+  model <- coal_model(c(5, 5), 1, 10) +
     feat_pop_merge(par_const(.5), 2, 1) +
     feat_mutation(par_const(5), model = "HKY") +
     feat_recombination(par_const(1)) +
     sumstat_dna()
 
-  stat <- simulate(dm_tmp)
+  stat <- simulate(model)
 })

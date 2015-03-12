@@ -63,29 +63,28 @@ get_parameter <- function(model) {
 }
 
 
-#' @param group The locus group for which aspects are returned
+#' @param locus The number of the locus.
+#' @param total If \code{FALSE}, the length of loci in a trio will be reported
+#'   individually. If \code{TRUE} the sum of the loci's length will be reported.
+#'   This does not affect non-trio loci.
+#'
 #' @describeIn get_feature_table Returns the length of the loci in a locus group
-get_locus_length <- function(dm) {
-  ll <- read_cache(dm, "locus_length")
-
-  if (is.null(ll)) {
-    ll <- as.integer(rowSums(
-      get_locus_length_matrix(dm, FALSE)[, c(1, 3, 5), drop = FALSE]
-    ))
-
-    cache(dm, "locus_length", ll)
-  }
-
+#' @export
+get_locus_length <- function(model, locus, total=TRUE) {
+  assert_that(is.numeric(locus))
+  ll <- get_locus_length_matrix(model, TRUE)[locus, c(1, 3, 5)]
+  if (total) return(sum(ll))
+  if (sum(ll[-2]) == 0) return(ll[2])
   ll
 }
 
 
 #' @describeIn get_feature_table Returns the number of loci in a locus group
 #' @export
-get_locus_number <- function(dm) {
-  number <- sum(sapply(dm$loci, function(x) {
+get_locus_number <- function(model) {
+  number <- sum(sapply(model$loci, function(x) {
     n <- x$get_number()
-    if (n > 1) n <- n / dm$scaling_factor
+    if (n > 1) n <- n / model$scaling_factor
     n
   }))
 
@@ -95,8 +94,8 @@ get_locus_number <- function(dm) {
 
 #' @describeIn get_feature_table Returns a vector of populations in the model
 #' @export
-get_populations <- function(dm) {
-  unique(search_feature(dm, 'sample')$pop.source)
+get_populations <- function(model) {
+  unique(search_feature(model, 'sample')$pop.source)
 }
 
 
@@ -106,11 +105,11 @@ get_populations <- function(dm) {
 #'   will be reported rather than the number of actuall samples. The numbers
 #'   can be unequal for the simulation of unphased data.
 #' @export
-get_sample_size <- function(dm, for_sim=FALSE) {
-  feat.samples <- search_feature(dm, type="sample")
+get_sample_size <- function(model, for_sim=FALSE) {
+  feat.samples <- search_feature(model, type="sample")
   stopifnot(nrow(feat.samples) > 0)
 
-  sample_size <- rep(0, length(get_populations(dm)))
+  sample_size <- rep(0, length(get_populations(model)))
   for (row.nr in 1:nrow(feat.samples)) {
     stopifnot(sample_size[feat.samples$pop.source[row.nr]] == 0)
     sample_size[feat.samples$pop.source[row.nr]] <-
@@ -118,52 +117,38 @@ get_sample_size <- function(dm, for_sim=FALSE) {
   }
 
   if (for_sim) {
-    sample_size <- sample_size * get_ploidy(dm)
+    sample_size <- sample_size * get_ploidy(model)
   } else {
-    sample_size <- sample_size * get_samples_per_ind(dm)
+    sample_size <- sample_size * get_samples_per_ind(model)
   }
 
   sample_size
 }
 
 
-
-
-#' @describeIn get_feature_table Returns a vector of groups in the model
-#' @export
-get_groups <- function(dm) {
-  groups <- read_cache(dm, 'groups')
-  if (is.null(groups)) {
-    groups <- sort(unique(c(sapply(dm$features, function(f) f$get_group()),
-                            sapply(dm$sum_stats, function(s) s$get_group()),
-                            sapply(dm$loci, function(l) l$get_group()))))
-
-    if (all(groups == 0)) return(0)
-    if (!1 %in% groups) groups <- c(1, groups)
-    groups <- groups[groups != 0]
-    cache(dm, 'groups', groups)
-  }
-  groups
-}
-
-
 #' @describeIn get_feature_table Returns a matrix with detailed length
 #' information about the loci in the model.
 #' @export
-get_locus_length_matrix <- function(dm, individual=TRUE) {
-  llm <- read_cache(dm, "llm")
-  if (is.null(llm)) {
-    # Select the relevant loci in dm$loci
-    loci <- get_loci(dm, idx=TRUE)
+get_locus_length_matrix <- function(model, individual=TRUE) {
+  if (individual) cache_name <- "llm_full"
+  else cache_name <- "llm_compact"
 
-    # Repeat the row if number > 1
-    if (individual && length(loci) == 1) {
-      loci <- rep(loci, dm$loci[[loci]]$get_number())
+  llm <- read_cache(model, cache_name)
+  if (is.null(llm)) {
+    loci <- seq(along = model$loci)
+    if (individual) {
+      loci <- rep(loci, sapply(model$loci, function(x) x$get_number()))
     }
 
     assert_that(length(loci) > 0)
-    llm <- do.call(rbind, lapply(dm$loci[loci], function(l) l$get_length(TRUE)))
-    cache(dm, "llm", llm)
+    llm <- do.call(rbind, lapply(model$loci[loci],
+                                 function(l) {
+                                   c(l$get_length(TRUE), number=l$get_number())
+                                 }))
+
+    if (individual) llm[ , 6] <- 1
+
+    cache(model, cache_name, llm)
   }
   llm
 }
@@ -202,15 +187,4 @@ get_par_names <- function(model) {
   sapply(get_parameter(model), function(par) par$get_name())
 }
 
-
-get_loci <- function(model, group=NA, idx=FALSE) {
-  if (is.na(group)) loci <- seq(along = model$loci)
-  else {
-    loci <- which(sapply(model$loci, function(l) l$get_group() == group))
-    if (length(loci) == 0) {
-      loci <- which(sapply(model$loci, function(l) l$get_group() == 0))
-    }
-  }
-  if (idx) return(loci)
-  model$loci[loci]
-}
+get_loci <- function(model) model$loci
