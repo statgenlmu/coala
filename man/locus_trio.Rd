@@ -4,15 +4,11 @@
 \alias{locus_trio}
 \title{Adds a trio of loci to a group}
 \usage{
-locus_trio(locus_names = c(left = "", middle = "", right = ""),
-  locus_length = c(left = 1000, middle = 1000, right = 1000),
+locus_trio(locus_length = c(left = 1000, middle = 1000, right = 1000),
   distance = c(left_middle = 500, middle_right = 500), number = 1,
   group = 0)
 }
 \arguments{
-\item{locus_names}{A vector of 3 strings, giving the names for the loci.
-The names are used for identifying the loci later (left, middle and right).}
-
 \item{locus_length}{An integer vector of length 3, giving the length of each
 of the three loci (left, middle and right).}
 
@@ -28,10 +24,7 @@ Adds a trio of loci to a group
 }
 \examples{
 coal_model(c(25,25)) +
-  locus_trio(locus_names = c('Solyc00g00500.2',
-                             'Solyc00g00520.1',
-                             'Solyc00g00540.1'),
-             locus_length=c(1250, 1017, 980),
+  locus_trio(locus_length=c(1250, 1017, 980),
              distance=c(257, 814))
 }
 

@@ -43,7 +43,7 @@ check_par_range <- function(dm, param) {
 }
 
 # Selects a program for simulation that is capable of all current features
-determine_simprog <- function(dm) {
+select_simprog <- function(dm) {
   name <- read_cache(dm, 'simprog')
 
   if (is.null(name)) {

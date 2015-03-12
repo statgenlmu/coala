@@ -1,3 +1,13 @@
+Feature_growth <- R6Class("Feature_growth", inherit = Feature,
+  public = list(
+    print = function() {
+      cat("Exponential growth/decline with rate", self$get_par(),
+          "in population", self$get_population(),
+          "starting at time", self$get_time_point(), "\n")
+    }
+  )
+)
+
 #' Adds an exponential growth or decline of the size of one
 #' population to a model.
 #'
@@ -23,5 +33,5 @@
 #' dm <- coal_model(c(20,37), 88) +
 #'   feat_growth(par_range('alpha', 0.1, 2), population=2, at.time="0")
 feat_growth <- function(rate, population, at.time="0") {
-  Feature$new("growth", rate, pop_source=population, time_point=at.time)
+  Feature_growth$new("growth", rate, pop_source=population, time_point=at.time)
 }

@@ -253,3 +253,14 @@ test_that('getting par names works', {
   model <- coal_model() + par_range("a", 1, 2) + par_range("b", 2, 3)
   expect_equal(get_par_names(model), c("a", "b"))
 })
+
+
+test_that('getting model command works', {
+  cmd <- get_cmd(model_theta_tau())
+  expect_that(cmd, is_a("character"))
+  expect_that(nchar(cmd), is_more_than(0))
+
+  cmd <- get_cmd(model_f84())
+  expect_that(cmd, is_a("character"))
+  expect_true(all(nchar(cmd) > 0))
+})

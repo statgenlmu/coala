@@ -188,3 +188,5 @@ get_par_names <- function(model) {
 }
 
 get_loci <- function(model) model$loci
+
+get_cmd <- function(model) select_simprog(model)$get_cmd(model)

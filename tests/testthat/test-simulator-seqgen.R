@@ -184,7 +184,7 @@ test_that('a more complicated model works', {
 test_that('printing a seqgen command works', {
   sg <- get_simulator("seqgen")
   cmd <- sg$get_cmd(model_f84())
-  expect_equal(length(cmd), 2)
+  expect_equal(length(cmd), 1)
 })
 
 

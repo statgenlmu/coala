@@ -3,13 +3,11 @@ Locus <- R6Class('Locus',
   private = list(
     group = 0,
     length = NA,
-    number = NA,
-    name = NA
+    number = NA
   ),
   public = list(
     initialize = function(locus_length,
                           locus_number = 1,
-                          locus_name = '',
                           group = 0) {
 
       assert_that(is.numeric(locus_length))
@@ -22,14 +20,10 @@ Locus <- R6Class('Locus',
       assert_that(length(locus_number) == 1)
       private$number <- locus_number
 
-      assert_that(is.character(locus_name))
-      private$name <- locus_name
-
       assert_that(is.numeric(group))
       assert_that(group >= 0)
       private$group <- group
     },
-    get_name = function() private$name,
     get_length = function(trios = FALSE) {
       if (!trios) return(sum(private$length))
 
@@ -46,8 +40,8 @@ Locus <- R6Class('Locus',
     get_number = function() private$number,
     get_group = function() private$group,
     print = function() {
-      cat(self$get_number(), "loci of length", self$get_length(),
-          "in group", self$get_group())
+      cat(self$get_number(), ifelse(self$get_number() == 1, "locus", "loci"),
+          "of length", self$get_length())
     }
   )
 )
@@ -76,8 +70,8 @@ is.locus <- function(locus) 'Locus' %in% class(locus)
 #' coal_model(20, 10, 560) +
 #'   locus_single(750, group = 2) +
 #'   locus_single(430, group = 2)
-locus_single <- function(length, group = 0, name = '') {
-  Locus$new(length, 1, name, group = group)
+locus_single <- function(length, group = 0) {
+  Locus$new(length, 1, group = group)
 }
 
 
@@ -92,8 +86,6 @@ locus_averaged <- function(number, length, group = 0) {
 #' Adds a trio of loci to a group
 #'
 #' @inheritParams locus_single
-#' @param locus_names A vector of 3 strings, giving the names for the loci.
-#'   The names are used for identifying the loci later (left, middle and right).
 #' @param locus_length An integer vector of length 3, giving the length of each
 #'   of the three loci (left, middle and right).
 #' @param distance A vector of two, giving the distance between left and middle,
@@ -101,21 +93,13 @@ locus_averaged <- function(number, length, group = 0) {
 #' @export
 #' @examples
 #' coal_model(c(25,25)) +
-#'   locus_trio(locus_names = c('Solyc00g00500.2',
-#'                              'Solyc00g00520.1',
-#'                              'Solyc00g00540.1'),
-#'              locus_length=c(1250, 1017, 980),
+#'   locus_trio(locus_length=c(1250, 1017, 980),
 #'              distance=c(257, 814))
-locus_trio <- function(locus_names = c(left='', middle='', right=''),
-                       locus_length = c(left=1000, middle=1000, right=1000),
+locus_trio <- function(locus_length = c(left=1000, middle=1000, right=1000),
                        distance = c(left_middle=500, middle_right=500),
                        number = 1,
                        group = 0) {
 
-  stopifnot(length(locus_names) == 3)
-  if (!is.null(names(locus_names))) {
-    locus_names <- locus_names[c('left', 'middle', 'right')]
-  }
   stopifnot(length(locus_length) == 3)
   if (!is.null(names(locus_length))) {
     locus_length <- locus_length[c('left', 'middle', 'right')]
@@ -127,7 +111,6 @@ locus_trio <- function(locus_names = c(left='', middle='', right=''),
 
   Locus$new(locus_length = c(locus_length, distance)[c(1,4,2,5,3)],
             locus_number = number,
-            locus_name = locus_names,
             group = group)
 }
 

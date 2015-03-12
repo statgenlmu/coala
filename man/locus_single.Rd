@@ -5,7 +5,7 @@
 \alias{locus_single}
 \title{Add one locus or multiple loci to a Model}
 \usage{
-locus_single(length, group = 0, name = "")
+locus_single(length, group = 0)
 
 locus_averaged(number, length, group = 0)
 }

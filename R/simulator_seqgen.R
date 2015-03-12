@@ -199,10 +199,7 @@ sg_generate_opt_cmd <- function(model) {
 
 
 sg_get_command <- function(model) {
-  tree_model <- generate_tree_model(model)
-
-  tree_cmd <-
-    determine_simprog(tree_model)$get_cmd(tree_model)
+  tree_cmd <- get_cmd(generate_tree_model(model))
 
   sg_cmd <- paste(sg_generate_opts(model, get_parameter_table(model)$name,
                                    get_locus_length_matrix(model)[1, 1:5],
@@ -211,7 +208,8 @@ sg_get_command <- function(model) {
                   collapse = ' ')
   sg_cmd <- paste('seq-gen', sg_cmd)
 
-  c(tree=tree_cmd, seqgen=sg_cmd)
+  paste("\n  Trees:", tree_cmd, "\n",
+        " seqgen:", sg_cmd)
 }
 
 
