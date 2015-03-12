@@ -120,6 +120,10 @@ test_that("searching features works", {
   expect_equal(nrow(search_feature(model, time.point = NA)), 1)
 
   expect_equal(nrow(search_feature(model, type = "sample")), 2)
+  expect_equal(nrow(search_feature(model, type = "mutation",
+                                   pop.source = NA)), 1)
+  expect_equal(nrow(search_feature(model, type = "pop_merge",
+                                   pop.sink = 1)), 1)
 })
 
 
@@ -236,6 +240,10 @@ test_that('print works on models', {
   # Printing parameters works
   out <- capture.output(print(coal_model(5) + par_range("abc", 1, 5)))
   expect_that(length(grep("abc", out)), is_more_than(0))
+
+  # Printing loci works
+  out <- capture.output(print(coal_model(5) + locus_single(3131)))
+  expect_that(length(grep("3131", out)), is_more_than(0))
 })
 
 

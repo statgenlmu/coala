@@ -47,10 +47,11 @@ sg_find_exe <- function(throw.error = TRUE, silent = FALSE) {
   }
 
   if (throw.error) {
-    stop("No seqgen executable found. Please provide one using
-          set_seqgen_exe()")
+    stop("No seqgen executable found. Please provide one using ",
+         "set_seqgen_exe()")
   }
-  return(FALSE)
+
+  FALSE
 }
 
 generate_tree_model <- function(model) {
@@ -81,9 +82,7 @@ generate_tree_model <- function(model) {
 set_seqgen_exe <- function(seqgen_exe) {
   if (file.exists(seqgen_exe)) {
     set_seqgen_path(seqgen_exe)
-  } else {
-    stop("File", seqgen_exe, "does not exist")
-  }
+  } else stop("File", seqgen_exe, "does not exist")
 }
 
 # Function to perform simulation using seqgen
