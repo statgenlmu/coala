@@ -38,7 +38,7 @@ test_that("generating msms options works", {
 
   opts <- paste(eval(parse(text = msms_generate_opts_cmd(dm))),
                 collapse = " ")
-  expect_equal(grep("-SI 1.7 2", opts), 1)
+  expect_equal(grep("-SI 1.7 2 5e-04 0", opts), 1)
   expect_equal(grep("-SAA 500", opts), 1)
   expect_equal(grep("-SAa 250", opts), 1)
 })

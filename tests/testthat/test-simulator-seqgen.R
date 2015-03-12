@@ -18,10 +18,10 @@ test_that("test.sg_generate_opts", {
 test_that("generation of tree models works", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
   for (dm in list(model_hky(), model_f84(), model_gtr())) {
-    dm.ms <- generate_tree_model(dm, 1)
+    dm.ms <- generate_tree_model(dm)
     sum.stats <- simulate(dm.ms, pars=c(1, 5))
-    expect_false(is.null(sum.stats$sg_trees))
-    unlink(sum.stats$sg_trees)
+    expect_false(is.null(sum.stats$trees))
+    unlink(sum.stats$trees)
   }
 })
 
@@ -80,12 +80,12 @@ test_that("test.seqgenWithMsms", {
 
 test_that("seq-gen can simulate trios", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  dm.lt <- model_f84() +
-    locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5), group = 1) +
-    locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5), group = 1) +
+  model <- model_f84() +
+    locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5)) +
+    locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5)) +
     sumstat_seg_sites()
 
-  sum.stats <- simulate(dm.lt, pars=c(1, 10))
+  sum.stats <- simulate(model, pars=c(1, 10))
   expect_true(sum(sum.stats$jsfs) <= sum(sapply(sum.stats$seg_sites, ncol)))
 })
 

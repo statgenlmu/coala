@@ -25,7 +25,7 @@ NumericMatrix read_sequence(std::ifstream &output,
 
     // Read sequence
     output >> tmp;
-    //Rcout << i << ":" << seq_nr << " " << tmp << std::endl;
+    // Rcout << i << ":" << seq_nr << " " << tmp << " " << std::endl;
     if (tmp.size() != locus_length) stop("unexpected sequence length");
     for(std::string::size_type j = 0; j < locus_length; ++j) {
       if (tmp[j] == 'A') seq(seq_nr, j) = 1;
@@ -155,9 +155,11 @@ List parse_sg_output(const List file_names,
   List seg_sites(loci_number);
   int locus = -1;
   NumericVector positions(0);
+  CharacterVector file_name;
 
   for (int i = 0; i < file_names.size(); ++i) {
-    CharacterVector file_name = as<CharacterVector>(file_names(i));
+    file_name = as<CharacterVector>(file_names(i));
+    //Rcout << "Locus " << i << ": " << file_name.size() << " files" << std::endl;
 
     // Open the file
     if (file_name.size() == 1) {
@@ -201,7 +203,6 @@ List parse_sg_output(const List file_names,
           if (line_l.substr(0, 1) != " ") stop("seq-gen outputs not in sync");
           if (line_r.substr(0, 1) != " ") stop("seq-gen outputs not in sync");
           ++locus;
-
 
           NumericMatrix ss_l = parseSeqgenSegSites(output_l, sample_size,
                                                    sequence_length(i, 0), outgroup_size);

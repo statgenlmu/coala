@@ -4,16 +4,11 @@
 \alias{feat_mutation}
 \title{Creates a Mutation Feature}
 \usage{
-feat_mutation(rate, group = 0, variance = 0, model = "IFS",
-  base_frequencies, tstv_ratio, gtr_rates)
+feat_mutation(rate, variance = 0, model = "IFS", base_frequencies,
+  tstv_ratio, gtr_rates)
 }
 \arguments{
 \item{rate}{A \code{\link{Parameter}} defining the mutation rate (see above).}
-
-\item{group}{Group of loci for with this feature is added. 0 means that
-the feature applies to all groups, and 1 is the default group.
-Set to 1 or an greater integer to set this feature only for
-the corresponding group of loci.}
 
 \item{variance}{Set to a value different from 0 to introduce variation in the
 the parameter value for different loci. The

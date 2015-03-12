@@ -9,7 +9,6 @@ coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model$sum_stats <- create_sumstat_container()
 
   model$scaling_factor <- 1
-  model$is_grp_model <- FALSE
   model$id <- get_id()
 
   # Add sample sizes
@@ -48,20 +47,16 @@ determine_simprog <- function(dm) {
   name <- read_cache(dm, 'simprog')
 
   if (is.null(name)) {
-    if ( (!dm$is_grp_model) && any(get_groups(dm) != 0) ) {
-      name <- 'groups'
-    } else {
-      priority <- -Inf
+    priority <- -Inf
 
-      for (simprog_name in ls(simulators)) {
-        simprog <- get_simulator(simprog_name)
-        if (all(get_feature_table(dm)$type %in% simprog$get_features()) &
-              all(dm$sum_stats$name %in% simprog$get_sumstats())) {
+    for (simprog_name in ls(simulators)) {
+      simprog <- get_simulator(simprog_name)
+      if (all(get_feature_table(dm)$type %in% simprog$get_features()) &
+            all(dm$sum_stats$name %in% simprog$get_sumstats())) {
 
-          if (simprog$get_priority() > priority) {
-            name <- simprog
-            priority <- simprog$get_priority()
-          }
+        if (simprog$get_priority() > priority) {
+          name <- simprog
+          priority <- simprog$get_priority()
         }
       }
     }
@@ -74,44 +69,22 @@ determine_simprog <- function(dm) {
 }
 
 
-get_mutation_par <- function(dm, outer=FALSE, group=0) {
+get_mutation_par <- function(dm, outer=FALSE) {
   if (outer) {
-    feat <- search_feature(dm, "mutation_outer", group=group)
+    feat <- search_feature(dm, "mutation_outer")
     if (nrow(feat) == 0) {
-      feat <- search_feature(dm, "mutation", group=group)
+      feat <- search_feature(dm, "mutation")
     }
   }  else {
-    feat <- search_feature(dm, "mutation", group=group)
+    feat <- search_feature(dm, "mutation")
   }
   if (nrow(feat) != 1) stop("Failed to determine mutation rate")
   feat[1, 'parameter']
 }
 
 
-get_group_model <- function(model, group) {
-  grp_model <- read_cache(model, paste0('grp_model_', group))
-  if (is.null(grp_model)) {
-    grp_model <- model
-    # Features
-    grp_model$features <-
-      search_feature(model, group = group, feat_table = FALSE)
-
-    # sum_stats
-    grp_model$sum_stats <- get_group_statistics(model, group)
-
-    # Loci
-    grp_model$loci <- get_loci(model, group)
-
-    grp_model$id <- get_id()
-    grp_model$is_grp_model <- TRUE
-    cache(model, paste0('grp_model_', group), grp_model)
-  }
-  grp_model
-}
-
-
 search_feature <- function(dm, type=NULL, pop.source=NULL,
-                          pop.sink=NULL, time.point=NULL, group=NULL,
+                          pop.sink=NULL, time.point=NULL,
                           feat_table=TRUE) {
 
   feat_tbl <- get_feature_table(dm)
@@ -143,55 +116,24 @@ search_feature <- function(dm, type=NULL, pop.source=NULL,
     }
   }
 
-  if (!is.null(group)) {
-    if (group == 0) mask <- mask & feat_tbl$group == 0
-    else {
-      mask <- mask & feat_tbl$group %in% c(0, group)
-
-      # Check if values for the default group are overwritten in the focal group
-      grp_0 <- feat_tbl$group == 0
-      overwritten <- grp_0[mask]
-      for (i in which(overwritten)) {
-        duplicats <- search_feature(dm, type=feat_tbl$type[mask][i],
-                                    pop.source=feat_tbl$pop.source[mask][i],
-                                    pop.sink=feat_tbl$pop.sink[mask][i])
-        if (sum(duplicats$group == group) == 0) overwritten[i] <- FALSE
-      }
-      mask[mask] <- !overwritten
-    }
-  }
-
   if(!feat_table) return(get_features(dm)[mask])
   feat_tbl[mask, ]
 }
 
 
-add_inter_locus_var <- function(dm, group = 0) {
-  stopifnot(is.numeric(group))
-  if (has_inter_locus_var(dm, group)) return(dm)
-  dm + Feature$new('inter_locus_variation', par_const(NA), group = group)
+add_inter_locus_var <- function(dm) {
+  if (has_inter_locus_var(dm)) return(dm)
+  dm + Feature$new('inter_locus_variation', par_const(NA))
 }
 
-has_inter_locus_var <- function(dm, group = 0) {
-  nrow(search_feature(dm, 'inter_locus_variation', group = group)) > 0
+
+has_inter_locus_var <- function(dm) {
+  nrow(search_feature(dm, 'inter_locus_variation')) > 0
 }
 
 
 has_trios <- function(dm) {
   sum(get_locus_length_matrix(dm)[,-3]) > 0
-}
-
-
-# Converts a position on the middle locus to the relative position
-# on the simulated stretch
-conv_middle_to_trio_pos <- function(pos, model,
-                                    relative_out=TRUE, relative_in=TRUE) {
-  llm <- get_locus_length_matrix(model)
-
-  pos <- ifelse(relative_in, pos * llm[,3], pos) + llm[,1] + llm[,2]
-  if (relative_out) pos <- pos / rowSums(llm)
-
-  pos
 }
 
 
@@ -207,7 +149,7 @@ get_snp_positions <- function(seg_sites, model, relative=TRUE) {
       sum(llm[locus, 1:2])
     pos[trio_locus == 1] <- pos[trio_locus == 1] * llm[locus, 5] +
       sum(llm[locus, 1:4])
-    if (relative) pos <- pos / sum(llm[locus,])
+    if (relative) pos <- pos / sum(llm[locus, 1:5])
     pos
   })
 }

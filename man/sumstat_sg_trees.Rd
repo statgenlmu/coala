@@ -4,11 +4,7 @@
 \alias{sumstat_sg_trees}
 \title{Returns ancestral tress in NEWICK fromat from simulations}
 \usage{
-sumstat_sg_trees(locus_length, group = 0)
-}
-\arguments{
-\item{group}{The locus group for which this summary statistic is reported.
-The default of `0` corresponds to all groups.}
+sumstat_sg_trees()
 }
 \description{
 Returns ancestral tress in NEWICK fromat from simulations

@@ -53,11 +53,10 @@ sg_find_exe <- function(throw.error = TRUE, silent = FALSE) {
   return(FALSE)
 }
 
-generate_tree_model <- function(model, locus, locus_number=1) {
-  tree_model <- read_cache(model, paste0('tree_model_', locus))
+generate_tree_model <- function(model) {
+  tree_model <- read_cache(model, "tree_model")
 
   if (is.null(tree_model)) {
-    locus_length <- get_locus_length_matrix(model)[locus,]
     tree_model <- model
 
     # Features
@@ -66,18 +65,9 @@ generate_tree_model <- function(model, locus, locus_number=1) {
 
     # Summary Stastics
     tree_model$sum_stats <- create_sumstat_container()
-    tree_model <- tree_model + sumstat_sg_trees(locus_length)
+    tree_model <- tree_model + sumstat_sg_trees()
 
-    # Loci
-    tree_model$loci <- tree_model$loci[FALSE, ]
-    if (locus_number == 1) {
-      tree_model <- tree_model + locus_single(sum(locus_length))
-    } else {
-      tree_model <- tree_model + locus_averaged(locus_number,
-                                                sum(locus_length))
-    }
-
-    cache(model, paste0('tree_model_', locus), tree_model)
+    cache(model, "tree_model", tree_model)
   }
 
   tree_model
@@ -101,8 +91,6 @@ set_seqgen_exe <- function(seqgen_exe) {
 # @param opts The options to pass to ms. Must either be a character or character
 # vector.
 sg_call <- function(opts, ms_files) {
-  sg_find_exe()
-  stopifnot(!missing(opts))
   stopifnot(length(opts) == length(ms_files))
 
   sapply(seq(along = opts), function(i) {
@@ -122,7 +110,7 @@ sg_call <- function(opts, ms_files) {
 }
 
 sg_generate_opts <- function(model, parameters, locus,
-                                  seeds, eval_pars = TRUE) {
+                             locus_lengths, seeds, eval_pars = TRUE) {
 
   cmd <- read_cache(model, 'seqgen_cmd')
   if (is.null(cmd)) {
@@ -130,7 +118,6 @@ sg_generate_opts <- function(model, parameters, locus,
     cache(model, 'seqgen_cmd', cmd)
   }
 
-  locus_lengths <- get_locus_length_matrix(model)[locus,]
   if (locus_lengths[1] == 0 & locus_lengths[5] == 0) {
     locus_lengths <- locus_lengths[3]
   } else {
@@ -213,13 +200,15 @@ sg_generate_opt_cmd <- function(model) {
 
 
 sg_get_command <- function(model) {
-  tree_model <- generate_tree_model(model, 1)
+  tree_model <- generate_tree_model(model)
+
   tree_cmd <-
     determine_simprog(tree_model)$get_cmd(tree_model)
 
   sg_cmd <- paste(sg_generate_opts(model, get_parameter_table(model)$name,
-                                        locus = 1, seeds = 'seed',
-                                        eval_pars=FALSE),
+                                   get_locus_length_matrix(model)[1, 1:5],
+                                   locus = 1, seeds = 'seed',
+                                   eval_pars=FALSE),
                   collapse = ' ')
   sg_cmd <- paste('seq-gen', sg_cmd)
 
@@ -230,43 +219,28 @@ sg_get_command <- function(model) {
 sg_simulate <- function(model, parameters) {
   sg_find_exe()
 
-  # Run all simulation in with one seqgen call if they loci are identical,
-  # or call ms for each locus if there is variation between the loci.
+  # Simulate the ancestral trees
+  tree_model <- generate_tree_model(model)
+  trees <- simulate(tree_model, pars=parameters)$trees
+  assert_that(!is.null(trees))
 
-  if (has_inter_locus_var(model)) {
-    sim_reps <- 1:get_locus_number(model)
-    sim_loci <- 1
-  } else {
-    sim_reps <- 1
-    sim_loci <- get_locus_number(model)
-  }
+  # Get loci length and number
+  llm <- get_locus_length_matrix(model, has_inter_locus_var(model))
 
-  seqgen_files <- lapply(sim_reps, function(locus) {
-    # Generate options for seqgen
-    tree_model <- generate_tree_model(model, locus, sim_loci)
-    stopifnot(!is.null(tree_model))
-
-    # Simulate the trees
-    sum_stats_ms <- simulate(tree_model, pars=parameters)
-
-    # Call seq-gen to distribute mutations
-    seqgen.options <-
-      sg_generate_opts(model, parameters, locus,
-                       sample_seed(length(sum_stats_ms$sg_trees)))
-
-    seqgen.file <- sg_call(seqgen.options, sum_stats_ms$sg_trees)
-
-    # Delete tree files
-    unlink(c(sum_stats_ms[['file']], sum_stats_ms$sg_trees))
-    seqgen.file
+  # Call seq-gen for each locus (trio)
+  seqgen_files <- lapply(1:length(trees), function(locus) {
+    seqgen_options <- sg_generate_opts(model, parameters, locus,
+                                       llm[locus, 1:5],
+                                       sample_seed(length(trees[[locus]])))
+    sg_call(seqgen_options, trees[[locus]])
   })
-  stopifnot(length(seqgen_files) == length(sim_reps))
+  unlink(unlist(trees))
 
   # Generate the summary statistics
   if (any(get_summary_statistics(model) != "dna")) {
     seg_sites <- parse_sg_output(seqgen_files,
                                  sum(get_sample_size(model, for_sim = TRUE)),
-                                 get_locus_length_matrix(model),
+                                 llm[, 1:5, drop=FALSE],
                                  get_locus_number(model),
                                  outgroup_size = get_outgroup_size(model, TRUE))
   } else {

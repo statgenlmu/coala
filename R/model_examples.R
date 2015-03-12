@@ -53,7 +53,7 @@ model_grps <- function() {
 
 model_trios <- function() {
   model_f84() +
-    locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5), group = 1) +
-    locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5), group = 1) +
+    locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5)) +
+    locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5)) +
     sumstat_seg_sites()
 }

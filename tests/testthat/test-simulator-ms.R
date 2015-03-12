@@ -15,6 +15,15 @@ test_that("msSimFunc is working", {
 })
 
 
+test_that("simulation works with recombination", {
+  ms <- get_simulator("ms")
+  dm_tt <- model_theta_tau() + feat_recombination(1)
+  sum_stats <- ms$simulate(dm_tt, c(1, 10))
+  expect_true(is.matrix(sum_stats$jsfs))
+  expect_true(sum(sum_stats$jsfs) > 0)
+})
+
+
 test_that("msSimFunc works with inter-locus variation", {
   ms <- get_simulator("ms")
   dm_tmp <- coal_model(5:6, 2) +

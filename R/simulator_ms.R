@@ -7,15 +7,15 @@ ms_sum_stats <- c("jsfs", "trees", "seg.sites", "file")
 
 # This function generates an string that contains an R command for generating
 # an ms call to the current model.
-ms_generate_opts_cmd <- function(dm) {
-  sample_size <- get_sample_size(dm, for_sim = TRUE)
+ms_generate_opts_cmd <- function(model) {
+  sample_size <- get_sample_size(model, for_sim = TRUE)
   cmd <- c('c(')
   cmd <- c(cmd,'"-I"', ",", length(sample_size), ',',
            paste(sample_size, collapse=","), ',')
 
-  for (i in 1:dim(get_feature_table(dm))[1] ) {
-    type <- as.character(get_feature_table(dm)[i,"type"])
-    feat <- unlist(get_feature_table(dm)[i, ])
+  for (i in 1:dim(get_feature_table(model))[1] ) {
+    type <- as.character(get_feature_table(model)[i,"type"])
+    feat <- unlist(get_feature_table(model)[i, ])
 
     if ( type == "mutation" ) {
       cmd <- c(cmd, '"-t"', ',', feat["parameter"], ',')
@@ -38,7 +38,7 @@ ms_generate_opts_cmd <- function(dm) {
 
     else if (type == "recombination")
       cmd <- c(cmd, '"-r"', ',', feat['parameter'], ',',
-               get_locus_length(dm), ',')
+               'locus_length', ',')
 
     else if (type == "size_change"){
       cmd <- c(cmd, '"-en"', ',', feat['time.point'], ',',
@@ -65,17 +65,20 @@ ms_generate_opts_cmd <- function(dm) {
   cmd <- c(cmd, '" ")')
 }
 
-ms_generate_opts <- function(dm, parameters, eval_pars = TRUE) {
-  ms.tmp <- create_par_env(dm, parameters)
+ms_generate_opts <- function(model, parameters,
+                             locus_length, eval_pars = TRUE) {
 
-  cmd <- read_cache(dm, 'ms_cmd')
+  ms_tmp <- create_par_env(model, parameters,
+                           locus_length=locus_length)
+
+  cmd <- read_cache(model, 'ms_cmd')
   if (is.null(cmd)) {
-    cmd <- ms_generate_opts_cmd(dm)
-    cache(dm, 'ms_cmd', cmd)
+    cmd <- ms_generate_opts_cmd(model)
+    cache(model, 'ms_cmd', cmd)
   }
 
   if (!eval_pars) cmd <- escape_par_expr(cmd)
-  eval(parse(text=cmd), envir=ms.tmp)
+  eval(parse(text=cmd), envir=ms_tmp)
 }
 
 
@@ -90,25 +93,19 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
     priority = 100
   ),
   public = list(
-    simulate = function(dm, parameters=numeric()) {
+    simulate = function(model, parameters=numeric()) {
       stopifnot(length(parameters) == 0 | all(is.numeric(parameters)))
 
-      # Run all simulation in with one ms call if they loci are identical,
-      # or call ms for each locus if there is variation between the loci.
-      if (has_inter_locus_var(dm)) {
-        sim_reps <- 1:get_locus_number(dm)
-        sim_loci <- 1
-      } else {
-        sim_reps <- 1
-        sim_loci <- get_locus_number(dm)
-      }
+      # Get the length and number of loci
+      llm <- get_locus_length_matrix(model, has_inter_locus_var(model))
 
       # Do the actuall simulation
-      files <- lapply(sim_reps, function(locus) {
-        ms.options <- ms_generate_opts(dm, parameters, locus)
+      files <- lapply(1:nrow(llm), function(i) {
+        ms.options <- ms_generate_opts(model, parameters,
+                                       locus_length = sum(llm[i, 1:5]))
         file <- tempfile('csr_ms')
 
-        ms(sum(get_sample_size(dm, for_sim = TRUE)), sim_loci,
+        ms(sum(get_sample_size(model, for_sim = TRUE)), llm[i, 'number'],
            unlist(strsplit(ms.options, " ")), file)
 
         if(file.info(file)$size == 0) stop("ms simulation output is empty")
@@ -117,17 +114,18 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
 
       # Parse the output and calculate summary statistics
       seg_sites <- parse_ms_output(files,
-                                   get_sample_size(dm, for_sim = TRUE),
-                                   get_locus_number(dm))
+                                   get_sample_size(model, for_sim = TRUE),
+                                   get_locus_number(model))
 
-      sum_stats <- calc_sumstats(seg_sites, files, dm, parameters)
+      sum_stats <- calc_sumstats(seg_sites, files, model, parameters)
 
       # Clean Up
       unlink(files)
       sum_stats
     },
     get_cmd = function(model) {
-      cmd <- ms_generate_opts(model, get_parameter_table(model)$name, FALSE)
+      cmd <- ms_generate_opts(model, get_parameter_table(model)$name,
+                              "locus_length", FALSE)
       txt <- paste(cmd, collapse = ' ')
       paste("ms", sum(get_sample_size(model)), get_locus_number(model), txt)
     }
