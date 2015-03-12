@@ -17,24 +17,6 @@
 #' simulate(model, pars=c(1, 5))
 simulate.Coalmodel <- function(object, nsim = 1, seed, pars=NULL, ...) {
   check_par_range(object, pars)
-
   simprog <- determine_simprog(object)
-
-  if (is_simulator(simprog)) {
-    return(simprog$simulate(object, pars))
-  }
-
-  sum_stats <- list(pars=pars)
-  for (group in get_groups(object)) {
-    grp_model <- get_group_model(object, group)
-    sum_stats_grp <- simulate.Coalmodel(grp_model, pars = pars)
-
-    for (i in seq(along = sum_stats_grp)) {
-      if (names(sum_stats_grp)[i] == 'pars') next
-      name <- paste(names(sum_stats_grp)[i], group, sep='.')
-      sum_stats[[name]] <- sum_stats_grp[[i]]
-    }
-  }
-
-  sum_stats
+  simprog$simulate(object, pars)
 }
