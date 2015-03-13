@@ -21,7 +21,7 @@ test_that("generation of tree models works", {
     dm.ms <- generate_tree_model(dm)
     sum.stats <- simulate(dm.ms, pars=c(1, 5))
     expect_false(is.null(sum.stats$trees))
-    unlink(sum.stats$trees)
+    unlink(unlist(sum.stats$trees))
   }
 })
 

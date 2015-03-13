@@ -3,71 +3,124 @@
 
 using namespace Rcpp;
 
+
 // [[Rcpp::export]]
-CharacterVector parse_trees(const std::string in_file,
-                            const NumericVector trio_opts,
-                            Function tempfile) {
+List parse_trees(const List file_names,
+                 const int loci_number,
+                 const bool separate_loci = true) {
 
+  int file_number = file_names.size();
+  int locus = -1;
+  int file_nr = 0;
+
+  List trees;
+  if (separate_loci) trees = List(loci_number);
+  else trees = List(file_number);
+
+  CharacterVector locus_trees;
+  CharacterVector file_name;
   std::string line;
-  bool trio = false;
-  if (trio_opts(0) != 0 ||  trio_opts(4) != 0) trio = true;
 
-  // Prepare a file for the first locus' tree
-  std::vector<std::string> out_files;
-  out_files.push_back(as<std::string>(tempfile("trees")));
+  for (int i = 0; i < file_names.size(); ++i) {
+    file_name = as<CharacterVector>(file_names(i));
+    if (file_name.size() != 1) stop("Expecting one file per locus");
 
-  // Open input file and first output file
-  std::ifstream input(in_file.c_str(), std::ifstream::in);
-  if (!input.is_open())
-    stop(std::string("Failed to open simulation results in ") + in_file);
-
-  std::ofstream output_0(out_files[0].c_str(), std::ofstream::out);
-  if (!output_0.is_open()) stop("Failed to create a file for writing trees.");
-  std::ofstream* output = &output_0;
-
-  // Filter trees
-  if (!trio) {
-    // Fast parser when not using loci-trios.
-    while (getline(input, line)) {
-      if (line.substr(0, 1) == "[")  *output << line << "\n";
+    // Open the file
+    std::ifstream input(as<std::string>(file_name(0)).c_str(),
+                        std::ifstream::in);
+    if (!input.is_open()) {
+      stop(std::string("Cannot open file ") + file_name(0));
     }
-  } else {
-    // Open remaining output files
-    out_files.push_back(as<std::string>(tempfile("trees")));
-    out_files.push_back(as<std::string>(tempfile("trees")));
-
-    std::ofstream output_1(out_files[1].c_str(), std::ofstream::out);
-    if (!output_1.is_open()) stop("Failed to create a file for writing trees.");
-    std::ofstream output_2(out_files[2].c_str(), std::ofstream::out);
-    if (!output_2.is_open()) stop("Failed to create a file for writing trees.");
-
-    // When using loci-trios, we need to remove the inter-locus regions.
-    size_t digits = 0,  // Number of digits of the length of the tree
-    pos = 0,     // Current position on the locus trio
-    locus = 0,   // The locus that we are currently in
-    len = 0,     // The length of the current tree
-    seg_len = 0,
-    locus_end = trio_opts[0]; // The end of the current locus
 
     while (getline(input, line)) {
-      // Read in the next tree
-      if (line.substr(0, 1) != "[") continue;
-      digits = line.find("]")-1;
-      len = std::atoi(line.substr(1, digits).c_str());
+      if (line.substr(0, 2) == "//") {
+        if (separate_loci) {
+          if (locus >= 0) trees(locus) = locus_trees;
+          ++locus;
+          locus_trees = CharacterVector();
+        }
+      }
+      if (line.substr(0, 1) == "[" || line.substr(0, 1) == "(") {
+        locus_trees.push_back(line);
+      }
+    }
+    if (!separate_loci) {
+      trees(file_nr) = locus_trees;
+      ++file_nr;
+      locus_trees = CharacterVector();
+    }
+  }
+
+  if (separate_loci) trees(locus) = locus_trees;
+
+  return(trees);
+}
+
+
+void addTree(const std::string &tree,
+             const size_t length,
+             const size_t locus,
+             CharacterVector &left,
+             CharacterVector &middle,
+             CharacterVector &right) {
+
+  if (length == 0) return;
+  if (locus % 2 == 1) return;
+
+  std::stringstream ss;
+  ss << length;
+  std::string prefix = std::string("[") + ss.str() + std::string("]");
+
+  if (locus == 0) {
+    left.push_back(prefix + tree);
+  } else if (locus == 2) {
+    middle.push_back(prefix + tree);
+  } else {
+    right.push_back(prefix + tree);
+  }
+}
+
+
+// [[Rcpp::export]]
+List generate_trio_trees(const List trees,
+                         const NumericMatrix llm) {
+
+  if (trees.size() != llm.nrow()) stop("Locus number mismatch.");
+
+  CharacterVector locus_trees;
+  std::string tree;
+  size_t digits, pos, locus, len, seg_len, locus_end;
+  List result = List(trees.size());
+
+
+  for (size_t i = 0; i < trees.size(); ++i) {
+    locus_trees = as<CharacterVector>(trees[i]);
+
+    digits = 0;            // Number of digits of the length of the tree
+    pos = 0;               // Current position on the locus trio
+    locus = 0;             // The locus that we are currently in
+    len = 0;               // The length of the current tree
+    seg_len = 0;
+    locus_end = llm(i, 0); // The end of the current locus
+
+    CharacterVector left;
+    CharacterVector middle;
+    CharacterVector right;
+
+    for (size_t j = 0; j < locus_trees.size(); ++j) {
+      tree = as<std::string>(locus_trees[j]);
+
+      // Get the number of bases for which the tree is valid
+      digits = tree.find("]")-1;
+      len = std::atoi(tree.substr(1, digits).c_str());
+      tree = tree.substr(digits+2, std::string::npos);
 
       // If the current tree is valid for a sequence that ends behind the
       // end of the locus, we need to do a few things:
       while (pos + len >= locus_end) {
         // First print a tree spanning until the end of the current locus
-        // if neccessary.
         seg_len = locus_end - pos;
-        //Rprintf("locus %i (end %i) - pos %i - len %i\n", locus, locus_end,
-        //        pos, len);
-
-        if (locus % 2 == 0) {
-          *output << "[" << seg_len << "]"
-                  << line.substr(digits+2, std::string::npos) << "\n";
-        }
+        addTree(tree, seg_len, locus, left, middle, right);
 
         // Now the position move towards the end of the current locus.
         len -= seg_len;
@@ -76,17 +129,17 @@ CharacterVector parse_trees(const std::string in_file,
         // And look at the next locus.
         if (locus < 4) {
           ++locus;
-          locus_end += trio_opts[locus];
-          if (locus == 2) output = &output_1;
-          if (locus == 4) output = &output_2;
+          locus_end += llm(i, locus);
+          //if (locus == 2) current_tree = &trio_trees[1];
+          //if (locus == 4) current_tree = &trio_trees[2];
         } else {
           // The last tree should end exactly end at the end of the last locus
           if (len != 0) stop("Tree and locus length do not match.");
           // Reset the stats and go one to the next locus trio.
           locus = 0;
-          locus_end = trio_opts[0];
+          locus_end = llm(i, 0);
           pos = 0;
-          output = &output_0;
+          //current_tree = &trio_trees[0];
         }
       }
 
@@ -94,20 +147,15 @@ CharacterVector parse_trees(const std::string in_file,
       // Print the rest and move until to the end of the tree.
       if (len > 0) {
         pos += len;
-        if (locus % 2 == 0) {
-          *output << "[" << len << "]"
-                  << line.substr(digits+2, std::string::npos) << "\n";
-        }
+        addTree(tree, len, locus, left, middle, right);
       }
     }
 
     if (pos != 0) stop("Error parsing trees");
-    output_1.close();
-    output_2.close();
+    result[i] = List::create(_["left"] = left,
+                             _["middle"] = middle,
+                             _["right"] = right);
   }
 
-  input.close();
-  output_0.close();
-
-  return(wrap(out_files));
+  return(result);
 }

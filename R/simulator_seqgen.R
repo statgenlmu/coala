@@ -93,16 +93,18 @@ sg_call <- function(opts, ms_files) {
   stopifnot(length(opts) == length(ms_files))
 
   sapply(seq(along = opts), function(i) {
-    if(file.info(ms_files[i])$size == 0 ) stop("No trees in file ", ms_files[i])
+    if(file.info(ms_files[[i]])$size <= 1 ) {
+      stop("No trees in file ", ms_files[[i]])
+    }
 
     seqgen_file <- tempfile('seqgen')
-    cmd <- paste(opts[i], "<", ms_files[i], ">", seqgen_file)
+    cmd <- paste(opts[i], "<", ms_files[[i]], ">", seqgen_file)
 
     # Do the acctual simulation
     if (system(cmd, intern = FALSE) != 0) stop("seq-gen simulation failed")
 
     if( !file.exists(seqgen_file) ) stop("seq-gen simulation failed!")
-    if( file.info(seqgen_file)$size == 0 ) stop("seq-gen output is empty!")
+    if( file.info(seqgen_file)$size <= 1 ) stop("seq-gen output is empty!")
 
     seqgen_file
   })
