@@ -111,9 +111,13 @@ List generate_trio_trees(const List trees,
       tree = as<std::string>(locus_trees[j]);
 
       // Get the number of bases for which the tree is valid
-      digits = tree.find("]")-1;
-      len = std::atoi(tree.substr(1, digits).c_str());
-      tree = tree.substr(digits+2, std::string::npos);
+      if (tree.substr(0, 1) != "[") {
+        len = llm(i, 0) + llm(i, 1) + llm(i, 2) + llm(i, 3) + llm(i, 4);
+      } else {
+        digits = tree.find("]")-1;
+        len = std::atoi(tree.substr(1, digits).c_str());
+        tree = tree.substr(digits+2, std::string::npos);
+      }
 
       // If the current tree is valid for a sequence that ends behind the
       // end of the locus, we need to do a few things:

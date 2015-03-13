@@ -100,6 +100,7 @@ test_that("Generating trees for trios works", {
   expect_error(generate_trio_trees(trees,
                                    matrix(c(2, 4, 8, 2, 4, 1), 2, 6, TRUE)))
 
+
   trio_trees <- generate_trio_trees(trees, matrix(c(9, 2, 2, 5, 2, 1), 1, 6))
   expect_equal(trio_trees[[1]][[1]][1], '[2](2:0.865,(1:0.015,3:0.015):0.850);')
   expect_equal(trio_trees[[1]][[1]][2], '[3](2:0.865,(1:0.015,3:0.015):0.850);')
@@ -111,6 +112,16 @@ test_that("Generating trees for trios works", {
   expect_equal(trio_trees[[1]][[2]][2], '[2](3:0.460,(1:0.076,2:0.076):0.384);')
   expect_equal(trio_trees[[1]][[3]][2], '[2](3:0.460,(1:0.076,2:0.076):0.384);')
 
+
+  # Works on trees without recombination
+  trio_trees <- generate_trio_trees(list("(2:0.865,(1:0.015,3:0.015):0.850);"),
+                                    matrix(c(9, 2, 2, 5, 2, 1), 1, 6))
+  expect_equal(trio_trees[[1]][[1]][1], '[9](2:0.865,(1:0.015,3:0.015):0.850);')
+  expect_equal(trio_trees[[1]][[2]][1], '[2](2:0.865,(1:0.015,3:0.015):0.850);')
+  expect_equal(trio_trees[[1]][[3]][1], '[2](2:0.865,(1:0.015,3:0.015):0.850);')
+
+
+  # Works for non-trio loci
   trio_trees <- generate_trio_trees(trees, matrix(c(0, 0, 20, 0, 0, 1), 1, 6))
   expect_equal(length(trio_trees[[1]]$left), 0)
   expect_equal(length(trio_trees[[1]]$right), 0)
