@@ -21,7 +21,7 @@ test_that("generation of tree models works", {
     dm.ms <- generate_tree_model(dm)
     sum.stats <- simulate(dm.ms, pars=c(1, 5))
     expect_false(is.null(sum.stats$trees))
-    unlink(sum.stats$trees)
+    unlink(unlist(sum.stats$trees))
   }
 })
 
@@ -218,4 +218,16 @@ test_that('simulating unphased data works', {
   stats <- sg_simulate(model, c(1,5))
   expect_equal(dim(stats$jsfs), c(7, 7))
   expect_equal(nrow(stats$seg_sites[[1]]), 12)
+})
+
+
+test_that("seq-gen works without recombination", {
+  model <- coal_model(c(3, 3, 1), 2) +
+    feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
+    feat_pop_merge(par_expr('2*tau'), 3, 1) +
+    feat_outgroup(3) +
+    feat_mutation(par_range('theta', 1, 10), model = 'HKY') +
+    sumstat_jsfs()
+
+  simulate(model, pars=c(1, 5))
 })

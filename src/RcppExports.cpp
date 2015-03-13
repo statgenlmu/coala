@@ -46,15 +46,27 @@ BEGIN_RCPP
 END_RCPP
 }
 // parse_trees
-CharacterVector parse_trees(const std::string in_file, const NumericVector trio_opts, Function tempfile);
-RcppExport SEXP coalsimr_parse_trees(SEXP in_fileSEXP, SEXP trio_optsSEXP, SEXP tempfileSEXP) {
+List parse_trees(const List file_names, const int loci_number, const bool separate_loci);
+RcppExport SEXP coalsimr_parse_trees(SEXP file_namesSEXP, SEXP loci_numberSEXP, SEXP separate_lociSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const std::string >::type in_file(in_fileSEXP);
-    Rcpp::traits::input_parameter< const NumericVector >::type trio_opts(trio_optsSEXP);
-    Rcpp::traits::input_parameter< Function >::type tempfile(tempfileSEXP);
-    __result = Rcpp::wrap(parse_trees(in_file, trio_opts, tempfile));
+    Rcpp::traits::input_parameter< const List >::type file_names(file_namesSEXP);
+    Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP);
+    Rcpp::traits::input_parameter< const bool >::type separate_loci(separate_lociSEXP);
+    __result = Rcpp::wrap(parse_trees(file_names, loci_number, separate_loci));
+    return __result;
+END_RCPP
+}
+// generate_trio_trees
+List generate_trio_trees(const List trees, const NumericMatrix llm);
+RcppExport SEXP coalsimr_generate_trio_trees(SEXP treesSEXP, SEXP llmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const List >::type trees(treesSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix >::type llm(llmSEXP);
+    __result = Rcpp::wrap(generate_trio_trees(trees, llm));
     return __result;
 END_RCPP
 }
