@@ -48,5 +48,3 @@ sumstat_sg_trees <- function() {
     Feature$new('trees', par_const(NA)) +
     Sumstat_sgtrees$new('trees')
 }
-
-

@@ -41,8 +41,3 @@ test_that("simulating and importing trees works", {
   expect_equal(length(stats$trees), get_locus_number(model))
   expect_true(all(sapply(stats$trees, length) == 1))
 })
-
-
-
-
-
