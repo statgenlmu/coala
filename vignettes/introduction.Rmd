@@ -15,22 +15,22 @@ biological sequences like DNA by tracing their ancestry back in time. The
 coalescent simulators from R.
 
 # Creating a model
-A basic model can be created using the function `coal_model`:
+Use the function `coal_model` to create a basic coalescent model:
 
 ```{r}
 library(coalsimr)
 model <- coal_model(sample_size = 5, loci_number = 1)
 ```
 
-This creates a basic model of a population of constant size.
-Simulated is one genetic locus in 5 individuals taken from the population. 
+This creates a basic model with one population of constant size.
+Simulated is one genetic locus in 5 haplotypes taken from the population. 
 
 Printing the model gives a short summary of this content:
 ```{r}
 print(model)
 ```
 
-simulate trees. Models consist of 
+Models consist of 
 
 * _features_, which represent evolutionary forces and events present in the 
   model, 
@@ -38,18 +38,43 @@ simulate trees. Models consist of
 * _loci_, which describe the genetic regions that are simualted and 
 * _summary statistics_, which describe the format of the simulated data.
 
-In our basic model, the sampling of 5 individuals the only feature. 
+In order to simulate the model we need to add a few more features and at least
+one summary statistic.
 
-simulated trees
 
 # Adding features
+For simulating sequences, we need to add mutations to the model. To do so,
+we create a corresponding feature using `feat_mutation` and add it to the
+existing model using the plus operator:
 
-mutations, simulate dna
+```{r}
+model <- model + feat_mutation(rate = 1, model = "IFS")
+model
+```
 
-two populations, migration
+Now, mutation occur with rate 1 and accoring to an infinite-sites mutation 
+model (IFS). Details on both rate and mutation model are given the help
+page of the feature (`?feat_mutation`). 
 
-# Parameters
+Coalsimr currently support the features
 
-# Loci
+```{r echo=FALSE}
+funcs <- ls("package:coalsimr")
+funcs[grep("^feat_", funcs)]
+```
 
-# Summary statistics
+However, not all combination of all features might be possible. Please refer 
+to the features help pages for detailed information.
+
+
+# Adding Summary Statistics
+Adding summary statistics works in a similar fashion to adding features:
+
+```{r}
+model <- model + sumstat_seg_sites()
+model
+```
+
+This adds the _segregating sites_ summary statistic to the model, which is a
+basic summary statisic in population genetics. Again, refer to 
+`?sumstat_seg_sites` for details.
