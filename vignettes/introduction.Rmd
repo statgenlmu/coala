@@ -68,7 +68,8 @@ to the features help pages for detailed information.
 
 
 # Adding Summary Statistics
-Adding summary statistics works in a similar fashion to adding features:
+
+Adding summary statistics works in a similar fashion as adding features:
 
 ```{r}
 model <- model + sumstat_seg_sites()
@@ -78,3 +79,37 @@ model
 This adds the _segregating sites_ summary statistic to the model, which is a
 basic summary statisic in population genetics. Again, refer to 
 `?sumstat_seg_sites` for details.
+
+
+# Simulating the model
+
+We now can simulate the model. The printed output of a model contains information
+which program will be used for the simulation and which arguments will be used.
+As coalsimr is in a early stage, please make sure to always check both. 
+
+The
+function `simulate` will call the program with the printed options, parse its
+output and caluclated the added summary statistics:
+
+```{r}
+set.seed(123)
+sumstats <- simulate(model)
+```
+
+The returned object `sumstats` a list, in which each entry corresponds to one 
+summary statistic. As there is only one summary statistic in our model, 
+it has only one entry:
+
+```{r}
+names(sumstats)
+```
+
+The structure in `sumstats$seg_sites` is given by the segregating sites 
+statistic. It is again a list, where each entry repesents one locus. For each 
+locus, it contains a matrix as specified in `?sumstat_seg_sites`:
+
+```{r}
+sumstats$seg_sites[[1]]
+```
+
+
