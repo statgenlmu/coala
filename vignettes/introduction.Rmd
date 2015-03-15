@@ -80,6 +80,13 @@ This adds the _segregating sites_ summary statistic to the model, which is a
 basic summary statisic in population genetics. Again, refer to 
 `?sumstat_seg_sites` for details.
 
+Available summary statistics are:
+
+```{r echo=FALSE}
+funcs[grep("^sumstat_", funcs)]
+```
+
+
 
 # Simulating the model
 
