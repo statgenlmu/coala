@@ -1,10 +1,13 @@
-sumstat_file_class <- R6Class('sumstat_file', inherit = sumstat,
-  private = list(folder=NULL),
+SumstatFile <- R6Class('SumstatFile', inherit = Sumstat, #nolint
+  private = list(
+    folder = NULL,
+    req_files = TRUE
+  ),
   public = list(
-    initialize = function(folder, group) {
+    initialize = function(folder) {
       dir.create(folder, showWarnings = FALSE)
       private$folder <- folder
-      super$initialize('file', group)
+      super$initialize('file')
     },
     calculate = function(seg_sites, files, model) {
       if (is.list(files)) files <- unlist(files)
@@ -22,6 +25,6 @@ sumstat_file_class <- R6Class('sumstat_file', inherit = sumstat,
 #' @param group The locus group for which this summary statistic is reported.
 #'   The default of `0` corresponds to all groups.
 #' @export
-sumstat_file <- function(folder, groups = 0) {
-  sumstat_file_class$new(folder, groups)
+sumstat_file <- function(folder) {
+  SumstatFile$new(folder) #nolint
 }

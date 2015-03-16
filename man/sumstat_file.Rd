@@ -4,7 +4,7 @@
 \alias{sumstat_file}
 \title{Returns files with the raw results of simulations}
 \usage{
-sumstat_file(folder, groups = 0)
+sumstat_file(folder)
 }
 \arguments{
 \item{group}{The locus group for which this summary statistic is reported.

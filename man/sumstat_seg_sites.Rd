@@ -4,11 +4,7 @@
 \alias{sumstat_seg_sites}
 \title{Returns the Segregation Sites Statistics from simulations}
 \usage{
-sumstat_seg_sites(name = "seg_sites", group = 0)
-}
-\arguments{
-\item{group}{The locus group for which this summary statistic is reported.
-The default of `0` corresponds to all groups.}
+sumstat_seg_sites(name = "seg_sites")
 }
 \description{
 Returns the Segregation Sites Statistics from simulations

@@ -4,15 +4,12 @@
 \alias{sumstat_sfs}
 \title{Calculates the Site Frequency Spectrum from simulations}
 \usage{
-sumstat_sfs(name = "sfs", population = "all", group = 0)
+sumstat_sfs(name = "sfs", population = "all")
 }
 \arguments{
 \item{population}{Either the number of a population for with the SFS is
 calculated, or \code{'all'} to calculate the combined SFS of all
 populations.}
-
-\item{group}{The locus group for which this summary statistic is reported.
-The default of `0` corresponds to all groups.}
 }
 \description{
 Calculates the Site Frequency Spectrum from simulations

@@ -1,5 +1,6 @@
 #' @importFrom R6 R6Class
-sumstat_dna_class <- R6Class('sumstat_DNA', inherit = sumstat,
+SumstatDna <- R6Class('SumstatDna', inherit = Sumstat, #nolint
+  private = list(req_files = TRUE),
   public = list(
     calculate = function(seg_sites, files, model) {
       dna <- parse_sg_output(files,
@@ -18,8 +19,8 @@ sumstat_dna_class <- R6Class('sumstat_DNA', inherit = sumstat,
 #'
 #' @inheritParams sumstat_file
 #' @export
-sumstat_dna <- function(name = 'dna', group = 0) {
+sumstat_dna <- function(name = 'dna') {
   coal_model() +
     Feature$new('sumstat_dna', par_const(NA)) +
-    sumstat_dna_class$new(name, group = group)
+    SumstatDna$new(name) #nolint
 }

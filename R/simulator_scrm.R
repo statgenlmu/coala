@@ -1,7 +1,7 @@
 #' @importFrom scrm scrm
 #' @include simulator_class.R
 #' @include simulator_ms.R
-Simulator_scrm <- R6Class('Simulator_scrm', inherit = Simulator,
+SimulatorScrm <- R6Class('SimulatorScrm', inherit = Simulator, #nolint
   private = list(
     name = 'scrm',
     features = c("sample", "mutation", "migration", "migration_sym",
@@ -10,17 +10,16 @@ Simulator_scrm <- R6Class('Simulator_scrm', inherit = Simulator,
     priority = 90
   ),
   public = list(
-    simulate = function(dm, parameters) {
-      if (nrow(get_locus_length_matrix(dm, has_inter_locus_var(dm))) > 1) {
+    simulate = function(model, parameters) {
+      if (nrow(get_locus_length_matrix(model, has_inter_locus_var(model))) > 1)
         stop("scrm can only simulate one group of loci at the moment.")
-      }
-      args <- paste(sum(get_sample_size(dm, for_sim = TRUE)),
-                    get_locus_number(dm),
-                    paste(ms_generate_opts(dm, parameters,
-                                           get_locus_length(dm, 1)),
+      args <- paste(sum(get_sample_size(model, for_sim = TRUE)),
+                    get_locus_number(model),
+                    paste(ms_generate_opts(model, parameters,
+                                           get_locus_length(model, 1)),
                           collapse = ' '))
 
-      if ('file' %in% get_summary_statistics(dm)) file <- tempfile('scrm')
+      if (requires_files(model)) file <- tempfile('scrm')
       else file <- ''
 
       sum_stats <- scrm(args, file)
@@ -30,7 +29,7 @@ Simulator_scrm <- R6Class('Simulator_scrm', inherit = Simulator,
         x
       })
 
-      sum_stats <- calc_sumstats(seg_sites, file, dm, parameters)
+      sum_stats <- calc_sumstats(seg_sites, file, model, parameters)
       unlink(file)
 
       sum_stats
@@ -40,4 +39,4 @@ Simulator_scrm <- R6Class('Simulator_scrm', inherit = Simulator,
 )
 
 
-register_simulator(Simulator_scrm)
+register_simulator(SimulatorScrm) #nolint

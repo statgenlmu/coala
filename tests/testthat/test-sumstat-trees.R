@@ -1,5 +1,15 @@
 context("SumStat Trees")
 
+test_that("tree summary statistics require files", {
+  expect_false(requires_files(coal_model(5)))
+  expect_false(requires_segsites(coal_model(5)))
+  expect_true(requires_files((coal_model(5) + sumstat_trees())))
+  expect_true(requires_files((coal_model(5) + sumstat_sg_trees())))
+  expect_false(requires_segsites((coal_model(5) + sumstat_trees())))
+  expect_false(requires_segsites((coal_model(5) + sumstat_sg_trees())))
+})
+
+
 test_that("simulating trees for seq-gen works", {
   model <- generate_tree_model(model_theta_tau() +
                                  feat_recombination(1) +

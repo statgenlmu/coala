@@ -2,11 +2,11 @@
 % Please edit documentation in R/sumstat_trees.R
 \name{sumstat_sg_trees}
 \alias{sumstat_sg_trees}
-\title{Returns ancestral tress in NEWICK fromat from simulations}
+\title{Returns ancestral tress as files for seq-gen}
 \usage{
 sumstat_sg_trees()
 }
 \description{
-Returns ancestral tress in NEWICK fromat from simulations
+Returns ancestral tress as files for seq-gen
 }
 

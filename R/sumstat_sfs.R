@@ -1,11 +1,14 @@
 #' @importFrom R6 R6Class
-sumstat_sfs_class <- R6Class('sumstat_SFS', inherit = sumstat,
-  private = list(population = NULL),
+SumstatSfs <- R6Class('SumstatSfs', inherit = Sumstat, #nolint
+  private = list(
+    population = NULL,
+    req_segsites = TRUE
+  ),
   public = list(
-    initialize = function(name, population, group=0) {
+    initialize = function(name, population) {
       assert_that(length(population) == 1)
       private$population <- population
-      super$initialize(name, group)
+      super$initialize(name)
     },
     calculate = function(seg_sites, files, model) {
       if ('all' %in% private$population) {
@@ -25,6 +28,6 @@ sumstat_sfs_class <- R6Class('sumstat_SFS', inherit = sumstat,
 #'   calculated, or \code{'all'} to calculate the combined SFS of all
 #'   populations.
 #' @export
-sumstat_sfs <- function(name='sfs', population='all', group = 0) {
-  sumstat_sfs_class$new(name, population, group)
+sumstat_sfs <- function(name='sfs', population='all') {
+  SumstatSfs$new(name, population) #nolint
 }

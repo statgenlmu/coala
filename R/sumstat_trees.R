@@ -1,4 +1,5 @@
-Sumstat_trees <- R6Class('sumstat_Trees', inherit = sumstat,
+SumstatTrees <- R6Class('SumstatTrees', inherit = Sumstat, #nolint
+  private = list(req_files = TRUE),
   public = list(
     calculate = function(seg_sites, files, model) {
       parse_trees(files, get_locus_number(model))
@@ -13,11 +14,12 @@ Sumstat_trees <- R6Class('sumstat_Trees', inherit = sumstat,
 sumstat_trees <- function(name = "trees") {
   coal_model() +
     Feature$new('trees', par_const(NA)) +
-    Sumstat_trees$new(name)
+    SumstatTrees$new(name) #nolint
 }
 
 
-Sumstat_sgtrees <- R6Class('sumstat_Trees', inherit = sumstat,
+SumstatSgTrees <- R6Class('SumstatSgTrees', inherit = Sumstat, #nolint
+  private = list(req_files = TRUE),
   public = list(
     calculate = function(seg_sites, files, model) {
       trees <- parse_trees(files, get_locus_number(model), FALSE)
@@ -46,5 +48,5 @@ Sumstat_sgtrees <- R6Class('sumstat_Trees', inherit = sumstat,
 sumstat_sg_trees <- function() {
   coal_model() +
     Feature$new('trees', par_const(NA)) +
-    Sumstat_sgtrees$new('trees')
+    SumstatSgTrees$new('trees') #nolint
 }

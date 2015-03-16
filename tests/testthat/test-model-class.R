@@ -55,12 +55,9 @@ test_that("adding features works", {
 
 
 test_that("test get_summary_statistics", {
-  expect_equal(get_summary_statistics(coal_model(1:2, 2)), character())
-  expect_equal(get_summary_statistics(model_theta_tau()),  "jsfs")
-
-  expect_equal(get_summary_statistics(model_grps(), 1), "jsfs")
-  expect_equal(get_summary_statistics(model_grps(), 2), "jsfs")
-  expect_equal(get_summary_statistics(model_grps(), 3), "jsfs")
+  expect_equal(get_summary_statistics(coal_model(1:2)), list())
+  expect_equal(length(get_summary_statistics(model_theta_tau())),  1)
+  expect_true(is.sum_stat(get_summary_statistics(model_theta_tau())[[1]]))
 })
 
 

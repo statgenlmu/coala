@@ -1,6 +1,9 @@
 #' @importFrom R6 R6Class
-sumstat_jsfs_class <- R6Class('sumstat_Jsfs', inherit = sumstat,
-  private = list(populations = NULL),
+SumstatJsfs <- R6Class('SumstatJsfs', inherit = Sumstat, #nolint
+  private = list(
+    populations = NULL,
+    req_segsites = TRUE
+  ),
   public = list(
     initialize = function(name, populations) {
       assert_that(is.numeric(populations))
@@ -21,5 +24,5 @@ sumstat_jsfs_class <- R6Class('sumstat_Jsfs', inherit = sumstat,
 #' @inheritParams sumstat_file
 #' @export
 sumstat_jsfs <- function(name='jsfs', populations=c(1,2)) {
-  sumstat_jsfs_class$new(name, populations)
+  SumstatJsfs$new(name, populations) #nolint
 }

@@ -1,5 +1,6 @@
 #' @importFrom R6 R6Class
-sumstat_segsites_class <- R6Class('sumstat_SegSites', inherit = sumstat,
+SumstatSegSites <- R6Class('SumstatSegSites', inherit = Sumstat, #nolint
+  private = list(req_segsites = TRUE),
   public = list(
     calculate = function(seg_sites, files, model) seg_sites
   )
@@ -9,6 +10,6 @@ sumstat_segsites_class <- R6Class('sumstat_SegSites', inherit = sumstat,
 #'
 #' @inheritParams sumstat_file
 #' @export
-sumstat_seg_sites <- function(name = 'seg_sites', group = 0) {
-  sumstat_segsites_class$new(name, group = group)
+sumstat_seg_sites <- function(name = 'seg_sites') {
+  SumstatSegSites$new(name) #nolint
 }

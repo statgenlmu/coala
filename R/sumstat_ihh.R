@@ -1,6 +1,7 @@
 #' @importFrom R6 R6Class
-sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
+SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
   private = list(
+    req_segsites = TRUE,
     position = NA,
     population = NULL,
     get_snp = function(positions, locus, model) {
@@ -10,7 +11,7 @@ sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
       which.min(abs(pos - positions))
     }),
   public = list(
-    initialize = function(name, position, population, group=0) {
+    initialize = function(name, position, population) {
       if (!requireNamespace("rehh", quietly = TRUE)) {
         stop("Package rehh is required to calculate the iHH summary statistic.",
              " Please install it.", call. = FALSE)
@@ -19,7 +20,7 @@ sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
       assert_that(length(population) == 1)
       private$population <- population
       private$position <- position
-      super$initialize(name, group)
+      super$initialize(name)
     },
     calculate = function(seg_sites, files, model) {
       assert_that(is.list(seg_sites))
@@ -83,6 +84,6 @@ sumstat_ihh_class <- R6Class('sumstat_ihh', inherit = sumstat,
 #'   used as focal SNPs in turn, and all the values reportet. If trios are used,
 #'   than the position is relative to the middle locus' extend.
 #' @export
-sumstat_ihh <- function(name = 'ihh', position=NA, population=1, group = 0) {
-  sumstat_ihh_class$new(name, position, population, group = group)
+sumstat_ihh <- function(name = 'ihh', position=NA, population=1) {
+  SumstatIhh$new(name, position, population) #nolint
 }
