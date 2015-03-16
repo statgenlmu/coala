@@ -1,8 +1,14 @@
 context('SumStat File')
 
+test_that('File statistic requires files', {
+  model <- model_theta_tau()
+  expect_false(requires_files(model))
+  expect_true(requires_files(model + sumstat_file("test")))
+})
+
 test_that('File statistic works', {
   folder <- tempfile('sumstat_file_test')
-  stat <- sumstat_file(folder, 3)
+  stat <- sumstat_file(folder)
 
   files <- c(tempfile("test1"), tempfile("test2"))
   cat('test1', file = files[1])

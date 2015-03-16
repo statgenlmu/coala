@@ -1,20 +1,25 @@
-sumstat <- R6Class('sumstat',
-  private = list(name=NA, group=NA),
+Sumstat <- R6Class('Sumstat',
+  private = list(
+    name=NA,
+    req_files=FALSE,
+    req_segsites=FALSE
+  ),
   public = list(
-    initialize = function(name, group=0) {
+    initialize = function(name) {
       private$name <- name
-      private$group <- group
     },
     calculate = function(seg_sites, files, model) {
       stop("Overwrite this function with the calculation of the statistic.")
     },
     get_name = function() private$name,
-    get_group = function() private$group
+    get_group = function() private$group,
+    requires_files = function() private$req_files,
+    requires_segsites = function() private$req_segsites
   )
 )
 
 
-is.sum_stat <- function(sum_stat) 'sumstat' %in% class(sum_stat)
+is.sum_stat <- function(sum_stat) 'Sumstat' %in% class(sum_stat)
 
 
 # Written to `model$sum_stats` on initialization
@@ -24,7 +29,7 @@ create_sumstat_container <- function() {
 
 
 # Add a summary statistic to a model
-add_to_model.sumstat <- function(sum_stat, model, feat_name) {
+add_to_model.Sumstat <- function(sum_stat, model, feat_name) {
   if (sum_stat$get_name() %in% names(model$sum_stats))
     stop("Can't add ", feat_name, " to model: ",
          "There is already a statistic with name ", sum_stat$get_name())
@@ -39,26 +44,8 @@ add_to_model.sumstat <- function(sum_stat, model, feat_name) {
 #' @param pop The population for which aspects are returned
 #' @describeIn get_feature_table Returns the summary statistics in the model
 #' @export
-get_summary_statistics <- function(dm, group = 1) {
-  ss <- sapply(get_group_statistics(dm, group), function(stat) stat$get_name())
-  if (length(ss) == 0) return(character())
-  names(ss) <- NULL
-  ss
-}
-
-
-get_group_statistics <- function(model, group) {
-  if (group == 'all') return(model$sum_stats)
-  stats <- lapply(model$sum_stats, function(sum_stat) {
-    if (sum_stat$get_group() %in% c(0, group)) return(sum_stat)
-    else return(NA)
-  })
-  stats[!is.na(stats)]
-}
-
-
-get_sumstat_groups <- function(model) {
-  unique(sapply(model$sum_stats, function(ss) ss$get_group()))
+get_summary_statistics <- function(model) {
+  model$sum_stats
 }
 
 
@@ -78,4 +65,12 @@ calc_sumstats <- function(seg_sites, files, model, pars) {
   }
 
   sum_stats
+}
+
+requires_segsites <- function(model) {
+  any(sapply(get_summary_statistics(model), function(x) x$requires_segsites()))
+}
+
+requires_files <- function(model) {
+  any(sapply(get_summary_statistics(model), function(x) x$requires_files()))
 }

@@ -130,9 +130,13 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
       })
 
       # Parse the output and calculate summary statistics
-      seg_sites <- parse_ms_output(files,
-                                   get_sample_size(model, for_sim = TRUE),
-                                   get_locus_number(model))
+      if (requires_segsites(model)) {
+        seg_sites <- parse_ms_output(files,
+                                     get_sample_size(model, for_sim = TRUE),
+                                     get_locus_number(model))
+      } else {
+        seg_sites <- NULL
+      }
 
       sum_stats <- calc_sumstats(seg_sites, files, model, parameters)
 

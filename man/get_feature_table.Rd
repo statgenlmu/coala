@@ -37,7 +37,7 @@ get_outgroup_size(model, for_sim = FALSE)
 
 get_population_indiviuals(model, pop)
 
-get_summary_statistics(dm, group = 1)
+get_summary_statistics(model)
 }
 \arguments{
 \item{model}{The coalescent model from which aspects are returned}

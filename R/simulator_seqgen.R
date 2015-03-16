@@ -236,7 +236,7 @@ sg_simulate <- function(model, parameters) {
   unlink(unlist(trees))
 
   # Generate the summary statistics
-  if (any(get_summary_statistics(model) != "dna")) {
+  if (requires_segsites(model)) {
     seg_sites <- parse_sg_output(seqgen_files,
                                  sum(get_sample_size(model, for_sim = TRUE)),
                                  llm[, 1:5, drop=FALSE],
