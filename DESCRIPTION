@@ -1,5 +1,5 @@
 Package: coalsimr
-Version: 0.0.9023
+Version: 0.0.9024
 Date: 2015-03-16
 License: GPL (>= 3)
 Title: Simulating the evolution of DNA sequences
@@ -57,6 +57,7 @@ Collate:
     'sumstat.R'
     'sumstat_dna.R'
     'sumstat_file.R'
+    'sumstat_four_gamete.R'
     'sumstat_ihh.R'
     'sumstat_jsfs.R'
     'sumstat_omegaprime.R'

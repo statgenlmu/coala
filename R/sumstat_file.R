@@ -22,8 +22,7 @@ SumstatFile <- R6Class('SumstatFile', inherit = Sumstat, #nolint
 
 #' Returns files with the raw results of simulations
 #'
-#' @param group The locus group for which this summary statistic is reported.
-#'   The default of `0` corresponds to all groups.
+#' @param folder The path of a folder where the files will be written.
 #' @export
 sumstat_file <- function(folder) {
   SumstatFile$new(folder) #nolint

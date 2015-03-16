@@ -70,6 +70,19 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// calc_four_gamete_stat
+NumericMatrix calc_four_gamete_stat(const List seg_sites_list, const IntegerVector individuals, const NumericMatrix locus_length);
+RcppExport SEXP coalsimr_calc_four_gamete_stat(SEXP seg_sites_listSEXP, SEXP individualsSEXP, SEXP locus_lengthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const List >::type seg_sites_list(seg_sites_listSEXP);
+    Rcpp::traits::input_parameter< const IntegerVector >::type individuals(individualsSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix >::type locus_length(locus_lengthSEXP);
+    __result = Rcpp::wrap(calc_four_gamete_stat(seg_sites_list, individuals, locus_length));
+    return __result;
+END_RCPP
+}
 // calc_jsfs
 NumericMatrix calc_jsfs(const List seg_sites, const NumericVector pop1, const NumericVector pop2);
 RcppExport SEXP coalsimr_calc_jsfs(SEXP seg_sitesSEXP, SEXP pop1SEXP, SEXP pop2SEXP) {

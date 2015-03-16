@@ -7,8 +7,7 @@
 sumstat_file(folder)
 }
 \arguments{
-\item{group}{The locus group for which this summary statistic is reported.
-The default of `0` corresponds to all groups.}
+\item{folder}{The path of a folder where the files will be written.}
 }
 \description{
 Returns files with the raw results of simulations

@@ -4,11 +4,7 @@
 \alias{sumstat_omegaprime}
 \title{Calculates the (experimental) Omega' Statistic}
 \usage{
-sumstat_omegaprime(name = "omegaprime", population = 1, group = 0)
-}
-\arguments{
-\item{group}{The locus group for which this summary statistic is reported.
-The default of `0` corresponds to all groups.}
+sumstat_omegaprime(name = "omegaprime", population = 1)
 }
 \description{
 Calculates the (experimental) Omega' Statistic
