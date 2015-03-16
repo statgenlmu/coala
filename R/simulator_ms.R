@@ -67,10 +67,10 @@ ms_generate_opts_cmd <- function(model) {
   cmd <- c(cmd, '" ")')
 }
 
-ms_generate_opts <- function(model, parameters,
+ms_generate_opts <- function(model, parameters, locus,
                              locus_length, eval_pars = TRUE) {
 
-  ms_tmp <- create_par_env(model, parameters,
+  ms_tmp <- create_par_env(model, parameters, locus=locus,
                            locus_length=locus_length)
 
   cmd <- read_cache(model, 'ms_cmd')
@@ -103,7 +103,7 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
 
       # Do the actuall simulation
       files <- lapply(1:nrow(llm), function(i) {
-        ms.options <- ms_generate_opts(model, parameters,
+        ms.options <- ms_generate_opts(model, parameters, i,
                                        locus_length = sum(llm[i, 1:5]))
         file <- tempfile('csr_ms')
 
@@ -130,7 +130,7 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
       sum_stats
     },
     get_cmd = function(model) {
-      cmd <- ms_generate_opts(model, get_parameter_table(model)$name,
+      cmd <- ms_generate_opts(model, get_parameter_table(model)$name, "locus",
                               "locus_length", FALSE)
       txt <- paste(cmd, collapse = ' ')
       paste("ms", sum(get_sample_size(model)), get_locus_number(model), txt)

@@ -76,8 +76,9 @@ msms_generate_opts_cmd <- function(model) {
 }
 
 
-msms_generate_opts <- function(model, parameters) {
-  msms_tmp <- create_par_env(model, parameters)
+msms_generate_opts <- function(model, parameters, locus) {
+  msms_tmp <- create_par_env(model, parameters,
+                             locus = locus)
 
   cmd <- read_cache(model, 'msms_cmd')
   if (is.null(cmd)) {
@@ -103,10 +104,12 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
     get_cmd = function(model) {
       ms_cmd <- paste(ms_generate_opts(model,
                                        get_parameter_table(model)$name,
-                                       'locus_length'),
+                                       "locus",
+                                       "locus_length"),
                       collapse = ' ')
       msms_cmd <- paste(msms_generate_opts(model,
-                                           get_parameter_table(model)$name),
+                                           get_parameter_table(model)$name,
+                                           "locus"),
                         collapse = ' ')
 
       paste("msms", msms_cmd,
@@ -120,10 +123,10 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
       files <- lapply(1:nrow(llm), function(i) {
         ms_options <- paste(sum(get_sample_size(model, for_sim = TRUE)),
                             llm[i, 'number'],
-                            paste(ms_generate_opts(model, parameters,
+                            paste(ms_generate_opts(model, parameters, i,
                                                    sum(llm[i, 1:5])),
                                   collapse=" "))
-        msms_options <- paste(msms_generate_opts(model, parameters),
+        msms_options <- paste(msms_generate_opts(model, parameters, i),
                               collapse= " ")
         #print(c(ms_options, msms_options))
         call_msms(ms_options, msms_options)

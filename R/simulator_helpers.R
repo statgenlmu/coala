@@ -11,6 +11,8 @@ create_par_env <- function(model, parameters, ...) {
     par_env[[names(additional_pars)[i]]] <- additional_pars[[i]]
   }
 
+  par_env[["locus_number"]] <- get_locus_number(model)
+
   par_env
 }
 

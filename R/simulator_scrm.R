@@ -15,7 +15,7 @@ SimulatorScrm <- R6Class('SimulatorScrm', inherit = Simulator, #nolint
         stop("scrm can only simulate one group of loci at the moment.")
       args <- paste(sum(get_sample_size(model, for_sim = TRUE)),
                     get_locus_number(model),
-                    paste(ms_generate_opts(model, parameters,
+                    paste(ms_generate_opts(model, parameters, 1,
                                            get_locus_length(model, 1)),
                           collapse = ' '))
 
