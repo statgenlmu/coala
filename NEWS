@@ -12,4 +12,5 @@ coalsimr 0.1
   + Joint Site Frequency Spectrum
   + iHH (#25)
   + DNA (#40)
+  + a Four-Gamete-Test based statistics
 * Added the feature to simulate unphased data (#26).

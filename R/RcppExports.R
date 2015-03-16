@@ -21,6 +21,10 @@ generate_trio_trees <- function(trees, llm) {
     .Call('coalsimr_generate_trio_trees', PACKAGE = 'coalsimr', trees, llm)
 }
 
+calc_four_gamete_stat <- function(seg_sites_list, individuals, locus_length) {
+    .Call('coalsimr_calc_four_gamete_stat', PACKAGE = 'coalsimr', seg_sites_list, individuals, locus_length)
+}
+
 #' Calculates the JSFS for two populations
 #'
 #' @param seg_sites List of segregating sites
