@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-SumstatOmegaPrime <- R6Class('SumstatOmegaPrime', inherit = Sumstat,
+SumstatOmegaPrime <- R6Class('SumstatOmegaPrime', inherit = Sumstat, #nolint
   private = list(
     population = NULL,
     req_segsites = TRUE
@@ -23,5 +23,5 @@ SumstatOmegaPrime <- R6Class('SumstatOmegaPrime', inherit = Sumstat,
 #' @inheritParams sumstat_file
 #' @export
 sumstat_omegaprime  <- function(name='omegaprime', population=1) {
-  SumstatOmegaPrime$new(name, population)
+  SumstatOmegaPrime$new(name, population) #nolint
 }
