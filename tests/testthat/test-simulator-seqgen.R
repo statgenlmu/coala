@@ -172,6 +172,7 @@ test_that('simulating unphased data works', {
 
 
 test_that("seq-gen works without recombination", {
+  if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
   model <- coal_model(c(3, 3, 1), 2) +
     feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
     feat_pop_merge(par_expr('2*tau'), 3, 1) +
