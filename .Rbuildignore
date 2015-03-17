@@ -3,5 +3,6 @@
 .tar.gz$
 ^.travis.yml$
 ^.lintr$
+^appveyor\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
