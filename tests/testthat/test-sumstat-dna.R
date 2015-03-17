@@ -38,6 +38,7 @@ s10       CCTCAGGGCC", file = seqgen_file)
 
 
 test_that("DNA can be simulated", {
+  if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
   model <- coal_model(c(5, 5), 1, 10) +
     feat_pop_merge(par_const(.5), 2, 1) +
     feat_mutation(par_const(5), model = "HKY") +
