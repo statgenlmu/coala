@@ -15,7 +15,7 @@ as fraction of N0.}
 
 \item{at.time}{The time point at which the size changes.}
 
-\item{dm}{The demographic model to which the size change should be added.}
+\item{model}{The demographic model to which the size change should be added.}
 }
 \value{
 A feature which can be added to a model.
@@ -29,11 +29,11 @@ fraction of N0, the present day size of population one.
 }
 \details{
 If you want to add a slow, continuous change over some time,
-then use the \link{dm.addGrowth} function.
+then use the \link{model.addGrowth} function.
 }
 \examples{
 # A model with one smaller population
-dm <- coal_model(c(20,37), 88) +
+model <- coal_model(c(20,37), 88) +
   feat_size_change(par_const(.1), 2, at.time='1')
 }
 

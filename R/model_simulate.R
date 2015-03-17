@@ -1,6 +1,6 @@
 #' Simulates data according to a demographic model
 #'
-#' @param dm The demographic model according to which the simulations should be done
+#' @param model The demographic model according to which the simulations should be done
 #' @param parameters A vector of parameters which should be used for the simulations.
 #'           If a matrix is given, a simulation for each row of the matrix will be performed
 #' @return A matrix where each row is the vector of summary statistics for

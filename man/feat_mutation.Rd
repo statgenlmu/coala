@@ -44,14 +44,14 @@ time of sampling and mu is the neutral mutation rate for an entire locus.
 }
 \examples{
 # A model with a constant scaled mutation rate of 5:
-dm <- coal_model(c(15,20), 100) + feat_mutation(par_const(5))
+model <- coal_model(c(15,20), 100) + feat_mutation(par_const(5))
 
 # A model with a mutation rate that can be estimated with Jaatha:
-dm <- coal_model(c(15,20), 100) +
+model <- coal_model(c(15,20), 100) +
   feat_mutation(par_range('theta', 1, 20))
 
 # A model with variable gamma distributed mutation rate
-dm <- coal_model(c(15,20), 100) +
+model <- coal_model(c(15,20), 100) +
   feat_mutation(par_range('theta', 1, 20), variance=100)
 }
 

@@ -7,7 +7,7 @@
 \method{simulate}{Coalmodel}(object, nsim = 1, seed, pars = NULL, ...)
 }
 \arguments{
-\item{dm}{The demographic model according to which the simulations should be done}
+\item{model}{The demographic model according to which the simulations should be done}
 
 \item{parameters}{A vector of parameters which should be used for the simulations.
 If a matrix is given, a simulation for each row of the matrix will be performed}

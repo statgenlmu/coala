@@ -22,7 +22,7 @@ Feature_growth <- R6Class("Feature_growth", inherit = Feature,
 #' in forwards time for a negative value of alpha.
 #'
 #' If you want to add an instantaneous change of the population size,
-#' then use the \link{dm.addSizeChange} function.
+#' then use the \link{model.addSizeChange} function.
 #'
 #' @param rate A \code{\link{Parameter}} stating the rate of the change.
 #' @param population The population which starts to grow or decline.
@@ -30,7 +30,7 @@ Feature_growth <- R6Class("Feature_growth", inherit = Feature,
 #' @return    The demographic model with a size change.
 #' @export
 #' @examples
-#' dm <- coal_model(c(20,37), 88) +
+#' model <- coal_model(c(20,37), 88) +
 #'   feat_growth(par_range('alpha', 0.1, 2), population=2, at.time="0")
 feat_growth <- function(rate, population, at.time="0") {
   Feature_growth$new("growth", rate, pop_source=population, time_point=at.time)
