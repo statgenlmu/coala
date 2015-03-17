@@ -231,3 +231,9 @@ test_that("seq-gen works without recombination", {
 
   simulate(model, pars=c(1, 5))
 })
+
+
+test_that("Printing the command works", {
+  cmd <- get_cmd(model_gtr())
+  expect_that(cmd, is_a("character"))
+})
