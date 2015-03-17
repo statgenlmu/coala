@@ -106,56 +106,6 @@ test_that("Error is thrown without an outgroup", {
 })
 
 
-test_that("Simulation of trios with unequal mutation rates works", {
-  skip("Temporarily deactivated")
-#   if (!test_seqgen) skip('seq-gen not installed')
-#   if (!isJaathaVariable('seqgen.exe'))
-#     setJaathaVariable('seqgen.exe', 'seq-gen')
-#   model <- model.setTrioMutationRates(model_trios, '17', 'theta', group=2)
-#   expect_equal(get_mutation_par(model, outer = FALSE, group = 2), '17')
-#   expect_equal(get_mutation_par(model, outer = TRUE, group = 2), 'theta')
-#   expect_equal(get_mutation_par(model, outer = FALSE, group = 1), 'theta')
-#
-#   expect_equal(get_mutation_par(model_trios, outer = FALSE, group = 2), 'theta')
-#   expect_equal(get_mutation_par(model_trios, outer = TRUE, group = 2), 'theta')
-#
-#
-#   # sg_generate_opt_cmd
-#   model <- model.setTrioMutationRates(model_trios, 'BLUB', 'BLA', group=2)
-#   grp_mdl <- create_group_model(model, 2)
-#   cmd <- lapply(sg_generate_opt_cmd(grp_mdl), paste0, collapse = "")
-#   expect_equal(length(cmd), 3)
-#   expect_equal(grep("BLUB", cmd[[2]]), 1)
-#   expect_equal(grep("theta", cmd[[2]]), integer(0))
-#   expect_equal(grep("BLA", cmd[[1]]), 1)
-#   expect_equal(grep("BLA", cmd[[3]]), 1)
-#   expect_equal(grep("theta", cmd[[1]]), integer(0))
-#   expect_equal(grep("theta", cmd[[3]]), integer(0))
-#
-#   # sg_generate_opts
-#   model <- model.setTrioMutationRates(model_trios, '1', '2', group=2)
-#   grp_mdl <- create_group_model(model, 2)
-#   ll <- get_locus_length_matrix(grp_mdl)[1,]
-#   cmds <- sg_generate_opts(grp_mdl, c(1, 5), locus = 1,
-#                                 locus_lengths = ll, 1)
-#   expect_equal(grep(as.character(2/ll[1]), cmds[[1]]), 1)
-#   expect_equal(grep(as.character(1/ll[3]), cmds[[2]]), 1)
-#   expect_equal(grep(as.character(2/ll[5]), cmds[[3]]), 1)
-#
-#   ll <- get_locus_length_matrix(grp_mdl)[2,]
-#   cmds <- sg_generate_opts(grp_mdl, c(1, 5), locus = 2,
-#                                 locus_lengths = ll, 1)
-#   expect_equal(grep(as.character(2/ll[1]), cmds[[1]]), 1)
-#   expect_equal(grep(as.character(1/ll[3]), cmds[[2]]), 1)
-#   expect_equal(grep(as.character(2/ll[5]), cmds[[3]]), 1)
-#
-#   # simulate
-#   grp_mdl <- grp_mdl + sumstat_seg_sites()
-#   ss <- simulate(grp_mdl, c(1,5))
-#   expect_false(is.null(ss$seg.sites))
-})
-
-
 test_that('a more complicated model works', {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
   model <- coal_model(c(5,5,2), 1, 100) +
