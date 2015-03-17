@@ -43,14 +43,6 @@ model_gtr <- function() {
 }
 
 
-model_grps <- function() {
-  model_theta_tau() +
-    locus_averaged(15, 100, 1) +
-    locus_averaged(10, 200, 2) +
-    locus_averaged(5, 50, 3)
-}
-
-
 model_trios <- function() {
   model_f84() +
     locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5)) +
