@@ -2,7 +2,7 @@ coalsimr
 ========
 
 [![Build Status](https://travis-ci.org/paulstaab/coalsimr.png?branch=master)](https://travis-ci.org/paulstaab/jaatha) 
-[![Coverage Status](https://coveralls.io/repos/paulstaab/coalsimr/badge.svg?branch=master)](https://coveralls.io/r/paulstaab/coalsimr)
+[![Coverage Status](https://codecov.io/github/paulstaab/coalsimr/coverage.svg?branch=master)](https://codecov.io/github/paulstaab/coalsimr?branch=master)
 
 This is a framework for calling coalescent simulators from within R. It allows to 
 specify a model using a ggplot2-like syntax and supports multiple simulators. It can
