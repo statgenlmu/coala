@@ -30,10 +30,10 @@ backwards in time' or grow forwards in time. Similar, will decline
 in forwards time for a negative value of alpha.
 
 If you want to add an instantaneous change of the population size,
-then use the \link{dm.addSizeChange} function.
+then use the \link{model.addSizeChange} function.
 }
 \examples{
-dm <- coal_model(c(20,37), 88) +
+model <- coal_model(c(20,37), 88) +
   feat_growth(par_range('alpha', 0.1, 2), population=2, at.time="0")
 }
 

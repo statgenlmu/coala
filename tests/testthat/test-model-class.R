@@ -36,21 +36,21 @@ test_that("adding features works", {
   expect_equal(length(get_features(coal_model())), 0)
   expect_equal(nrow(get_feature_table(coal_model())), 0)
 
-  dm <- coal_model(11:12, 100)
-  dm <- dm + Feature$new('blub', 5)
-  expect_equal(nrow(search_feature(dm, 'blub')), 1)
-  expect_that(length(get_features(dm)), is_more_than(0))
-  expect_true('blub' %in% get_feature_table(dm)$type)
+  model <- coal_model(11:12, 100)
+  model <- model + Feature$new('blub', 5)
+  expect_equal(nrow(search_feature(model, 'blub')), 1)
+  expect_that(length(get_features(model)), is_more_than(0))
+  expect_true('blub' %in% get_feature_table(model)$type)
 
 
-  dm <- coal_model(11:12, 100)
-  dm <- dm + Feature$new('bli', par_range('bla', 1, 5))
-  expect_equal(nrow(search_feature(dm, 'bli')), 1)
-  expect_true('bla' %in% get_parameter_table(dm)$name)
+  model <- coal_model(11:12, 100)
+  model <- model + Feature$new('bli', par_range('bla', 1, 5))
+  expect_equal(nrow(search_feature(model, 'bli')), 1)
+  expect_true('bla' %in% get_parameter_table(model)$name)
 
-  dm <- coal_model(11:12, 100)
-  dm <- dm + Feature$new('bli', par_range('bla', 1, 5), variance='15')
-  expect_true(has_inter_locus_var(dm))
+  model <- coal_model(11:12, 100)
+  model <- model + Feature$new('bli', par_range('bla', 1, 5), variance='15')
+  expect_true(has_inter_locus_var(model))
 })
 
 
@@ -71,9 +71,9 @@ test_that("getting the Theta Name works", {
   expect_equal(get_mutation_par(model_hky()), "theta")
   expect_equal(get_mutation_par(model_f84()), "theta")
 
-  dm.test <- coal_model(11:12, 100) +
+  model.test <- coal_model(11:12, 100) +
     feat_mutation(par_range('abcd', 1, 5))
-  expect_equal(get_mutation_par(dm.test), "abcd")
+  expect_equal(get_mutation_par(model.test), "abcd")
 })
 
 
@@ -168,25 +168,25 @@ test_that('locus length matrix generations works', {
 test_that("Adding and Getting inter locus variation works", {
   expect_false(has_inter_locus_var(model_theta_tau()))
 
-  dm_tmp <- model_theta_tau() + feat_recombination(5, variance = 3)
-  expect_true(has_inter_locus_var(dm_tmp))
+  model_tmp <- model_theta_tau() + feat_recombination(5, variance = 3)
+  expect_true(has_inter_locus_var(model_tmp))
 })
 
 
 test_that('setTrioMutationsRates works', {
   warning("test about model with trio mutation rates deactivated")
-#   dm <- dm.setTrioMutationRates(dm_trios, '17', 'theta', group=2)
-#   expect_equal(nrow(search_feature(dm, 'mutation', group=2)), 1)
-#   expect_equal(search_feature(dm, 'mutation', group=2)$parameter, "17")
-#   expect_equal(nrow(search_feature(dm, 'mutation_outer', group=2)), 1)
-#   expect_equal(search_feature(dm, 'mutation_outer', group=2)$parameter,
+#   model <- model.setTrioMutationRates(model_trios, '17', 'theta', group=2)
+#   expect_equal(nrow(search_feature(model, 'mutation', group=2)), 1)
+#   expect_equal(search_feature(model, 'mutation', group=2)$parameter, "17")
+#   expect_equal(nrow(search_feature(model, 'mutation_outer', group=2)), 1)
+#   expect_equal(search_feature(model, 'mutation_outer', group=2)$parameter,
 #                "theta")
 })
 
 
 test_that('getting the available Populations works', {
-  dm <- coal_model(10:11, 100)
-  expect_equal(get_populations(dm), 1:2)
+  model <- coal_model(10:11, 100)
+  expect_equal(get_populations(model), 1:2)
   expect_equal(get_populations(model_theta_tau()), 1:2)
   expect_equal(get_populations(model_hky()), 1:3)
 })

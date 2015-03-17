@@ -7,9 +7,9 @@ test_that("the ms sim program exists", {
 
 test_that("msSimFunc is working", {
   ms <- get_simulator("ms")
-  dm_tt <- model_theta_tau()
+  model_tt <- model_theta_tau()
   set.seed(789)
-  sum_stats <- ms$simulate(dm_tt, c(1, 10))
+  sum_stats <- ms$simulate(model_tt, c(1, 10))
   expect_true(is.matrix(sum_stats$jsfs))
   expect_true(sum(sum_stats$jsfs) > 0)
 })
@@ -17,8 +17,8 @@ test_that("msSimFunc is working", {
 
 test_that("simulation works with recombination", {
   ms <- get_simulator("ms")
-  dm_tt <- model_theta_tau() + feat_recombination(1)
-  sum_stats <- ms$simulate(dm_tt, c(1, 10))
+  model_tt <- model_theta_tau() + feat_recombination(1)
+  sum_stats <- ms$simulate(model_tt, c(1, 10))
   expect_true(is.matrix(sum_stats$jsfs))
   expect_true(sum(sum_stats$jsfs) > 0)
 })
@@ -26,31 +26,31 @@ test_that("simulation works with recombination", {
 
 test_that("msSimFunc works with inter-locus variation", {
   ms <- get_simulator("ms")
-  dm_tmp <- coal_model(5:6, 2) +
+  model_tmp <- coal_model(5:6, 2) +
     feat_mutation(par_const(2), variance = '2') +
     feat_pop_merge(par_const(.5), 2, 1) +
     sumstat_jsfs()
 
   set.seed(117)
-  sum_stats <- ms$simulate(dm_tmp)
+  sum_stats <- ms$simulate(model_tmp)
   expect_true(is.matrix(sum_stats$jsfs))
   expect_true(sum(sum_stats$jsfs) > 0)
 
   set.seed(117)
-  sum_stats2 <- ms$simulate(dm_tmp)
+  sum_stats2 <- ms$simulate(model_tmp)
   expect_equal(sum_stats$jsfs, sum_stats2$jsfs)
 })
 
 
 test_that("simulating a size change works", {
   ms <- get_simulator("ms")
-  dm_tmp <- coal_model(5:6, 1) +
+  model_tmp <- coal_model(5:6, 1) +
     feat_mutation(par_range('theta', 1, 10), variance = '2') +
     feat_pop_merge(par_const(.5), 2, 1) +
     feat_size_change(par_const(2), population = 2, at.time = 0) +
     sumstat_jsfs()
 
-  sum_stats <- ms$simulate(dm_tmp, 5)
+  sum_stats <- ms$simulate(model_tmp, 5)
   expect_true(is.matrix(sum_stats$jsfs))
   expect_true(sum(sum_stats$jsfs) > 0)
 })

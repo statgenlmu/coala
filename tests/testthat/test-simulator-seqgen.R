@@ -2,8 +2,8 @@ context("Simulator seqgen")
 
 test_that("test.sg_generate_opts", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  dm.hky <- model_hky()
-  opts <- sg_generate_opts(dm.hky, c(1, 10), 1, c(0, 0, 10, 0, 0), 1)
+  model.hky <- model_hky()
+  opts <- sg_generate_opts(model.hky, c(1, 10), 1, c(0, 0, 10, 0, 0), 1)
   opts <- strsplit(opts, " ")[[1]]
   expect_true("-l" %in% opts)
   expect_true("-p" %in% opts)
@@ -17,9 +17,9 @@ test_that("test.sg_generate_opts", {
 
 test_that("generation of tree models works", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  for (dm in list(model_hky(), model_f84(), model_gtr())) {
-    dm.ms <- generate_tree_model(dm)
-    sum.stats <- simulate(dm.ms, pars=c(1, 5))
+  for (model in list(model_hky(), model_f84(), model_gtr())) {
+    model.ms <- generate_tree_model(model)
+    sum.stats <- simulate(model.ms, pars=c(1, 5))
     expect_false(is.null(sum.stats$trees))
     unlink(unlist(sum.stats$trees))
   }
@@ -56,9 +56,9 @@ test_that("test.RateHeterogenity", {
   skip("Temporarily deactivated")
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
   set.seed(12)
-  #dm.rh <-
-  #  dm.addMutationRateHeterogenity(dm.hky, 0.1, 5, categories.number = 5)
-  jsfs <- simulate(dm.rh, c(1, 10, 1))
+  #model.rh <-
+  #  model.addMutationRateHeterogenity(model.hky, 0.1, 5, categories.number = 5)
+  jsfs <- simulate(model.rh, c(1, 10, 1))
   expect_true(sum(jsfs$jsfs) > 0)
 })
 
@@ -111,18 +111,18 @@ test_that("Simulation of trios with unequal mutation rates works", {
 #   if (!test_seqgen) skip('seq-gen not installed')
 #   if (!isJaathaVariable('seqgen.exe'))
 #     setJaathaVariable('seqgen.exe', 'seq-gen')
-#   dm <- dm.setTrioMutationRates(dm_trios, '17', 'theta', group=2)
-#   expect_equal(get_mutation_par(dm, outer = FALSE, group = 2), '17')
-#   expect_equal(get_mutation_par(dm, outer = TRUE, group = 2), 'theta')
-#   expect_equal(get_mutation_par(dm, outer = FALSE, group = 1), 'theta')
+#   model <- model.setTrioMutationRates(model_trios, '17', 'theta', group=2)
+#   expect_equal(get_mutation_par(model, outer = FALSE, group = 2), '17')
+#   expect_equal(get_mutation_par(model, outer = TRUE, group = 2), 'theta')
+#   expect_equal(get_mutation_par(model, outer = FALSE, group = 1), 'theta')
 #
-#   expect_equal(get_mutation_par(dm_trios, outer = FALSE, group = 2), 'theta')
-#   expect_equal(get_mutation_par(dm_trios, outer = TRUE, group = 2), 'theta')
+#   expect_equal(get_mutation_par(model_trios, outer = FALSE, group = 2), 'theta')
+#   expect_equal(get_mutation_par(model_trios, outer = TRUE, group = 2), 'theta')
 #
 #
 #   # sg_generate_opt_cmd
-#   dm <- dm.setTrioMutationRates(dm_trios, 'BLUB', 'BLA', group=2)
-#   grp_mdl <- create_group_model(dm, 2)
+#   model <- model.setTrioMutationRates(model_trios, 'BLUB', 'BLA', group=2)
+#   grp_mdl <- create_group_model(model, 2)
 #   cmd <- lapply(sg_generate_opt_cmd(grp_mdl), paste0, collapse = "")
 #   expect_equal(length(cmd), 3)
 #   expect_equal(grep("BLUB", cmd[[2]]), 1)
@@ -133,8 +133,8 @@ test_that("Simulation of trios with unequal mutation rates works", {
 #   expect_equal(grep("theta", cmd[[3]]), integer(0))
 #
 #   # sg_generate_opts
-#   dm <- dm.setTrioMutationRates(dm_trios, '1', '2', group=2)
-#   grp_mdl <- create_group_model(dm, 2)
+#   model <- model.setTrioMutationRates(model_trios, '1', '2', group=2)
+#   grp_mdl <- create_group_model(model, 2)
 #   ll <- get_locus_length_matrix(grp_mdl)[1,]
 #   cmds <- sg_generate_opts(grp_mdl, c(1, 5), locus = 1,
 #                                 locus_lengths = ll, 1)
@@ -191,17 +191,17 @@ test_that('printing a seqgen command works', {
 test_that("seqgen works with inter-locus variation", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
 
-  dm_tmp <- coal_model(c(3, 3, 1), 2) +
+  model_tmp <- coal_model(c(3, 3, 1), 2) +
     feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
     feat_pop_merge(par_expr('2*tau'), 3, 1) +
     feat_recombination(par_const(1)) +
     feat_outgroup(3) +
     feat_mutation(par_range('theta', 1, 10), model = 'F84', variance = 15) +
     sumstat_jsfs()
-  expect_true(has_inter_locus_var(dm_tmp))
+  expect_true(has_inter_locus_var(model_tmp))
 
   set.seed(1100)
-  sum_stats <- sg_simulate(dm_tmp, c(1,5))
+  sum_stats <- sg_simulate(model_tmp, c(1,5))
   expect_is(sum_stats$jsfs, 'matrix')
   expect_that(sum(sum_stats$jsfs), is_more_than(0))
 })

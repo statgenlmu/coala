@@ -32,27 +32,28 @@ is.model <- function(model) {
 
 
 # Checks if a vector of parameters is within the ranges of the model
-check_par_range <- function(dm, param) {
-  if (length(param) != nrow(get_parameter_table(dm))) {
+check_par_range <- function(model, param) {
+  if (length(param) != nrow(get_parameter_table(model))) {
     stop("Wrong number of parameters")
   }
 
-  ranges <- get_parameter_table(dm)[,2:3]
-  in.range <- all(ranges[, 1] - 1e-11 <= param & param <= ranges[, 2] + 1e-11)
-  if (!in.range) stop("Parameter combination out of range")
+  ranges <- get_parameter_table(model)
+  in_range <- all(ranges[, 2] - 1e-11 <= param & param <= ranges[, 3] + 1e-11)
+  if (!in_range) stop("Parameter combination out of range:", param)
 }
 
+
 # Selects a program for simulation that is capable of all current features
-select_simprog <- function(dm) {
-  name <- read_cache(dm, 'simprog')
+select_simprog <- function(model) {
+  name <- read_cache(model, 'simprog')
 
   if (is.null(name)) {
     priority <- -Inf
 
     for (simprog_name in ls(simulators)) {
       simprog <- get_simulator(simprog_name)
-      if (all(get_feature_table(dm)$type %in% simprog$get_features()) &
-            all(dm$sum_stats$name %in% simprog$get_sumstats())) {
+      if (all(get_feature_table(model)$type %in% simprog$get_features()) &
+            all(model$sum_stats$name %in% simprog$get_sumstats())) {
 
         if (simprog$get_priority() > priority) {
           name <- simprog
@@ -62,32 +63,32 @@ select_simprog <- function(dm) {
     }
 
     if (is.null(name)) stop("No suitable simulation software found!")
-    cache(dm, 'simprog', name)
+    cache(model, 'simprog', name)
   }
 
   name
 }
 
 
-get_mutation_par <- function(dm, outer=FALSE) {
+get_mutation_par <- function(model, outer=FALSE) {
   if (outer) {
-    feat <- search_feature(dm, "mutation_outer")
+    feat <- search_feature(model, "mutation_outer")
     if (nrow(feat) == 0) {
-      feat <- search_feature(dm, "mutation")
+      feat <- search_feature(model, "mutation")
     }
   }  else {
-    feat <- search_feature(dm, "mutation")
+    feat <- search_feature(model, "mutation")
   }
   if (nrow(feat) != 1) stop("Failed to determine mutation rate")
   feat[1, 'parameter']
 }
 
 
-search_feature <- function(dm, type=NULL, pop.source=NULL,
+search_feature <- function(model, type=NULL, pop.source=NULL,
                           pop.sink=NULL, time.point=NULL,
                           feat_table=TRUE) {
 
-  feat_tbl <- get_feature_table(dm)
+  feat_tbl <- get_feature_table(model)
   mask <- rep(TRUE, nrow(feat_tbl))
 
   if (!is.null(type)) mask <- mask & feat_tbl$type %in% type
@@ -116,24 +117,24 @@ search_feature <- function(dm, type=NULL, pop.source=NULL,
     }
   }
 
-  if(!feat_table) return(get_features(dm)[mask])
+  if(!feat_table) return(get_features(model)[mask])
   feat_tbl[mask, ]
 }
 
 
-add_inter_locus_var <- function(dm) {
-  if (has_inter_locus_var(dm)) return(dm)
-  dm + Feature$new('inter_locus_variation', par_const(NA))
+add_inter_locus_var <- function(model) {
+  if (has_inter_locus_var(model)) return(model)
+  model + Feature$new('inter_locus_variation', par_const(NA))
 }
 
 
-has_inter_locus_var <- function(dm) {
-  nrow(search_feature(dm, 'inter_locus_variation')) > 0
+has_inter_locus_var <- function(model) {
+  nrow(search_feature(model, 'inter_locus_variation')) > 0
 }
 
 
-has_trios <- function(dm) {
-  sum(get_locus_length_matrix(dm)[,-3]) > 0
+has_trios <- function(model) {
+  sum(get_locus_length_matrix(model)[,-3]) > 0
 }
 
 

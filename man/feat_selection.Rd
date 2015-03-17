@@ -4,7 +4,8 @@
 \alias{feat_selection}
 \title{Adds positiv selection to a model}
 \usage{
-feat_selection(strength_AA, strength_Aa, population, at_time)
+feat_selection(strength_AA, strength_Aa, population, at_time,
+  zero_inflation = 0)
 }
 \arguments{
 \item{population}{The populaton in which the allele is selected.}

@@ -32,11 +32,11 @@ test_that("Creation of parameter enviroment works", {
 
 
 test_that("generating msms options works", {
-  dm <- model_theta_tau() +
+  model <- model_theta_tau() +
     feat_selection(par_const(500), par_const(250),
                    population = 1, at_time = 1.7)
 
-  opts <- paste(eval(parse(text = msms_generate_opts_cmd(dm))),
+  opts <- paste(eval(parse(text = msms_generate_opts_cmd(model))),
                 collapse = " ")
   expect_equal(grep("-SI 1.7 2 5e-04 0", opts), 1)
   expect_equal(grep("-SAA 500", opts), 1)
@@ -61,17 +61,17 @@ test_that("generating text command works", {
 test_that("msms_simulate works", {
   if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
   msms <- get_simulator("msms")
-  dm <- model_theta_tau() +
+  model <- model_theta_tau() +
     feat_selection(par_const(500), par_const(250),
                    population = 1, at_time = 1.7)
 
   set.seed(6688)
-  sum_stats <- msms$simulate(dm, c(1, 5))
+  sum_stats <- msms$simulate(model, c(1, 5))
   expect_true(is.matrix(sum_stats$jsfs))
   expect_true(sum(sum_stats$jsfs) > 0)
 
   set.seed(6688)
-  sum_stats2 <- msms$simulate(dm, c(1, 5))
+  sum_stats2 <- msms$simulate(model, c(1, 5))
   expect_equal(sum_stats, sum_stats2)
 })
 
@@ -80,13 +80,13 @@ test_that("msms_simulate works with inter-locus variation", {
   if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
   msms <- get_simulator("msms")
 
-  dm_tmp <- coal_model(5, 2) +
+  model_tmp <- coal_model(5, 2) +
     feat_mutation(par_range('theta', 1, 5), variance = 17) +
     sumstat_seg_sites()
-  expect_true(has_inter_locus_var(dm_tmp))
+  expect_true(has_inter_locus_var(model_tmp))
 
   set.seed(1100)
-  sum_stats <- msms$simulate(dm_tmp, c(3))
+  sum_stats <- msms$simulate(model_tmp, c(3))
   expect_is(sum_stats$seg_sites, 'list')
   expect_equal(length(sum_stats$seg_sites), 2)
 })

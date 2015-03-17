@@ -37,14 +37,14 @@ Feature_mutation <- R6Class("Feature_mutation", inherit = Feature,
 #'
 #' @examples
 #' # A model with a constant scaled mutation rate of 5:
-#' dm <- coal_model(c(15,20), 100) + feat_mutation(par_const(5))
+#' model <- coal_model(c(15,20), 100) + feat_mutation(par_const(5))
 #'
 #' # A model with a mutation rate that can be estimated with Jaatha:
-#' dm <- coal_model(c(15,20), 100) +
+#' model <- coal_model(c(15,20), 100) +
 #'   feat_mutation(par_range('theta', 1, 20))
 #'
 #' # A model with variable gamma distributed mutation rate
-#' dm <- coal_model(c(15,20), 100) +
+#' model <- coal_model(c(15,20), 100) +
 #'   feat_mutation(par_range('theta', 1, 20), variance=100)
 feat_mutation <- function(rate, variance = 0, model='IFS',
                           base_frequencies, tstv_ratio, gtr_rates) {
@@ -95,7 +95,7 @@ feat_mutation <- function(rate, variance = 0, model='IFS',
 }
 
 #-------------------------------------------------------------------
-# dm.setMutationModel
+# model.setMutationModel
 #-------------------------------------------------------------------
 # Defines what mutation model is used for simulations
 #
@@ -109,17 +109,17 @@ feat_mutation <- function(rate, variance = 0, model='IFS',
 # 'tstv.ratio'. The GTR model uses 'gtr.rates'.
 
 
-# dm.addMutationRateHeterogenity <-
-#   function(dm, min.alpha, max.alpha, parameter="alpha", categories.number) {
+# model.addMutationRateHeterogenity <-
+#   function(model, min.alpha, max.alpha, parameter="alpha", categories.number) {
 #
-#     dm <- addFeature(dm, "gamma.rate", parameter, min.alpha,
+#     model <- addFeature(model, "gamma.rate", parameter, min.alpha,
 #                      max.alpha, NA, NA, NA)
 #
 #     if (!missing(categories.number)) {
-#       dm <- addFeature(dm, "gamma.categories", parameter=categories.number)
+#       model <- addFeature(model, "gamma.categories", parameter=categories.number)
 #     }
 #
-#     return(dm)
+#     return(model)
 #   }
 
 
@@ -127,8 +127,8 @@ feat_mutation <- function(rate, variance = 0, model='IFS',
 # @param middle_rate The mutation rate used for the middle locus
 # @param outer_rate The mutation rate for the two outer loci
 # @export
-# dm.setTrioMutationRates <- function(dm, middle_rate, outer_rate, group = 0) {
-#   dm <- addFeature(dm, 'mutation', parameter = middle_rate, group = group)
-#   dm <- addFeature(dm, 'mutation_outer', parameter = outer_rate,
+# model.setTrioMutationRates <- function(model, middle_rate, outer_rate, group = 0) {
+#   model <- addFeature(model, 'mutation', parameter = middle_rate, group = group)
+#   model <- addFeature(model, 'mutation_outer', parameter = outer_rate,
 #                    group = group)
 # }

@@ -16,11 +16,11 @@
 #'
 #' @examples
 #' # A model with a fixed recombination rate of 5
-#' dm <- coal_model(c(25,25), 100, 1000) +
+#' model <- coal_model(c(25,25), 100, 1000) +
 #'   feat_recombination(par_const(5))
 #'
 #' # A model where the recombination is given by a parameter 'rho'
-#' dm <- coal_model(c(25,25), 100) +
+#' model <- coal_model(c(25,25), 100) +
 #'   feat_recombination(par_range('rho', 1, 5))
 feat_recombination <- function(rate, variance = 0) {
   Feature$new("recombination", rate, variance = variance)

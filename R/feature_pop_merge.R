@@ -21,7 +21,7 @@
 #' @return    The demographic model with a split.
 #' @export
 #' @examples
-#' dm <- coal_model(c(25,25), 100) +
+#' model <- coal_model(c(25,25), 100) +
 #'   feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
 #'   feat_mutation(par_range('theta', 1, 20))
 feat_pop_merge <- function(time, pop_source, pop_target) {
