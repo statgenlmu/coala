@@ -59,13 +59,13 @@ msms_generate_opts_cmd <- function(model) {
                              pop.source = feat['pop.source'],
                              time.point = feat['time.point'])$parameter
       stopifnot(length(s_AA) == 1)
-      cmd <- c(cmd, '"-SAA"', ',', s_AA, ',')
+      cmd <- c(cmd, '"-SAA"', ',', s=s_AA, ',')
 
       s_Aa <- search_feature(model, 'selection_Aa',
                             pop.source = feat['pop.source'],
                             time.point = feat['time.point'])$parameter
       stopifnot(length(s_Aa) == 1)
-      cmd <- c(cmd, '"-SAa"', ',', s_Aa, ',')
+      cmd <- c(cmd, '"-SAa"', ',', s=s_Aa, ',')
       cmd <- c(cmd, '"-Sp 0.5"', ',', '"-SForceKeep"', ',')
       cmd <- c(cmd, '"-threads 1"', ',')
     }
@@ -76,7 +76,7 @@ msms_generate_opts_cmd <- function(model) {
 }
 
 
-msms_generate_opts <- function(model, parameters, locus) {
+msms_generate_opts <- function(model, parameters, locus,  eval_pars = TRUE) {
   msms_tmp <- create_par_env(model, parameters,
                              locus = locus)
 
@@ -86,6 +86,7 @@ msms_generate_opts <- function(model, parameters, locus) {
     cache(model, 'msms_cmd', cmd)
   }
 
+  if (!eval_pars) cmd <- escape_par_expr(cmd)
   eval(parse(text=cmd), envir=msms_tmp)
 }
 
@@ -105,11 +106,11 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
       ms_cmd <- paste(ms_generate_opts(model,
                                        get_parameter_table(model)$name,
                                        "locus",
-                                       "locus_length"),
+                                       "locus_length", FALSE),
                       collapse = ' ')
       msms_cmd <- paste(msms_generate_opts(model,
                                            get_parameter_table(model)$name,
-                                           "locus"),
+                                           "locus", FALSE),
                         collapse = ' ')
 
       paste("msms", msms_cmd,
