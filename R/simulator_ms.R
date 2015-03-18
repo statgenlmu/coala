@@ -1,6 +1,6 @@
 ms_features  <- c("sample", "mutation", "migration", "migration_sym",
                   "pop_merge", "recombination", "size_change", "growth",
-                  "inter_locus_variation", "trees",
+                  "inter_locus_variation", "trees", 'locus_trios',
                   "unphased", "ploidy", "samples_per_ind")
 ms_sum_stats <- c("jsfs", "trees", "seg.sites", "file")
 
@@ -67,6 +67,7 @@ ms_generate_opts_cmd <- function(model) {
   cmd <- c(cmd, '" ")')
 }
 
+
 ms_generate_opts <- function(model, parameters, locus,
                              locus_length, eval_pars = TRUE) {
 
@@ -119,6 +120,11 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
         seg_sites <- parse_ms_output(files,
                                      get_sample_size(model, for_sim = TRUE),
                                      get_locus_number(model))
+
+        if (has_trios(model)) {
+          seg_sites <- conv_for_trios(seg_sites,
+                                      get_locus_length_matrix(model))
+        }
       } else {
         seg_sites <- NULL
       }

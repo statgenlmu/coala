@@ -38,8 +38,8 @@ test_that('initialzation of statistic works', {
   attr(seg_sites[[1]], 'locus') <- rep(c(-1, 0, 1), each = 4)
 
   model <- model_trios() + sumstat_omegaprime(name = 'omega_prime', 1)
-  stats <- simulate(model, pars=c(1,5))
+  stats <- simulate(model)
   expect_that(stats$omega_prime, is_a('numeric'))
-  expect_equal(length(stats$omega_prime), 4)
+  expect_equal(length(stats$omega_prime), 1)
   expect_true(all(stats$omega_prime >= 0 & stats$omega_prime <= 1))
 })

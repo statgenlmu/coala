@@ -137,6 +137,11 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
         seg_sites <- parse_ms_output(files,
                                      get_sample_size(model, for_sim = TRUE),
                                      get_locus_number(model))
+
+        if (has_trios(model)) {
+          seg_sites <- conv_for_trios(seg_sites,
+                                      get_locus_length_matrix(model))
+        }
       } else {
         seg_sites <- NULL
       }

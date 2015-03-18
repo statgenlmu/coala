@@ -85,3 +85,12 @@ test_that('simulating unphased data works', {
   expect_equal(dim(stats$jsfs), c(21, 31))
   expect_equal(nrow(stats$seg_sites[[1]]), 50)
 })
+
+
+test_that("ms can simulate locus trios", {
+  stat <- get_simulator("ms")$simulate(model_trios())
+  expect_that(attr(stat$seg_sites[[1]], "locus"), is_a("numeric"))
+  expect_true(all(attr(stat$seg_sites[[1]], "locus") %in% -1:1))
+  expect_true(all(attr(stat$seg_sites[[1]], "positions") >= 0))
+  expect_true(all(attr(stat$seg_sites[[1]], "positions") <= 1))
+})
