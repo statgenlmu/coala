@@ -25,7 +25,7 @@ conv_for_trios <- function(seg_sites, llm) {
     left <- pos < borders[1]
     middle <- pos >= borders[2] & pos < borders[3]
     right <- pos >= borders[4]
-    seg_sites[[i]] <- seg_sites[[i]][ , left | middle | right]
+    seg_sites[[i]] <- seg_sites[[i]][ , left | middle | right, drop=FALSE]
 
     pos[left] <- pos[left] * total_length / llm[i, 1]
     pos[middle] <- (pos[middle] - borders[2]) * total_length / llm[i, 3]
