@@ -108,6 +108,7 @@ test_that('simulating unphased data works', {
 
 
 test_that("msms can simulate locus trios", {
+  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
   stat <- get_simulator("msms")$simulate(model_trios())
   expect_that(attr(stat$seg_sites[[1]], "locus"), is_a("numeric"))
   expect_true(all(attr(stat$seg_sites[[1]], "locus") %in% -1:1))
