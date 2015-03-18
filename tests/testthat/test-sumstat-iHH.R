@@ -53,9 +53,9 @@ test_that('calculation of ihh works', {
 test_that('ihh works with trios', {
   if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
   model <- model_trios()
-  stats <- simulate(model, pars=c(1,5))
-  ihh <- sumstat_ihh(population = 2)
+  stats <- simulate(model)
+  ihh <- sumstat_ihh(population = 1)
   stat <- ihh$calculate(stats$seg_sites, NULL, model)
   expect_that(stat, is_a('list'))
-  expect_equal(length(stat), 4)
+  expect_equal(length(stat), 1)
 })

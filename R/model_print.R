@@ -29,7 +29,11 @@ print.Coalmodel <- function(x, ...) {
   }
 
   cat("\nSimulator:", select_simprog(x)$get_name(), "\n")
-  cmd <- "Can not simulate model"
-  tryCatch(cmd <- get_cmd(x), error = function(e) NULL)
-  cat("Command:", paste(cmd, collapse="\n"), "\n")
+  cmd <- try(cmd <- get_cmd(x), silent = TRUE)
+  if ("try-error" %in% class(cmd)) {
+    cat("Failed to generate command: \n  ")
+    cat(cmd)
+  } else {
+    cat("Command:", paste(cmd, collapse="\n"), "\n")
+  }
 }

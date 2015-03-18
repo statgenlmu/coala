@@ -106,20 +106,25 @@ get_populations <- function(model) {
 #'   can be unequal for the simulation of unphased data.
 #' @export
 get_sample_size <- function(model, for_sim=FALSE) {
-  feat.samples <- search_feature(model, type="sample")
-  stopifnot(nrow(feat.samples) > 0)
+  sample_size <- read_cache(model, paste0("sample_size_", for_sim))
 
-  sample_size <- rep(0, length(get_populations(model)))
-  for (row.nr in 1:nrow(feat.samples)) {
-    stopifnot(sample_size[feat.samples$pop.source[row.nr]] == 0)
-    sample_size[feat.samples$pop.source[row.nr]] <-
-      as.integer(feat.samples$parameter[row.nr])
-  }
+  if (is.null(sample_size)) {
+    feat.samples <- search_feature(model, type="sample")
+    stopifnot(nrow(feat.samples) > 0)
 
-  if (for_sim) {
-    sample_size <- sample_size * get_ploidy(model)
-  } else {
-    sample_size <- sample_size * get_samples_per_ind(model)
+    sample_size <- rep(0, length(get_populations(model)))
+    for (row.nr in 1:nrow(feat.samples)) {
+      stopifnot(sample_size[feat.samples$pop.source[row.nr]] == 0)
+      sample_size[feat.samples$pop.source[row.nr]] <-
+        as.integer(feat.samples$parameter[row.nr])
+    }
+
+    if (for_sim) {
+      sample_size <- sample_size * get_ploidy(model)
+    } else {
+      sample_size <- sample_size * get_samples_per_ind(model)
+    }
+    cache(model, paste0("sample_size_", for_sim), sample_size)
   }
 
   sample_size
