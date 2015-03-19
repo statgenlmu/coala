@@ -59,3 +59,18 @@ test_that('ihh works with trios', {
   expect_that(stat, is_a('list'))
   expect_equal(length(stat), 1)
 })
+
+
+test_that("ihh works with empty segsites", {
+  model <- model_trios()
+  seg_sites <- list(matrix(0, 5, 0))
+  ihh <- sumstat_ihh(population = 1)
+  attr(seg_sites[[1]], "positions") <- numeric(0)
+  stat <- ihh$calculate(seg_sites, NULL, model)
+  expect_equivalent(stat, list(matrix(0, 2, 0)))
+
+  seg_sites <- list(matrix(0, 0, 0))
+  attr(seg_sites[[1]], "positions") <- numeric(0)
+  stat <- ihh$calculate(seg_sites, NULL, model)
+  expect_equivalent(stat, list(matrix(0, 2, 0)))
+})
