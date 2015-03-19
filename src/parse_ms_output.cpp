@@ -59,7 +59,7 @@ List parse_ms_output(const List file_names,
       else if (line.substr(0, 9) == "segsites:") {
 
         if (line.substr(0, 11) == "segsites: 0") {
-          NumericMatrix ss = NumericMatrix(0, 0);
+          NumericMatrix ss = NumericMatrix(individuals, 0);
           ss.attr("positions") = NumericVector(0);
           seg_sites[locus] = ss;
         } else {

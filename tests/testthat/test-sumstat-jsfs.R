@@ -57,6 +57,12 @@ test_that("calculation of the JSFS is correct", {
     expect_equal(jsfs[3, 3], 4)
     expect_equal(jsfs[1, 3], 1)
     expect_equal(jsfs[3, 1], 1)
+
+    # No SNPs edgecase
+    jsfs <- calc_jsfs(list(matrix(0, 4, 0)), 1:2, 3:4)
+    expect_equal(jsfs, matrix(0, 3, 3))
+    jsfs <- calc_jsfs(list(matrix(0, 0, 0)), 1:2, 3:4)
+    expect_equal(jsfs, matrix(0, 3, 3))
 })
 
 
