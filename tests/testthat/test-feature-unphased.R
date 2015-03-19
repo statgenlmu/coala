@@ -37,4 +37,9 @@ test_that("unphasing works", {
   phased <- unphase_segsites(seg_sites, 2, 1)
   expect_that(phased, is_a('list'))
   expect_equal(length(phased), 2)
+
+  seg_sites <- list(seg_sites[[1]])
+  seg_sites[[1]] <- seg_sites[[1]][ , numeric()]
+  attr(seg_sites[[1]], 'positions') <- numeric()
+  phased <- unphase_segsites(seg_sites, 2, 1)
 })
