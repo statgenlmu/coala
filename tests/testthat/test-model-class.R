@@ -261,3 +261,10 @@ test_that('getting model command works', {
   expect_that(cmd, is_a("character"))
   expect_true(all(nchar(cmd) > 0))
 })
+
+
+test_that("has_trios works", {
+  expect_false(has_trios(model_theta_tau()))
+  expect_false(has_trios(model_f84()))
+  expect_true(has_trios(model_trios()))
+})

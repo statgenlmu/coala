@@ -29,6 +29,10 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
       ind <- get_population_indiviuals(model, private$population)
       lapply(1:length(seg_sites), function(locus) {
         assert_that(is.matrix(seg_sites[[locus]]))
+        if (ncol(seg_sites[[locus]]) == 0) {
+          return(matrix(0, 2, 0, dimnames = list(c("Anc. Allele",
+                                                   "Der. Allele"), NULL)))
+        }
         snps <- private$get_snp(pos[[locus]], locus, model)
         ehh <- sapply(snps, function(snp) {
           rehh::calc_ehh(self$segsites_to_rehh_data(seg_sites[[locus]],

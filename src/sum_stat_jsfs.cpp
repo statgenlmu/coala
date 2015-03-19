@@ -29,9 +29,10 @@ NumericMatrix calc_jsfs(const List seg_sites,
 
   for (int locus = 0; locus < seg_sites.size(); ++locus) {
     ss = as<NumericMatrix>(seg_sites[locus]);
+    ncol = ss.ncol();
+    if (ncol == 0) continue;
     if (ss.nrow() < nrows_required) stop("Seg. Sites has too few rows.");
     trio_locus = getTrioLocus(ss);
-    ncol = ss.ncol();
 
     for (int j = 0; j < ncol; ++j) {
       if (trio_locus(j) != 0) continue; // Only calculate for middle locus
