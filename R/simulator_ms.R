@@ -108,7 +108,8 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
                                        locus_length = sum(llm[i, 1:5]))
         file <- tempfile('csr_ms')
 
-        ms(sum(get_sample_size(model, for_sim = TRUE)), llm[i, 'number'],
+        ms(sum(get_sample_size(model, for_sim = TRUE)),
+           format(llm[i, 'number'], scientific=FALSE),
            unlist(strsplit(ms.options, " ")), file)
 
         if(file.info(file)$size == 0) stop("ms simulation output is empty")

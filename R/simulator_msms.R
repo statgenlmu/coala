@@ -123,7 +123,7 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
       # Run the simulation(s)
       files <- lapply(1:nrow(llm), function(i) {
         ms_options <- paste(sum(get_sample_size(model, for_sim = TRUE)),
-                            llm[i, 'number'],
+                            format(llm[i, 'number'], scientific=FALSE),
                             paste(ms_generate_opts(model, parameters, i,
                                                    sum(llm[i, 1:5])),
                                   collapse=" "))
