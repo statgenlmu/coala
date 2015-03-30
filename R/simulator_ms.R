@@ -68,10 +68,13 @@ ms_generate_opts_cmd <- function(model) {
 }
 
 
-ms_generate_opts <- function(model, parameters, locus,
-                             locus_length, eval_pars = TRUE) {
+ms_generate_opts <- function(model, parameters, group,
+                             eval_pars = TRUE) {
 
-  ms_tmp <- create_par_env(model, parameters, locus=locus,
+  if (eval_pars) locus_length <- get_locus_length(model, group=group)
+  else locus_length <- "locus_length"
+
+  ms_tmp <- create_par_env(model, parameters, locus=group,
                            locus_length=locus_length)
 
   cmd <- read_cache(model, 'ms_cmd')
@@ -99,18 +102,14 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
     simulate = function(model, parameters=numeric()) {
       stopifnot(length(parameters) == 0 | all(is.numeric(parameters)))
 
-      # Get the length and number of loci
-      llm <- get_locus_length_matrix(model, has_inter_locus_var(model))
-
       # Do the actuall simulation
-      files <- lapply(1:nrow(llm), function(i) {
-        ms.options <- ms_generate_opts(model, parameters, i,
-                                       locus_length = sum(llm[i, 1:5]))
+      files <- lapply(1:get_locus_group_number(model) , function(i) {
+        opts <- ms_generate_opts(model, parameters, i)
         file <- tempfile('csr_ms')
 
         ms(sum(get_sample_size(model, for_sim = TRUE)),
-           format(llm[i, 'number'], scientific=FALSE),
-           unlist(strsplit(ms.options, " ")), file)
+           format(get_locus_number(model, group=i), scientific=FALSE),
+           unlist(strsplit(opts, " ")), file)
 
         if(file.info(file)$size == 0) stop("ms simulation output is empty")
         file
@@ -137,8 +136,8 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
       sum_stats
     },
     get_cmd = function(model) {
-      cmd <- ms_generate_opts(model, get_parameter_table(model)$name, "locus",
-                              "locus_length", FALSE)
+      cmd <- ms_generate_opts(model, get_parameter_table(model)$name,
+                              "locus", FALSE)
       txt <- paste(cmd, collapse = ' ')
       paste("ms", sum(get_sample_size(model)), get_locus_number(model), txt)
     }

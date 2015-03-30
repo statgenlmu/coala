@@ -58,19 +58,24 @@ test_that('locus positions are converted correctly', {
     locus_trio(locus_length = c(50, 30, 10), distance = c(40, 20)) +
     locus_averaged(2, 100)
 
-  expect_equal(conv_middle_to_trio_pos(.5, model),
-               c(45 / 150, 105 / 150, .5, .5))
+  expect_equal(conv_middle_to_trio_pos(.5, model, 1), 45 / 150)
+  expect_equal(conv_middle_to_trio_pos(.5, model, 2), 105 / 150)
+  expect_equal(conv_middle_to_trio_pos(.5, model, 3), .5)
+  expect_equal(conv_middle_to_trio_pos(.5, model, 4), .5)
 
-  expect_equal(conv_middle_to_trio_pos(15, model, relative_in = FALSE),
-               c(45 / 150, 105 / 150, 0.15, 0.15))
+  expect_equal(conv_middle_to_trio_pos(15, model, 1, relative_in = FALSE),
+               45 / 150)
+  expect_equal(conv_middle_to_trio_pos(15, model, 2, relative_in = FALSE),
+               105 / 150)
+  expect_equal(conv_middle_to_trio_pos(15, model, 3, relative_in = FALSE), .15)
 
-  expect_equal(conv_middle_to_trio_pos(.5, model, relative_out = FALSE),
-               c(45, 105, 50, 50))
+  expect_equal(conv_middle_to_trio_pos(.5, model, 1, relative_out = FALSE), 45)
+  expect_equal(conv_middle_to_trio_pos(.5, model, 2, relative_out = FALSE), 105)
+  expect_equal(conv_middle_to_trio_pos(.5, model, 3, relative_out = FALSE), 50)
 
-  expect_equal(conv_middle_to_trio_pos(10, model,
+  expect_equal(conv_middle_to_trio_pos(10, model, 1,
                                        relative_out = FALSE,
-                                       relative_in = FALSE),
-               c(40, 100, 10, 10))
+                                       relative_in = FALSE), 40)
 
   ss <- matrix(0, 6, 5)
   attr(ss, 'positions') <- c(0.1, 0.5, 0.2, 0.6, 0.5, 1)
@@ -78,12 +83,12 @@ test_that('locus positions are converted correctly', {
   expect_equal(get_snp_positions(list(ss, ss, ss, ss), model),
                list(c(1, 5, 36, 48, 125, 150) / 150,
                     c(5, 25, 96, 108, 145, 150) / 150,
-                    c(0, 0, 0.2, 0.6, 1, 1),
-                    c(0, 0, 0.2, 0.6, 1, 1)))
+                    c(0.1, 0.5, 0.2, 0.6, 0.5, 1),
+                    c(0.1, 0.5, 0.2, 0.6, 0.5, 1)))
   expect_equal(get_snp_positions(list(ss, ss, ss, ss),
                                  model, relative = FALSE),
                list(c(1, 5, 36, 48, 125, 150),
                     c(5, 25, 96, 108, 145, 150),
-                    c(0, 0, 20, 60, 100, 100),
-                    c(0, 0, 20, 60, 100, 100)))
+                    c(10, 50, 20, 60, 50, 100),
+                    c(10, 50, 20, 60, 50, 100)))
 })

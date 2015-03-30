@@ -9,13 +9,13 @@ test_that("calc_four_gamete_stat works", {
                              0, 0, 0, 0, 1), 5))
 
   attr(seg_sites[[1]], 'positions') <- c(0.1, 0.12, 0.5, 0.51, 0.61)
-  locus_length <- matrix(c(0, 0, 100, 0, 0, 0), 1, 6)
+  locus_length <- matrix(c(0, 0, 100, 0, 0, 1), 1, 6)
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[1, ], c(mid_near=.5, mid_far=.5, outer=NaN,
                                       between=NaN, mid=.5, perc_polym=0.05))
 
   seg_sites[[2]] <- seg_sites[[1]]
-  locus_length <- rbind(locus_length, matrix(c(0, 0, 50, 0, 0, 0), 1, 6))
+  locus_length <- rbind(locus_length, matrix(c(0, 0, 50, 0, 0, 1), 1, 6))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[1, ], c(mid_near=.5, mid_far=.5, outer=NaN,
                                       between=NaN, mid=.5, perc_polym=0.05))
@@ -45,7 +45,7 @@ test_that("calc_four_gamete_stat works", {
 
   seg_sites[[3]] <- matrix(0, 5, 0)
   attr(seg_sites[[3]], 'positions') <- numeric(0)
-  locus_length <- rbind(locus_length, c(0, 0, 50, 0, 0, 0))
+  locus_length <- rbind(locus_length, c(0, 0, 50, 0, 0, 1))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[3, ], c(mid_near=NaN, mid_far=NaN, outer=NaN,
                                       between=NaN, mid=NaN, perc_polym=0))
@@ -59,7 +59,7 @@ test_that("calc_four_gamete_stat works", {
                              0, 0, 0, 0, 1), 5)
   attr(seg_sites[[4]], 'positions') <- c(0.15, 0.55, 0.05, 0.08, 0.30)
   attr(seg_sites[[4]], 'locus') <- c(-1, -1, 0, 0, 0)
-  locus_length <- rbind(locus_length, c(10, 5, 6, 5, 10, 0))
+  locus_length <- rbind(locus_length, c(10, 5, 6, 5, 10, 1))
 
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[4, ], c(mid_near=NaN, mid_far=NaN, outer=1,

@@ -9,134 +9,102 @@ using namespace Rcpp;
 NumericVector parse_ms_positions(const std::string line);
 RcppExport SEXP coalsimr_parse_ms_positions(SEXP lineSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const std::string >::type line(lineSEXP );
-        NumericVector __result = parse_ms_positions(line);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const std::string >::type line(lineSEXP);
+    __result = Rcpp::wrap(parse_ms_positions(line));
+    return __result;
 END_RCPP
 }
 // parse_ms_output
 List parse_ms_output(const List file_names, const NumericVector sample_size, const int loci_number);
 RcppExport SEXP coalsimr_parse_ms_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP loci_numberSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const List >::type file_names(file_namesSEXP );
-        Rcpp::traits::input_parameter< const NumericVector >::type sample_size(sample_sizeSEXP );
-        Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP );
-        List __result = parse_ms_output(file_names, sample_size, loci_number);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const List >::type file_names(file_namesSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type sample_size(sample_sizeSEXP);
+    Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP);
+    __result = Rcpp::wrap(parse_ms_output(file_names, sample_size, loci_number));
+    return __result;
 END_RCPP
 }
 // parse_sg_output
-List parse_sg_output(const List file_names, const int sample_size, const NumericMatrix sequence_length, const int loci_number, const int outgroup_size = 1, const bool calc_seg_sites = true);
+List parse_sg_output(const List file_names, const int sample_size, const NumericMatrix sequence_length, const int loci_number, const int outgroup_size, const bool calc_seg_sites);
 RcppExport SEXP coalsimr_parse_sg_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP sequence_lengthSEXP, SEXP loci_numberSEXP, SEXP outgroup_sizeSEXP, SEXP calc_seg_sitesSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const List >::type file_names(file_namesSEXP );
-        Rcpp::traits::input_parameter< const int >::type sample_size(sample_sizeSEXP );
-        Rcpp::traits::input_parameter< const NumericMatrix >::type sequence_length(sequence_lengthSEXP );
-        Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP );
-        Rcpp::traits::input_parameter< const int >::type outgroup_size(outgroup_sizeSEXP );
-        Rcpp::traits::input_parameter< const bool >::type calc_seg_sites(calc_seg_sitesSEXP );
-        List __result = parse_sg_output(file_names, sample_size, sequence_length, loci_number, outgroup_size, calc_seg_sites);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const List >::type file_names(file_namesSEXP);
+    Rcpp::traits::input_parameter< const int >::type sample_size(sample_sizeSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix >::type sequence_length(sequence_lengthSEXP);
+    Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP);
+    Rcpp::traits::input_parameter< const int >::type outgroup_size(outgroup_sizeSEXP);
+    Rcpp::traits::input_parameter< const bool >::type calc_seg_sites(calc_seg_sitesSEXP);
+    __result = Rcpp::wrap(parse_sg_output(file_names, sample_size, sequence_length, loci_number, outgroup_size, calc_seg_sites));
+    return __result;
 END_RCPP
 }
 // parse_trees
-List parse_trees(const List file_names, const int loci_number, const bool separate_loci = true);
+List parse_trees(const List file_names, const int loci_number, const bool separate_loci);
 RcppExport SEXP coalsimr_parse_trees(SEXP file_namesSEXP, SEXP loci_numberSEXP, SEXP separate_lociSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const List >::type file_names(file_namesSEXP );
-        Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP );
-        Rcpp::traits::input_parameter< const bool >::type separate_loci(separate_lociSEXP );
-        List __result = parse_trees(file_names, loci_number, separate_loci);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const List >::type file_names(file_namesSEXP);
+    Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP);
+    Rcpp::traits::input_parameter< const bool >::type separate_loci(separate_lociSEXP);
+    __result = Rcpp::wrap(parse_trees(file_names, loci_number, separate_loci));
+    return __result;
 END_RCPP
 }
 // generate_trio_trees
 List generate_trio_trees(const List trees, const NumericMatrix llm);
 RcppExport SEXP coalsimr_generate_trio_trees(SEXP treesSEXP, SEXP llmSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const List >::type trees(treesSEXP );
-        Rcpp::traits::input_parameter< const NumericMatrix >::type llm(llmSEXP );
-        List __result = generate_trio_trees(trees, llm);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const List >::type trees(treesSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix >::type llm(llmSEXP);
+    __result = Rcpp::wrap(generate_trio_trees(trees, llm));
+    return __result;
 END_RCPP
 }
 // calc_four_gamete_stat
 NumericMatrix calc_four_gamete_stat(const List seg_sites_list, const IntegerVector individuals, const NumericMatrix locus_length);
 RcppExport SEXP coalsimr_calc_four_gamete_stat(SEXP seg_sites_listSEXP, SEXP individualsSEXP, SEXP locus_lengthSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const List >::type seg_sites_list(seg_sites_listSEXP );
-        Rcpp::traits::input_parameter< const IntegerVector >::type individuals(individualsSEXP );
-        Rcpp::traits::input_parameter< const NumericMatrix >::type locus_length(locus_lengthSEXP );
-        NumericMatrix __result = calc_four_gamete_stat(seg_sites_list, individuals, locus_length);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const List >::type seg_sites_list(seg_sites_listSEXP);
+    Rcpp::traits::input_parameter< const IntegerVector >::type individuals(individualsSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix >::type locus_length(locus_lengthSEXP);
+    __result = Rcpp::wrap(calc_four_gamete_stat(seg_sites_list, individuals, locus_length));
+    return __result;
 END_RCPP
 }
 // calc_jsfs
 NumericMatrix calc_jsfs(const List seg_sites, const NumericVector pop1, const NumericVector pop2);
 RcppExport SEXP coalsimr_calc_jsfs(SEXP seg_sitesSEXP, SEXP pop1SEXP, SEXP pop2SEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const List >::type seg_sites(seg_sitesSEXP );
-        Rcpp::traits::input_parameter< const NumericVector >::type pop1(pop1SEXP );
-        Rcpp::traits::input_parameter< const NumericVector >::type pop2(pop2SEXP );
-        NumericMatrix __result = calc_jsfs(seg_sites, pop1, pop2);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const List >::type seg_sites(seg_sitesSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type pop1(pop1SEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type pop2(pop2SEXP);
+    __result = Rcpp::wrap(calc_jsfs(seg_sites, pop1, pop2));
+    return __result;
 END_RCPP
 }
 // calc_omegaprime
 NumericVector calc_omegaprime(List seg_sites, NumericVector individuals);
 RcppExport SEXP coalsimr_calc_omegaprime(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< List >::type seg_sites(seg_sitesSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type individuals(individualsSEXP );
-        NumericVector __result = calc_omegaprime(seg_sites, individuals);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< List >::type seg_sites(seg_sitesSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type individuals(individualsSEXP);
+    __result = Rcpp::wrap(calc_omegaprime(seg_sites, individuals));
+    return __result;
 END_RCPP
 }

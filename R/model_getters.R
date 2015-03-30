@@ -70,25 +70,47 @@ get_parameter <- function(model) {
 #'
 #' @describeIn get_feature_table Returns the length of the loci in a locus group
 #' @export
-get_locus_length <- function(model, locus, total=TRUE) {
-  assert_that(is.numeric(locus))
-  ll <- get_locus_length_matrix(model, TRUE)[locus, c(1, 3, 5)]
+get_locus_length <- function(model, locus=NULL, group=NULL, total=TRUE) {
+  assert_that(!(is.null(locus) & is.null(group)))
+  llm <- get_locus_length_matrix(model)
+
+  # Group and locus are identical for ilv models
+  if (!is.null(group) && has_inter_locus_var(model)) {
+    locus <- group
+  }
+
+  # Determine to which group the locus belongs
+  if (!is.null(locus)) {
+    group <- get_locus_group(model, locus)
+  }
+
+  ll <- llm[group, 1:5]
   if (total) return(sum(ll))
-  if (sum(ll[-2]) == 0) return(ll[2])
+  if (sum(ll[-3]) == 0) return(ll[3])
   ll
+}
+
+
+get_locus_group <- function(model, locus) {
+  llm <- get_locus_length_matrix(model)
+  min(which(cumsum(llm[ , "number"]) >= locus))
 }
 
 
 #' @describeIn get_feature_table Returns the number of loci in a locus group
 #' @export
-get_locus_number <- function(model) {
-  number <- sum(sapply(model$loci, function(x) {
-    n <- x$get_number()
-    if (n > 1) n <- n / model$scaling_factor
-    n
-  }))
+get_locus_number <- function(model, group=NA) {
+  numbers <- get_locus_length_matrix(model)[ , "number"]
+  numbers <- ifelse(numbers > 1, round(numbers / model$scaling_factor), numbers)
+  if (is.na(group)) return(sum(numbers))
+  if (has_inter_locus_var(model)) return(1)
+  numbers[group]
+}
 
-  max(as.integer(round(number)))
+
+get_locus_group_number <- function(model) {
+  if (has_inter_locus_var(model)) return(get_locus_number(model))
+  nrow(get_locus_length_matrix(model))
 }
 
 
@@ -134,26 +156,17 @@ get_sample_size <- function(model, for_sim=FALSE) {
 #' @describeIn get_feature_table Returns a matrix with detailed length
 #' information about the loci in the model.
 #' @export
-get_locus_length_matrix <- function(model, individual=TRUE) {
-  if (individual) cache_name <- "llm_full"
-  else cache_name <- "llm_compact"
-
-  llm <- read_cache(model, cache_name)
+get_locus_length_matrix <- function(model) {
+  llm <- read_cache(model, "llm")
   if (is.null(llm)) {
     loci <- seq(along = model$loci)
-    if (individual) {
-      loci <- rep(loci, sapply(model$loci, function(x) x$get_number()))
-    }
-
     assert_that(length(loci) > 0)
     llm <- do.call(rbind, lapply(model$loci[loci],
                                  function(l) {
                                    c(l$get_length(TRUE), number=l$get_number())
                                  }))
 
-    if (individual) llm[ , 6] <- 1
-
-    cache(model, cache_name, llm)
+    cache(model, "llm", llm)
   }
   llm
 }

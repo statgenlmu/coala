@@ -1,10 +1,13 @@
 context("parsing seq-gen output")
 
 test_that("parse_sg_output works with a single file", {
-  model_tmp <- coal_model(c(4, 6, 1), 2, 10) +
+  # --- One Group -----------------------------------------------
+  model_base <- coal_model(c(4, 6, 1)) +
     feat_outgroup(3) +
     feat_pop_merge(par_range('tau', 0.5, 2), 2, 1) +
     feat_pop_merge(par_expr('2*tau'), 3, 1)
+
+  model_tmp <- model_base + locus_averaged(2, 10)
 
   seqgen_file <- tempfile('seqgen_parser_test')
   cat(" 11 10
@@ -33,7 +36,7 @@ s3        GCAGACGGTA
 s4        GCTGATAATA", file = seqgen_file)
 
   seg_sites <- parse_sg_output(list(seqgen_file), 11,
-                                 get_locus_length_matrix(model_tmp), 2)
+                               get_locus_length_matrix(model_tmp), 2)
   expect_is(seg_sites, 'list')
   expect_equal(length(seg_sites), 2)
 
@@ -85,19 +88,7 @@ s4        GCTGATAATA", file = seqgen_file)
   attr(seg_sites_o2, 'positions') <- attr(seg_sites_1, 'positions')[c()]
   expect_equal(seg_sites[[2]], seg_sites_o2)
 
-  # Muliple files
-  seg_sites <- parse_sg_output(list(seqgen_file, seqgen_file),
-                                 sum(get_sample_size(model_tmp)),
-                                 rbind(get_locus_length_matrix(model_tmp),
-                                       get_locus_length_matrix(model_tmp)), 4)
-  expect_is(seg_sites, 'list')
-  expect_equal(length(seg_sites), 4)
-  expect_equal(seg_sites[[1]], seg_sites_1)
-  expect_equal(seg_sites[[2]], seg_sites_2)
-  expect_equal(seg_sites[[3]], seg_sites_1)
-  expect_equal(seg_sites[[4]], seg_sites_2)
-
-
+  # With trios
   seg_sites <- parse_sg_output(list(c(seqgen_file, seqgen_file, seqgen_file)),
                                  11, matrix(10, 2, 5, byrow = TRUE), 2)
   expect_equal(seg_sites[[1]][, 1:7], seg_sites_1[, ])
@@ -110,6 +101,16 @@ s4        GCTGATAATA", file = seqgen_file)
   expect_equal(seg_sites[[2]][, 11:15], seg_sites_2[, ])
   expect_equal(attr(seg_sites[[2]], 'locus'), rep(c(-1,0,1), each = 5))
   expect_equal(attr(seg_sites[[2]], 'positions'), rep(c(1, 2, 3, 8, 9) / 9, 3))
+
+
+
+  # --- Multiple Group -----------------------------------------------
+  # Multiple loci with different length
+  model_tmp <- coal_model(c(4, 6, 1)) +
+    locus_averaged(2, 10) + locus_single(8) +
+    feat_outgroup(3) +
+    feat_pop_merge(par_range('tau', 0.5, 2), 2, 1) +
+    feat_pop_merge(par_expr('2*tau'), 3, 1)
 
   seqgen_file_1 <- tempfile('seqgen_parser_test')
   cat(" 11 10
@@ -126,40 +127,47 @@ s9        CCGGCTGCAG
 s10       CCTCAGGGCC", file = seqgen_file_1)
 
   seqgen_file_2 <- tempfile('seqgen_parser_test')
-  cat(" 11 10
-s11       ATTGAACCGC
-s5        GTATATTTAC
-s9        GAATATGAAG
-s6        CTATATTTAG
-s8        CTAAATGAGG
-s7        CTATATGAAC
-s10       CTATATGAAC
-s1        CCATACGATA
-s2        CTTGACGGTA
-s3        GCAGACGGTA
-s4        GCTGATAATA", file = seqgen_file_2)
+  cat(" 11 8
+s11       ATTGAACC
+s5        GTATATTT
+s9        GAATATGA
+s6        CTATATTT
+s8        CTAAATGA
+s7        CTATATGA
+s10       CTATATGA
+s1        CCATACGA
+s2        CTTGACGG
+s3        GCAGACGG
+s4        GCTGATAA", file = seqgen_file_2)
+  seg_sites_2 <- seg_sites_2[ , 1:3]
 
-  seg_sites <- parse_sg_output(list(c(seqgen_file_1,
-                                        seqgen_file_1,
-                                        seqgen_file_2)),
-                                 11, matrix(10, 2, 5, byrow = TRUE), 1)
+  seg_sites <- parse_sg_output(list(seqgen_file_1,
+                                    seqgen_file_1,
+                                    seqgen_file_2),
+                               sum(get_sample_size(model_tmp)),
+                               get_locus_length_matrix(model_tmp),
+                               get_locus_number(model_tmp))
+
+  expect_is(seg_sites, 'list')
+  expect_equal(length(seg_sites), 3)
+  expect_equivalent(seg_sites[[1]], seg_sites_1)
+  expect_equivalent(seg_sites[[2]], seg_sites_1)
+  expect_equivalent(seg_sites[[3]], seg_sites_2)
+
+  # with trios
+  model_tmp <- model_base +
+    locus_trio(locus_length = c(10, 10, 8), dist = 1:2, number = 2) +
+    locus_trio(locus_length = c(10, 8, 8), dist = 1:2, number = 1)
+
+  files <- list(c(seqgen_file_1, seqgen_file_1, seqgen_file_2),
+                c(seqgen_file_1, seqgen_file_1, seqgen_file_2),
+                c(seqgen_file_1, seqgen_file_2, seqgen_file_2))
+
+  seg_sites <- parse_sg_output(files, sum(get_sample_size(model_tmp)),
+                               get_locus_length_matrix(model_tmp),
+                               get_locus_number(model_tmp))
+
   expect_equal(seg_sites[[1]][,], cbind(seg_sites_1, seg_sites_1, seg_sites_2))
-  expect_equal(length(attr(seg_sites[[1]], 'locus')), ncol(seg_sites[[1]]))
-  expect_equal(length(attr(seg_sites[[1]], 'positions')), ncol(seg_sites[[1]]))
-
-  seg_sites <- parse_sg_output(list(c(seqgen_file_1,
-                                        seqgen_file_2,
-                                        seqgen_file_2)),
-                                 11, matrix(10, 2, 5, byrow = TRUE), 1)
-  expect_equal(seg_sites[[1]][,], cbind(seg_sites_1, seg_sites_2, seg_sites_2))
-  expect_equal(length(attr(seg_sites[[1]], 'locus')), ncol(seg_sites[[1]]))
-  expect_equal(length(attr(seg_sites[[1]], 'positions')), ncol(seg_sites[[1]]))
-
-  seg_sites <- parse_sg_output(list(c(seqgen_file_2,
-                                        seqgen_file_1,
-                                        seqgen_file_2)),
-                                 11, matrix(10, 2, 5, byrow = TRUE), 1)
-  expect_equal(seg_sites[[1]][,], cbind(seg_sites_2, seg_sites_1, seg_sites_2))
   expect_equal(length(attr(seg_sites[[1]], 'locus')), ncol(seg_sites[[1]]))
   expect_equal(length(attr(seg_sites[[1]], 'positions')), ncol(seg_sites[[1]]))
 

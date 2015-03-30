@@ -111,7 +111,12 @@ sg_call <- function(opts, ms_files) {
 }
 
 sg_generate_opts <- function(model, parameters, locus,
-                             locus_lengths, seeds, eval_pars = TRUE) {
+                             seeds, eval_pars = TRUE) {
+
+  if (eval_pars) locus_lengths <- get_locus_length(model,
+                                                  group = locus,
+                                                  total = FALSE)
+  else locus_lengths <- "locus_length"
 
   cmd <- read_cache(model, 'seqgen_cmd')
   if (is.null(cmd)) {
@@ -119,9 +124,7 @@ sg_generate_opts <- function(model, parameters, locus,
     cache(model, 'seqgen_cmd', cmd)
   }
 
-  if (locus_lengths[1] == 0 & locus_lengths[5] == 0) {
-    locus_lengths <- locus_lengths[3]
-  } else {
+  if (length(locus_lengths) == 5) {
     locus_lengths <- locus_lengths[c(1,3,5)]
   }
 
@@ -192,7 +195,7 @@ sg_generate_opt_cmd <- function(model) {
     opts <- c(opts, '"-l"', ',', 'locus_length', ',')
     opts <- c(opts, '"-s"', ',',
               s=paste(get_mutation_par(model, outer), ' / locus_length'), ',')
-    opts <- c(opts, '"-p"', ',', 'locus_length + 1', ',')
+    opts <- c(opts, '"-p"', ',', p='locus_length + 1', ',')
     opts <- c(opts, '"-z"', ',', 'seed', ',')
     opts <- c(opts, '"-q"', ')')
     opts
@@ -204,7 +207,6 @@ sg_get_command <- function(model) {
   tree_cmd <- get_cmd(generate_tree_model(model))
 
   sg_cmd <- paste(sg_generate_opts(model, get_parameter_table(model)$name,
-                                   get_locus_length_matrix(model)[1, 1:5],
                                    locus = 1, seeds = 'seed',
                                    eval_pars=FALSE),
                   collapse = ' ')
@@ -223,13 +225,9 @@ sg_simulate <- function(model, parameters) {
   trees <- simulate(tree_model, pars=parameters)$trees
   assert_that(!is.null(trees))
 
-  # Get loci length and number
-  llm <- get_locus_length_matrix(model, has_inter_locus_var(model))
-
   # Call seq-gen for each locus (trio)
   seqgen_files <- lapply(1:length(trees), function(locus) {
     seqgen_options <- sg_generate_opts(model, parameters, locus,
-                                       llm[locus, 1:5],
                                        sample_seed(length(trees[[locus]])))
     sg_call(seqgen_options, trees[[locus]])
   })
@@ -239,7 +237,7 @@ sg_simulate <- function(model, parameters) {
   if (requires_segsites(model)) {
     seg_sites <- parse_sg_output(seqgen_files,
                                  sum(get_sample_size(model, for_sim = TRUE)),
-                                 llm[, 1:5, drop=FALSE],
+                                 get_locus_length_matrix(model),
                                  get_locus_number(model),
                                  outgroup_size = get_outgroup_size(model, TRUE))
   } else {

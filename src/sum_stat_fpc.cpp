@@ -39,8 +39,9 @@ NumericMatrix calc_four_gamete_stat(const List seg_sites_list,
                                     const NumericMatrix locus_length) {
 
   size_t loci_number = seg_sites_list.size();
-  if (loci_number != (size_t)locus_length.nrow()) stop("Locus number mismatch");
   size_t n_ind = individuals.size();
+  size_t locus_group = 0;
+  size_t locus_in_group = 0;
   size_t type; // 0 = near, 1 = far, 2 = on outer locus, 3 = between loci;
 
   NumericMatrix violations(loci_number, 6);
@@ -118,10 +119,15 @@ NumericMatrix calc_four_gamete_stat(const List seg_sites_list,
     for (int i = 0; i < 4; ++i) violations(locus, i) /= total_count[i];
 
     // Calculate SNPs per basepair for middle locus
-    violations(locus, 5) = sum(trio_locus == 0) / locus_length(locus, 2);
+    violations(locus, 5) = sum(trio_locus == 0) / locus_length(locus_group, 2);
 
     // Clean Up
     snps.clear();
+    ++locus_in_group;
+    if (locus_in_group == locus_length(locus_group, 5)) {
+      locus_in_group = 0;
+      ++locus_group;
+    }
   }
 
   return violations;

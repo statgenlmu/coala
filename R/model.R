@@ -139,18 +139,25 @@ has_trios <- function(model) {
 
 
 get_snp_positions <- function(seg_sites, model, relative=TRUE) {
-  assert_that(length(seg_sites) == get_locus_number(model))
-  llm <- get_locus_length_matrix(model)
   lapply(1:length(seg_sites), function(locus) {
     pos <- attr(seg_sites[[locus]], 'position')
+    locus_length <- get_locus_length(model, locus, total = FALSE)
+
+    # Nothing changes without trios
+    if (length(locus_length) == 1) {
+      if (relative) return(pos)
+      else return(pos * locus_length)
+    }
+
+    # Convert if we have trios
     trio_locus <- attr(seg_sites[[locus]], 'locus')
     if (is.null(trio_locus)) trio_locus <- 0
-    pos[trio_locus == -1] <- pos[trio_locus == -1] * llm[locus, 1]
-    pos[trio_locus == 0] <- pos[trio_locus == 0] * llm[locus, 3] +
-      sum(llm[locus, 1:2])
-    pos[trio_locus == 1] <- pos[trio_locus == 1] * llm[locus, 5] +
-      sum(llm[locus, 1:4])
-    if (relative) pos <- pos / sum(llm[locus, 1:5])
+    pos[trio_locus == -1] <- pos[trio_locus == -1] * locus_length[1]
+    pos[trio_locus == 0] <- pos[trio_locus == 0] * locus_length[3] +
+      sum(locus_length[1:2])
+    pos[trio_locus == 1] <- pos[trio_locus == 1] * locus_length[5] +
+      sum(locus_length[1:4])
+    if (relative) pos <- pos / sum(locus_length)
     pos
   })
 }

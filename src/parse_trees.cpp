@@ -85,13 +85,11 @@ void addTree(const std::string &tree,
 List generate_trio_trees(const List trees,
                          const NumericMatrix llm) {
 
-  if (trees.size() != llm.nrow()) stop("Locus number mismatch.");
-
   CharacterVector locus_trees;
   std::string tree;
   size_t digits, pos, locus, len, seg_len, locus_end;
   List result = List(trees.size());
-
+  size_t llm_row = 0, llm_row_counter = 0;
 
   for (size_t i = 0; i < trees.size(); ++i) {
     locus_trees = as<CharacterVector>(trees[i]);
@@ -101,7 +99,7 @@ List generate_trio_trees(const List trees,
     locus = 0;             // The locus that we are currently in
     len = 0;               // The length of the current tree
     seg_len = 0;
-    locus_end = llm(i, 0); // The end of the current locus
+    locus_end = llm(llm_row, 0); // The end of the current locus
 
     CharacterVector left;
     CharacterVector middle;
@@ -112,7 +110,11 @@ List generate_trio_trees(const List trees,
 
       // Get the number of bases for which the tree is valid
       if (tree.substr(0, 1) != "[") {
-        len = llm(i, 0) + llm(i, 1) + llm(i, 2) + llm(i, 3) + llm(i, 4);
+        len = llm(llm_row, 0) +
+              llm(llm_row, 1) +
+              llm(llm_row, 2) +
+              llm(llm_row, 3) +
+              llm(llm_row, 4);
       } else {
         digits = tree.find("]")-1;
         len = std::atoi(tree.substr(1, digits).c_str());
@@ -133,17 +135,22 @@ List generate_trio_trees(const List trees,
         // And look at the next locus.
         if (locus < 4) {
           ++locus;
-          locus_end += llm(i, locus);
-          //if (locus == 2) current_tree = &trio_trees[1];
-          //if (locus == 4) current_tree = &trio_trees[2];
+          locus_end += llm(llm_row, locus);
         } else {
           // The last tree should end exactly end at the end of the last locus
           if (len != 0) stop("Tree and locus length do not match.");
+          pos = 0;
+
+          ++llm_row_counter;
+          if (llm_row_counter == llm(llm_row, 5)) {
+            ++llm_row;
+            if (llm_row == llm.nrow()) break; //avoid invalid read
+            llm_row_counter = 0;
+          }
+
           // Reset the stats and go one to the next locus trio.
           locus = 0;
-          locus_end = llm(i, 0);
-          pos = 0;
-          //current_tree = &trio_trees[0];
+          locus_end = llm(llm_row, 0);
         }
       }
 
@@ -161,5 +168,6 @@ List generate_trio_trees(const List trees,
                              _["right"] = right);
   }
 
+  if (llm_row != llm.nrow()) stop("Wrong number of trees");
   return(result);
 }

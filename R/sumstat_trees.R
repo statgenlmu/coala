@@ -23,7 +23,7 @@ SumstatSgTrees <- R6Class('SumstatSgTrees', inherit = Sumstat, #nolint
   public = list(
     calculate = function(seg_sites, files, model) {
       trees <- parse_trees(files, get_locus_number(model), FALSE)
-      llm <- get_locus_length_matrix(model, has_inter_locus_var(model))
+      llm <- get_locus_length_matrix(model)
 
       trio_trees <- generate_trio_trees(trees, llm)
       lapply(trio_trees, function(locus_trees) {

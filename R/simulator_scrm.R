@@ -11,12 +11,12 @@ SimulatorScrm <- R6Class('SimulatorScrm', inherit = Simulator, #nolint
   ),
   public = list(
     simulate = function(model, parameters) {
-      if (nrow(get_locus_length_matrix(model, has_inter_locus_var(model))) > 1)
+      if (length(get_locus_group_number(model)) > 1)
         stop("scrm can only simulate one group of loci at the moment.")
+
       args <- paste(sum(get_sample_size(model, for_sim = TRUE)),
                     get_locus_number(model),
-                    paste(ms_generate_opts(model, parameters, 1,
-                                           get_locus_length(model, 1)),
+                    paste(ms_generate_opts(model, parameters, 1),
                           collapse = ' '))
 
       if (requires_files(model)) file <- tempfile('scrm')
