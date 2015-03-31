@@ -41,3 +41,7 @@ calc_omegaprime <- function(seg_sites, individuals) {
     .Call('coalsimr_calc_omegaprime', PACKAGE = 'coalsimr', seg_sites, individuals)
 }
 
+unphase_segsites <- function(seg_sites, ploidy, samples_per_ind) {
+    .Call('coalsimr_unphase_segsites', PACKAGE = 'coalsimr', seg_sites, ploidy, samples_per_ind)
+}
+
