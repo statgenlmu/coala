@@ -21,15 +21,15 @@ get_parameter_table(model)
 
 get_parameter(model)
 
-get_locus_length(model, locus, total = TRUE)
+get_locus_length(model, locus = NULL, group = NULL, total = TRUE)
 
-get_locus_number(model)
+get_locus_number(model, group = NA)
 
 get_populations(model)
 
 get_sample_size(model, for_sim = FALSE)
 
-get_locus_length_matrix(model, individual = TRUE)
+get_locus_length_matrix(model)
 
 get_outgroup(model)
 

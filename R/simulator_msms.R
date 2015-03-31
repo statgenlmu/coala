@@ -105,8 +105,7 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
     get_cmd = function(model) {
       ms_cmd <- paste(ms_generate_opts(model,
                                        get_parameter_table(model)$name,
-                                       "locus",
-                                       "locus_length", FALSE),
+                                       "locus", FALSE),
                       collapse = ' ')
       msms_cmd <- paste(msms_generate_opts(model,
                                            get_parameter_table(model)$name,
@@ -117,19 +116,15 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
             "-ms", sum(get_sample_size(model)), get_locus_number(model), ms_cmd)
     },
     simulate = function(model, parameters) {
-      # Get the length and number of loci
-      llm <- get_locus_length_matrix(model, has_inter_locus_var(model))
-
       # Run the simulation(s)
-      files <- lapply(1:nrow(llm), function(i) {
+      files <- lapply(1:get_locus_group_number(model), function(i) {
         ms_options <- paste(sum(get_sample_size(model, for_sim = TRUE)),
-                            format(llm[i, 'number'], scientific=FALSE),
-                            paste(ms_generate_opts(model, parameters, i,
-                                                   sum(llm[i, 1:5])),
+                            format(get_locus_number(model, group=i),
+                                   scientific=FALSE),
+                            paste(ms_generate_opts(model, parameters, i),
                                   collapse=" "))
         msms_options <- paste(msms_generate_opts(model, parameters, i),
                               collapse= " ")
-        #print(c(ms_options, msms_options))
         call_msms(ms_options, msms_options)
       })
 

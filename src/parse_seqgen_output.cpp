@@ -153,7 +153,7 @@ List parse_sg_output(const List file_names,
   std::string line_l, line_m, line_r;
 
   List seg_sites(loci_number);
-  int locus = -1;
+  int locus = -1, locus_group = 0, locus_in_group = -1;
   NumericVector positions(0);
   CharacterVector file_name;
 
@@ -171,13 +171,19 @@ List parse_sg_output(const List file_names,
         if (line_m == "") continue;
         if (line_m.substr(0, 1) == " ") {
           ++locus;
+          ++locus_in_group;
+          if(locus_in_group == sequence_length(locus_group, 5)) {
+            ++locus_group;
+            locus_in_group = 0;
+          }
+
           if (calc_seg_sites) {
             seg_sites[locus] = parseSeqgenSegSites(output_m, sample_size,
-                                                   sequence_length(i, 2),
+                                                   sequence_length(locus_group, 2),
                                                    outgroup_size);
           } else {
             seg_sites[locus] = read_sequence(output_m, sample_size,
-                                             sequence_length(i, 2));
+                                             sequence_length(locus_group, 2));
           }
         } else {
           stop(std::string("Unexpected line in seq-gen output: '") + line_m + "'");
@@ -203,13 +209,18 @@ List parse_sg_output(const List file_names,
           if (line_l.substr(0, 1) != " ") stop("seq-gen outputs not in sync");
           if (line_r.substr(0, 1) != " ") stop("seq-gen outputs not in sync");
           ++locus;
+          ++locus_in_group;
+          if(locus_in_group == sequence_length(locus_group, 5)) {
+            ++locus_group;
+            locus_in_group = 0;
+          }
 
           NumericMatrix ss_l = parseSeqgenSegSites(output_l, sample_size,
-                                                   sequence_length(i, 0), outgroup_size);
+                                                   sequence_length(locus_group, 0), outgroup_size);
           NumericMatrix ss_m = parseSeqgenSegSites(output_m, sample_size,
-                                                   sequence_length(i, 2), outgroup_size);
+                                                   sequence_length(locus_group, 2), outgroup_size);
           NumericMatrix ss_r = parseSeqgenSegSites(output_r, sample_size,
-                                                   sequence_length(i, 4), outgroup_size);
+                                                   sequence_length(locus_group, 4), outgroup_size);
 
           seg_sites[locus] = cbindPos(ss_l, ss_m, ss_r);
         } else {

@@ -6,8 +6,8 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
     population = NULL,
     get_snp = function(positions, locus, model) {
       if (is.na(private$position)) return(seq(along = positions))
-      pos <- conv_middle_to_trio_pos(private$position, model,
-                                     relative_out = FALSE)[locus]
+      pos <- conv_middle_to_trio_pos(private$position, model, locus,
+                                     relative_out = FALSE)
       which.min(abs(pos - positions))
     }),
   public = list(
@@ -34,6 +34,7 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
                                                    "Der. Allele"), NULL)))
         }
         snps <- private$get_snp(pos[[locus]], locus, model)
+        assert_that(length(snps) > 0)
         ehh <- sapply(snps, function(snp) {
           rehh::calc_ehh(self$segsites_to_rehh_data(seg_sites[[locus]],
                                                     pos[[locus]],

@@ -68,7 +68,7 @@ test_that("Generating trees for trios works", {
                   "[2](3:0.613,(1:0.076,2:0.076):0.537);",
                   "[18](3:0.460,(1:0.076,2:0.076):0.384);"))
 
-  trio_trees <- generate_trio_trees(trees, matrix(c(2, 4, 8, 2, 4, 1), 1, 6))
+  trio_trees <- generate_trio_trees(trees, matrix(c(2, 4, 8, 2, 4, 2), 1, 6))
   expect_that(trio_trees, is_a("list"))
   expect_equal(length(trio_trees), 1)
 
@@ -80,6 +80,11 @@ test_that("Generating trees for trios works", {
   expect_equal(trio_trees[[1]][[1]][2], '[2](3:0.613,(1:0.076,2:0.076):0.537);')
   expect_equal(trio_trees[[1]][[2]][3], '[8](3:0.460,(1:0.076,2:0.076):0.384);')
   expect_equal(trio_trees[[1]][[3]][2], '[4](3:0.460,(1:0.076,2:0.076):0.384);')
+
+
+  trio_trees_2 <- generate_trio_trees(list(trees[[1]], trees[[1]]),
+                                      matrix(c(2, 4, 8, 2, 4, 2), 2, 6, TRUE))
+  expect_equal(trio_trees_2, list(trio_trees[[1]], trio_trees[[1]]))
 
 
   trees2 <- list(trees[[1]][1:4], trees[[1]][5:6])
@@ -97,11 +102,8 @@ test_that("Generating trees for trios works", {
   expect_equal(trio_trees[[2]][[2]][1], '[8](3:0.460,(1:0.076,2:0.076):0.384);')
   expect_equal(trio_trees[[2]][[3]][1], '[4](3:0.460,(1:0.076,2:0.076):0.384);')
 
-  expect_error(generate_trio_trees(trees,
-                                   matrix(c(2, 4, 8, 2, 4, 1), 2, 6, TRUE)))
 
-
-  trio_trees <- generate_trio_trees(trees, matrix(c(9, 2, 2, 5, 2, 1), 1, 6))
+  trio_trees <- generate_trio_trees(trees, matrix(c(9, 2, 2, 5, 2, 2), 1, 6))
   expect_equal(trio_trees[[1]][[1]][1], '[2](2:0.865,(1:0.015,3:0.015):0.850);')
   expect_equal(trio_trees[[1]][[1]][2], '[3](2:0.865,(1:0.015,3:0.015):0.850);')
   expect_equal(trio_trees[[1]][[1]][3], '[4](2:1.261,(1:0.015,3:0.015):1.246);')
@@ -122,8 +124,10 @@ test_that("Generating trees for trios works", {
 
 
   # Works for non-trio loci
-  trio_trees <- generate_trio_trees(trees, matrix(c(0, 0, 20, 0, 0, 1), 1, 6))
+  trio_trees <- generate_trio_trees(trees, matrix(c(0, 0, 20, 0, 0, 2), 1, 6))
   expect_equal(length(trio_trees[[1]]$left), 0)
   expect_equal(length(trio_trees[[1]]$right), 0)
   expect_equal(length(trio_trees[[1]]$middle), 6)
+
+  expect_error(generate_trio_trees(trees, matrix(c(0, 0, 20, 0, 0, 2), 3, 6)))
 })

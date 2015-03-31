@@ -26,7 +26,7 @@ test_that("adding parameters works", {
   model <- model + par_range("p2", 1, 5)
   expect_equal(length(get_parameter(model)), 2)
 
-  test <- list (1:10)
+  test <- list(1:10)
   class(test) <- 'BLUB'
   expect_error(model + test)
 })
@@ -41,7 +41,6 @@ test_that("adding features works", {
   expect_equal(nrow(search_feature(model, 'blub')), 1)
   expect_that(length(get_features(model)), is_more_than(0))
   expect_true('blub' %in% get_feature_table(model)$type)
-
 
   model <- coal_model(11:12, 100)
   model <- model + Feature$new('bli', par_range('bla', 1, 5))
@@ -92,18 +91,17 @@ test_that("test.parInRange", {
 
 
 test_that("test that scaling of model works", {
-  skip("temorarily deactivated")
   model <- coal_model(11:12, 10) +
-    locus_averaged(25, 10) +
+    locus_averaged(24, 10) +
     locus_averaged(25, 15) +
     locus_single(101) +
     locus_single(102)
-
   model <- scale_model(model, 5)
 
-  expect_equal(get_locus_number(model), 5L)
-  expect_equal(get_locus_number(model), 5L)
-  expect_equal(get_locus_number(model), 2L)
+  expect_equal(get_locus_number(model), 14)
+  expect_equal(get_locus_number(model, 1), 2)
+  expect_equal(get_locus_number(model, 2), 5)
+  expect_equal(get_locus_number(model, 5), 1)
 })
 
 
@@ -135,10 +133,15 @@ test_that("get loci length and number works", {
   expect_equal(get_locus_length(model, 11), 101)
   expect_equal(get_locus_length(model, 15), 102)
   expect_equal(get_locus_length(model, 23), 102)
-  expect_equal(get_locus_length(model, 24), 6)
+  expect_equal(get_locus_length(model, 24), 27)
+
+  expect_equal(get_locus_length(model, group = 1), 101)
+  expect_equal(get_locus_length(model, group = 2), 102)
+  expect_equal(get_locus_length(model, group = 3), 27)
 
   expect_equivalent(get_locus_length(model, 1, total = FALSE), 101)
-  expect_equivalent(get_locus_length(model, 24, total = FALSE), 1:3)
+  expect_equivalent(get_locus_length(model, 24, total = FALSE),
+                    c(1, 10, 2, 11, 3))
 
   expect_error(get_locus_length(model))
 })
@@ -147,9 +150,7 @@ test_that("get loci length and number works", {
 test_that('locus length matrix generations works', {
   # Multiple loci with equal length
   expect_equivalent(get_locus_length_matrix(model_theta_tau()),
-                    matrix(c(0, 0, 1000, 0, 0, 1), 10, 6, TRUE))
-  expect_equivalent(get_locus_length_matrix(model_theta_tau(), FALSE),
-                    matrix(c(0, 0, 1000, 0, 0, 10), 1, 6, TRUE))
+                    matrix(c(0, 0, 1000, 0, 0, 10), 1, 6))
 
   # Multiple loci with differnt length
   model <- model_theta_tau() +
@@ -157,7 +158,7 @@ test_that('locus length matrix generations works', {
     locus_single(22) +
     locus_single(23)
 
-  expect_equivalent(get_locus_length_matrix(model, individual = FALSE),
+  expect_equivalent(get_locus_length_matrix(model),
                     matrix(c(0, 0, 1000, 0, 0, 10,
                              0, 0, 21, 0, 0, 1,
                              0, 0, 22, 0, 0, 1,
