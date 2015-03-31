@@ -135,8 +135,7 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
                                      get_locus_number(model))
 
         if (has_trios(model)) {
-          seg_sites <- conv_for_trios(seg_sites,
-                                      get_locus_length_matrix(model))
+          seg_sites <- conv_for_trios(seg_sites, model)
         }
       } else {
         seg_sites <- NULL

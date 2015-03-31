@@ -16,11 +16,13 @@ sumstat_seg_sites <- function(name = 'seg_sites') {
 }
 
 
-conv_for_trios <- function(seg_sites, llm) {
-  assert_that(length(seg_sites) == nrow(llm))
+conv_for_trios <- function(seg_sites, model) {
   for (i in seq(along = seg_sites)) {
-    total_length <- sum(llm[i, 1:5])
-    borders <- cumsum(llm[i, 1:4] / total_length)
+    locus_length <- get_locus_length(model, i, total = FALSE)
+    if (length(locus_length) == 1) next
+
+    total_length <- sum(locus_length)
+    borders <- cumsum(locus_length[1:4] / total_length)
     pos <- attr(seg_sites[[i]], "positions")
     left <- pos < borders[1]
     middle <- pos >= borders[2] & pos < borders[3]
@@ -28,9 +30,9 @@ conv_for_trios <- function(seg_sites, llm) {
     seg_sites[[i]] <- seg_sites[[i]][, left | middle | right, drop=FALSE]
     assert_that(nrow(seg_sites[[i]]) > 0)
 
-    pos[left] <- pos[left] * total_length / llm[i, 1]
-    pos[middle] <- (pos[middle] - borders[2]) * total_length / llm[i, 3]
-    pos[right] <- (pos[right] - borders[4]) * total_length / llm[i, 5]
+    pos[left] <- pos[left] * total_length / locus_length[1]
+    pos[middle] <- (pos[middle] - borders[2]) * total_length / locus_length[3]
+    pos[right] <- (pos[right] - borders[4]) * total_length / locus_length[5]
 
     attr(seg_sites[[i]], "positions") <- pos[left | middle | right]
     attr(seg_sites[[i]], "locus") <- c(rep(-1, sum(left)),
