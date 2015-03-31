@@ -17,7 +17,6 @@ sumstat_seg_sites <- function(name = 'seg_sites') {
 
 
 conv_for_trios <- function(seg_sites, llm) {
-  assert_that(length(seg_sites) == nrow(llm))
   for (i in seq(along = seg_sites)) {
     total_length <- sum(llm[i, 1:5])
     borders <- cumsum(llm[i, 1:4] / total_length)
