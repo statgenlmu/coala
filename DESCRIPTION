@@ -1,5 +1,5 @@
 Package: coalsimr
-Version: 0.0.9028
+Version: 0.0.9029
 Date: 2015-03-31
 License: GPL (>= 3)
 Title: Simulating the evolution of DNA sequences
@@ -21,7 +21,7 @@ Imports:
 Suggests:
     testthat (>= 0.9.1.9000),
     rehh (>= 1.11)
-LinkingTo: Rcpp
+LinkingTo: Rcpp, RcppArmadillo (>= 0.3.810.0)
 Collate:
     'RcppExports.R'
     'cache.R'
