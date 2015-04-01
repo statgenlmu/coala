@@ -6,19 +6,15 @@ test_that('Creating loci works', {
   expect_equal(locus$get_length(), 1013)
   expect_equal(locus$get_number(), 1)
 
-  locus <- Locus$new(1014, 10, 2)
+  locus <- Locus$new(1014, 10)
   expect_true(is.locus(locus))
   expect_equal(locus$get_length(), 1014)
   expect_equal(locus$get_number(), 10)
-  expect_equal(locus$get_group(), 2)
 
-  expect_error(Locus$new("abc", 10, 2))
-  expect_error(Locus$new(-5, 10, 2))
-  expect_error(Locus$new(10, '10', 2))
-  expect_error(Locus$new(10, -3, 2))
-  expect_error(Locus$new(10, 5, 17, 2))
-  expect_error(Locus$new(10, 5, 17, -1))
-  expect_error(Locus$new(10, 5, 17, 'bla'))
+  expect_error(Locus$new("abc", 10))
+  expect_error(Locus$new(-5, 10))
+  expect_error(Locus$new(10, "10"))
+  expect_error(Locus$new(10, -3))
 })
 
 

@@ -5,8 +5,7 @@
 \title{Adds a trio of loci to a group}
 \usage{
 locus_trio(locus_length = c(left = 1000, middle = 1000, right = 1000),
-  distance = c(left_middle = 500, middle_right = 500), number = 1,
-  group = 0)
+  distance = c(left_middle = 500, middle_right = 500), number = 1)
 }
 \arguments{
 \item{locus_length}{An integer vector of length 3, giving the length of each
@@ -16,8 +15,6 @@ of the three loci (left, middle and right).}
 and middle an right locus, in basepairs.}
 
 \item{number}{The number of loci to add.}
-
-\item{group}{The group of loci to which the locus belongs.}
 }
 \description{
 Adds a trio of loci to a group

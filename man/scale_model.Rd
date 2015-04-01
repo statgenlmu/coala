@@ -21,7 +21,7 @@ modified in any way. This function is primiarily designed for jaatha,
 and might be unsuitable for other purposes.
 }
 \examples{
-model <- coal_model(10, loci_number = 10) + locus_single(100, group = 2)
+model <- coal_model(10, loci_number = 10) + locus_single(100)
 model
 # Group 1: 10 loci; group 2: 1 locus
 

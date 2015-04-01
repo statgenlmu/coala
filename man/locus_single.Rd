@@ -5,14 +5,12 @@
 \alias{locus_single}
 \title{Add one locus or multiple loci to a Model}
 \usage{
-locus_single(length, group = 0)
+locus_single(length)
 
-locus_averaged(number, length, group = 0)
+locus_averaged(number, length)
 }
 \arguments{
 \item{length}{The length of the locus in base pairs.}
-
-\item{group}{The group of loci to which the locus belongs.}
 
 \item{number}{The number of loci to add.}
 }
@@ -32,11 +30,11 @@ coal_model(15, 0) + locus_averaged(10, 950)
 # or just
 coal_model(15, 10, 950)
 
-# A model with two groups of loci. The first group consists of 10 loci with
+# A model with two loci. The first group consists of 10 loci with
 # a length 560bp each, the second one of two loci with length 750bp and 560pb,
 # repectively.
 coal_model(20, 10, 560) +
-  locus_single(750, group = 2) +
-  locus_single(430, group = 2)
+  locus_single(750) +
+  locus_single(430)
 }
 

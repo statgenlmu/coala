@@ -1,15 +1,11 @@
 #' @importFrom R6 R6Class
 Locus <- R6Class('Locus',
   private = list(
-    group = 0,
-    length = NA,
-    number = NA
+    number = 0,
+    length = NA
   ),
   public = list(
-    initialize = function(locus_length,
-                          locus_number = 1,
-                          group = 0) {
-
+    initialize = function(locus_length, locus_number = 1) {
       assert_that(is.numeric(locus_length))
       assert_that(length(locus_length) == 1 || length(locus_length) == 5)
       assert_that(all(locus_length >= 0))
@@ -19,10 +15,6 @@ Locus <- R6Class('Locus',
       assert_that(locus_number > 0)
       assert_that(length(locus_number) == 1)
       private$number <- locus_number
-
-      assert_that(is.numeric(group))
-      assert_that(group >= 0)
-      private$group <- group
     },
     get_length = function(trios = FALSE) {
       if (!trios) return(sum(private$length))
@@ -38,7 +30,6 @@ Locus <- R6Class('Locus',
       locus_length
     },
     get_number = function() private$number,
-    get_group = function() private$group,
     print = function() {
       cat(self$get_number(), ifelse(self$get_number() == 1, "locus", "loci"),
           "of length", self$get_length())
@@ -53,7 +44,6 @@ is.locus <- function(locus) 'Locus' %in% class(locus)
 #' Add one locus or multiple loci to a Model
 #'
 #' @param length The length of the locus in base pairs.
-#' @param group The group of loci to which the locus belongs.
 #' @export
 #' @examples
 #' # A model with one locus of length 1005 bp
@@ -64,22 +54,22 @@ is.locus <- function(locus) 'Locus' %in% class(locus)
 #' # or just
 #' coal_model(15, 10, 950)
 #'
-#' # A model with two groups of loci. The first group consists of 10 loci with
+#' # A model with two loci. The first group consists of 10 loci with
 #' # a length 560bp each, the second one of two loci with length 750bp and 560pb,
 #' # repectively.
 #' coal_model(20, 10, 560) +
-#'   locus_single(750, group = 2) +
-#'   locus_single(430, group = 2)
-locus_single <- function(length, group = 0) {
-  Locus$new(length, 1, group = group)
+#'   locus_single(750) +
+#'   locus_single(430)
+locus_single <- function(length) {
+  Locus$new(length, 1)
 }
 
 
 #' @describeIn locus_single
 #' @param number The number of loci to add.
 #' @export
-locus_averaged <- function(number, length, group = 0) {
-  Locus$new(round(length), number, group = group)
+locus_averaged <- function(number, length) {
+  Locus$new(round(length), number)
 }
 
 
@@ -97,8 +87,7 @@ locus_averaged <- function(number, length, group = 0) {
 #'              distance=c(257, 814))
 locus_trio <- function(locus_length = c(left=1000, middle=1000, right=1000),
                        distance = c(left_middle=500, middle_right=500),
-                       number = 1,
-                       group = 0) {
+                       number = 1) {
 
   stopifnot(length(locus_length) == 3)
   if (!is.null(names(locus_length))) {
@@ -110,8 +99,7 @@ locus_trio <- function(locus_length = c(left=1000, middle=1000, right=1000),
   }
 
   Locus$new(locus_length = c(locus_length, distance)[c(1,4,2,5,3)],
-            locus_number = number,
-            group = group)
+            locus_number = number)
 }
 
 
