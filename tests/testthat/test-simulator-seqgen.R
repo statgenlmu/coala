@@ -184,6 +184,21 @@ test_that("seq-gen works without recombination", {
 })
 
 
+test_that("seq-gen can simulate scaled models", {
+  if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
+  model <- coal_model(c(3, 3, 1), 100, 10) +
+    feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
+    feat_pop_merge(par_expr('2*tau'), 3, 1) +
+    feat_outgroup(3) +
+    feat_mutation(par_range('theta', 1, 10), model = 'HKY') +
+    sumstat_jsfs()
+
+  model <- scale_model(model, 5)
+
+  simulate(model, pars=c(1, 5))
+})
+
+
 test_that("Printing the command works", {
   cmd <- get_cmd(model_gtr())
   expect_that(cmd, is_a("character"))

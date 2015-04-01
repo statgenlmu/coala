@@ -163,6 +163,14 @@ test_that('locus length matrix generations works', {
                              0, 0, 21, 0, 0, 1,
                              0, 0, 22, 0, 0, 1,
                              0, 0, 23, 0, 0, 1), 4, 6, TRUE))
+
+  # Test with scaling
+  model <- scale_model(model, 5)
+  expect_equivalent(get_locus_length_matrix(model),
+                    matrix(c(0, 0, 1000, 0, 0, 2,
+                             0, 0, 21, 0, 0, 1,
+                             0, 0, 22, 0, 0, 1,
+                             0, 0, 23, 0, 0, 1), 4, 6, TRUE))
 })
 
 
