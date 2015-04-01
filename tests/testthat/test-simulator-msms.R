@@ -115,3 +115,27 @@ test_that("msms can simulate locus trios", {
   expect_true(all(attr(stat$seg_sites[[1]], "positions") >= 0))
   expect_true(all(attr(stat$seg_sites[[1]], "positions") <= 1))
 })
+
+
+test_that("msms can simulate selection with one population", {
+  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  model <- coal_model(5, 1, 100) +
+    feat_selection(1000, 500, 1, at_time = 0.01) +
+    feat_mutation(1) +
+    sumstat_sfs()
+
+  stat <- get_simulator("msms")$simulate(model)
+  expect_that(stat$sfs, is_a("numeric"))
+})
+
+
+test_that("msms can simulate selection with three populations", {
+  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  model <- coal_model(c(5, 5, 5), 1, 100) +
+    feat_selection(1000, 500, 1, at_time = 0.01) +
+    feat_mutation(1) +
+    feat_migration(1, symmetric = TRUE) +
+    sumstat_sfs()
+  stat <- get_simulator("msms")$simulate(model)
+  expect_that(stat$sfs, is_a("numeric"))
+})
