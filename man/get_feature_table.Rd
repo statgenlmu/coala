@@ -23,13 +23,13 @@ get_parameter(model)
 
 get_locus_length(model, locus = NULL, group = NULL, total = TRUE)
 
-get_locus_number(model, group = NA)
-
 get_populations(model)
 
 get_sample_size(model, for_sim = FALSE)
 
 get_locus_length_matrix(model)
+
+get_locus_number(model, group = NA)
 
 get_outgroup(model)
 
@@ -68,8 +68,6 @@ data.frame
 
 \item \code{get_locus_length}: Returns the length of the loci in a locus group
 
-\item \code{get_locus_number}: Returns the number of loci in a locus group
-
 \item \code{get_populations}: Returns a vector of populations in the model
 
 \item \code{get_sample_size}: Returns a vector of samples sizes per
@@ -77,6 +75,8 @@ population.
 
 \item \code{get_locus_length_matrix}: Returns a matrix with detailed length
 information about the loci in the model.
+
+\item \code{get_locus_number}: Returns the number of loci in a locus group
 
 \item \code{get_outgroup}: Returns the population that is marked as outgroup
 

@@ -27,7 +27,6 @@ test_that('calculation is correct', {
 
 
 test_that('initialzation of statistic works', {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
   ss <- matrix(c(1, 0, 0, 1,
                  1, 1, 0, 0,
                  1, 0, 1, 0,
