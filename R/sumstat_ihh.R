@@ -77,7 +77,7 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
 #'  Voight et al., A map of recent positive selection in the human genome.
 #'  PLoS Biol, 4(3):e72, Mar 2006
 #'
-#' coalsimr relies on the package rehh to calculate this statistic. Please refer
+#' Coala relies on the package rehh to calculate this statistic. Please refer
 #' to their documentation for detailed information on the concrete
 #' implementation. It is required to install the package \code{rehh} to use this
 #' function.

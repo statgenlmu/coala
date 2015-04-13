@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // parse_ms_positions
 NumericVector parse_ms_positions(const std::string line);
-RcppExport SEXP coalsimr_parse_ms_positions(SEXP lineSEXP) {
+RcppExport SEXP coala_parse_ms_positions(SEXP lineSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -19,7 +19,7 @@ END_RCPP
 }
 // parse_ms_output
 List parse_ms_output(const List file_names, const NumericVector sample_size, const int loci_number);
-RcppExport SEXP coalsimr_parse_ms_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP loci_numberSEXP) {
+RcppExport SEXP coala_parse_ms_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP loci_numberSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -32,7 +32,7 @@ END_RCPP
 }
 // parse_sg_output
 List parse_sg_output(const List file_names, const int sample_size, const NumericMatrix sequence_length, const int loci_number, const int outgroup_size, const bool calc_seg_sites);
-RcppExport SEXP coalsimr_parse_sg_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP sequence_lengthSEXP, SEXP loci_numberSEXP, SEXP outgroup_sizeSEXP, SEXP calc_seg_sitesSEXP) {
+RcppExport SEXP coala_parse_sg_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP sequence_lengthSEXP, SEXP loci_numberSEXP, SEXP outgroup_sizeSEXP, SEXP calc_seg_sitesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -48,7 +48,7 @@ END_RCPP
 }
 // parse_trees
 List parse_trees(const List file_names, const int loci_number, const bool separate_loci);
-RcppExport SEXP coalsimr_parse_trees(SEXP file_namesSEXP, SEXP loci_numberSEXP, SEXP separate_lociSEXP) {
+RcppExport SEXP coala_parse_trees(SEXP file_namesSEXP, SEXP loci_numberSEXP, SEXP separate_lociSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -61,7 +61,7 @@ END_RCPP
 }
 // generate_trio_trees
 List generate_trio_trees(const List trees, const NumericMatrix llm);
-RcppExport SEXP coalsimr_generate_trio_trees(SEXP treesSEXP, SEXP llmSEXP) {
+RcppExport SEXP coala_generate_trio_trees(SEXP treesSEXP, SEXP llmSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -73,7 +73,7 @@ END_RCPP
 }
 // calc_four_gamete_stat
 NumericMatrix calc_four_gamete_stat(const List seg_sites_list, const IntegerVector individuals, const NumericMatrix locus_length);
-RcppExport SEXP coalsimr_calc_four_gamete_stat(SEXP seg_sites_listSEXP, SEXP individualsSEXP, SEXP locus_lengthSEXP) {
+RcppExport SEXP coala_calc_four_gamete_stat(SEXP seg_sites_listSEXP, SEXP individualsSEXP, SEXP locus_lengthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -86,7 +86,7 @@ END_RCPP
 }
 // calc_jsfs
 NumericMatrix calc_jsfs(const List seg_sites, const NumericVector pop1, const NumericVector pop2);
-RcppExport SEXP coalsimr_calc_jsfs(SEXP seg_sitesSEXP, SEXP pop1SEXP, SEXP pop2SEXP) {
+RcppExport SEXP coala_calc_jsfs(SEXP seg_sitesSEXP, SEXP pop1SEXP, SEXP pop2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -99,7 +99,7 @@ END_RCPP
 }
 // calc_omegaprime
 NumericVector calc_omegaprime(List seg_sites, NumericVector individuals);
-RcppExport SEXP coalsimr_calc_omegaprime(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
+RcppExport SEXP coala_calc_omegaprime(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -111,7 +111,7 @@ END_RCPP
 }
 // unphase_segsites
 List unphase_segsites(const List seg_sites, const int ploidy, const int samples_per_ind);
-RcppExport SEXP coalsimr_unphase_segsites(SEXP seg_sitesSEXP, SEXP ploidySEXP, SEXP samples_per_indSEXP) {
+RcppExport SEXP coala_unphase_segsites(SEXP seg_sitesSEXP, SEXP ploidySEXP, SEXP samples_per_indSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;

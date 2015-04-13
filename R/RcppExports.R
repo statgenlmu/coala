@@ -2,27 +2,27 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 parse_ms_positions <- function(line) {
-    .Call('coalsimr_parse_ms_positions', PACKAGE = 'coalsimr', line)
+    .Call('coala_parse_ms_positions', PACKAGE = 'coala', line)
 }
 
 parse_ms_output <- function(file_names, sample_size, loci_number) {
-    .Call('coalsimr_parse_ms_output', PACKAGE = 'coalsimr', file_names, sample_size, loci_number)
+    .Call('coala_parse_ms_output', PACKAGE = 'coala', file_names, sample_size, loci_number)
 }
 
 parse_sg_output <- function(file_names, sample_size, sequence_length, loci_number, outgroup_size = 1L, calc_seg_sites = TRUE) {
-    .Call('coalsimr_parse_sg_output', PACKAGE = 'coalsimr', file_names, sample_size, sequence_length, loci_number, outgroup_size, calc_seg_sites)
+    .Call('coala_parse_sg_output', PACKAGE = 'coala', file_names, sample_size, sequence_length, loci_number, outgroup_size, calc_seg_sites)
 }
 
 parse_trees <- function(file_names, loci_number, separate_loci = TRUE) {
-    .Call('coalsimr_parse_trees', PACKAGE = 'coalsimr', file_names, loci_number, separate_loci)
+    .Call('coala_parse_trees', PACKAGE = 'coala', file_names, loci_number, separate_loci)
 }
 
 generate_trio_trees <- function(trees, llm) {
-    .Call('coalsimr_generate_trio_trees', PACKAGE = 'coalsimr', trees, llm)
+    .Call('coala_generate_trio_trees', PACKAGE = 'coala', trees, llm)
 }
 
 calc_four_gamete_stat <- function(seg_sites_list, individuals, locus_length) {
-    .Call('coalsimr_calc_four_gamete_stat', PACKAGE = 'coalsimr', seg_sites_list, individuals, locus_length)
+    .Call('coala_calc_four_gamete_stat', PACKAGE = 'coala', seg_sites_list, individuals, locus_length)
 }
 
 #' Calculates the JSFS for two populations
@@ -34,14 +34,14 @@ calc_four_gamete_stat <- function(seg_sites_list, individuals, locus_length) {
 #' @export
 #' @return The Joint Site Frequency Spectrum, as a matrix.
 calc_jsfs <- function(seg_sites, pop1, pop2) {
-    .Call('coalsimr_calc_jsfs', PACKAGE = 'coalsimr', seg_sites, pop1, pop2)
+    .Call('coala_calc_jsfs', PACKAGE = 'coala', seg_sites, pop1, pop2)
 }
 
 calc_omegaprime <- function(seg_sites, individuals) {
-    .Call('coalsimr_calc_omegaprime', PACKAGE = 'coalsimr', seg_sites, individuals)
+    .Call('coala_calc_omegaprime', PACKAGE = 'coala', seg_sites, individuals)
 }
 
 unphase_segsites <- function(seg_sites, ploidy, samples_per_ind) {
-    .Call('coalsimr_unphase_segsites', PACKAGE = 'coalsimr', seg_sites, ploidy, samples_per_ind)
+    .Call('coala_unphase_segsites', PACKAGE = 'coala', seg_sites, ploidy, samples_per_ind)
 }
 

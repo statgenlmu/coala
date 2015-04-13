@@ -92,7 +92,7 @@ test_that("seq-gen can simulate trios", {
 
 test_that("Error is thrown without an outgroup", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  temp_files_before <- list.files(tempdir(), pattern = '^coalsimr-[0-9]+-')
+  temp_files_before <- list.files(tempdir(), pattern = '^coala-[0-9]+-')
   model <- coal_model(c(3, 3), 10) +
     feat_mutation(par_range('theta', 5, 10), model = 'HKY') +
     feat_pop_merge(par_range('tau', .5, 1), 2, 1) +
@@ -100,7 +100,7 @@ test_that("Error is thrown without an outgroup", {
   expect_error(simulate(model, pars = c(7.5, .75)))
 
   # Remove tempfiles that may remain because of error exit
-  temp_files_after <- list.files(tempdir(), pattern = '^coalsimr-[0-9]+-')
+  temp_files_after <- list.files(tempdir(), pattern = '^coala-[0-9]+-')
   temp_files_diff <- temp_files_after[!temp_files_after %in% temp_files_before]
   unlink(file.path(tempdir(), temp_files_diff))
 })
