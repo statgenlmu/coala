@@ -33,20 +33,22 @@ test_that('calculation of ihh works', {
   expect_that(ihh, is_a('list'))
   expect_equal(length(ihh), 1)
   expect_that(ihh[[1]], is_a('matrix'))
-  expect_equal(dim(ihh[[1]]), c(2,5))
+  expect_equal(dim(ihh[[1]]), c(5,3))
 
   stat_ihh <- sumstat_ihh(position = 0.5)
   ihh2 <- stat_ihh$calculate(list(seg_sites), NULL, model)
   expect_that(ihh2, is_a('list'))
   expect_equal(length(ihh2), 1)
   expect_that(ihh2[[1]], is_a('matrix'))
-  expect_equal(dim(ihh2[[1]]), c(2,1))
-  expect_equal(ihh[[1]][,3,drop=FALSE], ihh2[[1]])
+  expect_equal(dim(ihh2[[1]]), c(1,3))
+  expect_equal(ihh[[1]][3, , drop=FALSE], ihh2[[1]])
 
   model <- coal_model(4, 3, 337)
   ihh2 <- stat_ihh$calculate(list(seg_sites, seg_sites, seg_sites), NULL, model)
   expect_that(ihh2, is_a('list'))
   expect_equal(length(ihh2), 3)
+  expect_equal(ihh2[[1]], ihh2[[2]])
+  expect_equal(ihh2[[1]], ihh2[[3]])
 })
 
 
