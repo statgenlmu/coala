@@ -39,7 +39,7 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
         haplohh <- self$segsites_to_rehh_data(seg_sites[[locus]],
                                               pos[[locus]],
                                               ind)
-        rehh::scan_hh(haplohh)[snps , -(1:3), drop=FALSE]
+        rehh::scan_hh(haplohh)[snps , -(1:3), drop=FALSE] #nolint
       })
     },
     segsites_to_snp_map = function(seg_sites, pos) {
@@ -83,9 +83,10 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
 #'
 #' @inheritParams sumstat_four_gamete
 #' @param position A position relative to the locus extent, e.g. 0.5 for the
-#'   middle of the locus. If provided, iHH will be calculate for the SNP
-#'   closest to the given position. Otherwise, it will be calculated for all
-#'   SNPs. The position is relative to the middle locus' extend if trios
+#'   middle of the locus. If provided, the statistic will be calculate
+#'   for the SNP closest to the given position.
+#'   Otherwise, it will be calculated for all SNPs.
+#'   The position is relative to the middle locus' extend if trios
 #'   are used.
 #' @return When added to a model, the statistic returns a matrix for each locus.
 #'   The columns of the values state the values for integrated EHH for the
