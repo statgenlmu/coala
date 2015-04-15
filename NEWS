@@ -10,7 +10,7 @@ coala 0.1
   + Segregating Sites
   + Site Frequency Spectrum (#24)
   + Joint Site Frequency Spectrum
-  + iHH & iHS (#25)
+  + iHH, iHS & nSL (#25, #63, #64)
   + DNA (#40)
   + a Four-Gamete-Test based statistics
 * Added the feature to simulate unphased data (#26).

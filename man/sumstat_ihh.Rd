@@ -12,9 +12,10 @@ the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
 \item{position}{A position relative to the locus extent, e.g. 0.5 for the
-middle of the locus. If provided, iHH will be calculate for the SNP
-closest to the given position. Otherwise, it will be calculated for all
-SNPs. The position is relative to the middle locus' extend if trios
+middle of the locus. If provided, the statistic will be calculate
+for the SNP closest to the given position.
+Otherwise, it will be calculated for all SNPs.
+The position is relative to the middle locus' extend if trios
 are used.}
 
 \item{population}{The population for which the statistic is calculated.}
