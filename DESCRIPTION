@@ -19,16 +19,11 @@ Imports:
     settings (>= 0.1.1),
     stats
 Suggests:
-<<<<<<< HEAD
+    knitr,
     testthat (>= 0.9.1),
     rehh (>= 1.11)
 LinkingTo: Rcpp, RcppArmadillo (>= 0.3.810.0)
-=======
-    testthat (>= 0.9.1.9000),
-    knitr
 VignetteBuilder: knitr
-LinkingTo: Rcpp
->>>>>>> add empty vignette
 Collate:
     'RcppExports.R'
     'cache.R'
