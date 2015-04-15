@@ -4,6 +4,8 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
     req_segsites = TRUE,
     position = NA,
     population = NULL,
+    empty_matrix = matrix(0, 3, 0,
+                          dimnames = list(c("IHHa","IHHd", "IES"), NULL)),
     get_snp = function(positions, locus, model) {
       if (is.na(private$position)) return(seq(along = positions))
       pos <- conv_middle_to_trio_pos(private$position, model, locus,
@@ -30,19 +32,14 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
       lapply(1:length(seg_sites), function(locus) {
         assert_that(is.matrix(seg_sites[[locus]]))
         if (ncol(seg_sites[[locus]]) == 0) {
-          return(matrix(0, 2, 0, dimnames = list(c("Anc. Allele",
-                                                   "Der. Allele"), NULL)))
+          return(private$empty_matrix)
         }
         snps <- private$get_snp(pos[[locus]], locus, model)
         assert_that(length(snps) > 0)
-        ehh <- sapply(snps, function(snp) {
-          rehh::calc_ehh(self$segsites_to_rehh_data(seg_sites[[locus]],
-                                                    pos[[locus]],
-                                                    ind),
-                         mrk = snp, plotehh = FALSE)$ihh
-        })
-        colnames(ehh) <- pos[[locus]][snps]
-        ehh
+        haplohh <- self$segsites_to_rehh_data(seg_sites[[locus]],
+                                              pos[[locus]],
+                                              ind)
+        rehh::scan_hh(haplohh)[snps , -(1:3), drop=FALSE]
       })
     },
     segsites_to_snp_map = function(seg_sites, pos) {
@@ -72,22 +69,30 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
 #' Integrated Extended Haplotype Homozygosity
 #'
 #' This summary statistic calculates a modified version of the iHH statistic
-#' introduced by
+#' and iES introduced by
 #'
 #'  Voight et al., A map of recent positive selection in the human genome.
 #'  PLoS Biol, 4(3):e72, Mar 2006
 #'
-#' Coala relies on the package rehh to calculate this statistic. Please refer
+#' Coala relies on \code{\link[rehh]{scan_hh}} from package \pkg{rehh} to
+#' calculate this statistic. Please refer
 #' to their documentation for detailed information on the concrete
-#' implementation. It is required to install the package \code{rehh} to use this
+#' implementation.
+#' It is required to install the package \pkg{rehh} to use this
 #' function.
 #'
-#' @inheritParams sumstat_file
+#' @inheritParams sumstat_four_gamete
 #' @param position A position relative to the locus extent, e.g. 0.5 for the
-#'   middle of the locus. If provided, the iHH will be calculate using the SNP
-#'   closest to the given position as focal SNP. Otherwise, all SNPs will be
-#'   used as focal SNPs in turn, and all the values reportet. If trios are used,
-#'   than the position is relative to the middle locus' extend.
+#'   middle of the locus. If provided, iHH will be calculate for the SNP
+#'   closest to the given position. Otherwise, it will be calculated for all
+#'   SNPs. The position is relative to the middle locus' extend if trios
+#'   are used.
+#' @return When added to a model, the statistic returns a matrix for each locus.
+#'   The columns of the values state the values for integrated EHH for the
+#'   ancestral allele (IHHa), integrated EHH for the derived allele (IHHd) and
+#'   integrated EHHS (IES), either for all SNPs when no position is given or
+#'   for the SNP nearest to the selected position. Each SNP is represented by
+#'   a row, sorted by position on the locus.
 #' @export
 sumstat_ihh <- function(name = 'ihh', position=NA, population=1) {
   SumstatIhh$new(name, position, population) #nolint

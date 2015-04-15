@@ -6,6 +6,11 @@
 \usage{
 sumstat_dna(name = "dna")
 }
+\arguments{
+\item{name}{The name of the summary statistic. When simulating a model,
+the value of the statistics are written to an entry of the returned list
+with this name. Summary statistic names must be unique in a model.}
+}
 \description{
 Returns the Segregation Sites Statistics from simulations
 }

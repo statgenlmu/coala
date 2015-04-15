@@ -9,7 +9,7 @@ SumstatSegSites <- R6Class('SumstatSegSites', inherit = Sumstat, #nolint
 
 #' Returns the Segregation Sites Statistics from simulations
 #'
-#' @inheritParams sumstat_file
+#' @inheritParams sumstat_four_gamete
 #' @export
 sumstat_seg_sites <- function(name = 'seg_sites') {
   SumstatSegSites$new(name) #nolint

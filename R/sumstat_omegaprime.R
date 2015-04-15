@@ -20,7 +20,7 @@ SumstatOmegaPrime <- R6Class('SumstatOmegaPrime', inherit = Sumstat, #nolint
 
 #' Calculates the (experimental) Omega' Statistic
 #'
-#' @inheritParams sumstat_file
+#' @inheritParams sumstat_four_gamete
 #' @export
 sumstat_omegaprime  <- function(name='omegaprime', population=1) {
   SumstatOmegaPrime$new(name, population) #nolint

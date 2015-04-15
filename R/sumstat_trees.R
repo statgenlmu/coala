@@ -10,7 +10,7 @@ SumstatTrees <- R6Class('SumstatTrees', inherit = Sumstat, #nolint
 #' Returns ancestral tress in NEWICK fromat from simulations
 #'
 #' @export
-#' @inheritParams sumstat_file
+#' @inheritParams sumstat_four_gamete
 sumstat_trees <- function(name = "trees") {
   coal_model() +
     Feature$new('trees', par_const(NA)) +
@@ -42,9 +42,7 @@ SumstatSgTrees <- R6Class('SumstatSgTrees', inherit = Sumstat, #nolint
   )
 )
 
-#' Returns ancestral tress as files for seq-gen
-#'
-#' @inheritParams sumstat_file
+# Returns ancestral tress as files for seq-gen
 sumstat_sg_trees <- function() {
   coal_model() +
     Feature$new('trees', par_const(NA)) +

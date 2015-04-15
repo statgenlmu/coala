@@ -6,6 +6,13 @@
 \usage{
 sumstat_omegaprime(name = "omegaprime", population = 1)
 }
+\arguments{
+\item{name}{The name of the summary statistic. When simulating a model,
+the value of the statistics are written to an entry of the returned list
+with this name. Summary statistic names must be unique in a model.}
+
+\item{population}{The population for which the statistic is calculated.}
+}
 \description{
 Calculates the (experimental) Omega' Statistic
 }
