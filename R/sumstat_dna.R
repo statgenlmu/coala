@@ -17,7 +17,7 @@ SumstatDna <- R6Class('SumstatDna', inherit = Sumstat, #nolint
 
 #' Returns the Segregation Sites Statistics from simulations
 #'
-#' @inheritParams sumstat_file
+#' @inheritParams sumstat_four_gamete
 #' @export
 sumstat_dna <- function(name = 'dna') {
   coal_model() +

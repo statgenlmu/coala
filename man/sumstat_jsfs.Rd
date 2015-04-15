@@ -11,7 +11,7 @@ sumstat_jsfs(name = "jsfs", populations = c(1, 2))
 the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
-\item{population}{The population for which the statistic is calculated.}
+\item{populations}{The populations for which the statistic is calculated.}
 }
 \description{
 Calculates the Joint Site Frequency Spectrum from simulations

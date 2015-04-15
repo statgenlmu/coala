@@ -23,7 +23,7 @@ SumstatSfs <- R6Class('SumstatSfs', inherit = Sumstat, #nolint
 
 #' Calculates the Site Frequency Spectrum from simulations
 #'
-#' @inheritParams sumstat_file
+#' @inheritParams sumstat_four_gamete
 #' @param population Either the number of a population for with the SFS is
 #'   calculated, or \code{'all'} to calculate the combined SFS of all
 #'   populations.

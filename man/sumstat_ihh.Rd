@@ -7,23 +7,39 @@
 sumstat_ihh(name = "ihh", position = NA, population = 1)
 }
 \arguments{
+\item{name}{The name of the summary statistic. When simulating a model,
+the value of the statistics are written to an entry of the returned list
+with this name. Summary statistic names must be unique in a model.}
+
 \item{position}{A position relative to the locus extent, e.g. 0.5 for the
-middle of the locus. If provided, the iHH will be calculate using the SNP
-closest to the given position as focal SNP. Otherwise, all SNPs will be
-used as focal SNPs in turn, and all the values reportet. If trios are used,
-than the position is relative to the middle locus' extend.}
+middle of the locus. If provided, iHH will be calculate for the SNP
+closest to the given position. Otherwise, it will be calculated for all
+SNPs. The position is relative to the middle locus' extend if trios
+are used.}
+
+\item{population}{The population for which the statistic is calculated.}
+}
+\value{
+When added to a model, the statistic returns a matrix for each locus.
+  The columns of the values state the values for integrated EHH for the
+  ancestral allele (IHHa), integrated EHH for the derived allele (IHHd) and
+  integrated EHHS (IES), either for all SNPs when no position is given or
+  for the SNP nearest to the selected position. Each SNP is represented by
+  a row, sorted by position on the locus.
 }
 \description{
 This summary statistic calculates a modified version of the iHH statistic
-introduced by
+and iES introduced by
 }
 \details{
 Voight et al., A map of recent positive selection in the human genome.
  PLoS Biol, 4(3):e72, Mar 2006
 
-Coala relies on the package rehh to calculate this statistic. Please refer
+Coala relies on \code{\link[rehh]{scan_hh}} from package \pkg{rehh} to
+calculate this statistic. Please refer
 to their documentation for detailed information on the concrete
-implementation. It is required to install the package \code{rehh} to use this
+implementation.
+It is required to install the package \pkg{rehh} to use this
 function.
 }
 

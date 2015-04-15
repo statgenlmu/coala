@@ -50,7 +50,10 @@ SumstatFourGamete <- R6Class('SumstatFourGamete', inherit = Sumstat, #nolint
 #' }
 #'
 #'
-#' @inheritParams sumstat_jsfs
+#' @param name The name of the summary statistic. When simulating a model,
+#'   the value of the statistics are written to an entry of the returned list
+#'   with this name. Summary statistic names must be unique in a model.
+#' @param population The population for which the statistic is calculated.
 #' @export
 sumstat_four_gamete  <- function(name='four_gamete', population=1) {
   SumstatFourGamete$new(name, population) #nolint

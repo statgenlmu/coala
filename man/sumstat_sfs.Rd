@@ -7,6 +7,10 @@
 sumstat_sfs(name = "sfs", population = "all")
 }
 \arguments{
+\item{name}{The name of the summary statistic. When simulating a model,
+the value of the statistics are written to an entry of the returned list
+with this name. Summary statistic names must be unique in a model.}
+
 \item{population}{Either the number of a population for with the SFS is
 calculated, or \code{'all'} to calculate the combined SFS of all
 populations.}
