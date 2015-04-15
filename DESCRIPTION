@@ -60,6 +60,7 @@ Collate:
     'sumstat_four_gamete.R'
     'sumstat_ihh.R'
     'sumstat_jsfs.R'
+    'sumstat_nsl.R'
     'sumstat_omegaprime.R'
     'sumstat_seg_sites.R'
     'sumstat_sfs.R'

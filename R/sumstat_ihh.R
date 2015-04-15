@@ -39,7 +39,7 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
         haplohh <- self$segsites_to_rehh_data(seg_sites[[locus]],
                                               pos[[locus]],
                                               ind)
-        rehh::scan_hh(haplohh)[snps , -(1:3), drop=FALSE]
+        rehh::scan_hh(haplohh)[snps , -(1:3), drop=FALSE] #nolint
       })
     },
     segsites_to_snp_map = function(seg_sites, pos) {
