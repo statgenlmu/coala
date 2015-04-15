@@ -1,7 +1,7 @@
 ---
-title: "Introduction to coalsimr"
+title: "Introduction to Coala"
 author: "Paul Staab"
-date: "coalsimr `r packageVersion('coalsimr')`"
+date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction}
@@ -11,19 +11,19 @@ vignette: >
 
 Coalescent simulation referrers to the idea to simulate the evolution of 
 biological sequences like DNA by tracing their ancestry back in time. The
-`coalsimr` package is an interface for calling a number of commonly used
+`coala` package is an interface for calling a number of commonly used
 coalescent simulators from R.
 
 # Creating a model
 Use the function `coal_model` to create a basic coalescent model:
 
 ```{r}
-library(coalsimr)
-model <- coal_model(sample_size = 5, loci_number = 1)
+library(coala)
+model <- coal_model(sample_size = 3, loci_number = 1)
 ```
 
 This creates a basic model with one population of constant size.
-Simulated is one genetic locus in 5 haplotypes taken from the population. 
+Simulated is one genetic locus in 3 haplotypes taken from the population. 
 
 Printing the model gives a short summary of this content:
 ```{r}
@@ -35,7 +35,7 @@ Models consist of
 * _features_, which represent evolutionary forces and events present in the 
   model, 
 * _parameters_, which are the model parameters, 
-* _loci_, which describe the genetic regions that are simualted and 
+* _loci_, which describe the genetic regions that are simulated and 
 * _summary statistics_, which describe the format of the simulated data.
 
 In order to simulate the model we need to add a few more features and at least
@@ -52,14 +52,14 @@ model <- model + feat_mutation(rate = 1, model = "IFS")
 model
 ```
 
-Now, mutation occur with rate 1 and accoring to an infinite-sites mutation 
+Now, mutation occur with rate 1 and according to an infinite-sites mutation 
 model (IFS). Details on both rate and mutation model are given the help
 page of the feature (`?feat_mutation`). 
 
-Coalsimr currently support the features
+coala currently support the features
 
 ```{r echo=FALSE}
-funcs <- ls("package:coalsimr")
+funcs <- ls("package:coala")
 funcs[grep("^feat_", funcs)]
 ```
 
@@ -77,7 +77,7 @@ model
 ```
 
 This adds the _segregating sites_ summary statistic to the model, which is a
-basic summary statisic in population genetics. Again, refer to 
+basic summary statistic in population genetics. Again, refer to 
 `?sumstat_seg_sites` for details.
 
 Available summary statistics are:
@@ -92,11 +92,11 @@ funcs[grep("^sumstat_", funcs)]
 
 We now can simulate the model. The printed output of a model contains information
 which program will be used for the simulation and which arguments will be used.
-As coalsimr is in a early stage, please make sure to always check both. 
+As coala is in a early stage, please make sure to always check both. 
 
 The
 function `simulate` will call the program with the printed options, parse its
-output and caluclated the added summary statistics:
+output and calculated the added summary statistics:
 
 ```{r}
 set.seed(123)
@@ -112,7 +112,7 @@ names(sumstats)
 ```
 
 The structure in `sumstats$seg_sites` is given by the segregating sites 
-statistic. It is again a list, where each entry repesents one locus. For each 
+statistic. It is again a list, where each entry represents one locus. For each 
 locus, it contains a matrix as specified in `?sumstat_seg_sites`:
 
 ```{r}
@@ -120,3 +120,87 @@ sumstats$seg_sites[[1]]
 ```
 
 
+# Adding Loci
+If we want to have more loci in a model, we can add them using the `locus_` 
+functions. The most basic option is to add an additional locus with a different
+length:
+
+```{r}
+model <- model + locus_single(500)
+model
+```
+
+Now you model consists of two loci, the first with length 1000, the second with
+500. Simulation now produces a seg. sites list with two entries corresponding 
+to the loci:
+
+```{r}
+sumstats <- simulate(model)
+sumstats$seg_sites[[1]]
+sumstats$seg_sites[[2]]
+```
+
+Another possibility is to add multiple loci with the same length using 
+`locus_averaged`, which gives better performance than adding the loci 
+one by one. For example
+```{r}
+model <- model + locus_averaged(2, 750)
+sumstats <- simulate(model)
+length(sumstats$seg_sites)
+```
+adds two more loci with length of 750bp to the model.
+
+
+
+# Adding Parameters
+So far, we have used a model without parameters that can vary between 
+simulations. In particular for fitting a model to data via ABC or Jaatha it is 
+useful to such parameters so that you don't need to create a new model for
+each simulation.
+
+
+### Named Parameters
+
+
+
+### Parameters with Priors
+A parameter distributed according to a prior can be specified using the 
+`par_prior` function. The functions first argument is a name for the parameter,
+the second an expression that when evaluated produces a sample from the
+prior distribution.
+
+TODO: Implement + Example
+
+
+
+### Parameter Ranges
+For Jaatha, you need to give a range of possible values for each parameters.
+This is done using `par_range`. For instance
+
+```{r}
+model <- model + feat_recombination(rate = par_range("rho", .1, 2))
+```
+
+adds recombination with a rate of "rho" to the model, which can be between
+_0.1_ and _2_. For ranged parameters, the actual value used in a simulation
+needs to be specified when simulating:
+
+```{r}
+sumstats <- simulate(model, pars = c(rho = 1.5))
+```
+
+
+### Expressions
+Finally, there is a very powerful type of parameters generated with `par_expr`.
+Similar to parameters with priors, the value of the parameter is given as an
+R expression, which is evaluated before simulation. Different to `par_prior`,
+this expression can contain other named parameters. For example 
+
+```{r}
+model <- coal_model(4, 2) +
+  feat_mutation(rate = par_range("theta", .1, 5)) +
+  feat_recombination(rate = par_expr(theta * 2))
+```
+
+creates a model with a mutation rate between .1 and 5 and a recombination
+rate that always is twice as high. 
