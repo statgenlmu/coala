@@ -1,4 +1,4 @@
-context("SumStat iHH")
+context("SumStat iHS")
 
 seg_sites <- matrix(c(1, 0, 0, 0, 1,
                       1, 1, 0, 1, 0,
@@ -10,7 +10,6 @@ pos <- get_snp_positions(list(seg_sites), model, relative = FALSE)[[1]]
 
 
 test_that("generation of SNP maps works", {
-  skip_on_cran()
   stat_ihh <- sumstat_ihh(population = 1)
   snp_map <- stat_ihh$segsites_to_snp_map(seg_sites, pos)
   map <- read.table(snp_map, row.names = 1)
@@ -20,7 +19,6 @@ test_that("generation of SNP maps works", {
 
 
 test_that("generation of haplotye file works", {
-  skip_on_cran()
   stat_ihh <- sumstat_ihh(population = 1)
   haplotypes <- stat_ihh$segsites_to_haplo(seg_sites, 1:4)
   haplo <- read.table(haplotypes, row.names = 1)
@@ -30,7 +28,6 @@ test_that("generation of haplotye file works", {
 
 
 test_that('calculation of ihh works', {
-  skip_on_cran()
   stat_ihh <- sumstat_ihh()
   ihh <- stat_ihh$calculate(list(seg_sites), NULL, model)
   expect_that(ihh, is_a('list'))
@@ -56,7 +53,6 @@ test_that('calculation of ihh works', {
 
 
 test_that('ihh works with trios', {
-  skip_on_cran()
   model <- model_trios()
   stats <- simulate(model)
   ihh <- sumstat_ihh(population = 1)
@@ -67,16 +63,15 @@ test_that('ihh works with trios', {
 
 
 test_that("ihh works with empty segsites", {
-  skip_on_cran()
   model <- model_trios()
   seg_sites <- list(matrix(0, 5, 0))
   ihh <- sumstat_ihh(population = 1)
   attr(seg_sites[[1]], "positions") <- numeric(0)
   stat <- ihh$calculate(seg_sites, NULL, model)
-  expect_equivalent(stat, list(matrix(0, 2, 0)))
+  expect_equal(dim(stat[[1]]), c(0, 3))
 
   seg_sites <- list(matrix(0, 0, 0))
   attr(seg_sites[[1]], "positions") <- numeric(0)
   stat <- ihh$calculate(seg_sites, NULL, model)
-  expect_equivalent(stat, list(matrix(0, 2, 0)))
+  expect_equal(dim(stat[[1]]), c(0, 3))
 })

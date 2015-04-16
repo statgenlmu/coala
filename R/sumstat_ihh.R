@@ -4,8 +4,8 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
     req_segsites = TRUE,
     position = NA,
     population = NULL,
-    empty_matrix = matrix(0, 3, 0,
-                          dimnames = list(c("IHHa","IHHd", "IES"), NULL)),
+    empty_matrix = matrix(0, 0, 3,
+                          dimnames = list(NULL, c("IHHa", "IHHd", "IES"))),
     get_snp = function(positions, locus, model) {
       if (is.na(private$position)) return(seq(along = positions))
       pos <- conv_middle_to_trio_pos(private$position, model, locus,
