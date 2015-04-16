@@ -10,14 +10,14 @@ test_that('calculation of nSL works', {
   model <- coal_model(4, 1, 337)
   pos <- get_snp_positions(list(seg_sites), model, relative = FALSE)[[1]]
 
-  stat_nsl <- sumstat_nSL()
+  stat_nsl <- sumstat_nSL() #nolint
   nsl <- stat_nsl$calculate(list(seg_sites), NULL, model)
   expect_that(nsl, is_a('list'))
   expect_equal(length(nsl), 1)
   expect_that(nsl[[1]], is_a('numeric'))
   expect_equal(length(nsl[[1]]), 5)
 
-  stat_nsl <- sumstat_nSL(position = 0.5)
+  stat_nsl <- sumstat_nSL(position = 0.5) #nolint
   nsl2 <- stat_nsl$calculate(list(seg_sites), NULL, model)
   expect_that(nsl2, is_a('list'))
   expect_equal(length(nsl2), 1)
@@ -38,13 +38,13 @@ test_that("nSL works with empty segsites", {
   skip_on_cran()
   model <- model_trios()
   seg_sites <- list(matrix(0, 5, 0))
-  ihh <- sumstat_ihh(population = 1)
+  nsl <- sumstat_nSL(population = 1)
   attr(seg_sites[[1]], "positions") <- numeric(0)
-  stat <- ihh$calculate(seg_sites, NULL, model)
-  expect_equivalent(stat, list(matrix(0, 2, 0)))
+  stat <- nsl$calculate(seg_sites, NULL, model)
+  expect_equal(length(stat[[1]]), 0)
 
   seg_sites <- list(matrix(0, 0, 0))
   attr(seg_sites[[1]], "positions") <- numeric(0)
-  stat <- ihh$calculate(seg_sites, NULL, model)
-  expect_equivalent(stat, list(matrix(0, 2, 0)))
+  stat <- nsl$calculate(seg_sites, NULL, model)
+  expect_equal(length(stat[[1]]), 0)
 })
