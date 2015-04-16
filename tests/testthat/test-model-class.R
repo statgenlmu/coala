@@ -76,20 +76,6 @@ test_that("getting the Theta Name works", {
 })
 
 
-test_that("test.parInRange", {
-  check_par_range(model_theta_tau(), c(1, 5))
-  check_par_range(model_theta_tau(), c(2, 7))
-  check_par_range(model_theta_tau(), c(0.5, 7.7))
-  expect_error(check_par_range(model_theta_tau(), c(0, 5)))
-  expect_error(check_par_range(model_theta_tau(), c(0, -1)))
-  expect_error(check_par_range(model_theta_tau(), c(10, 1)))
-  expect_error(check_par_range(model_theta_tau(), c(100, 100)))
-  expect_error(check_par_range(model_theta_tau(), 1))
-  expect_error(check_par_range(model_theta_tau(), matrix(1, 2, 2)))
-  expect_error(check_par_range(model_theta_tau(), NULL))
-})
-
-
 test_that("test that scaling of model works", {
   model <- coal_model(11:12, 10) +
     locus_averaged(24, 10) +

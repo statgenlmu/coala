@@ -31,18 +31,6 @@ is.model <- function(model) {
 }
 
 
-# Checks if a vector of parameters is within the ranges of the model
-check_par_range <- function(model, param) {
-  if (length(param) != nrow(get_parameter_table(model))) {
-    stop("Wrong number of parameters")
-  }
-
-  ranges <- get_parameter_table(model)
-  in_range <- all(ranges[, 2] - 1e-11 <= param & param <= ranges[, 3] + 1e-11)
-  if (!in_range) stop("Parameter combination out of range:", param)
-}
-
-
 # Selects a program for simulation that is capable of all current features
 select_simprog <- function(model) {
   name <- read_cache(model, 'simprog')

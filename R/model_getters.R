@@ -35,6 +35,9 @@ get_parameter_table <- function(model) {
 
   par_table <- read_cache(model, "par_table")
   if (is.null(par_table)) {
+    if (!all(sapply(get_parameter(model), is.ranged_par))) {
+      stop("Can not create parameter table with non-ranged named pars in model")
+    }
     if (length(get_parameter(model)) == 0) {
       par_table <- (data.frame(name=character(),
                                lower.range=numeric(),
@@ -149,12 +152,12 @@ get_sample_size <- function(model, for_sim=FALSE) {
 get_locus_length_matrix <- function(model) {
   llm <- read_cache(model, "llm")
   if (is.null(llm)) {
-    assert_that(length(model$loci) > 0)
+    assert_that(length(model$loci) >= 0)
     llm <- do.call(rbind, lapply(model$loci, function(l) {
              number <- ifelse(l$get_number() > 1,
                               round(l$get_number() / model$scaling_factor),
                               l$get_number())
-             c(l$get_length(TRUE), number=number)
+             c(l$get_length(TRUE), number = number)
            }))
 
     cache(model, "llm", llm)

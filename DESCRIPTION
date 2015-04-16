@@ -51,7 +51,6 @@ Collate:
     'parameter.R'
     'sample_seed.R'
     'simulator_class.R'
-    'simulator_helpers.R'
     'simulator_ms.R'
     'simulator_msms.R'
     'simulator_scrm.R'

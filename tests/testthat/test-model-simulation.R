@@ -22,6 +22,4 @@ test_that("model without ranged parameters can be simualted", {
   model <- coal_model(5, 1) + feat_mutation(5) + sumstat_sfs("sfs")
   stat <- simulate(model)
   expect_false(is.null(stat$sfs))
-  stat <- simulate(model, pars=c())
-  expect_false(is.null(stat$sfs))
 })
