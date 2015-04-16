@@ -38,7 +38,7 @@ test_that("nSL works with empty segsites", {
   skip_on_cran()
   model <- model_trios()
   seg_sites <- list(matrix(0, 5, 0))
-  nsl <- sumstat_nSL(population = 1)
+  nsl <- sumstat_nSL(population = 1) #nolint
   attr(seg_sites[[1]], "positions") <- numeric(0)
   stat <- nsl$calculate(seg_sites, NULL, model)
   expect_equal(length(stat[[1]]), 0)
