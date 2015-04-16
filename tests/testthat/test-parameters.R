@@ -89,6 +89,21 @@ test_that('par_range works', {
 })
 
 
+test_that("par_prior works", {
+  par <- par_prior("x", rnorm(1))
+  expect_equal(par$get_name(), "x")
+  expect_true(is.prior_par(par))
+
+  set.seed(18)
+  x <- sapply(1:10, par$generate_value)
+  expect_equal(length(unique(x)), 10)
+
+  set.seed(18)
+  y <- sapply(1:10, par$generate_value)
+  expect_equal(x, y)
+})
+
+
 test_that("Adding an expression par to a model give no error", {
   coal_model(5:6, 10, 100) + par_expr(2 * theta)
   coal_model(5:6, 10, 100) + par_expr(2 * theta) + par_expr(5)
@@ -136,6 +151,17 @@ test_that("Creation of parameter enviroment works", {
   par_envir <- create_par_env(model_theta_tau(), c(theta = 5, tau = 1))
   expect_equal(par_envir[['tau']], 1)
   expect_equal(par_envir[['theta']], 5)
+
+  # With priors
+  model <- coal_model() + par_prior("x", 17)
+  par_envir <- create_par_env(model, numeric(0))
+  expect_equal(par_envir[["x"]], 17)
+
+  model <- model_theta_tau() + par_prior("x", 17)
+  par_envir <- create_par_env(model, c(1, 5))
+  expect_equal(par_envir[['tau']], 1)
+  expect_equal(par_envir[['theta']], 5)
+  expect_equal(par_envir[['x']], 17)
 
   # Additional options
   par_envir <- create_par_env(model_theta_tau(), c(1, 5), locus = 17)

@@ -204,9 +204,13 @@ get_population_indiviuals <- function(model, pop) {
 }
 
 
-get_par_names <- function(model) {
-  if (length(get_parameter(model)) == 0) return(character(0))
-  sapply(get_parameter(model), function(par) par$get_name())
+get_par_names <- function(model, without_priors=FALSE) {
+  param <- get_parameter(model)
+  if (length(param) == 0) return(character(0))
+  if (without_priors) {
+    param <- param[!vapply(param, is.prior_par, numeric(1))]
+  }
+  sapply(param, function(par) par$get_name())
 }
 
 get_loci <- function(model) model$loci

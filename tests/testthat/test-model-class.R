@@ -244,6 +244,11 @@ test_that('getting par names works', {
 
   model <- coal_model() + par_range("a", 1, 2) + par_range("b", 2, 3)
   expect_equal(get_par_names(model), c("a", "b"))
+  expect_equal(get_par_names(model, TRUE), c("a", "b"))
+
+  model <- model + par_prior("c", 1)
+  expect_equal(get_par_names(model), c("a", "b", "c"))
+  expect_equal(get_par_names(model, TRUE), c("a", "b"))
 })
 
 
