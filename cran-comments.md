@@ -1,5 +1,4 @@
 ## Test environments
-* local OS X install, R 3.1.2
 * ubuntu 12.04 (on travis-ci), R 3.1.2
 * win-builder (devel and release)
 
@@ -14,8 +13,4 @@ There was 1 NOTE:
   R6 is a build-time dependency.
 
 ## Downstream dependencies
-I have also run R CMD check on downstream dependencies of httr 
-(https://github.com/wch/checkresults/blob/master/httr/r-release). All packages 
-that I could install passed except:
-
-* XYZ:...
+Coala has no downstream dependencies
