@@ -36,7 +36,7 @@ get_parameter_table <- function(model) {
   par_table <- read_cache(model, "par_table")
   if (is.null(par_table)) {
     if (!all(sapply(get_parameter(model), is.ranged_par))) {
-      stop("Can not create parameter table with non-ranged named pars in model")
+      stop("Can not create a parameter table with non-ranged pars in model")
     }
     if (length(get_parameter(model)) == 0) {
       par_table <- (data.frame(name=character(),

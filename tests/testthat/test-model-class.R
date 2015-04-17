@@ -268,3 +268,28 @@ test_that("has_trios works", {
   expect_false(has_trios(model_f84()))
   expect_true(has_trios(model_trios()))
 })
+
+
+test_that('creating a parameter table works ', {
+  expect_equal(get_parameter_table(coal_model(5)),
+               data.frame(name = character(0),
+                          lower.range = numeric(0),
+                          upper.range = numeric(0),
+                          stringsAsFactors = FALSE))
+
+  model <- coal_model(5:6, 10, 100) + par_range('theta', 1, 2)
+  expect_equal(get_parameter_table(model),
+               data.frame(name = 'theta', lower.range = 1, upper.range = 2,
+                          stringsAsFactors = FALSE))
+
+  model <- coal_model(5:6, 10, 100) +
+    par_range('theta', 1, 2) +
+    par_range('tau', 5, 6)
+  expect_equal(get_parameter_table(model),
+               data.frame(name = c('theta','tau'),
+                          lower.range = c(1, 5),
+                          upper.range = c(2, 6),
+                          stringsAsFactors = FALSE))
+
+  expect_error(get_parameter_table(model + par_prior("x", rnorm(1))))
+})

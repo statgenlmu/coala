@@ -202,4 +202,7 @@ test_that("seq-gen can simulate scaled models", {
 test_that("Printing the command works", {
   cmd <- get_cmd(model_gtr())
   expect_that(cmd, is_a("character"))
+
+  cmd2 <- sg_get_command(model_gtr())
+  expect_equal(cmd, cmd2)
 })
