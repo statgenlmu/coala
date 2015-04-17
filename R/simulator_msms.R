@@ -78,7 +78,7 @@ msms_generate_opts_cmd <- function(model) {
 
 msms_generate_opts <- function(model, parameters, locus,  eval_pars = TRUE) {
   msms_tmp <- create_par_env(model, parameters,
-                             locus = locus)
+                             locus = locus, for_cmd = !eval_pars)
 
   cmd <- read_cache(model, 'msms_cmd')
   if (is.null(cmd)) {
@@ -87,7 +87,7 @@ msms_generate_opts <- function(model, parameters, locus,  eval_pars = TRUE) {
   }
 
   if (!eval_pars) cmd <- escape_par_expr(cmd)
-  eval(parse(text=cmd), envir=msms_tmp)
+  eval(parse(text = cmd), envir = msms_tmp)
 }
 
 
@@ -115,7 +115,7 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
       paste("msms", msms_cmd,
             "-ms", sum(get_sample_size(model)), get_locus_number(model), ms_cmd)
     },
-    simulate = function(model, parameters) {
+    simulate = function(model, parameters=numeric(0)) {
       # Run the simulation(s)
       files <- lapply(1:get_locus_group_number(model), function(i) {
         ms_options <- paste(sum(get_sample_size(model, for_sim = TRUE)),

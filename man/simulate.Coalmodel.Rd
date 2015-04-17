@@ -4,7 +4,7 @@
 \alias{simulate.Coalmodel}
 \title{Simulates data according to a demographic model}
 \usage{
-\method{simulate}{Coalmodel}(object, nsim = 1, seed, pars = NULL, ...)
+\method{simulate}{Coalmodel}(object, nsim = 1, seed, pars = numeric(0), ...)
 }
 \arguments{
 \item{model}{The demographic model according to which the simulations should be done}

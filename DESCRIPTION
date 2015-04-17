@@ -1,5 +1,5 @@
 Package: coala
-Version: 0.0.9033
+Version: 0.0.9034
 Date: 2015-04-16
 License: GPL (>= 3)
 Title: Simulating the evolution of DNA sequences
@@ -51,7 +51,6 @@ Collate:
     'parameter.R'
     'sample_seed.R'
     'simulator_class.R'
-    'simulator_helpers.R'
     'simulator_ms.R'
     'simulator_msms.R'
     'simulator_scrm.R'

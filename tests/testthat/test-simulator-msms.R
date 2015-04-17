@@ -16,21 +16,6 @@ test_that("calling msms works", {
 })
 
 
-test_that("Creation of parameter enviroment works", {
-  par_envir <- create_par_env(model_theta_tau(), c(1,5))
-  expect_equal(par_envir[['tau']], 1)
-  expect_equal(par_envir[['theta']], 5)
-
-  par_envir <- create_par_env(model_theta_tau(), c(1,5), locus = 17)
-  expect_equal(par_envir[['locus']], 17)
-
-  par_envir <- create_par_env(model_theta_tau(), c(1,5),
-                                  locus = 23, seed = 115)
-  expect_equal(par_envir[['locus']], 23)
-  expect_equal(par_envir[['seed']], 115)
-})
-
-
 test_that("generating msms options works", {
   model <- model_theta_tau() +
     feat_selection(par_const(500), par_const(250),

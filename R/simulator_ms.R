@@ -68,14 +68,13 @@ ms_generate_opts_cmd <- function(model) {
 }
 
 
-ms_generate_opts <- function(model, parameters, group,
-                             eval_pars = TRUE) {
-
-  if (eval_pars) locus_length <- get_locus_length(model, group=group)
+ms_generate_opts <- function(model, parameters, group, eval_pars = TRUE) {
+  if (eval_pars) locus_length <- get_locus_length(model, group = group)
   else locus_length <- "locus_length"
 
-  ms_tmp <- create_par_env(model, parameters, locus=group,
-                           locus_length=locus_length)
+  ms_tmp <- create_par_env(model, parameters, locus = group,
+                           locus_length = locus_length,
+                           for_cmd = !eval_pars)
 
   cmd <- read_cache(model, 'ms_cmd')
   if (is.null(cmd)) {
@@ -84,7 +83,7 @@ ms_generate_opts <- function(model, parameters, group,
   }
 
   if (!eval_pars) cmd <- escape_par_expr(cmd)
-  eval(parse(text=cmd), envir=ms_tmp)
+  eval(parse(text = cmd), envir = ms_tmp)
 }
 
 

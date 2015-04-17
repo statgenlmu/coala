@@ -15,8 +15,7 @@
 #'   sumstat_jsfs()
 #'
 #' simulate(model, pars=c(1, 5))
-simulate.Coalmodel <- function(object, nsim = 1, seed, pars=NULL, ...) {
-  check_par_range(object, pars)
+simulate.Coalmodel <- function(object, nsim = 1, seed, pars = numeric(0), ...) {
   simprog <- select_simprog(object)
   simprog$simulate(object, pars)
 }

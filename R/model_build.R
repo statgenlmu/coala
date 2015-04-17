@@ -28,7 +28,7 @@ add_to_model.Coalmodel <- function(add, model, par_name) {
 add_to_model.Parameter <- function(par, model, par_name) model
 
 
-add_to_model.Par_Range <- function(par, model, par_name) {
+add_to_model.Par_Named <- function(par, model, par_name) {
   if (par$get_name() %in% get_par_names(model))
     stop("There is already a parameter with name ", par_name)
 

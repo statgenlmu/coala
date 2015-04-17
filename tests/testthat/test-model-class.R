@@ -76,20 +76,6 @@ test_that("getting the Theta Name works", {
 })
 
 
-test_that("test.parInRange", {
-  check_par_range(model_theta_tau(), c(1, 5))
-  check_par_range(model_theta_tau(), c(2, 7))
-  check_par_range(model_theta_tau(), c(0.5, 7.7))
-  expect_error(check_par_range(model_theta_tau(), c(0, 5)))
-  expect_error(check_par_range(model_theta_tau(), c(0, -1)))
-  expect_error(check_par_range(model_theta_tau(), c(10, 1)))
-  expect_error(check_par_range(model_theta_tau(), c(100, 100)))
-  expect_error(check_par_range(model_theta_tau(), 1))
-  expect_error(check_par_range(model_theta_tau(), matrix(1, 2, 2)))
-  expect_error(check_par_range(model_theta_tau(), NULL))
-})
-
-
 test_that("test that scaling of model works", {
   model <- coal_model(11:12, 10) +
     locus_averaged(24, 10) +
@@ -258,6 +244,11 @@ test_that('getting par names works', {
 
   model <- coal_model() + par_range("a", 1, 2) + par_range("b", 2, 3)
   expect_equal(get_par_names(model), c("a", "b"))
+  expect_equal(get_par_names(model, TRUE), c("a", "b"))
+
+  model <- model + par_prior("c", 1)
+  expect_equal(get_par_names(model), c("a", "b", "c"))
+  expect_equal(get_par_names(model, TRUE), c("a", "b"))
 })
 
 
@@ -276,4 +267,29 @@ test_that("has_trios works", {
   expect_false(has_trios(model_theta_tau()))
   expect_false(has_trios(model_f84()))
   expect_true(has_trios(model_trios()))
+})
+
+
+test_that('creating a parameter table works ', {
+  expect_equal(get_parameter_table(coal_model(5)),
+               data.frame(name = character(0),
+                          lower.range = numeric(0),
+                          upper.range = numeric(0),
+                          stringsAsFactors = FALSE))
+
+  model <- coal_model(5:6, 10, 100) + par_range('theta', 1, 2)
+  expect_equal(get_parameter_table(model),
+               data.frame(name = 'theta', lower.range = 1, upper.range = 2,
+                          stringsAsFactors = FALSE))
+
+  model <- coal_model(5:6, 10, 100) +
+    par_range('theta', 1, 2) +
+    par_range('tau', 5, 6)
+  expect_equal(get_parameter_table(model),
+               data.frame(name = c('theta','tau'),
+                          lower.range = c(1, 5),
+                          upper.range = c(2, 6),
+                          stringsAsFactors = FALSE))
+
+  expect_error(get_parameter_table(model + par_prior("x", rnorm(1))))
 })

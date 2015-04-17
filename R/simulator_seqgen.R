@@ -133,7 +133,7 @@ sg_generate_opts <- function(model, parameters, locus,
     if (!eval_pars) cmd[[i]] <- escape_par_expr(cmd[[i]])
     par_envir <- create_par_env(model, parameters, locus = locus,
                                     locus_length = locus_lengths[i],
-                                    seed = seeds[i])
+                                    seed = seeds[i], for_cmd = !eval_pars)
     paste(eval(parse(text=cmd[[i]]), envir=par_envir), collapse=" ")
   })
 }
@@ -208,7 +208,7 @@ sg_get_command <- function(model) {
 
   sg_cmd <- paste(sg_generate_opts(model, get_parameter_table(model)$name,
                                    locus = 1, seeds = 'seed',
-                                   eval_pars=FALSE),
+                                   eval_pars = FALSE),
                   collapse = ' ')
   sg_cmd <- paste('seq-gen', sg_cmd)
 
