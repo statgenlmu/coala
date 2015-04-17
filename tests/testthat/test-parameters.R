@@ -178,5 +178,3 @@ test_that("Creation of parameter enviroment works", {
   expect_equal(par_envir[["theta"]], "theta")
   expect_equal(par_envir[["tau"]], "tau")
 })
-
-
