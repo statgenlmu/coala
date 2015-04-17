@@ -23,7 +23,7 @@ model <- coal_model(sample_size = 3, loci_number = 1)
 ```
 
 This creates a basic model with one population of constant size.
-Simulated is one genetic locus in 3 haplotypes taken from the population. 
+Simulated is one genetic locus for 3 haplotypes sampled from the population. 
 
 Printing the model gives a short summary of this content:
 ```{r}
@@ -42,7 +42,7 @@ In order to simulate the model we need to add a few more features and at least
 one summary statistic.
 
 
-# Adding features
+# Adding Features
 For simulating sequences, we need to add mutations to the model. To do so,
 we create a corresponding feature using `feat_mutation` and add it to the
 existing model using the plus operator:
@@ -66,13 +66,36 @@ funcs[grep("^feat_", funcs)]
 However, not all combination of all features might be possible. Please refer 
 to the features help pages for detailed information.
 
+## Multiple Populations
+
+If we a model consisting of multiple populations, we need to state the sample 
+sizes as a vector of sample sizes for the different populations. The lines
+
+```{r}
+model <- coal_model(sample_size = c(5, 2, 0), loci_number = 1) +
+  feat_migration(rate = 0.5, symmetric = TRUE) +
+  feat_pop_merge(0.5, 3, 2) +
+  feat_pop_merge(0.8, 2, 1)
+```
+
+create a model of three populations, which a symmetric migration rate of `0.5`
+between them. View backwards in time, population 3 merges into population 2
+`0.5` coalescent time units in the past and population 2 into population 1
+`0.3` time units further into the past. Looking forwards in time, this 
+repesents two speciation events with migration going on afterwards. At time `0`
+five haploids of population 1 and two ones of population 2 are sampled. Please
+note that sample sizes for all populations must be given, even if no haploid
+is sampled from a population, as it is the case for population 3 here.
+
 
 # Adding Summary Statistics
 
 Adding summary statistics works in a similar fashion as adding features:
 
 ```{r}
-model <- model + sumstat_seg_sites()
+model <- coal_model(3, 1) +
+  feat_mutation(rate = 1) +
+  sumstat_seg_sites()
 model
 ```
 
@@ -160,6 +183,16 @@ each simulation.
 
 
 ### Named Parameters
+Named parameters values can be specified in the simulation command. If we want
+to simulate a model for different values of the mutation rate, when can use
+a named parameter:
+
+```{r}
+model <- coal_model(5, 1) +
+  feat_mutation(rate = par_named("theta")) +
+  sumstat_seg_sites()
+sumstats <- simulate(model, pars=c(theta=2.5))
+```
 
 
 
@@ -167,9 +200,20 @@ each simulation.
 A parameter distributed according to a prior can be specified using the 
 `par_prior` function. The functions first argument is a name for the parameter,
 the second an expression that when evaluated produces a sample from the
-prior distribution.
+prior distribution. 
 
-TODO: Implement + Example
+So if we want the mutation to follow a uniform distribution between 
+`0` and `10`, we can use:
+
+```{r priors}
+model <- coal_model(5, 1) +
+  feat_mutation(rate = par_prior("theta", runif(1, 0, 10))) +
+  sumstat_seg_sites()
+sumstats <- simulate(model)
+sumstats$pars
+sumstats2 <- simulate(model)
+sumstats2$pars
+```
 
 
 
@@ -178,16 +222,13 @@ For Jaatha, you need to give a range of possible values for each parameters.
 This is done using `par_range`. For instance
 
 ```{r}
-model <- model + feat_recombination(rate = par_range("rho", .1, 2))
+model <- coal_model(5, 1) +
+  feat_mutation(rate = par_range("theta", 0.1, 5)) +
+  sumstat_seg_sites()
 ```
 
-adds recombination with a rate of "rho" to the model, which can be between
-_0.1_ and _2_. For ranged parameters, the actual value used in a simulation
-needs to be specified when simulating:
-
-```{r}
-sumstats <- simulate(model, pars = c(rho = 1.5))
-```
+sets a possible range from _0.1_ to _5_ for the mutation rate. The acctual
+rate is given in `simulate` just as with named parameters.
 
 
 ### Expressions
@@ -198,9 +239,20 @@ this expression can contain other named parameters. For example
 
 ```{r}
 model <- coal_model(4, 2) +
-  feat_mutation(rate = par_range("theta", .1, 5)) +
+  feat_mutation(rate = par_named("theta")) +
   feat_recombination(rate = par_expr(theta * 2))
 ```
 
-creates a model with a mutation rate between .1 and 5 and a recombination
-rate that always is twice as high. 
+creates a model with a a recombination rate that always is twice as high as the
+mutation rate. 
+
+
+
+# A more complex model
+Using this building blocks, we can construct and simulate quite sofisitcated 
+models. 
+
+coal_model(c(10, 15), 10) +
+    feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
+    feat_mutation(par_range('theta', 1, 10)) +
+    sumstat_jsfs()
