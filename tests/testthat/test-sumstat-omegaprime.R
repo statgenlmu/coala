@@ -14,7 +14,7 @@ test_that('calculation is correct', {
   ss <- matrix(c(0, 0, 0, 1,
                  0, 0, 1, 0,
                  0, 0, 1, 0,
-                 0, 0, 1, 0), 4, 4, byrow=TRUE)
+                 0, 0, 1, 0), 4, 4, byrow = TRUE)
   seg_sites[[2]] <- cbind(ss, ss, ss)
   attr(seg_sites[[2]], 'positions') <- rep(c(0.1, 0.2, 0.5, 0.7), 4)
   attr(seg_sites[[2]], 'locus') <- rep(c(-1, 0, 1), each = 4)
@@ -27,7 +27,7 @@ test_that('calculation is correct', {
   seg_sites <- list(matrix(0, 4, 0))
   attr(seg_sites[[1]], "locus") <- numeric()
   attr(seg_sites[[1]], "position") <- numeric()
-  expect_equal(calc_omegaprime(seg_sites, 1:4), 0)
+  expect_true(is.na(calc_omegaprime(seg_sites, 1:4)))
 })
 
 
@@ -35,7 +35,7 @@ test_that('initialzation of statistic works', {
   ss <- matrix(c(1, 0, 0, 1,
                  1, 1, 0, 0,
                  1, 0, 1, 0,
-                 1, 0, 0, 0), 4, 4, byrow=TRUE)
+                 1, 0, 0, 0), 4, 4, byrow = TRUE)
 
   seg_sites <- list(cbind(ss, ss, ss))
   attr(seg_sites[[1]], 'positions') <- rep(c(0.1, 0.2, 0.5, 0.7), 4)

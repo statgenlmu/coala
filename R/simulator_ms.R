@@ -20,7 +20,8 @@ ms_generate_opts_cmd <- function(model) {
     feat <- unlist(get_feature_table(model)[i, ])
 
     if ( type == "mutation" ) {
-      cmd <- c(cmd, '"-t"', ', ', feat["parameter"], ', ')
+      cmd <- c(cmd, '"-t"', ', ',
+               'format(', feat['parameter'], ', scientific=FALSE), ')
     }
 
     else if (type == "pop_merge") {
@@ -38,16 +39,18 @@ ms_generate_opts_cmd <- function(model) {
                feat['time.point'], ', ',
                feat['parameter'], ', ')
 
-    else if (type == "recombination")
-      cmd <- c(cmd, '"-r"', ', ', feat['parameter'], ', ',
-               'locus_length', ', ')
+    else if (type == "recombination") {
+      cmd <- c(cmd, '"-r"', ', ',
+               'format(', feat['parameter'], ', scientific=FALSE), ',
+               'format(locus_length, scientific=FALSE), ')
+    }
 
-    else if (type == "size_change"){
+    else if (type == "size_change") {
       cmd <- c(cmd, '"-en"', ', ', feat['time.point'], ', ',
                feat["pop.source"], ', ', feat['parameter'], ', ')
     }
 
-    else if (type == "growth"){
+    else if (type == "growth") {
       cmd <- c(cmd, '"-eg"', ', ' , feat["time.point"], ', ',
                feat["pop.source"], ', ', feat["parameter"], ', ')
       }

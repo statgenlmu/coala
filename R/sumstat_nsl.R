@@ -38,9 +38,9 @@ SumstatNsl <- R6Class('sumstat_nsl', inherit = SumstatIhh, #nolint
 #'
 #' @inheritParams sumstat_ihh
 #' @return When added to a model, the statistic returns a vector for each locus,
-#'   list the values of nSL either for all SNPs when no position is given or
-#'   for the SNP nearest to the selected position. SNPs are sorted by their
-#'   positions on the locus.
+#'   which lists the values of nSL either for all SNPs when no position is
+#'   given or for the SNP nearest to the selected position.
+#'   SNPs are sorted by their positions on the locus.
 #' @export
 sumstat_nSL <- function(name = 'ihh', position=NA, population=1) { #nolint
   SumstatNsl$new(name, position, population) #nolint

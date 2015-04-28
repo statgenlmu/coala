@@ -76,12 +76,12 @@ test_that('Printing the command works', {
 test_that('simulating unphased data works', {
   ms <- get_simulator("ms")
   model <- model_theta_tau() + feat_unphased(2, 1) + sumstat_seg_sites()
-  stats <- ms$simulate(model, c(1,5))
+  stats <- ms$simulate(model, c(1, 5))
   expect_equal(dim(stats$jsfs), c(11, 16))
   expect_equal(nrow(stats$seg_sites[[1]]), 25)
 
   model <- model_theta_tau() + feat_unphased(3, 2) + sumstat_seg_sites()
-  stats <- ms$simulate(model, c(1,5))
+  stats <- ms$simulate(model, c(1, 5))
   expect_equal(dim(stats$jsfs), c(21, 31))
   expect_equal(nrow(stats$seg_sites[[1]]), 50)
 })
@@ -93,4 +93,22 @@ test_that("ms can simulate locus trios", {
   expect_true(all(attr(stat$seg_sites[[1]], "locus") %in% -1:1))
   expect_true(all(attr(stat$seg_sites[[1]], "positions") >= 0))
   expect_true(all(attr(stat$seg_sites[[1]], "positions") <= 1))
+})
+
+
+test_that("ms works with scientific notation", {
+  model <- coal_model(5, 1, 1e8) + feat_recombination(1)
+  opts <- ms_generate_opts(model, numeric(0), 1)
+  expect_true("100000000" %in% opts)
+  expect_false("1e8" %in% opts)
+
+  model <- coal_model(5, 1, 1000) + feat_recombination(1e8)
+  opts <- ms_generate_opts(model, numeric(0), 1)
+  expect_true("100000000" %in% opts)
+  expect_false("1e8" %in% opts)
+
+  model <- coal_model(5, 1, 1000) + feat_mutation(1e8)
+  opts <- ms_generate_opts(model, numeric(0), 1)
+  expect_true("100000000" %in% opts)
+  expect_false("1e8" %in% opts)
 })

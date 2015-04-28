@@ -54,7 +54,7 @@ NumericVector calc_omegaprime(List seg_sites, NumericVector individuals) {
   for (int locus = 0; locus < n_loci; ++locus) {
     ss = as<NumericMatrix>(seg_sites[locus]);
     if (max(individuals) > ss.nrow()) stop("Invalid individuals");
-    if (ss.ncol() == 0) omega_prime[locus] = 0;
+    if (ss.ncol() == 0) omega_prime[locus] = NA_REAL;
     else {
           omega_prime[locus] = (double)(maxsplit(ss, -1, individuals) +
                                   maxsplit(ss, 1, individuals)) / ss.ncol();
