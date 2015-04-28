@@ -22,9 +22,9 @@ are used.}
 }
 \value{
 When added to a model, the statistic returns a vector for each locus,
-  list the values of nSL either for all SNPs when no position is given or
-  for the SNP nearest to the selected position. SNPs are sorted by their
-  positions on the locus.
+  which lists the values of nSL either for all SNPs when no position is
+  given or for the SNP nearest to the selected position.
+  SNPs are sorted by their positions on the locus.
 }
 \description{
 This (mis)uses \code{\link[rehh]{scan_hh}} from package \pkg{rehh} to
