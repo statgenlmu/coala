@@ -6,14 +6,13 @@ SumstatPi <- R6Class('SumstatPi', inherit = Sumstat, #nolint
   ),
   public = list(
     initialize = function(name, population) {
-      assert_that(is.numeric(population))
       assert_that(length(population) == 1)
       private$population <- population
       super$initialize(name)
     },
     calculate = function(seg_sites, files, model) {
-      calc_nucleotide_div(seg_sites,
-                          get_population_indiviuals(model, private$population))
+      ind <- get_population_indiviuals(model, private$population)
+      calc_nucleotide_div(seg_sites, ind)
     }
   )
 )

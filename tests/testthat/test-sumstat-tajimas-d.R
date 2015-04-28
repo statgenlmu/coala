@@ -18,6 +18,9 @@ test_that("calulation works", {
   model <- coal_model(10, 1)
   expect_true(abs(tajd$calculate(list(ss), NULL, model) + 1.446172) < 1e-6)
 
+  tajd <- sumstat_tajimas_d(population = "all")
+  expect_true(abs(tajd$calculate(list(ss), NULL, model) + 1.446172) < 1e-6)
+
   expect_error(tajd$calculate(list(ss), NULL, coal_model(1, 1)))
   expect_equal(tajd$calculate(list(matrix(0, 10, 0)), NULL, model), NaN)
 })

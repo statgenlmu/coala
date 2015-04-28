@@ -6,7 +6,6 @@ SumstatTajimasD <- R6Class('TajimasD', inherit = Sumstat, #nolint
   ),
   public = list(
     initialize = function(name, population) {
-      assert_that(is.numeric(population))
         assert_that(length(population) == 1)
         private$population <- population
         super$initialize(name)
@@ -47,6 +46,6 @@ SumstatTajimasD <- R6Class('TajimasD', inherit = Sumstat, #nolint
 #' @return On simulation, this returns a vector with the value of Tajima's D for
 #'   each locus.
 #' @export
-sumstat_tajimas_d <- function(name='tajimas_d', population=1) {
+sumstat_tajimas_d <- function(name='tajimas_d', population="all") {
   SumstatTajimasD$new(name, population) #nolint
 }
