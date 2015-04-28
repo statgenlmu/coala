@@ -6,6 +6,18 @@
 
 using namespace Rcpp;
 
+// calc_nucleotide_div
+NumericVector calc_nucleotide_div(List seg_sites, const NumericVector individuals);
+RcppExport SEXP coala_calc_nucleotide_div(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< List >::type seg_sites(seg_sitesSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type individuals(individualsSEXP);
+    __result = Rcpp::wrap(calc_nucleotide_div(seg_sites, individuals));
+    return __result;
+END_RCPP
+}
 // parse_ms_positions
 NumericVector parse_ms_positions(const std::string line);
 RcppExport SEXP coala_parse_ms_positions(SEXP lineSEXP) {

@@ -1,0 +1,41 @@
+#' @importFrom R6 R6Class
+SumstatPi <- R6Class('SumstatPi', inherit = Sumstat, #nolint
+  private = list(
+    population = NULL,
+    req_segsites = TRUE
+  ),
+  public = list(
+    initialize = function(name, population) {
+      assert_that(is.numeric(population))
+      assert_that(length(population) == 1)
+      private$population <- population
+      super$initialize(name)
+    },
+    calculate = function(seg_sites, files, model) {
+      calc_nucleotide_div(seg_sites,
+                          get_population_indiviuals(model, private$population))
+    }
+  )
+)
+
+#' Calculates the Nucleodite Diversity Pi
+#'
+#' This calculates the nucleotide diversity / mean pairwise difference usually
+#' for a population.
+#'
+#' The statistic is usually denoted by pi and can be used
+#' as an estimator for the per locus scaled muation rate theta.
+#'
+#' It was introducted by
+#'
+#'  Nei and Li (1979). "Mathematical Model for Studying Genetic Variation in
+#'  Terms of Restriction Endonucleases". PNAS 76 (10): 5269–73.
+#'  doi:10.1073/pnas.76.10.5269.
+#'
+#' @inheritParams sumstat_four_gamete
+#' @return On simulation, this returns a vector with the value of pi for
+#'   each locus.
+#' @export
+sumstat_nucleotide_div <- function(name='pi', population=1) {
+  SumstatPi$new(name, population) #nolint
+}
