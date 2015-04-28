@@ -1,7 +1,5 @@
 #include <Rcpp.h>
-#include "seg_sites.h"
 using namespace Rcpp;
-
 
 // [[Rcpp::export]]
 NumericVector calc_nucleotide_div(List seg_sites,
