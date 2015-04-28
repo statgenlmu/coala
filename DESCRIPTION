@@ -1,5 +1,5 @@
 Package: coala
-Version: 0.0.9034
+Version: 0.0.9035
 Date: 2015-04-28
 License: GPL (>= 3)
 Title: Simulating the evolution of DNA sequences
@@ -62,8 +62,10 @@ Collate:
     'sumstat_ihh.R'
     'sumstat_jsfs.R'
     'sumstat_nsl.R'
+    'sumstat_nucleotide_div.R'
     'sumstat_omegaprime.R'
     'sumstat_seg_sites.R'
     'sumstat_sfs.R'
+    'sumstat_tajimas_d.R'
     'sumstat_trees.R'
     'tempfile.R'

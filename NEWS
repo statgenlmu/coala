@@ -13,4 +13,6 @@ coala 0.1
   + iHH, iHS & nSL (#25, #63, #64)
   + DNA (#40)
   + a Four-Gamete-Test based statistics
+  + Nucleotide Diveristy (pi)
+  + Tajima's D
 * Added the feature to simulate unphased data (#26).
