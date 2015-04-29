@@ -6,6 +6,10 @@
 #' @return The feature, which can be added to a model using `+`.
 #' @export
 feat_unphased <- function(ploidy, samples_per_ind=ploidy) {
+  if (samples_per_ind > ploidy) {
+    stop("samples_per_ind can not be larger than the ploidy.")
+  }
+
   coal_model() +
     Feature$new('unphased', par_const(NA)) +
     Feature$new('ploidy', par_const(ploidy)) +
