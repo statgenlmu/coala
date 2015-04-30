@@ -1,7 +1,7 @@
 context("SumStat nSL")
 
 test_that('calculation of nSL works', {
-  skip_on_cran()
+  if (!requireNamespace("rehh", quietly = TRUE)) skip("rehh not installed")
   seg_sites <- matrix(c(1, 0, 0, 0, 1,
                         1, 1, 0, 1, 0,
                         1, 0, 0, 1, 1,
@@ -35,7 +35,7 @@ test_that('calculation of nSL works', {
 
 
 test_that("nSL works with empty segsites", {
-  skip_on_cran()
+  if (!requireNamespace("rehh", quietly = TRUE)) skip("rehh not installed")
   model <- model_trios()
   seg_sites <- list(matrix(0, 5, 0))
   nsl <- sumstat_nSL(population = 1) #nolint
