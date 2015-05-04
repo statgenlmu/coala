@@ -9,13 +9,6 @@ feat_recombination(rate, variance = 0)
 \arguments{
 \item{rate}{A \code{\link{Parameter}} defining the recombination rate
 (see above).}
-
-\item{variance}{Set to a value different from 0 to introduce variation in the
-the parameter value for different loci. The
-variation follows a gamma distribution with mean equal to
-the value provided as \code{parameter}, and variance as given
-here. Can also be set to a previously
-created parameter, or an expression based on parameters.}
 }
 \value{
 The demographic model with recombination

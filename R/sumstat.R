@@ -42,7 +42,7 @@ add_to_model.Sumstat <- function(sum_stat, model, feat_name) {
 
 
 #' @param pop The population for which aspects are returned
-#' @describeIn get_feature_table Returns the summary statistics in the model
+#' @describeIn get_features Returns the summary statistics in the model
 #' @export
 get_summary_statistics <- function(model) {
   model$sum_stats

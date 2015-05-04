@@ -34,22 +34,12 @@ test_that("adding parameters works", {
 
 test_that("adding features works", {
   expect_equal(length(get_features(coal_model())), 0)
-  expect_equal(nrow(get_feature_table(coal_model())), 0)
-
-  model <- coal_model(11:12, 100)
-  model <- model + Feature$new('blub', 5)
-  expect_equal(nrow(search_feature(model, 'blub')), 1)
-  expect_that(length(get_features(model)), is_more_than(0))
-  expect_true('blub' %in% get_feature_table(model)$type)
-
-  model <- coal_model(11:12, 100)
-  model <- model + Feature$new('bli', par_range('bla', 1, 5))
-  expect_equal(nrow(search_feature(model, 'bli')), 1)
-  expect_true('bla' %in% get_parameter_table(model)$name)
-
-  model <- coal_model(11:12, 100)
-  model <- model + Feature$new('bli', par_range('bla', 1, 5), variance='15')
-  expect_true(has_inter_locus_var(model))
+  model <- coal_model() + Feature$new()
+  expect_equal(length(get_features(model)), 1)
+  model <- model + Feature$new()
+  expect_equal(length(get_features(model)), 2)
+  #model <- model + Feature$new('bli', par_range('bla', 1, 5), variance='15')
+  #expect_true(has_inter_locus_var(model))
 })
 
 
@@ -57,11 +47,6 @@ test_that("test get_summary_statistics", {
   expect_equal(get_summary_statistics(coal_model(1:2)), list())
   expect_equal(length(get_summary_statistics(model_theta_tau())),  1)
   expect_true(is.sum_stat(get_summary_statistics(model_theta_tau())[[1]]))
-})
-
-
-test_that("sample sizes are reported corrently", {
-  expect_equal(get_sample_size(model_theta_tau()), c(10L, 15L))
 })
 
 

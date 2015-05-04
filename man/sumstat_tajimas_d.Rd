@@ -4,7 +4,7 @@
 \alias{sumstat_tajimas_d}
 \title{Tajima's D}
 \usage{
-sumstat_tajimas_d(name = "tajimas_d", population = 1)
+sumstat_tajimas_d(name = "tajimas_d", population = "all")
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,

@@ -1,28 +1,77 @@
 Feature_sample <- R6Class("Feature_sample", inherit = Feature,
+  private = list(size = NA),
   public = list(
+    initialize = function(sizes, time) {
+      assert_that(is.numeric(sizes))
+      assert_that(length(sizes) >= 1)
+      private$size = sizes
+
+      private$time = self$add_parameter(time)
+    },
+    get_sizes = function() private$size,
     print = function() {
-      cat("Sampling of", self$get_par(),
-          ifelse(self$get_par() == 1, "haploid", "haploids"),
-          "in population", self$get_population(),
-          #"at time", self$get_time_point(),
-          "\n")
+      pop = seq(along = private$size)[private$size > 0]
+      samples = private$size[private$size > 0]
+      cat("Sampling of ")
+      for (i in seq(along = samples)) {
+        cat(samples[i], " (pop ", pop[i], ")", sep = "")
+        if (i < length(samples) - 1) cat(", ")
+        else if (i == length(samples) - 1) cat(" and ")
+      }
+      cat(" haploids at time", self$get_time(), "\n")
     }
   )
 )
 
+
 #' Creates a feature that represents the sampling from one population
 #'
-#' @param size The number of individuals that are sampled.
+#' @param sizes The number of individuals that are sampled per population,
+#'   given as a numeric vector.
 #' @param population The population from with the indidivuals are sampled
-#' @param time_point The time at which the sample is taken.
+#' @param time The time at which the sample is taken.
 #' @return The feature, which can be added to a model using `+`.
 #' @export
-feat_sample <- function(size, population, time_point='0') {
-  assert_that(is.numeric(size))
-  if (time_point != '0')
+feat_sample <- function(sizes, time = '0') {
+  if (time != '0')
     stop("Samples at time different from 0 at not supported at the moment")
-  Feature_sample$new('sample',
-                     size,
-                     pop_source=population,
-                     time_point=time_point)
+  Feature_sample$new(sizes, time)
 }
+
+is_feat_sample <- function(feat) any("Feature_sample" == class(feat))
+
+#' @describeIn get_features Returns a vector of samples sizes per
+#'   population.
+#' @param for_sim If true, the sample size used internally for the simulation
+#'   will be reported rather than the number of actuall samples. The numbers
+#'   can be unequal for the simulation of unphased data.
+#' @export
+get_sample_size <- function(model, for_sim=FALSE) {
+  sample_size <- read_cache(model, paste0("sample_size_", for_sim))
+
+  if (is.null(sample_size)) {
+    feat_mask <- sapply(model$feature, is_feat_sample)
+    if (sum(feat_mask) > 1) stop("Only one sample is currently supported")
+    sample_size <- model$feature[feat_mask][[1]]$get_sizes()
+
+    if (for_sim) {
+      #sample_size <- sample_size * get_ploidy(model)
+    } else {
+      #sample_size <- sample_size * get_samples_per_ind(model)
+    }
+    cache(model, paste0("sample_size_", for_sim), sample_size)
+  }
+
+  sample_size
+}
+
+conv_to_ms_arg.Feature_sample <- function(feature, model) {
+  sample_size <- feature$get_sizes()
+  if (length(feature$get_sizes()) == 1) return("")
+  paste0("-I ", length(sample_size), " ", paste(sample_size, collapse = " "))
+}
+
+conv_to_msms_arg.Feature_sample <- conv_to_ms_arg.Feature_sample
+
+conv_to_seqgen_arg.Feature_sample <- function(feature, model) ""
+

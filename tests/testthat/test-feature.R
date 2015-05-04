@@ -1,6 +1,7 @@
 context('Feature Class')
 
 test_that('Creating features works', {
+  skip("Deativated")
   feat <- Feature$new('abc', 5)
   expect_true(is.feature(feat))
   expect_equal(feat$get_table(),
@@ -62,4 +63,21 @@ test_that('Creating features works', {
   expect_true(abs(mean(sim) - theta * 0.9) < .3)
   expect_equal(sum(sim == 5), 0)
   expect_true(sum(sim == 0) > 80)
+})
+
+
+test_that("adding parameter works", {
+  feat <- Feature$new()
+  expect_equal(feat$add_parameter(5), "5")
+  expect_equal(feat$add_parameter("17"), "17")
+  expect_equal(feat$add_parameter(par_expr(tau)), "tau")
+  expect_equal(length(feat$get_parameters()), 1)
+  expect_equal(feat$add_parameter(par_const(5)), "5")
+
+  expect_error(feat$add_parameter(1:2))
+  expect_error(feat$add_parameter(NA))
+  expect_error(feat$add_parameter(NULL))
+
+  expect_equal(feat$add_parameter(NA, FALSE), NA)
+  expect_equal(feat$add_parameter(NULL, FALSE), NA)
 })

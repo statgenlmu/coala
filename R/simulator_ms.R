@@ -5,70 +5,70 @@ ms_features  <- c("sample", "mutation", "migration", "migration_sym",
 ms_sum_stats <- c("jsfs", "trees", "seg.sites", "file")
 
 
+# Translating the model into simulation commands
+conv_to_ms_arg <- function(feature, model) UseMethod("conv_to_ms_arg")
+conv_to_ms_arg.default <- function(feature, model) {
+  stop("Unknown feature when generating ms command")
+}
+
+
+
+
 # This function generates an string that contains an R command for generating
 # an ms call to the current model.
 ms_generate_opts_cmd <- function(model) {
-  sample_size <- get_sample_size(model, for_sim = TRUE)
-  cmd <- c('c(')
-  if (length(sample_size) > 1) {
-    cmd <- c(cmd,'"-I"', ', ', length(sample_size), ', ',
-             paste(sample_size, collapse=","), ', ')
-  }
-
-  for (i in 1:dim(get_feature_table(model))[1] ) {
-    type <- as.character(get_feature_table(model)[i,"type"])
-    feat <- unlist(get_feature_table(model)[i, ])
-
-    if ( type == "mutation" ) {
-      cmd <- c(cmd, '"-t"', ', ',
-               'format(', feat['parameter'], ', scientific=FALSE), ')
-    }
-
-    else if (type == "pop_merge") {
-      cmd <- c(cmd, '"-ej"', ', ', feat["time.point"], ', ',
-               feat["pop.source"], ', ', feat["pop.sink"], ', ')
-    }
-
-    else if (type == "migration")
-      cmd <- c(cmd, '"-em"', ', ', feat['time.point'], ', ',
-               feat['pop.sink'], ', ', feat['pop.source']  , ', ',
-               feat['parameter'], ', ')
-
-    else if (type == "migration_sym")
-      cmd <- c(cmd, '"-eM"', ', ',
-               feat['time.point'], ', ',
-               feat['parameter'], ', ')
-
-    else if (type == "recombination") {
-      cmd <- c(cmd, '"-r"', ', ',
-               'format(', feat['parameter'], ', scientific=FALSE), ',
-               'format(locus_length, scientific=FALSE), ')
-    }
-
-    else if (type == "size_change") {
-      cmd <- c(cmd, '"-en"', ', ', feat['time.point'], ', ',
-               feat["pop.source"], ', ', feat['parameter'], ', ')
-    }
-
-    else if (type == "growth") {
-      cmd <- c(cmd, '"-eg"', ', ' , feat["time.point"], ', ',
-               feat["pop.source"], ', ', feat["parameter"], ', ')
-      }
-
-    else if (type == 'trees') {
-      cmd <- c(cmd, '"-T", ')
-    }
-
-    else if (type %in% c("sample", "loci.number", "loci.length",
-                         "selection", "selection_AA", "selection_Aa",
-                         "inter_locus_variation", "unphased",
-                         "ploidy", "samples_per_ind")) NULL
-    else stop("Unknown feature:", type)
-  }
-
-
-  cmd <- c(cmd, '" ")')
+  cmd <- paste(vapply(model$features, conv_to_ms_arg, FUN.VALUE = character(1)),
+               collapse = " ")
+  paste0("c(\"", cmd, "\")")
 }
+
+#
+#   for (i in 1:dim(get_feature_table(model))[1] ) {
+#     type <- as.character(get_feature_table(model)[i,"type"])
+#     feat <- unlist(get_feature_table(model)[i, ])
+#
+#
+#     else if (type == "pop_merge") {
+#       cmd <- c(cmd, '"-ej"', ', ', feat["time.point"], ', ',
+#                feat["pop.source"], ', ', feat["pop.sink"], ', ')
+#     }
+#
+#     else if (type == "migration")
+#       cmd <- c(cmd, '"-em"', ', ', feat['time.point'], ', ',
+#                feat['pop.sink'], ', ', feat['pop.source']  , ', ',
+#                feat['parameter'], ', ')
+#
+#     else if (type == "migration_sym")
+#       cmd <- c(cmd, '"-eM"', ', ',
+#                feat['time.point'], ', ',
+#                feat['parameter'], ', ')
+#
+#     else if (type == "recombination") {
+#       cmd <- c(cmd, '"-r"', ', ',
+#                'format(', feat['parameter'], ', scientific=FALSE), ',
+#                'format(locus_length, scientific=FALSE), ')
+#     }
+#
+#     else if (type == "size_change") {
+#       cmd <- c(cmd, '"-en"', ', ', feat['time.point'], ', ',
+#                feat["pop.source"], ', ', feat['parameter'], ', ')
+#     }
+#
+#     else if (type == "growth") {
+#       cmd <- c(cmd, '"-eg"', ', ' , feat["time.point"], ', ',
+#                feat["pop.source"], ', ', feat["parameter"], ', ')
+#       }
+#
+#     else if (type == 'trees') {
+#       cmd <- c(cmd, '"-T", ')
+#     }
+#
+#     else if (type %in% c("sample", "loci.number", "loci.length",
+#                          "selection", "selection_AA", "selection_Aa",
+#                          "inter_locus_variation", "unphased",
+#                          "ploidy", "samples_per_ind")) NULL
+#     else stop("Unknown feature:", type)
+#   }
 
 
 ms_generate_opts <- function(model, parameters, group, eval_pars = TRUE) {

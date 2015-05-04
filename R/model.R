@@ -12,9 +12,8 @@ coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model$id <- get_id()
 
   # Add sample sizes
-  for (pop in seq(along = sample_size)) {
-    if (sample_size[pop] > 0) model <- model +
-      feat_sample(sample_size[pop], pop)
+  if (any(sample_size > 0)) {
+    model <- model + feat_sample(sample_size)
   }
 
   # Add locus
@@ -40,9 +39,8 @@ select_simprog <- function(model) {
 
     for (simprog_name in ls(simulators)) {
       simprog <- get_simulator(simprog_name)
-      if (all(get_feature_table(model)$type %in% simprog$get_features()) &
-            all(model$sum_stats$name %in% simprog$get_sumstats())) {
-
+      valid <- try(simprog$get_cmd(model), silent = TRUE)
+      if (all(class(valid) != "try-error")) {
         if (simprog$get_priority() > priority) {
           name <- simprog
           priority <- simprog$get_priority()
@@ -71,43 +69,6 @@ get_mutation_par <- function(model, outer=FALSE) {
   feat[1, 'parameter']
 }
 
-
-search_feature <- function(model, type=NULL, pop.source=NULL,
-                          pop.sink=NULL, time.point=NULL,
-                          feat_table=TRUE) {
-
-  feat_tbl <- get_feature_table(model)
-  mask <- rep(TRUE, nrow(feat_tbl))
-
-  if (!is.null(type)) mask <- mask & feat_tbl$type %in% type
-
-  if (!is.null(pop.source)) {
-    if (is.na(pop.source)) {
-      mask <- mask & is.na(feat_tbl$pop.source)
-    } else {
-      mask <- mask & feat_tbl$pop.source %in% pop.source
-    }
-  }
-
-  if (!is.null(pop.sink)) {
-    if (is.na(pop.sink)) {
-      mask <- mask & is.na(feat_tbl$pop.sink)
-    } else {
-      mask <- mask & feat_tbl$pop.sink %in% pop.sink
-    }
-  }
-
-  if (!is.null(time.point)) {
-    if (is.na(time.point)) {
-      mask <- mask & is.na(feat_tbl$time.point)
-    } else {
-      mask <- mask & feat_tbl$time.point %in% time.point
-    }
-  }
-
-  if(!feat_table) return(get_features(model)[mask])
-  feat_tbl[mask, ]
-}
 
 
 add_inter_locus_var <- function(model) {

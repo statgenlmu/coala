@@ -2,8 +2,6 @@
 Simulator <- R6Class("Simulator",
   private = list(
     name = "TEMPLATE",
-    features = NULL,
-    sumstats = NULL,
     priority = 50
   ),
   public = list(

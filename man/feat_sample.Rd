@@ -4,14 +4,15 @@
 \alias{feat_sample}
 \title{Creates a feature that represents the sampling from one population}
 \usage{
-feat_sample(size, population, time_point = "0")
+feat_sample(sizes, time = "0")
 }
 \arguments{
-\item{size}{The number of individuals that are sampled.}
+\item{sizes}{The number of individuals that are sampled per population,
+given as a numeric vector.}
+
+\item{time}{The time at which the sample is taken.}
 
 \item{population}{The population from with the indidivuals are sampled}
-
-\item{time_point}{The time at which the sample is taken.}
 }
 \value{
 The feature, which can be added to a model using `+`.
