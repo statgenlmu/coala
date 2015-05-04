@@ -39,5 +39,10 @@ test_that("Parsing mutation to ms args works", {
   expect_true(grepl("-t", ms_arg))
   expect_true(grepl("5", ms_arg))
 
+  model <- coal_model(15, 1) + feat_mutation(par_range("theta", 1, 2))
+  expect_equal(get_simulator("ms")$get_cmd(model), "ms 15 1 -t theta ")
+  model <- coal_model(15, 1) + feat_mutation(5)
+  expect_equal(get_simulator("ms")$get_cmd(model), "ms 15 1 -t 5 ")
+
   expect_error(conv_to_ms_arg(feat_mutation(5, "GTR"), NULL))
 })

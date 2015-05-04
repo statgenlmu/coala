@@ -1,10 +1,3 @@
-ms_features  <- c("sample", "mutation", "migration", "migration_sym",
-                  "pop_merge", "recombination", "size_change", "growth",
-                  "inter_locus_variation", "trees", 'locus_trios',
-                  "unphased", "ploidy", "samples_per_ind")
-ms_sum_stats <- c("jsfs", "trees", "seg.sites", "file")
-
-
 # Translating the model into simulation commands
 conv_to_ms_arg <- function(feature, model) UseMethod("conv_to_ms_arg")
 conv_to_ms_arg.default <- function(feature, model) {
@@ -12,13 +5,11 @@ conv_to_ms_arg.default <- function(feature, model) {
 }
 
 
-
-
 # This function generates an string that contains an R command for generating
 # an ms call to the current model.
 ms_generate_opts_cmd <- function(model) {
   cmd <- paste(vapply(model$features, conv_to_ms_arg, FUN.VALUE = character(1)),
-               collapse = " ")
+               collapse = "")
   paste0("c(\"", cmd, "\")")
 }
 
@@ -54,10 +45,6 @@ ms_generate_opts_cmd <- function(model) {
 #                feat["pop.source"], ', ', feat['parameter'], ', ')
 #     }
 #
-#     else if (type == "growth") {
-#       cmd <- c(cmd, '"-eg"', ', ' , feat["time.point"], ', ',
-#                feat["pop.source"], ', ', feat["parameter"], ', ')
-#       }
 #
 #     else if (type == 'trees') {
 #       cmd <- c(cmd, '"-T", ')
@@ -96,8 +83,6 @@ ms_generate_opts <- function(model, parameters, group, eval_pars = TRUE) {
 Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
   private = list(
     name = 'ms',
-    features = ms_features,
-    sumstats = ms_sum_stats,
     priority = 100
   ),
   public = list(
@@ -144,6 +129,5 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
     }
   )
 )
-
 
 register_simulator(Simulator_ms)

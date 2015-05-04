@@ -68,7 +68,8 @@ get_sample_size <- function(model, for_sim=FALSE) {
 conv_to_ms_arg.Feature_sample <- function(feature, model) {
   sample_size <- feature$get_sizes()
   if (length(feature$get_sizes()) == 1) return("")
-  paste0("-I ", length(sample_size), " ", paste(sample_size, collapse = " "))
+  paste0("-I ", length(sample_size), " ",
+         paste(sample_size, collapse = " "), " ")
 }
 
 conv_to_msms_arg.Feature_sample <- conv_to_ms_arg.Feature_sample

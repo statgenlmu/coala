@@ -1,9 +1,18 @@
 Feature_growth <- R6Class("Feature_growth", inherit = Feature,
+  private = list(rate = NA),
   public = list(
+    initialize = function(rate, population, time) {
+      private$rate = self$add_parameter(rate)
+      private$time = self$add_parameter(time)
+      assert_that(is.numeric(population))
+      assert_that(length(population) == 1)
+      private$population = population
+    },
+    get_rate = function() private$rate,
     print = function() {
-      cat("Exponential growth/decline with rate", self$get_par(),
+      cat("Exponential growth/decline with rate", private$rate,
           "in population", self$get_population(),
-          "starting at time", self$get_time_point(), "\n")
+          "starting at time", self$get_time(), "\n")
     }
   )
 )
@@ -26,12 +35,21 @@ Feature_growth <- R6Class("Feature_growth", inherit = Feature,
 #'
 #' @param rate A \code{\link{Parameter}} stating the rate of the change.
 #' @param population The population which starts to grow or decline.
-#' @param at.time The time at which the population starts to grow or decline.
+#' @param time The time at which the population starts to grow or decline.
 #' @return    The demographic model with a size change.
 #' @export
 #' @examples
 #' model <- coal_model(c(20,37), 88) +
-#'   feat_growth(par_range('alpha', 0.1, 2), population=2, at.time="0")
-feat_growth <- function(rate, population, at.time="0") {
-  Feature_growth$new("growth", rate, pop_source=population, time_point=at.time)
+#'   feat_growth(par_range('alpha', 0.1, 2), population=2, time="0")
+feat_growth <- function(rate, population, time="0") {
+  Feature_growth$new(rate, population, time)
 }
+
+
+conv_to_ms_arg.Feature_growth <- function(feature, model) {
+  paste0("-eg\", ", feature$get_time(), ", \"",
+         feature$get_population(), "\", ",
+         feature$get_rate(), ", \"")
+}
+
+conv_to_msms_arg.Feature_growth <- conv_to_ms_arg.Feature_growth
