@@ -1,7 +1,10 @@
 Feature_outgroup <- R6Class("Feature_outgroup", inherit = Feature,
   public = list(
+    initialize = function(population) {
+      private$set_population(population)
+    },
     print = function() {
-      cat("Outgroup: Population", self$get_par(), "\n")
+      cat("Outgroup: Population", private$population, "\n")
     }
   )
 )
@@ -21,5 +24,16 @@ Feature_outgroup <- R6Class("Feature_outgroup", inherit = Feature,
 #'    feat_pop_merge(par_expr('2*tau'), 3, 1) +
 #'    feat_mutation(par_range('theta', 1, 10), model="HKY")
 feat_outgroup <- function(population) {
-  Feature_outgroup$new("outgroup", par_const(population))
+  Feature_outgroup$new(population)
 }
+
+
+conv_to_ms_arg.Feature_outgroup <- function(feature, model) {
+  stop("ms does not support outgroups")
+}
+
+conv_to_msms_arg.Feature_outgroup <- function(feature, model) {
+  stop("msms does not support outgroups")
+}
+
+conv_to_seqgen_arg.Feature_outgroup <- ignore_par

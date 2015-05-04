@@ -4,7 +4,7 @@
 \alias{feat_migration}
 \title{Add migration/gene flow between two populations to a demographic model}
 \usage{
-feat_migration(rate, pop_from, pop_to, symmetric = FALSE, time_start = "0")
+feat_migration(rate, pop_from, pop_to, symmetric = FALSE, time = "0")
 }
 \arguments{
 \item{rate}{Instead of creating a new parameter, you can also
@@ -15,15 +15,11 @@ created. You can also use R expression here, so "2*M"
 or "5*M+2*tau" (if tau is another parameter) will also
 work (also this does not make much sense).}
 
-\item{pop.from}{The population from which the individuals leave.}
+\item{pop_from}{The population from which the individuals leave.}
 
-\item{pop.to}{The population to which the individuals move.}
+\item{pop_to}{The population to which the individuals move.}
 
-\item{time.start}{The time point at which the migration with this rate
-starts.}
-}
-\value{
-The demographic model with migration
+\item{time}{The time point at which the migration with this rate starts.}
 }
 \description{
 This function adds the assumption to the model that some individuals
@@ -49,8 +45,8 @@ speciation event in which the population is created.
 \examples{
 # Asymmetric migration for two populations
 model <- coal_model(c(25,25), 100) +
-  feat_migration(par_const(0.5), 1, 2) +
-  feat_migration(par_const(0.75), 2, 1)
+  feat_migration(0.5, 1, 2) +
+  feat_migration(0.75, 2, 1)
 
 # Symmetric Migration
 model <- coal_model(c(25,25), 100) +

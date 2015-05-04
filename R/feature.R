@@ -3,7 +3,26 @@ Feature <- R6Class("Feature",
     parameter = list(),
     population = NULL,
     time = NULL,
-    inter_locus_var = FALSE
+    inter_locus_var = FALSE,
+    set_population = function(population, expected_length = 1) {
+      assert_that(is.numeric(population))
+      assert_that(length(population) == expected_length)
+      private$population = population
+    },
+    add_parameter = function(parameter, required=TRUE) {
+      if (is.numeric(parameter) && length(parameter) == 1) {
+        return(as.character(parameter))
+      } else if (is.character(parameter) && length(parameter) == 1) {
+        return(parameter)
+      } else if (is.par(parameter)) {
+        idx <- as.character(length(private$parameter) + 1)
+        private$parameter[[idx]] <- parameter
+        return(as.character(parameter$get_expression()))
+      } else if (is.null(parameter) || is.na(parameter)) {
+        if (required) stop("Missing value for required parameter")
+        return(NA)
+      } else stop("Unexpected type of parameter")
+    }
   ),
   public = list(
 #     initialize = function(type, parameter,
@@ -53,20 +72,6 @@ Feature <- R6Class("Feature",
     get_time = function() private$time,
     reset_parameters = function() private$parameter <- list(),
     get_inter_locus_var = function() private$inter_locus_var,
-    add_parameter = function(parameter, required=TRUE) {
-      if (is.numeric(parameter) && length(parameter) == 1) {
-        return(as.character(parameter))
-      } else if (is.character(parameter) && length(parameter) == 1) {
-        return(parameter)
-      } else if (is.par(parameter)) {
-        idx <- as.character(length(private$parameter) + 1)
-        private$parameter[[idx]] <- parameter
-        return(as.character(parameter$get_expression()))
-      } else if (is.null(parameter) || is.na(parameter)) {
-        if (required) stop("Missing value for required parameter")
-        return(NA)
-      } else stop("Unexpected type of parameter")
-    },
     print = function() {
       cat("Feature of type", private$feature_table$type[1], "\n")
     }
@@ -76,3 +81,5 @@ Feature <- R6Class("Feature",
 is.feature <- function(feature) {
   'Feature' %in% class(feature)
 }
+
+ignore_par <- function(feature, model) ""

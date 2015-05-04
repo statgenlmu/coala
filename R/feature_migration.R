@@ -1,3 +1,30 @@
+Feature_migration <- R6Class("Feature_migration", inherit = Feature,
+  private = list(rate = NA),
+  public = list(
+    initialize = function(rate, pop_from, pop_to, time, symmetric = FALSE) {
+      private$rate = private$add_parameter(rate)
+      private$time = private$add_parameter(time)
+
+      if (symmetric) {
+        private$population = "all"
+      } else {
+        private$set_population(c(from=pop_from, to=pop_to), 2)
+      }
+    },
+    get_rate = function() private$rate,
+    print = function() {
+      if (all(feature$get_population() == "all")) {
+        cat("Symmetric migration with rate", private$rate)
+      } else {
+        cat("Migration from pop", private$population,
+            "to pop", private$pop_to)
+      }
+      cat(" starting at time", self$get_time(), "\n")
+    }
+  )
+)
+
+
 #' Add migration/gene flow between two populations to a demographic model
 #'
 #' This function adds the assumption to the model that some individuals
@@ -26,28 +53,39 @@
 #'            created. You can also use R expression here, so "2*M"
 #'            or "5*M+2*tau" (if tau is another parameter) will also
 #'            work (also this does not make much sense).
-#' @param pop.from The population from which the individuals leave.
-#' @param pop.to The population to which the individuals move.
-#' @param time.start The time point at which the migration with this rate
-#'            starts.
-#' @return    The demographic model with migration
+#' @param pop_from The population from which the individuals leave.
+#' @param pop_to The population to which the individuals move.
+#' @param time The time point at which the migration with this rate starts.
 #' @export
 #'
 #' @examples
 #' # Asymmetric migration for two populations
 #' model <- coal_model(c(25,25), 100) +
-#'   feat_migration(par_const(0.5), 1, 2) +
-#'   feat_migration(par_const(0.75), 2, 1)
+#'   feat_migration(0.5, 1, 2) +
+#'   feat_migration(0.75, 2, 1)
 #'
 #' # Symmetric Migration
 #' model <- coal_model(c(25,25), 100) +
 #'   feat_migration(par_range('m', 0.1, 2), symmetric=TRUE)
 feat_migration <- function(rate, pop_from, pop_to,
-                           symmetric=FALSE, time_start="0") {
+                           symmetric=FALSE, time="0") {
   if (symmetric) {
-    return(Feature$new("migration_sym", rate, time_point=time_start))
+    return(Feature_migration$new(rate, time = time, symmetric = TRUE))
   } else {
-    return(Feature$new("migration", rate, pop_source=pop_from, pop_sink=pop_to,
-                       time_point=time_start))
+    return(Feature_migration$new(rate, pop_from, pop_to, time))
   }
 }
+
+conv_to_ms_arg.Feature_migration <- function(feature, model) {
+  if (all(feature$get_population() == "all")) {
+    return( paste0("-eM\", ", feature$get_time(), ", ",
+                    feature$get_rate(), ", \""))
+  }
+  paste0("-em\", ", feature$get_time(), ", \"",
+         feature$get_population()[1], " ",
+         feature$get_population()[2], "\", ",
+         feature$get_rate(), ", \"")
+}
+
+conv_to_msms_arg.Feature_migration <- ignore_par
+conv_to_seqgen_arg.Feature_migration <- ignore_par

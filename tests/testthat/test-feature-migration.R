@@ -1,0 +1,25 @@
+context('Feature Migration')
+
+test_that('Creation of migration features works', {
+  feat <- feat_migration(2, 2, 1)
+  expect_equal(feat$get_rate(), "2")
+  expect_equal(feat$get_population(), c(from=2, to=1))
+  expect_equal(feat$get_time(), "0")
+
+  feat <- feat_migration(2, symmetric = TRUE, time = 5)
+  expect_equal(feat$get_rate(), "2")
+  expect_equal(feat$get_population(), "all")
+  expect_equal(feat$get_time(), "5")
+
+  expect_error(feat_migration(3, "A", 5))
+  expect_error(feat_growth(3, 1:2, 5))
+})
+
+
+test_that("generating ms cmd for growth works", {
+  model <- coal_model(4:5, 1) + feat_migration(par_range('m', 1, 2), 2, 1)
+  expect_equal(get_simulator("ms")$get_cmd(model),
+               "ms 9 1 -I 2 4 5 -em 0 2 1 m ")
+  model <- coal_model(4:5, 1) + feat_migration(3, symmetric = TRUE, time = 5)
+  expect_equal(get_simulator("ms")$get_cmd(model), "ms 9 1 -I 2 4 5 -eM 5 3 ")
+})

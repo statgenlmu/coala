@@ -2,11 +2,9 @@ Feature_growth <- R6Class("Feature_growth", inherit = Feature,
   private = list(rate = NA),
   public = list(
     initialize = function(rate, population, time) {
-      private$rate = self$add_parameter(rate)
-      private$time = self$add_parameter(time)
-      assert_that(is.numeric(population))
-      assert_that(length(population) == 1)
-      private$population = population
+      private$rate = private$add_parameter(rate)
+      private$time = private$add_parameter(time)
+      private$set_population(population)
     },
     get_rate = function() private$rate,
     print = function() {
@@ -52,4 +50,5 @@ conv_to_ms_arg.Feature_growth <- function(feature, model) {
          feature$get_rate(), ", \"")
 }
 
-conv_to_msms_arg.Feature_growth <- conv_to_ms_arg.Feature_growth
+conv_to_msms_arg.Feature_growth <- ignore_par
+conv_to_seqgen_arg.Feature_growth <- ignore_par

@@ -6,7 +6,7 @@ Feature_sample <- R6Class("Feature_sample", inherit = Feature,
       assert_that(length(sizes) >= 1)
       private$size = sizes
 
-      private$time = self$add_parameter(time)
+      private$time = private$add_parameter(time)
     },
     get_sizes = function() private$size,
     print = function() {

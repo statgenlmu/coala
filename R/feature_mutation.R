@@ -12,7 +12,7 @@ Feature_mutation <- R6Class("Feature_mutation", inherit = Feature,
   public = list(
     initialize = function(rate, model, base_frequencies,
                           tstv_ratio, gtr_rates) {
-      private$rate = self$add_parameter(rate)
+      private$rate = private$add_parameter(rate)
 
       assert_that(length(model) == 1)
       assert_that(any(model == c("IFS", "HKY", "GTR")))

@@ -5,14 +5,14 @@
 \title{Adds an exponential growth or decline of the size of one
 population to a model.}
 \usage{
-feat_growth(rate, population, at.time = "0")
+feat_growth(rate, population, time = "0")
 }
 \arguments{
 \item{rate}{A \code{\link{Parameter}} stating the rate of the change.}
 
 \item{population}{The population which starts to grow or decline.}
 
-\item{at.time}{The time at which the population starts to grow or decline.}
+\item{time}{The time at which the population starts to grow or decline.}
 }
 \value{
 The demographic model with a size change.
@@ -34,6 +34,6 @@ then use the \link{model.addSizeChange} function.
 }
 \examples{
 model <- coal_model(c(20,37), 88) +
-  feat_growth(par_range('alpha', 0.1, 2), population=2, at.time="0")
+  feat_growth(par_range('alpha', 0.1, 2), population=2, time="0")
 }
 
