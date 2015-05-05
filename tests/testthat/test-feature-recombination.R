@@ -16,5 +16,6 @@ test_that("generating ms cmd for growth works", {
 
 test_that("simulating recombination works", {
   model <- coal_model(5, 1) + feat_recombination(1) + feat_mutation(1)
-  simulate(model)
+  sim <- simulate(model)
+  expect_that(sim, is_a("list"))
 })

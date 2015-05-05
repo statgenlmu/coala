@@ -2,21 +2,28 @@
 % Please edit documentation in R/feature_unphased.R
 \name{feat_unphased}
 \alias{feat_unphased}
-\title{Creates a feature that represents the sampling from one population}
+\title{Feature: Unphased}
 \usage{
 feat_unphased(ploidy, samples_per_ind = ploidy)
 }
 \arguments{
-\item{size}{The number of individuals that are sampled.}
+\item{ploidy}{The number of phased chromosomes that are simulated per
+individual.}
 
-\item{population}{The population from with the indidivuals are sampled}
-
-\item{time_point}{The time at which the sample is taken.}
+\item{samples_per_ind}{The number of pseudo-chromosomes that are created
+from the phased chromosomes for each indidivual.}
 }
 \value{
 The feature, which can be added to a model using `+`.
 }
 \description{
-Creates a feature that represents the sampling from one population
+This simulated unphased data by creating "pseudo-chromosomes". For these,
+each position is randomly taken from a phased chromosome obtained by
+simulation.
+}
+\details{
+If this is used, the sample size is understood as the number of individuals.
+For each individual, \code{poidy} chromosomes are simulated, and
+\code{samples_per_ind} pseudo-chromosomes are created of these.
 }
 
