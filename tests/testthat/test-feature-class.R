@@ -67,7 +67,11 @@ test_that('Creating features works', {
 
 
 test_that("adding parameter works", {
-  feat <- Feature$new()
+  feat <- R6::R6Class("Feature_test", inherit = Feature,
+    public = list(
+      add_parameter = function(...) private$add_parameter(...)
+    )
+  )$new()
   expect_equal(feat$add_parameter(5), "5")
   expect_equal(feat$add_parameter("17"), "17")
   expect_equal(feat$add_parameter(par_expr(tau)), "tau")

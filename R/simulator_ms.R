@@ -13,31 +13,10 @@ ms_generate_opts_cmd <- function(model) {
   paste0("c(\"", cmd, "\")")
 }
 
-#
-#   for (i in 1:dim(get_feature_table(model))[1] ) {
-#     type <- as.character(get_feature_table(model)[i,"type"])
-#     feat <- unlist(get_feature_table(model)[i, ])
-#
-#
-#     else if (type == "pop_merge") {
-#       cmd <- c(cmd, '"-ej"', ', ', feat["time.point"], ', ',
-#                feat["pop.source"], ', ', feat["pop.sink"], ', ')
-#     }
-#
-#     else if (type == "migration")
-#       cmd <- c(cmd, '"-em"', ', ', feat['time.point'], ', ',
-#                feat['pop.sink'], ', ', feat['pop.source']  , ', ',
-#                feat['parameter'], ', ')
-#
-#     else if (type == "migration_sym")
-#       cmd <- c(cmd, '"-eM"', ', ',
-#                feat['time.point'], ', ',
-#                feat['parameter'], ', ')
-#
+
+
 #     else if (type == "recombination") {
-#       cmd <- c(cmd, '"-r"', ', ',
-#                'format(', feat['parameter'], ', scientific=FALSE), ',
-#                'format(locus_length, scientific=FALSE), ')
+
 #     }
 #
 #     else if (type == "size_change") {

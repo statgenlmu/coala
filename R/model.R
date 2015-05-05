@@ -78,7 +78,8 @@ add_inter_locus_var <- function(model) {
 
 
 has_inter_locus_var <- function(model) {
-  nrow(search_feature(model, 'inter_locus_variation')) > 0
+  FALSE
+  #nrow(search_feature(model, 'inter_locus_variation')) > 0
 }
 
 
