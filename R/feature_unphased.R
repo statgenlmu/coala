@@ -66,6 +66,6 @@ get_samples_per_ind <- function(model) {
 
 is_unphased <- function(model) !is.null(get_feature_unphased(model))
 
-conv_to_ms_arg.Feature_growth <- ignore_par
-conv_to_msms_arg.Feature_growth <- ignore_par
-conv_to_seqgen_arg.Feature_growth <- ignore_par
+conv_to_ms_arg.Feature_unphased <- ignore_par
+conv_to_msms_arg.Feature_unphased <- ignore_par
+conv_to_seqgen_arg.Feature_unphased <- ignore_par
