@@ -1,7 +1,22 @@
+Feature_selection <- R6Class("Feature_selection", inherit = Feature,
+  private = list(strength_AA = NA, strength_Aa = NA),
+  public = list(
+    initialize = function(strength_AA, strength_Aa, population, time) {
+      private$strength_AA = private$add_parameter(strength_AA)
+      private$strength_Aa = private$add_parameter(strength_Aa)
+      private$set_population(population)
+      private$time = private$add_parameter(time)
+    },
+    print = function() {
+    cat("Exponential growth/decline with rate", private$rate,
+      "in population", self$get_population(),
+      "starting at time", self$get_time(), "\n")
+    }
+  )
+)
+
 #' Adds positiv selection to a model
 #'
-#' @param fraction_neutral Optionally, a fraction of the loci in the group can
-#'   be neutral.
 #' @param population The populaton in which the allele is selected.
 #' @param at_time The time at which the selection starts.
 #' @export
@@ -12,23 +27,16 @@
 #'   feat_selection(strength_AA=par_expr(2*s), strength_Aa=par_range('s', 100, 2000),
 #'                  population = 2, at_time=par_expr(tau))
 #'
-feat_selection <- function(strength_AA, strength_Aa,
-                           population, at_time,
-                           zero_inflation=0) {
-
-  if (!is.par(at_time)) at_time <- par_const(at_time)
-
-  coal_model() +
-    Feature$new("selection", par_const(NA),
-                pop_source=population,
-                time_point=at_time,
-                zero_inflation=zero_inflation) +
-    Feature$new("selection_AA", strength_AA,
-                pop_source=population,
-                time_point=par_const(at_time$get_expression()),
-                zero_inflation=zero_inflation) +
-    Feature$new("selection_Aa", strength_Aa,
-                pop_source=population,
-                time_point=par_const(at_time$get_expression()),
-                zero_inflation=zero_inflation)
+feat_selection <- function(strength_AA, strength_Aa, population, at_time) {
+  Feature_selection$new(strength_AA, strength_Aa, population, at_time)
 }
+
+conv_to_ms_arg.Feature_selection <- function(feature, model) {
+  stop("ms does not support selection")
+}
+
+conv_to_msms_arg.Feature_growth <- function(feature, model) {
+
+}
+
+conv_to_seqgen_arg.Feature_growth <- ignore_par
