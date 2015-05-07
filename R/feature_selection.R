@@ -18,7 +18,7 @@ Feature_selection <- R6Class("Feature_selection", inherit = Feature,
 #' Adds positiv selection to a model
 #'
 #' @param population The populaton in which the allele is selected.
-#' @param at_time The time at which the selection starts.
+#' @param time The time at which the selection starts.
 #' @export
 #' @examples
 #' # Positive selection in population 2:
@@ -27,15 +27,15 @@ Feature_selection <- R6Class("Feature_selection", inherit = Feature,
 #'   feat_selection(strength_AA=par_expr(2*s), strength_Aa=par_range('s', 100, 2000),
 #'                  population = 2, at_time=par_expr(tau))
 #'
-feat_selection <- function(strength_AA, strength_Aa, population, at_time) {
-  Feature_selection$new(strength_AA, strength_Aa, population, at_time)
+feat_selection <- function(strength_AA, strength_Aa, population = 1, time) {
+  Feature_selection$new(strength_AA, strength_Aa, population, time)
 }
 
 conv_to_ms_arg.Feature_selection <- function(feature, model) {
   stop("ms does not support selection")
 }
 
-conv_to_msms_arg.Feature_growth <- function(feature, model) {
+conv_to_msms_arg.Feature_selection <- function(feature, model) {
   #     if (type == "selection") {
   #       cmd <- c(cmd, '"-SI"', ',', feat['time.point'], ',',
   #                length(get_sample_size(model, for_sim = TRUE)), ',')
@@ -60,7 +60,7 @@ conv_to_msms_arg.Feature_growth <- function(feature, model) {
   #       cmd <- c(cmd, '"-threads 1"', ',')
   #     }
   #   }
-
+  ""
 }
 
-conv_to_seqgen_arg.Feature_growth <- ignore_par
+conv_to_seqgen_arg.Feature_selection <- ignore_par
