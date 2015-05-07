@@ -130,7 +130,6 @@ sg_generate_opts <- function(model, parameters, locus,
 
   # Fill the parameters in the template
   sapply(seq(along = locus_lengths), function(i) {
-    if (!eval_pars) cmd[[i]] <- escape_par_expr(cmd[[i]])
     par_envir <- create_par_env(model, parameters, locus = locus,
                                     locus_length = locus_lengths[i],
                                     seed = seeds[i], for_cmd = !eval_pars)

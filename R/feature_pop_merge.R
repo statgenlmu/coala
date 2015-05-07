@@ -7,7 +7,7 @@ Feature_pop_merge <- R6Class("Feature_pop_merge", inherit = Feature,
     print = function() {
       cat("Merge of pop", private$population[1],
           "into pop", private$population[2],
-          "at time", self$get_time(), "\n")
+          "at time", print_par(self$get_time()), "\n")
     }
   )
 )
@@ -35,9 +35,9 @@ feat_pop_merge <- function(time, pop_source, pop_target) {
 }
 
 conv_to_ms_arg.Feature_pop_merge <- function(feature, model) {
-  paste0("-ej\", ", feature$get_time(), ", \"",
-         feature$get_population()[1], " ",
-         feature$get_population()[2], " ")
+  paste0("-ej', ", feature$get_time(), ", ",
+         feature$get_population()[1], ", ",
+         feature$get_population()[2], ", '")
 }
 
 conv_to_msms_arg.Feature_pop_merge <- ignore_par

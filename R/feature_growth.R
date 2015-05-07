@@ -1,16 +1,9 @@
 Feature_growth <- R6Class("Feature_growth", inherit = Feature,
-  private = list(rate = NA),
   public = list(
-    initialize = function(rate, population, time) {
-      private$rate = private$add_parameter(rate)
-      private$time = private$add_parameter(time)
-      private$set_population(population)
-    },
-    get_rate = function() private$rate,
     print = function() {
-      cat("Exponential growth/decline with rate", private$rate,
+      cat("Exponential growth/decline with rate", print_par(private$rate),
           "in population", self$get_population(),
-          "starting at time", self$get_time(), "\n")
+          "starting at time", print_par(self$get_time()), "\n")
     }
   )
 )
@@ -45,9 +38,22 @@ feat_growth <- function(rate, population, time="0") {
 
 
 conv_to_ms_arg.Feature_growth <- function(feature, model) {
-  paste0("-eg\", ", feature$get_time(), ", \"",
-         feature$get_population(), "\", ",
-         feature$get_rate(), ", \"")
+  all_pops <- feature$get_population() == "all" ||
+    (feature$get_population() == 1 && length(get_populations(model)) == 1)
+  present <- feature$get_time() == "par(0)"
+
+  if (present) {
+    if (all_pops) cmd <- "-G"
+    else cmd <- "-g"
+  } else {
+    if (all_pops) cmd <- "-eG"
+    else cmd <- "-eg"
+  }
+
+  paste0(cmd, "', ",
+         ifelse(present, "", paste(feature$get_time(), ", ")),
+         ifelse(all_pops, "", paste(feature$get_population(), ", ")),
+         feature$get_rate(), ", '")
 }
 
 conv_to_msms_arg.Feature_growth <- ignore_par

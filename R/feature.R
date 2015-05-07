@@ -3,7 +3,7 @@ Feature <- R6Class("Feature",
     parameter = list(),
     population = NULL,
     time = NULL,
-    inter_locus_var = FALSE,
+    rate = NA,
     set_population = function(population, expected_length = 1) {
       assert_that(is.numeric(population))
       assert_that(length(population) == expected_length)
@@ -11,13 +11,13 @@ Feature <- R6Class("Feature",
     },
     add_parameter = function(parameter, required=TRUE) {
       if (is.numeric(parameter) && length(parameter) == 1) {
-        return(as.character(parameter))
+        return(paste0("par(", parameter, ")"))
       } else if (is.character(parameter) && length(parameter) == 1) {
-        return(parameter)
+        return(paste0("par(", parameter, ")"))
       } else if (is.par(parameter)) {
         idx <- as.character(length(private$parameter) + 1)
         private$parameter[[idx]] <- parameter
-        return(as.character(parameter$get_expression()))
+        return(paste0("par(", parameter$get_expression(), ")"))
       } else if (is.null(parameter) || is.na(parameter)) {
         if (required) stop("Missing value for required parameter")
         return(NA)
@@ -25,6 +25,11 @@ Feature <- R6Class("Feature",
     }
   ),
   public = list(
+    initialize = function(rate, population, time) {
+      if (!missing(rate)) private$rate = private$add_parameter(rate)
+      if (!missing(time)) private$time = private$add_parameter(time)
+      if (!missing(population)) private$set_population(population)
+    },
 #     initialize = function(type, parameter,
 #                           pop_source=NA, pop_sink=NA,
 #                           time_point=NA,
@@ -71,10 +76,11 @@ Feature <- R6Class("Feature",
     get_population = function() private$population,
     get_time = function() private$time,
     reset_parameters = function() private$parameter <- list(),
-    get_inter_locus_var = function() private$inter_locus_var,
     print = function() {
       cat("Feature of type", private$feature_table$type[1], "\n")
-    }
+    },
+    get_call = function() private$call,
+    get_rate = function() private$rate
   )
 )
 
@@ -83,3 +89,5 @@ is.feature <- function(feature) {
 }
 
 ignore_par <- function(feature, model) ""
+
+print_par <- function(par) paste0("`", substr(par, 5, nchar(par)-1), "`")

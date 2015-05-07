@@ -14,7 +14,8 @@ Sumstat <- R6Class('Sumstat',
     get_name = function() private$name,
     get_group = function() private$group,
     requires_files = function() private$req_files,
-    requires_segsites = function() private$req_segsites
+    requires_segsites = function() private$req_segsites,
+    print = function() cat(class(self)[1], "\n")
   )
 )
 

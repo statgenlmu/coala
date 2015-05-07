@@ -58,7 +58,7 @@ test_that('Creating features works', {
   par_expr <- feat$get_table()$parameter
   sim <- sapply(1:1000, function(x) {
     locus <- x %% 100;
-    eval(parse(text=par_expr))
+    eval(parse(text = par_expr))
   })
   expect_true(abs(mean(sim) - theta * 0.9) < .3)
   expect_equal(sum(sim == 5), 0)
@@ -69,14 +69,15 @@ test_that('Creating features works', {
 test_that("adding parameter works", {
   feat <- R6::R6Class("Feature_test", inherit = Feature,
     public = list(
+      initialize = function() {},
       add_parameter = function(...) private$add_parameter(...)
     )
   )$new()
-  expect_equal(feat$add_parameter(5), "5")
-  expect_equal(feat$add_parameter("17"), "17")
-  expect_equal(feat$add_parameter(par_expr(tau)), "tau")
+  expect_equal(feat$add_parameter(5), "par(5)")
+  expect_equal(feat$add_parameter("17"), "par(17)")
+  expect_equal(feat$add_parameter(par_expr(tau)), "par(tau)")
   expect_equal(length(feat$get_parameters()), 1)
-  expect_equal(feat$add_parameter(par_const(5)), "5")
+  expect_equal(feat$add_parameter(par_const(5)), "par(5)")
 
   expect_error(feat$add_parameter(1:2))
   expect_error(feat$add_parameter(NA))
@@ -84,4 +85,10 @@ test_that("adding parameter works", {
 
   expect_equal(feat$add_parameter(NA, FALSE), NA)
   expect_equal(feat$add_parameter(NULL, FALSE), NA)
+})
+
+
+test_that("print parameter works", {
+  expect_equal(print_par("par(5)"), "`5`")
+  expect_equal(print_par("par(2 * theta)"), "`2 * theta`")
 })

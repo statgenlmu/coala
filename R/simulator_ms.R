@@ -8,33 +8,11 @@ conv_to_ms_arg.default <- function(feature, model) {
 # This function generates an string that contains an R command for generating
 # an ms call to the current model.
 ms_generate_opts_cmd <- function(model) {
-  cmd <- paste(vapply(model$features, conv_to_ms_arg, FUN.VALUE = character(1)),
+  cmd <- paste(vapply(model$features, conv_to_ms_arg,
+                      FUN.VALUE = character(1), model),
                collapse = "")
-  paste0("c(\"", cmd, "\")")
+  paste0("c('", cmd, "')")
 }
-
-
-
-#     else if (type == "recombination") {
-
-#     }
-#
-#     else if (type == "size_change") {
-#       cmd <- c(cmd, '"-en"', ', ', feat['time.point'], ', ',
-#                feat["pop.source"], ', ', feat['parameter'], ', ')
-#     }
-#
-#
-#     else if (type == 'trees') {
-#       cmd <- c(cmd, '"-T", ')
-#     }
-#
-#     else if (type %in% c("sample", "loci.number", "loci.length",
-#                          "selection", "selection_AA", "selection_Aa",
-#                          "inter_locus_variation", "unphased",
-#                          "ploidy", "samples_per_ind")) NULL
-#     else stop("Unknown feature:", type)
-#   }
 
 
 ms_generate_opts <- function(model, parameters, group, eval_pars = TRUE) {
@@ -51,7 +29,6 @@ ms_generate_opts <- function(model, parameters, group, eval_pars = TRUE) {
     cache(model, 'ms_cmd', cmd)
   }
 
-  if (!eval_pars) cmd <- escape_par_expr(cmd)
   eval(parse(text = cmd), envir = ms_tmp)
 }
 
@@ -71,13 +48,14 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
       # Do the actuall simulation
       files <- lapply(1:get_locus_group_number(model) , function(i) {
         opts <- ms_generate_opts(model, parameters, i)
+        #print(opts)
         file <- tempfile('csr_ms')
 
         ms(sum(get_sample_size(model, for_sim = TRUE)),
-           format(get_locus_number(model, group=i), scientific=FALSE),
+           format(get_locus_number(model, group = i), scientific = FALSE),
            unlist(strsplit(opts, " ")), file)
 
-        if(file.info(file)$size == 0) stop("ms simulation output is empty")
+        if (file.info(file)$size == 0) stop("ms simulation output is empty")
         file
       })
 
@@ -104,7 +82,10 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
       cmd <- ms_generate_opts(model, get_parameter_table(model)$name,
                               "locus", FALSE)
       txt <- paste(cmd, collapse = ' ')
-      paste("ms", sum(get_sample_size(model)), get_locus_number(model), txt)
+      paste("ms",
+            sum(get_sample_size(model, TRUE)),
+            get_locus_number(model),
+            txt)
     }
   )
 )

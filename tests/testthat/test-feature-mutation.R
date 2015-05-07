@@ -3,7 +3,7 @@ context('Feature Mutation')
 
 test_that('Creation of simple mutation features works', {
   feat <- feat_mutation(5)
-  expect_equal(feat$get_rate(), "5")
+  expect_equal(feat$get_rate(), "par(5)")
   expect_equal(feat$get_model(), "IFS")
 })
 
@@ -39,10 +39,15 @@ test_that("Parsing mutation to ms args works", {
   expect_true(grepl("-t", ms_arg))
   expect_true(grepl("5", ms_arg))
 
+  ms <- get_simulator("ms")
   model <- coal_model(15, 1) + feat_mutation(par_range("theta", 1, 2))
-  expect_equal(get_simulator("ms")$get_cmd(model), "ms 15 1 -t theta ")
+  expect_equal(ms$get_cmd(model), "ms 15 1 -t theta ")
   model <- coal_model(15, 1) + feat_mutation(5)
-  expect_equal(get_simulator("ms")$get_cmd(model), "ms 15 1 -t 5 ")
+  expect_equal(ms$get_cmd(model), "ms 15 1 -t 5 ")
+  model <- coal_model(15, 1) +
+    par_range("x", 1, 2) +
+    feat_mutation(par_expr(2 * x))
+  expect_equal(ms$get_cmd(model), "ms 15 1 -t 2 * x ")
 
   expect_error(conv_to_ms_arg(feat_mutation(5, "GTR"), NULL))
 })

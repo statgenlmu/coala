@@ -1,7 +1,7 @@
 context('Feature Recombination')
 
 test_that('Creation of growth features works', {
-  expect_equal(feat_recombination(2)$get_rate(), "2")
+  expect_equal(feat_recombination(2)$get_rate(), "par(2)")
 })
 
 
@@ -15,7 +15,6 @@ test_that("generating ms cmd for growth works", {
 
 
 test_that("simulating recombination works", {
-  model <- coal_model(5, 1) + feat_recombination(1) + feat_mutation(1)
-  sim <- simulate(model)
-  expect_that(sim, is_a("list"))
+  model <- coal_model(5, 1, 10) + feat_recombination(1) + feat_mutation(1)
+  expect_that(simulate(model), is_a("list"))
 })

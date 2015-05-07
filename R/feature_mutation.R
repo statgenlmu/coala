@@ -3,7 +3,6 @@ self <- NULL
 
 Feature_mutation <- R6Class("Feature_mutation", inherit = Feature,
   private = list(
-    rate = NA,
     model = NA,
     base_frequencies = NA,
     tstv_ratio = NA,
@@ -46,13 +45,12 @@ Feature_mutation <- R6Class("Feature_mutation", inherit = Feature,
         private$gtr_rates = gtr_rates
       }
     },
-    get_rate = function() private$rate,
     get_model = function() private$model,
     get_base_frequencies = function() private$base_frequencies,
     get_tstv_ratio = function() private$tstv_ratio,
     get_gtr_rates = function() private$gtr_rates,
     print = function() {
-      cat("Mutations with rate", private$rate,
+      cat("Mutations with rate", print_par(private$rate),
           "following a", private$model, "mutation model\n")
     }
   )
@@ -154,7 +152,7 @@ feat_mutation <- function(rate,
 
 conv_to_ms_arg.Feature_mutation <- function(feature, model) {
   if (feature$get_model() != "IFS") stop("Unsupported mutation model")
-  paste0("-t\", format(", feature$get_rate(), ", scientific=FALSE), \"")
+  paste0("-t', ", feature$get_rate(), ", '")
 }
 
 conv_to_msms_arg.Feature_mutation <- conv_to_ms_arg.Feature_mutation

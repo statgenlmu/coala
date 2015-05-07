@@ -158,6 +158,4 @@ test_that("Creation of parameter enviroment works", {
 
   # For cmd printing
   par_envir <- create_par_env(model_theta_tau(), for_cmd = TRUE)
-  expect_equal(par_envir[["theta"]], "theta")
-  expect_equal(par_envir[["tau"]], "tau")
 })

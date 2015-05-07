@@ -1,16 +1,9 @@
 Feature_size_change <- R6Class("Feature_size_change", inherit = Feature,
-  private = list(rate = NA),
   public = list(
-    initialize = function(new_size, population, time) {
-      private$rate = private$add_parameter(new_size)
-      private$time = private$add_parameter(time)
-      private$set_population(population)
-    },
-    get_rate = function() private$rate,
-      print = function() {
-        cat("Instanious size change to", private$rate,
-            "* N0 in population", self$get_population(),
-            "at time", self$get_time(), "\n")
+    print = function() {
+      cat("Instanious size change to", print_par(private$rate),
+          "* N0 in population", self$get_population(),
+          "at time", print_par(self$get_time()), "\n")
     }
   )
 )
@@ -43,9 +36,9 @@ feat_size_change <- function(new_size, population, time="0") {
 }
 
 conv_to_ms_arg.Feature_size_change <- function(feature, model) {
-  paste0("-en\", ", feature$get_time(), ", \"",
-         feature$get_population(), "\", ",
-         feature$get_rate(), ", \"")
+  paste0("-en', ", feature$get_time(), ", ",
+         feature$get_population(), ", ",
+         feature$get_rate(), ", '")
 }
 
 conv_to_msms_arg.Feature_size_change <- ignore_par

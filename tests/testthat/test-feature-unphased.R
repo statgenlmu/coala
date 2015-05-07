@@ -29,6 +29,13 @@ test_that("getting the unphased feature works", {
 })
 
 
+test_that("generating the ms command works", {
+  ms <- get_simulator("ms")
+  model <- coal_model(c(5, 10), 1) + feat_unphased(2, 1)
+  expect_equal(ms$get_cmd(model), "ms 30 1 -I 2 10 20 ")
+})
+
+
 
 test_that("unphasing works", {
   seg_sites <- list()

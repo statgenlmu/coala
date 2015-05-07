@@ -27,6 +27,26 @@ feat_outgroup <- function(population) {
   Feature_outgroup$new(population)
 }
 
+is_feat_outgroup <- function(feat) any("Feature_outgroup" == class(feat))
+
+
+#' @describeIn get_features Returns the population that is marked as outgroup
+#' @export
+get_outgroup <- function(model) {
+  mask <- vapply(model$features, is_feat_outgroup, logical(1))
+  if (sum(mask) != 1) stop("the model has no outgroup or multiple outgroups")
+  model$features[mask][[1]]$get_population()
+}
+
+
+#' @describeIn get_features Returns the number of samples in the outgroup
+#' @export
+get_outgroup_size <- function(model, for_sim = FALSE) {
+  outgroup_size <- get_sample_size(model, for_sim)[get_outgroup(model)]
+  if (length(outgroup_size) == 0) outgroup_size <- 0
+  outgroup_size
+}
+
 
 conv_to_ms_arg.Feature_outgroup <- function(feature, model) {
   stop("ms does not support outgroups")

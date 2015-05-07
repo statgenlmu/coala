@@ -1,12 +1,10 @@
 Feature_recombination <- R6Class("Feature_recombination", inherit = Feature,
-  private = list(rate = NA),
   public = list(
     initialize = function(rate) {
       private$rate = private$add_parameter(rate)
     },
-    get_rate = function() private$rate,
     print = function() {
-      cat("Recombination with rate", private$rate, "\n")
+      cat("Recombination with rate", print_par(private$rate), "\n")
     }
   )
 )
@@ -28,14 +26,13 @@ Feature_recombination <- R6Class("Feature_recombination", inherit = Feature,
 #' @examples
 #' # A model with a fixed recombination rate of 5
 #' model <- coal_model(c(25,25), 100, 1000) +
-#'   feat_recombination(par_const(5))
+#'   feat_recombination(5)
 feat_recombination <- function(rate) {
   Feature_recombination$new(rate)
 }
 
 conv_to_ms_arg.Feature_recombination <- function(feature, model) {
-  paste0("-r\", format(", feature$get_rate(), ", scientific=FALSE),
-         format(locus_length, scientific=FALSE), \"")
+  paste0("-r', ", feature$get_rate(), ", par(locus_length), '")
 }
 
 conv_to_msms_arg.Feature_recombination <- ignore_par

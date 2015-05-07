@@ -1,22 +1,24 @@
 context('Feature Growth')
 
-test_that('Creation of growth features works', {
-  expect_equal(feat_growth(2, 1)$get_rate(), "2")
-  expect_equal(feat_growth(2, 1)$get_population(), 1)
-
-  feat <- feat_growth(3, 2, 5)
-  expect_equal(feat$get_rate(), "3")
-  expect_equal(feat$get_population(), 2)
-  expect_equal(feat$get_time(), "5")
-
-  expect_error(feat_growth(3, "A", 5))
-  expect_error(feat_growth(3, 1:2, 5))
-})
-
 
 test_that("generating ms cmd for growth works", {
-  model <- coal_model(15, 1) + feat_growth(par_range("alpha", 0, 1), 1)
-  expect_equal(get_simulator("ms")$get_cmd(model), "ms 15 1 -eg 0 1 alpha ")
-  model <- coal_model(15, 1) + feat_growth(5, 1)
-  expect_equal(get_simulator("ms")$get_cmd(model), "ms 15 1 -eg 0 1 5 ")
+  ms <- get_simulator("ms")
+  model <- coal_model(4, 1) + feat_mutation(1)
+  expect_equal(ms$get_cmd(model + feat_growth(5, 1)), "ms 4 1 -t 1 -G 5 ")
+  expect_equal(ms$get_cmd(model + feat_growth(5, 1, 2)), "ms 4 1 -t 1 -eG 2 5 ")
+
+  model <- coal_model(4:5, 1) + feat_mutation(1) +
+    feat_migration(1, symmetric = TRUE)
+
+  expect_equal(ms$get_cmd(model + feat_growth(5, 1)),
+               "ms 9 1 -I 2 4 5 -t 1 -eM 0 1 -g 1 5 ")
+  expect_equal(ms$get_cmd(model + feat_growth(5, 1, 1.5)),
+               "ms 9 1 -I 2 4 5 -t 1 -eM 0 1 -eg 1.5 1 5 ")
+
+  model <- model +
+    par_range("a", 0, 1) +
+    feat_growth(par_expr(2 * a), 1, par_expr(3 * a))
+  expect_equal(ms$get_cmd(model),
+               "ms 9 1 -I 2 4 5 -t 1 -eM 0 1 -eg 3 * a 1 2 * a ")
+  expect_that(ms$simulate(model, .5), is_a('list'))
 })

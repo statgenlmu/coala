@@ -2,8 +2,7 @@ Feature_migration <- R6Class("Feature_migration", inherit = Feature,
   private = list(rate = NA),
   public = list(
     initialize = function(rate, pop_from, pop_to, time, symmetric = FALSE) {
-      private$rate = private$add_parameter(rate)
-      private$time = private$add_parameter(time)
+      super$initialize(rate = rate, time = time)
 
       if (symmetric) {
         private$population = "all"
@@ -11,15 +10,15 @@ Feature_migration <- R6Class("Feature_migration", inherit = Feature,
         private$set_population(c(from=pop_from, to=pop_to), 2)
       }
     },
-    get_rate = function() private$rate,
     print = function() {
       if (all(feature$get_population() == "all")) {
-        cat("Symmetric migration with rate", private$rate)
+        cat("Symmetric migration")
       } else {
         cat("Migration from pop", private$population,
             "to pop", private$pop_to)
       }
-      cat(" starting at time", self$get_time(), "\n")
+      cat(" with rate", print_par(private$rate),
+          "starting at time", print_par(self$get_time()), "\n")
     }
   )
 )
@@ -67,8 +66,8 @@ Feature_migration <- R6Class("Feature_migration", inherit = Feature,
 #' # Symmetric Migration
 #' model <- coal_model(c(25,25), 100) +
 #'   feat_migration(par_range('m', 0.1, 2), symmetric=TRUE)
-feat_migration <- function(rate, pop_from, pop_to,
-                           symmetric=FALSE, time="0") {
+feat_migration <- function(rate, pop_from = NULL, pop_to = NULL,
+                           symmetric = FALSE, time = "0") {
   if (symmetric) {
     return(Feature_migration$new(rate, time = time, symmetric = TRUE))
   } else {
@@ -78,13 +77,13 @@ feat_migration <- function(rate, pop_from, pop_to,
 
 conv_to_ms_arg.Feature_migration <- function(feature, model) {
   if (all(feature$get_population() == "all")) {
-    return( paste0("-eM\", ", feature$get_time(), ", ",
-                    feature$get_rate(), ", \""))
+    return( paste0("-eM', ", feature$get_time(), ", ",
+                    feature$get_rate(), ", '"))
   }
-  paste0("-em\", ", feature$get_time(), ", \"",
-         feature$get_population()[1], " ",
-         feature$get_population()[2], "\", ",
-         feature$get_rate(), ", \"")
+  paste0("-em', ", feature$get_time(), ", ",
+         feature$get_population()[1], ", ",
+         feature$get_population()[2], ", ",
+         feature$get_rate(), ", '")
 }
 
 conv_to_msms_arg.Feature_migration <- ignore_par

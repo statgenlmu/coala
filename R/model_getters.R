@@ -89,7 +89,10 @@ get_locus_group_number <- function(model) {
 #' @describeIn get_features Returns a vector of populations in the model
 #' @export
 get_populations <- function(model) {
-  unique(search_feature(model, 'sample')$pop.source)
+  feat <- model$features[vapply(model$features, is_feat_sample, logical(1))]
+  pop_number <- max(vapply(feat, function(x) length(x$get_sizes()), numeric(1)))
+  assert_that(pop_number > 0)
+  1:pop_number
 }
 
 
@@ -123,22 +126,6 @@ get_locus_number <- function(model, group=NA) {
 }
 
 
-#' @describeIn get_features Returns the population that is marked as outgroup
-#' @export
-get_outgroup <- function(model) {
-  as.integer(search_feature(model, 'outgroup')$parameter)
-}
-
-
-#' @describeIn get_features Returns the number of samples in the outgroup
-#' @export
-get_outgroup_size <- function(model, for_sim = FALSE) {
-  outgroup_size <- get_sample_size(model, for_sim)[get_outgroup(model)]
-  if (length(outgroup_size) == 0) outgroup_size <- 0
-  outgroup_size
-}
-
-
 #' @describeIn get_features Returns the index of the individuals of one
 #'   population
 #' @export
@@ -164,4 +151,8 @@ get_par_names <- function(model, without_priors=FALSE) {
 
 get_loci <- function(model) model$loci
 
-get_cmd <- function(model) select_simprog(model)$get_cmd(model)
+get_cmd <- function(model) {
+  suppressWarnings(prog <- select_simprog(model))
+  if (is.null(prog)) stop("No suitable simulator found.")
+  prog$get_cmd(model)
+}

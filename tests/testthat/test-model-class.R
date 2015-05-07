@@ -33,13 +33,11 @@ test_that("adding parameters works", {
 
 
 test_that("adding features works", {
-  expect_equal(length(get_features(coal_model())), 0)
-  model <- coal_model() + Feature$new()
-  expect_equal(length(get_features(model)), 1)
-  model <- model + Feature$new()
+  expect_equal(length(get_features(coal_model(5))), 1)
+  model <- coal_model(5) + Feature$new(1, 1, 5)
   expect_equal(length(get_features(model)), 2)
-  #model <- model + Feature$new('bli', par_range('bla', 1, 5), variance='15')
-  #expect_true(has_inter_locus_var(model))
+  model <- model + Feature$new(2, 1, 3)
+  expect_equal(length(get_features(model)), 3)
 })
 
 
@@ -47,17 +45,6 @@ test_that("test get_summary_statistics", {
   expect_equal(get_summary_statistics(coal_model(1:2)), list())
   expect_equal(length(get_summary_statistics(model_theta_tau())),  1)
   expect_true(is.sum_stat(get_summary_statistics(model_theta_tau())[[1]]))
-})
-
-
-test_that("getting the Theta Name works", {
-  expect_equal(get_mutation_par(model_theta_tau()), "theta")
-  expect_equal(get_mutation_par(model_hky()), "theta")
-  expect_equal(get_mutation_par(model_f84()), "theta")
-
-  model.test <- coal_model(11:12, 100) +
-    feat_mutation(par_range('abcd', 1, 5))
-  expect_equal(get_mutation_par(model.test), "abcd")
 })
 
 
@@ -73,23 +60,6 @@ test_that("test that scaling of model works", {
   expect_equal(get_locus_number(model, 1), 2)
   expect_equal(get_locus_number(model, 2), 5)
   expect_equal(get_locus_number(model, 5), 1)
-})
-
-
-test_that("searching features works", {
-  model <- model_theta_tau()
-  expect_equal(nrow(search_feature(model, type = "sample")), 2)
-  expect_equal(nrow(search_feature(model, type = c("pop_merge", "sample"))), 3)
-  expect_equal(nrow(search_feature(model, type = c("pop_merge", "sample"),
-                                  pop.sink = NA)), 2)
-  expect_equal(nrow(search_feature(model, time.point = "tau")), 1)
-  expect_equal(nrow(search_feature(model, time.point = NA)), 1)
-
-  expect_equal(nrow(search_feature(model, type = "sample")), 2)
-  expect_equal(nrow(search_feature(model, type = "mutation",
-                                   pop.source = NA)), 1)
-  expect_equal(nrow(search_feature(model, type = "pop_merge",
-                                   pop.sink = 1)), 1)
 })
 
 
@@ -146,10 +116,11 @@ test_that('locus length matrix generations works', {
 
 
 test_that("Adding and Getting inter locus variation works", {
+  skip("Interlocus variation needs to be reworked")
   expect_false(has_inter_locus_var(model_theta_tau()))
 
-  model_tmp <- model_theta_tau() + feat_recombination(5, variance = 3)
-  expect_true(has_inter_locus_var(model_tmp))
+  #model_tmp <- model_theta_tau() + feat_recombination(5, variance = 3)
+  #expect_true(has_inter_locus_var(model_tmp))
 })
 
 
@@ -169,16 +140,7 @@ test_that('getting the available Populations works', {
   expect_equal(get_populations(model), 1:2)
   expect_equal(get_populations(model_theta_tau()), 1:2)
   expect_equal(get_populations(model_hky()), 1:3)
-})
-
-
-test_that('Outgroup setting and getting works', {
-  model <- coal_model(1:4 * 2, 100)
-
-  for (i in 1:4) {
-    expect_equal(get_outgroup(model + feat_outgroup(i)), i)
-    expect_equal(get_outgroup_size(model + feat_outgroup(i)), 2 * i)
-  }
+  expect_equal(get_populations(model + feat_sample(1:5)), 1:5)
 })
 
 
@@ -213,7 +175,7 @@ test_that('getting the ploidy and individuals works', {
 
 test_that('print works on models', {
   # Printing an empty model works
-  out <- capture.output(print(coal_model()))
+  out <- capture.output(print(coal_model(5)))
   expect_that(length(out), is_more_than(0))
 
   # Printing parameters works
@@ -243,16 +205,12 @@ test_that('getting model command works', {
   cmd <- get_cmd(model_theta_tau())
   expect_that(cmd, is_a("character"))
   expect_that(nchar(cmd), is_more_than(0))
-
-  cmd <- get_cmd(model_f84())
-  expect_that(cmd, is_a("character"))
-  expect_true(all(nchar(cmd) > 0))
 })
 
 
 test_that("has_trios works", {
   expect_false(has_trios(model_theta_tau()))
-  expect_false(has_trios(model_f84()))
+  expect_false(has_trios(model_gtr()))
   expect_true(has_trios(model_trios()))
 })
 

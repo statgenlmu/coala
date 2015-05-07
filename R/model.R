@@ -48,27 +48,12 @@ select_simprog <- function(model) {
       }
     }
 
-    if (is.null(name)) stop("No suitable simulation software found!")
+    if (is.null(name)) warning("No suitable simulation software found!")
     cache(model, 'simprog', name)
   }
 
   name
 }
-
-
-get_mutation_par <- function(model, outer=FALSE) {
-  if (outer) {
-    feat <- search_feature(model, "mutation_outer")
-    if (nrow(feat) == 0) {
-      feat <- search_feature(model, "mutation")
-    }
-  }  else {
-    feat <- search_feature(model, "mutation")
-  }
-  if (nrow(feat) != 1) stop("Failed to determine mutation rate")
-  feat[1, 'parameter']
-}
-
 
 
 add_inter_locus_var <- function(model) {

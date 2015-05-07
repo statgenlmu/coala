@@ -31,7 +31,7 @@ Feature_sample <- R6Class("Feature_sample", inherit = Feature,
 #' @param population The population from with the indidivuals are sampled
 #' @param time The time at which the sample is taken.
 #' @return The feature, which can be added to a model using `+`.
-#' @export
+## @export
 feat_sample <- function(sizes, time = '0') {
   if (time != '0')
     stop("Samples at time different from 0 at not supported at the moment")
@@ -55,9 +55,9 @@ get_sample_size <- function(model, for_sim=FALSE) {
     sample_size <- model$feature[feat_mask][[1]]$get_sizes()
 
     if (for_sim) {
-      #sample_size <- sample_size * get_ploidy(model)
+      sample_size <- sample_size * get_ploidy(model)
     } else {
-      #sample_size <- sample_size * get_samples_per_ind(model)
+      sample_size <- sample_size * get_samples_per_ind(model)
     }
     cache(model, paste0("sample_size_", for_sim), sample_size)
   }
@@ -66,7 +66,7 @@ get_sample_size <- function(model, for_sim=FALSE) {
 }
 
 conv_to_ms_arg.Feature_sample <- function(feature, model) {
-  sample_size <- feature$get_sizes()
+  sample_size <- get_sample_size(model, TRUE)
   if (length(feature$get_sizes()) == 1) return("")
   paste0("-I ", length(sample_size), " ",
          paste(sample_size, collapse = " "), " ")

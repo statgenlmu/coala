@@ -86,7 +86,6 @@ msms_generate_opts <- function(model, parameters, locus,  eval_pars = TRUE) {
     cache(model, 'msms_cmd', cmd)
   }
 
-  if (!eval_pars) cmd <- escape_par_expr(cmd)
   eval(parse(text = cmd), envir = msms_tmp)
 }
 

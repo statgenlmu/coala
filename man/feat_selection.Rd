@@ -4,16 +4,12 @@
 \alias{feat_selection}
 \title{Adds positiv selection to a model}
 \usage{
-feat_selection(strength_AA, strength_Aa, population, at_time,
-  zero_inflation = 0)
+feat_selection(strength_AA, strength_Aa, population, at_time)
 }
 \arguments{
 \item{population}{The populaton in which the allele is selected.}
 
 \item{at_time}{The time at which the selection starts.}
-
-\item{fraction_neutral}{Optionally, a fraction of the loci in the group can
-be neutral.}
 }
 \description{
 Adds positiv selection to a model

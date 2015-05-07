@@ -2,7 +2,7 @@ context('Feature Pop Merge')
 
 test_that('Creation of merge features works', {
   feat <- feat_pop_merge(2, 2, 1)
-  expect_equal(feat$get_time(), "2")
+  expect_equal(feat$get_time(), "par(2)")
   expect_equal(feat$get_population(), c(from=2, to=1))
 })
 
