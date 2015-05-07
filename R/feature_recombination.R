@@ -35,5 +35,5 @@ conv_to_ms_arg.Feature_recombination <- function(feature, model) {
   paste0("-r', ", feature$get_rate(), ", par(locus_length), '")
 }
 
-conv_to_msms_arg.Feature_recombination <- ignore_par
+conv_to_msms_arg.Feature_recombination <- conv_to_ms_arg.Feature_recombination
 conv_to_seqgen_arg.Feature_recombination <- ignore_par

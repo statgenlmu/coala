@@ -2,14 +2,13 @@ context('Simulator msms')
 
 test_that("calling msms works", {
   if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
-  ms.args <- "5 1 -r 10 100 -t 5 -I 2 3 2 1"
-  msms.args <- ""
+  msms.args <- "5 1 -r 10 100 -t 5 -I 2 3 2 1"
   set.seed(17)
-  out_file <- call_msms(ms.args, msms.args)
+  out_file <- call_msms(msms.args)
   set.seed(17)
-  out_file_2 <- call_msms(ms.args, msms.args)
+  out_file_2 <- call_msms(msms.args)
   set.seed(20)
-  out_file_3 <- call_msms(ms.args, msms.args)
+  out_file_3 <- call_msms(msms.args)
   expect_equal(file.info(out_file_2)$size, file.info(out_file)$size)
   expect_true(file.info(out_file)$size != file.info(out_file_3)$size)
   unlink(c(out_file, out_file_2, out_file_3))
@@ -17,38 +16,16 @@ test_that("calling msms works", {
 
 
 test_that("generating msms options works", {
-  model <- model_theta_tau() +
-    feat_selection(par_const(500), par_const(250),
-                   population = 1, at_time = 1.7)
-
-  opts <- paste(eval(parse(text = msms_generate_opts_cmd(model))),
-                collapse = " ")
-  expect_equal(grep("-SI 1.7 2 5e-04 0", opts), 1)
-  expect_equal(grep("-SAA 500", opts), 1)
-  expect_equal(grep("-SAa 250", opts), 1)
-})
-
-
-test_that("generating text command works", {
   msms <- get_simulator("msms")
-  model2 <- model_theta_tau() +
-    feat_selection(par_range('s', 1, 10), par_expr(s),
-                   population = 1, at_time = 1.7)
-
-  cmd <- msms$get_cmd(model2)
-  expect_equal(grep('^msms', cmd), 1)
-  expect_equal(grep('-ms 25 10', cmd), 1)
-  expect_equal(grep('-SAA s', cmd), 1)
-  expect_equal(grep('-SAa s', cmd), 1)
+  model <- coal_model(10, 2) + feat_mutation(5)
+  expect_equal(msms$get_cmd(model), "msms 10 2 -t 5 ")
 })
 
 
 test_that("msms_simulate works", {
   if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
   msms <- get_simulator("msms")
-  model <- model_theta_tau() +
-    feat_selection(par_const(500), par_const(250),
-                   population = 1, at_time = 1.7)
+  model <- model_theta_tau()
 
   set.seed(6688)
   sum_stats <- msms$simulate(model, c(1, 5))
@@ -62,6 +39,7 @@ test_that("msms_simulate works", {
 
 
 test_that("msms_simulate works with inter-locus variation", {
+  skip("deactvated")
   if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
   msms <- get_simulator("msms")
 
@@ -99,28 +77,4 @@ test_that("msms can simulate locus trios", {
   expect_true(all(attr(stat$seg_sites[[1]], "locus") %in% -1:1))
   expect_true(all(attr(stat$seg_sites[[1]], "positions") >= 0))
   expect_true(all(attr(stat$seg_sites[[1]], "positions") <= 1))
-})
-
-
-test_that("msms can simulate selection with one population", {
-  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
-  model <- coal_model(5, 1, 100) +
-    feat_selection(1000, 500, 1, at_time = 0.01) +
-    feat_mutation(1) +
-    sumstat_sfs()
-
-  stat <- get_simulator("msms")$simulate(model)
-  expect_that(stat$sfs, is_a("numeric"))
-})
-
-
-test_that("msms can simulate selection with three populations", {
-  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
-  model <- coal_model(c(5, 5, 5), 1, 100) +
-    feat_selection(1000, 500, 1, at_time = 0.01) +
-    feat_mutation(1) +
-    feat_migration(1, symmetric = TRUE) +
-    sumstat_sfs()
-  stat <- get_simulator("msms")$simulate(model)
-  expect_that(stat$sfs, is_a("numeric"))
 })

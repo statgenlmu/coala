@@ -40,5 +40,5 @@ conv_to_ms_arg.Feature_pop_merge <- function(feature, model) {
          feature$get_population()[2], ", '")
 }
 
-conv_to_msms_arg.Feature_pop_merge <- ignore_par
+conv_to_msms_arg.Feature_pop_merge <- conv_to_ms_arg.Feature_pop_merge
 conv_to_seqgen_arg.Feature_pop_merge <- ignore_par

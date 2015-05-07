@@ -36,6 +36,30 @@ conv_to_ms_arg.Feature_selection <- function(feature, model) {
 }
 
 conv_to_msms_arg.Feature_growth <- function(feature, model) {
+  #     if (type == "selection") {
+  #       cmd <- c(cmd, '"-SI"', ',', feat['time.point'], ',',
+  #                length(get_sample_size(model, for_sim = TRUE)), ',')
+  #       start_freq <- rep(0, length(get_sample_size(model, for_sim = TRUE)))
+  #       start_freq[ as.integer(feat['pop.source']) ] <- 0.0005
+  #       cmd <- c(cmd, paste0('"', paste(start_freq, collapse=' '), '"'), ',')
+  #
+  #       cmd <- c(cmd, '"-N 10000"', ',')
+  #
+  #       s_AA <- search_feature(model, 'selection_AA',
+  #                              pop.source = feat['pop.source'],
+  #                              time.point = feat['time.point'])$parameter
+  #       stopifnot(length(s_AA) == 1)
+  #       cmd <- c(cmd, '"-SAA"', ',', s=s_AA, ',')
+  #
+  #       s_Aa <- search_feature(model, 'selection_Aa',
+  #                             pop.source = feat['pop.source'],
+  #                             time.point = feat['time.point'])$parameter
+  #       stopifnot(length(s_Aa) == 1)
+  #       cmd <- c(cmd, '"-SAa"', ',', s=s_Aa, ',')
+  #       cmd <- c(cmd, '"-Sp 0.5"', ',', '"-SForceKeep"', ',')
+  #       cmd <- c(cmd, '"-threads 1"', ',')
+  #     }
+  #   }
 
 }
 

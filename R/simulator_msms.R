@@ -1,4 +1,4 @@
-call_msms <- function(ms_args, msms_args, subgroup) {
+call_msms <- function(msms_args) {
   msms_find_jar()
 
   out_file <- tempfile('msms')
@@ -6,7 +6,7 @@ call_msms <- function(ms_args, msms_args, subgroup) {
 
   # Create the command
   cmd <- paste("java -jar", get_msms_path(), as.character(msms_args),
-               "-ms", as.character(ms_args), "-seed", seed, ">", out_file)
+               "-seed", seed, ">", out_file)
 
   # Execute the command
   capture.output(system(cmd))
@@ -36,48 +36,28 @@ msms_find_jar <- function(throw_error = TRUE, silent = FALSE) {
 }
 
 
-
-# This function generates an string that contains an R command for generating
-# an msms call to the current model_
-msms_generate_opts_cmd <- function(model) {
-  cmd <- c('c(')
-
-  for (i in 1:dim(get_feature_table(model))[1] ) {
-    type <- as.character(get_feature_table(model)[i,"type"])
-    feat <- unlist(get_feature_table(model)[i, ])
-
-    if (type == "selection") {
-      cmd <- c(cmd, '"-SI"', ',', feat['time.point'], ',',
-               length(get_sample_size(model, for_sim = TRUE)), ',')
-      start_freq <- rep(0, length(get_sample_size(model, for_sim = TRUE)))
-      start_freq[ as.integer(feat['pop.source']) ] <- 0.0005
-      cmd <- c(cmd, paste0('"', paste(start_freq, collapse=' '), '"'), ',')
-
-      cmd <- c(cmd, '"-N 10000"', ',')
-
-      s_AA <- search_feature(model, 'selection_AA',
-                             pop.source = feat['pop.source'],
-                             time.point = feat['time.point'])$parameter
-      stopifnot(length(s_AA) == 1)
-      cmd <- c(cmd, '"-SAA"', ',', s=s_AA, ',')
-
-      s_Aa <- search_feature(model, 'selection_Aa',
-                            pop.source = feat['pop.source'],
-                            time.point = feat['time.point'])$parameter
-      stopifnot(length(s_Aa) == 1)
-      cmd <- c(cmd, '"-SAa"', ',', s=s_Aa, ',')
-      cmd <- c(cmd, '"-Sp 0.5"', ',', '"-SForceKeep"', ',')
-      cmd <- c(cmd, '"-threads 1"', ',')
-    }
-  }
-
-  cmd <- c(cmd, '" ")')
-  cmd
+# Translating the model into simulation commands
+conv_to_msms_arg <- function(feature, model) UseMethod("conv_to_msms_arg")
+conv_to_msms_arg.default <- function(feature, model) {
+  stop("Unknown feature when generating ms command")
 }
 
 
-msms_generate_opts <- function(model, parameters, locus,  eval_pars = TRUE) {
+# This function generates an string that contains an R command for generating
+# an ms call to the current model.
+msms_generate_opts_cmd <- function(model) {
+  cmd <- paste(vapply(model$features, conv_to_msms_arg,
+                      FUN.VALUE = character(1), model),
+               collapse = "")
+  paste0("c('",
+         sum(get_sample_size(model, TRUE)),
+         "', format(locus_number, scientific = FALSE), '", cmd, "')")
+}
+
+
+msms_generate_opts <- function(model, parameters, locus, eval_pars = TRUE) {
   msms_tmp <- create_par_env(model, parameters,
+                             locus_number = get_locus_number(model, locus),
                              locus = locus, for_cmd = !eval_pars)
 
   cmd <- read_cache(model, 'msms_cmd')
@@ -95,36 +75,21 @@ msms_generate_opts <- function(model, parameters, locus,  eval_pars = TRUE) {
 Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
   private = list(
     name = 'msms',
-    features = c("selection", "selection_AA", "selection_Aa",
-                 get_simulator("ms")$get_features()),
-    sumstats = get_simulator("ms")$get_sumstats(),
     priority = 40
   ),
   public = list(
     get_cmd = function(model) {
-      ms_cmd <- paste(ms_generate_opts(model,
-                                       get_parameter_table(model)$name,
-                                       "locus", FALSE),
-                      collapse = ' ')
-      msms_cmd <- paste(msms_generate_opts(model,
-                                           get_parameter_table(model)$name,
-                                           "locus", FALSE),
-                        collapse = ' ')
+      cmd <- paste(msms_generate_opts(model, NULL, "locus", FALSE),
+                   collapse = ' ')
 
-      paste("msms", msms_cmd,
-            "-ms", sum(get_sample_size(model)), get_locus_number(model), ms_cmd)
+      paste("msms", cmd)
     },
     simulate = function(model, parameters=numeric(0)) {
       # Run the simulation(s)
       files <- lapply(1:get_locus_group_number(model), function(i) {
-        ms_options <- paste(sum(get_sample_size(model, for_sim = TRUE)),
-                            format(get_locus_number(model, group=i),
-                                   scientific=FALSE),
-                            paste(ms_generate_opts(model, parameters, i),
-                                  collapse=" "))
         msms_options <- paste(msms_generate_opts(model, parameters, i),
                               collapse= " ")
-        call_msms(ms_options, msms_options)
+        call_msms(msms_options)
       })
 
       # Parse the output and calculate summary statistics

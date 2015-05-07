@@ -86,5 +86,5 @@ conv_to_ms_arg.Feature_migration <- function(feature, model) {
          feature$get_rate(), ", '")
 }
 
-conv_to_msms_arg.Feature_migration <- ignore_par
+conv_to_msms_arg.Feature_migration <- conv_to_ms_arg.Feature_migration
 conv_to_seqgen_arg.Feature_migration <- ignore_par
