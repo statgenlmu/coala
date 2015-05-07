@@ -5,17 +5,15 @@
 \title{Adds an instantaneous change of the population size of one
 population to a model.}
 \usage{
-feat_size_change(new_size, population, at.time = "0")
+feat_size_change(new_size, population, time = "0")
 }
 \arguments{
-\item{new_size}{A \code{\link{Parameter}} giving the new size of the population
-as fraction of N0.}
+\item{new_size}{A \code{\link{parameter}} giving the new size of the
+population, as a factor of N0.}
 
 \item{population}{The number of the population whichs size is changed.}
 
-\item{at.time}{The time point at which the size changes.}
-
-\item{model}{The demographic model to which the size change should be added.}
+\item{time}{The time point at which the size changes.}
 }
 \value{
 A feature which can be added to a model.
@@ -23,7 +21,7 @@ A feature which can be added to a model.
 \description{
 This function changes the effective population size of one
 population. The change is performed at a given time point
-('at.time') and applies to the time interval farther into
+and applies to the time interval further on into
 the past from this point. The population size is set to a
 fraction of N0, the present day size of population one.
 }
@@ -34,6 +32,6 @@ then use the \link{model.addGrowth} function.
 \examples{
 # A model with one smaller population
 model <- coal_model(c(20,37), 88) +
-  feat_size_change(par_const(.1), 2, at.time='1')
+  feat_size_change(.1, 2, time="1")
 }
 
