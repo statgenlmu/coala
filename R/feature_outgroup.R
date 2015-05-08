@@ -56,4 +56,8 @@ conv_to_msms_arg.Feature_outgroup <- function(feature, model) {
   stop("msms does not support outgroups")
 }
 
+conv_to_scrm_arg.Feature_outgroup <- function(feature, model) {
+  stop("scrm does not support outgroups")
+}
+
 conv_to_seqgen_arg.Feature_outgroup <- ignore_par

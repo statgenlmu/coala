@@ -68,4 +68,5 @@ is_unphased <- function(model) !is.null(get_feature_unphased(model))
 
 conv_to_ms_arg.Feature_unphased <- ignore_par
 conv_to_msms_arg.Feature_unphased <- ignore_par
+conv_to_scrm_arg.Feature_unphased <- ignore_par
 conv_to_seqgen_arg.Feature_unphased <- ignore_par

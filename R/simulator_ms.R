@@ -79,13 +79,11 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
       sum_stats
     },
     get_cmd = function(model) {
-      cmd <- ms_generate_opts(model, get_parameter_table(model)$name,
-                              "locus", FALSE)
-      txt <- paste(cmd, collapse = ' ')
+      cmd <- ms_generate_opts(model, NULL, 1, FALSE)
       paste("ms",
             sum(get_sample_size(model, TRUE)),
             get_locus_number(model),
-            txt)
+            paste(cmd, collapse = ' '))
     }
   )
 )

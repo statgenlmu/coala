@@ -38,6 +38,7 @@ Collate:
     'feature_sample.R'
     'feature_selection.R'
     'feature_size_change.R'
+    'feature_sumstats.R'
     'feature_unphased.R'
     'locus.R'
     'model.R'

@@ -42,4 +42,5 @@ conv_to_ms_arg.Feature_size_change <- function(feature, model) {
 }
 
 conv_to_msms_arg.Feature_size_change <- conv_to_ms_arg.Feature_size_change
+conv_to_scrm_arg.Feature_size_change <- conv_to_ms_arg.Feature_size_change
 conv_to_seqgen_arg.Feature_size_change <- ignore_par

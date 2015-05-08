@@ -37,8 +37,10 @@ feat_selection <- function(strength_AA, strength_Aa, population = 1, time) {
 }
 
 conv_to_ms_arg.Feature_selection <- function(feature, model) {
-  stop("ms does not support selection")
+  stop("selection is not supported")
 }
+
+conv_to_scrm_arg.Feature_selection <- conv_to_ms_arg.Feature_selection
 
 conv_to_msms_arg.Feature_selection <- function(feature, model) {
   n_pop <- length(get_populations(model))

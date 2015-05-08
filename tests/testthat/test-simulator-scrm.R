@@ -12,6 +12,14 @@ test_that("simulation with scrm works", {
 })
 
 
+test_that("printing command works", {
+  scrm <- get_simulator("scrm")
+  model <- model_theta_tau()
+  expect_equal(scrm$get_cmd(model),
+               "scrm 25 10 -I 2 10 15 -ej tau 2 1 -t theta ")
+})
+
+
 test_that("simulating files works", {
   scrm <- get_simulator("scrm")
   folder <- tempfile('scrm_test')
@@ -30,12 +38,12 @@ test_that("simulating files works", {
 test_that('simulating unphased data works', {
   scrm <- get_simulator("scrm")
   model <- model_theta_tau() + feat_unphased(2, 1) + sumstat_seg_sites()
-  stats <- scrm$simulate(model, c(1,5))
+  stats <- scrm$simulate(model, c(1, 5))
   expect_equal(dim(stats$jsfs), c(11, 16))
   expect_equal(nrow(stats$seg_sites[[1]]), 25)
 
   model <- model_theta_tau() + feat_unphased(3, 2) + sumstat_seg_sites()
-  stats <- scrm$simulate(model, c(1,5))
+  stats <- scrm$simulate(model, c(1, 5))
   expect_equal(dim(stats$jsfs), c(21, 31))
   expect_equal(nrow(stats$seg_sites[[1]]), 50)
 })

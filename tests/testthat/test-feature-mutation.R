@@ -1,13 +1,6 @@
 context('Feature Mutation')
 
 
-test_that('Creation of simple mutation features works', {
-  feat <- feat_mutation(5)
-  expect_equal(feat$get_rate(), "par(5)")
-  expect_equal(feat$get_model(), "IFS")
-})
-
-
 test_that('Creation of finite sites features works', {
   expect_error(feat_mutation(5, model = "BLUB"))
   expect_error(feat_mutation(5, model = "F84"))
@@ -50,4 +43,10 @@ test_that("Parsing mutation to ms args works", {
   expect_equal(ms$get_cmd(model), "ms 15 1 -t 2 * x ")
 
   expect_error(conv_to_ms_arg(feat_mutation(5, "GTR"), NULL))
+})
+
+test_that("Parsing mutation to seqgen args works", {
+  sg <- get_simulator("seqgen")
+  model <- coal_model(10, 1) + feat_mutation(5, model = 'GTR', gtr_rates = 1:6)
+  sg$get_cmd(model)
 })

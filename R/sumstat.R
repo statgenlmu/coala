@@ -1,8 +1,9 @@
 Sumstat <- R6Class('Sumstat',
   private = list(
-    name=NA,
-    req_files=FALSE,
-    req_segsites=FALSE
+    name = NA,
+    req_files = FALSE,
+    req_trees = FALSE,
+    req_segsites = FALSE
   ),
   public = list(
     initialize = function(name) {
@@ -15,6 +16,7 @@ Sumstat <- R6Class('Sumstat',
     get_group = function() private$group,
     requires_files = function() private$req_files,
     requires_segsites = function() private$req_segsites,
+    requires_trees = function() private$req_trees,
     print = function() cat(class(self)[1], "\n")
   )
 )
@@ -35,8 +37,17 @@ add_to_model.Sumstat <- function(sum_stat, model, feat_name) {
     stop("Can't add ", feat_name, " to model: ",
          "There is already a statistic with name ", sum_stat$get_name())
 
+  if (sum_stat$requires_files() && !requires_files(model))
+    model <- model + Feature_files$new()
+  if (sum_stat$requires_segsites() && !requires_segsites(model))
+    model <- model + Feature_segsites$new()
+  if (sum_stat$requires_trees() && !requires_trees(model))
+    model <- model + Feature_trees$new()
+
   # Save the statistic
   model$sum_stats[[sum_stat$get_name()]] <- sum_stat
+
+  # Update cache
   model$id <- get_id()
   model
 }
@@ -70,6 +81,10 @@ calc_sumstats <- function(seg_sites, files, model, pars) {
 
 requires_segsites <- function(model) {
   any(sapply(get_summary_statistics(model), function(x) x$requires_segsites()))
+}
+
+requires_trees <- function(model) {
+  any(sapply(get_summary_statistics(model), function(x) x$requires_trees()))
 }
 
 requires_files <- function(model) {

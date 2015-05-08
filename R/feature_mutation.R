@@ -11,7 +11,7 @@ Feature_mutation <- R6Class("Feature_mutation", inherit = Feature,
   public = list(
     initialize = function(rate, model, base_frequencies,
                           tstv_ratio, gtr_rates) {
-      private$rate = private$add_parameter(rate)
+      private$rate = private$add_parameter(rate, add_par = FALSE)
 
       assert_that(length(model) == 1)
       assert_that(any(model == c("IFS", "HKY", "GTR")))
@@ -149,14 +149,27 @@ feat_mutation <- function(rate,
 #                    group = group)
 # }
 
+is_feat_mutation <- function(feat) any("Feature_mutation" == class(feat))
 
 conv_to_ms_arg.Feature_mutation <- function(feature, model) {
   if (feature$get_model() != "IFS") stop("Unsupported mutation model")
-  paste0("-t', ", feature$get_rate(), ", '")
+  paste0("-t', par(", feature$get_rate(), "), '")
 }
 
 conv_to_msms_arg.Feature_mutation <- conv_to_ms_arg.Feature_mutation
+conv_to_scrm_arg.Feature_mutation <- conv_to_ms_arg.Feature_mutation
 
 conv_to_seqgen_arg.Feature_mutation <- function(feature, model) {
-
+  if (feature$get_model() == "GTR") {
+    rates <- paste("-g", paste(feature$get_gtr_rates(), collapse = " "))
+  } else {
+    rates <- paste("-f", paste(feature$get_base_frequencies(), collapse = " "),
+                   "-t", feature$get_tstv_ratio())
+  }
+  paste0("-m", feature$get_model(), " ",
+         rates, " ",
+         "-l', locus_length, '",
+         "-s', par(", feature$get_rate(), " / locus_length), '",
+         "-p', locus_length + 1, '",
+         "-z', par(seed), '-q")
 }

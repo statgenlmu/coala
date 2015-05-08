@@ -17,11 +17,11 @@ test_that("test.sg_generate_opts", {
 
 test_that("generation of tree models works", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  for (model in list(model_hky(), model_f84(), model_gtr())) {
-    model.ms <- generate_tree_model(model)
-    sum.stats <- simulate(model.ms, pars=c(1, 5))
-    expect_false(is.null(sum.stats$trees))
-    unlink(unlist(sum.stats$trees))
+  for (model in list(model_hky(), model_gtr())) {
+    tree_model <- generate_tree_model(model)
+    stats <- simulate(tree_model, pars = c(1, 5))
+    expect_false(is.null(stats$trees))
+    unlink(unlist(stats$trees))
   }
 })
 
@@ -45,7 +45,7 @@ test_that("simulation with seq-gen works", {
 test_that("All example models can be simulated", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
   set.seed(12)
-  for (model in list(model_hky(), model_f84(), model_gtr())) {
+  for (model in list(model_hky(), model_gtr())) {
     sum_stats <- simulate(model, pars=c(1, 5))
     expect_true(sum(sum_stats$jsfs) > 0)
   }
@@ -80,7 +80,7 @@ test_that("test.seqgenWithMsms", {
 
 test_that("seq-gen can simulate trios", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  model <- model_f84() +
+  model <- model_gtr() +
     locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5)) +
     locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5)) +
     sumstat_seg_sites()

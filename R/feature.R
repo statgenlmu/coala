@@ -11,19 +11,22 @@ Feature <- R6Class("Feature",
       assert_that(length(population) == expected_length)
       private$population = population
     },
-    add_parameter = function(parameter, required=TRUE) {
+    add_parameter = function(parameter, required = TRUE, add_par = TRUE) {
+      expr <- NA
       if (is.numeric(parameter) && length(parameter) == 1) {
-        return(paste0("par(", parameter, ")"))
+        expr <- parameter
       } else if (is.character(parameter) && length(parameter) == 1) {
-        return(paste0("par(", parameter, ")"))
+        expr <- parameter
       } else if (is.par(parameter)) {
         idx <- as.character(length(private$parameter) + 1)
         private$parameter[[idx]] <- parameter
-        return(paste0("par(", parameter$get_expression(), ")"))
+        expr <- parameter$get_expression()
       } else if (is.null(parameter) || is.na(parameter)) {
         if (required) stop("Missing value for required parameter")
         return(NA)
       } else stop("Unexpected type of parameter")
+      if (!add_par) return(expr)
+      paste0("par(", expr, ")")
     }
   ),
   public = list(

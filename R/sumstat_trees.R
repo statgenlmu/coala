@@ -12,14 +12,12 @@ SumstatTrees <- R6Class('SumstatTrees', inherit = Sumstat, #nolint
 #' @export
 #' @inheritParams sumstat_four_gamete
 sumstat_trees <- function(name = "trees") {
-  coal_model() +
-    Feature$new('trees', par_const(NA)) +
-    SumstatTrees$new(name) #nolint
+  SumstatTrees$new(name) #nolint
 }
 
 
 SumstatSgTrees <- R6Class('SumstatSgTrees', inherit = Sumstat, #nolint
-  private = list(req_files = TRUE),
+  private = list(req_trees = TRUE),
   public = list(
     calculate = function(seg_sites, files, model) {
       trees <- parse_trees(files, get_locus_number(model), FALSE)
@@ -44,7 +42,5 @@ SumstatSgTrees <- R6Class('SumstatSgTrees', inherit = Sumstat, #nolint
 
 # Returns ancestral tress as files for seq-gen
 sumstat_sg_trees <- function() {
-  coal_model() +
-    Feature$new('trees', par_const(NA)) +
     SumstatSgTrees$new('trees') #nolint
 }
