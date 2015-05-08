@@ -1,3 +1,5 @@
+self <- private <- super <- NULL # Mute warnings about R6 objects
+
 Feature <- R6Class("Feature",
   private = list(
     parameter = list(),

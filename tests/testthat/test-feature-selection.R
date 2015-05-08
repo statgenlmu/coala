@@ -1,32 +1,16 @@
 context("Feature Selection")
 
-test_that("a variable start works", {
-  model <- coal_model(5) +
-    feat_selection(strength_AA = par_const(0),
-                   strength_Aa = par_const(1000),
-                   population = 1,
-                   time = par_range('t_sel', 0.001, 0.1))
-
-  expect_equal(get_parameter_table(model), data.frame(name="t_sel",
-                                                      lower.range=0.001,
-                                                      upper.range=0.1,
-                                                      stringsAsFactors = FALSE))
-  expect_true(all(get_feature_table(model)$time.point %in% c('0', 't_sel')))
-
-  model <- coal_model(5) +
-    feat_selection(strength_AA = par_const(0),
-                   strength_Aa = par_const(1000),
-                   population = 1,
-                   time = par_expr(2 * x))
-
-  expect_true(all(get_feature_table(model)$time.point %in% c('0', '2 * x')))
-
-  model <- coal_model(5) +
-    feat_selection(strength_AA = par_const(0),
-                   strength_Aa = par_const(1000),
-                   population = 1,
-                   time = 0.2)
-  expect_true(all(get_feature_table(model)$time.point %in% c('0', '0.2')))
+test_that("generation of selection cmd works", {
+  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  msms <- get_simulator("msms")
+  model  <- model_theta_tau() +
+    feat_selection(111, 222, population = 1, time = 5)
+  cmd <- msms$get_cmd(model)
+  expect_true(grepl("-N 10000", cmd))
+  expect_true(grepl("-SI 5 2 5e-04 0", cmd))
+  expect_true(grepl("-SAA 111", cmd))
+  expect_true(grepl("-SAa 222", cmd))
+  expect_true(grepl(" $", cmd))
 })
 
 
