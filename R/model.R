@@ -1,5 +1,29 @@
+#' Creates a coalescent model
+#'
+#' This creates a basic coalescent model to which more features, loci,
+#' parameters and summary statistics can be added. Data under the model
+#' can be simulated using the \code{simulate} function.
+#'
+#' @param sample_size Defines the number of populations and the number of
+#'   samples taken from each population. Given as an integer vector which
+#'   length defines the number of population and each entry gives the number
+#'   of haplodies sampled from the corresponding population.
+#' @param loci_number You can optionally add a number of loci with equal length
+#'   to the model. This gives to number of loci to add.
+#' @param loci_length This gives the length of the loci to add.
+#' @return The coalescent model
 #' @export
-coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
+#' @importFrom assertthat assert_that
+#' @examples
+#' model <- coal_model(5, 10, 100) + feat_mutation(1) + sumstat_sfs()
+#' simulate(model)
+#'
+#' model <- coal_model(c(2, 2), 1, 10) +
+#'   feat_recombination(1) +
+#'   feat_migration(0.5, symmetric = TRUE) +
+#'   sumstat_trees()
+#' simulate(model)
+coal_model <- function(sample_size, loci_number=0, loci_length=1000) {
   model <- list()
   class(model) <- c("Coalmodel")
 
@@ -12,9 +36,9 @@ coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model$id <- get_id()
 
   # Add sample sizes
-  if (any(sample_size > 0)) {
-    model <- model + feat_sample(sample_size)
-  }
+  assert_that(is.numeric(sample_size))
+  assert_that(sum(sample_size) > 0)
+  model <- model + feat_sample(sample_size)
 
   # Add locus
   if (loci_number > 0) {

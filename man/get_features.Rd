@@ -48,11 +48,16 @@ can be unequal for the simulation of unphased data.}
 
 \item{locus}{The number of the locus.}
 
+\item{group}{The group of loci.}
+
 \item{total}{If \code{FALSE}, the length of loci in a trio will be reported
-  individually. If \code{TRUE} the sum of the loci's length will be reported.
-  This does not affect non-trio loci.}
+individually. If \code{TRUE} the sum of the loci's length will be reported.
+This does not affect non-trio loci.}
 
 \item{pop}{The population for which aspects are returned}
+
+\item{zero_indexed}{If true, the names of the populations are started from
+0 instead of from 1.}
 }
 \description{
 Getters for coalescent models

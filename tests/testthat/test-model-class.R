@@ -189,9 +189,9 @@ test_that('print works on models', {
 
 
 test_that('getting par names works', {
-  expect_equal(get_par_names(coal_model()), character(0))
+  expect_equal(get_par_names(coal_model(5)), character(0))
 
-  model <- coal_model() + par_range("a", 1, 2) + par_range("b", 2, 3)
+  model <- coal_model(5) + par_range("a", 1, 2) + par_range("b", 2, 3)
   expect_equal(get_par_names(model), c("a", "b"))
   expect_equal(get_par_names(model, TRUE), c("a", "b"))
 

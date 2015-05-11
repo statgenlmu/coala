@@ -1,3 +1,10 @@
+#' Check which simulatior can simulate a model
+#'
+#' This function allows to check which of the available simulators can
+#' simulate a given model. It also states the problems for the ones that
+#' are incompatible with the model.
+#'
+#' @param model The model that is checked
 #' @export
 check_model <- function(model) {
   force(model)

@@ -50,6 +50,7 @@ get_parameter <- function(model) {
 #' @param total If \code{FALSE}, the length of loci in a trio will be reported
 #'   individually. If \code{TRUE} the sum of the loci's length will be reported.
 #'   This does not affect non-trio loci.
+#' @param group The group of loci.
 #'
 #' @describeIn get_features Returns the length of the loci in a locus group
 #' @export
@@ -128,6 +129,8 @@ get_locus_number <- function(model, group=NA) {
 
 #' @describeIn get_features Returns the index of the individuals of one
 #'   population
+#' @param zero_indexed If true, the names of the populations are started from
+#'   0 instead of from 1.
 #' @export
 get_population_indiviuals <- function(model, pop, zero_indexed = FALSE) {
   if (pop == "all") return(1:sum(get_sample_size(model)))
