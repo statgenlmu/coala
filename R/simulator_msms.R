@@ -57,6 +57,8 @@ msms_generate_opts_cmd <- function(model) {
 
 msms_generate_opts <- function(model, parameters, locus, eval_pars = TRUE) {
   msms_tmp <- create_par_env(model, parameters,
+                             locus_length = get_locus_length(model,
+                                                             group = locus),
                              locus_number = get_locus_number(model, locus),
                              locus = locus, for_cmd = !eval_pars)
 
@@ -79,7 +81,7 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
   ),
   public = list(
     get_cmd = function(model) {
-      cmd <- paste(msms_generate_opts(model, NULL, "locus", FALSE),
+      cmd <- paste(msms_generate_opts(model, NULL, 1, FALSE),
                    collapse = ' ')
 
       paste("msms", cmd)

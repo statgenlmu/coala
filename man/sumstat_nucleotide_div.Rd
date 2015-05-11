@@ -28,7 +28,7 @@ as an estimator for the per locus scaled muation rate theta.
 It was introducted by
 
 Nei and Li (1979). "Mathematical Model for Studying Genetic Variation in
- Terms of Restriction Endonucleases". PNAS 76 (10): 5269–73.
+ Terms of Restriction Endonucleases". PNAS 76 (10): 5269-73.
  doi:10.1073/pnas.76.10.5269.
 }
 

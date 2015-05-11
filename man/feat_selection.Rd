@@ -4,12 +4,16 @@
 \alias{feat_selection}
 \title{Adds positiv selection to a model}
 \usage{
-feat_selection(strength_AA, strength_Aa, population, at_time)
+feat_selection(strength_AA, strength_Aa, population = 1, time)
 }
 \arguments{
+\item{strength_AA}{The selection strength for the selected homozygote}
+
+\item{strength_Aa}{The selection strength for the heterozygote.}
+
 \item{population}{The populaton in which the allele is selected.}
 
-\item{at_time}{The time at which the selection starts.}
+\item{time}{The time at which the selection starts.}
 }
 \description{
 Adds positiv selection to a model
@@ -18,7 +22,9 @@ Adds positiv selection to a model
 # Positive selection in population 2:
 model <- coal_model(c(10, 13), 100) +
   feat_pop_merge(par_range('tau', .1, 2), 2, 1) +
-  feat_selection(strength_AA=par_expr(2*s), strength_Aa=par_range('s', 100, 2000),
-                 population = 2, at_time=par_expr(tau))
+  feat_selection(strength_AA=par_expr(2*s),
+                 strength_Aa=par_range('s', 100, 2000),
+                 population = 2,
+                 time=par_expr(tau))
 }
 

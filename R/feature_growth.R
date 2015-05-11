@@ -12,19 +12,19 @@ Feature_growth <- R6Class("Feature_growth", inherit = Feature,
 #' population to a model.
 #'
 #' This function changes the growth factor of a population at given
-#' point in time ('at.time'). This factor than applies to the time
+#' point in time (\code{time}). This factor than applies to the time
 #' interval farther into the past from this point.
 #'
 #' The population size changes by factor exp(-alpha*t), where alpha
 #' is the growth parameter and t is the time since the growth has
-#' started. Hence, for positive alpha, the population will 'decline
-#' backwards in time' or grow forwards in time. Similar, will decline
+#' started. Hence, for positive alpha, the population will decline
+#' backwards in time or grow forwards in time. Similar, will decline
 #' in forwards time for a negative value of alpha.
 #'
 #' If you want to add an instantaneous change of the population size,
-#' then use the \link{model.addSizeChange} function.
+#' then use the \code{\link{feat_size_change}} function.
 #'
-#' @param rate A \code{\link{Parameter}} stating the rate of the change.
+#' @param rate A \code{\link{parameter}} stating the rate of the change.
 #' @param population The population which starts to grow or decline.
 #' @param time The time at which the population starts to grow or decline.
 #' @return    The demographic model with a size change.
@@ -37,6 +37,8 @@ feat_growth <- function(rate, population, time="0") {
 }
 
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_ms_arg.Feature_growth <- function(feature, model) {
   all_pops <- feature$get_population() == "all" ||
     (feature$get_population() == 1 && length(get_populations(model)) == 1)
@@ -56,6 +58,14 @@ conv_to_ms_arg.Feature_growth <- function(feature, model) {
          feature$get_rate(), ", '")
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_msms_arg.Feature_growth <- conv_to_ms_arg.Feature_growth
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_scrm_arg.Feature_growth <- conv_to_ms_arg.Feature_growth
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_seqgen_arg.Feature_growth <- ignore_par

@@ -25,6 +25,6 @@ mutation model, this assumes an finite locus length.
 \examples{
 # A model with a fixed recombination rate of 5
 model <- coal_model(c(25,25), 100, 1000) +
-  feat_recombination(par_const(5))
+  feat_recombination(5)
 }
 

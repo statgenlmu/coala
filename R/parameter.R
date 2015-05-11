@@ -77,7 +77,7 @@ is.named_par <- function(par) {
 #' @describeIn par_expr Creates a parameter with value determined by evaluating an
 #'  expression.
 #' @export
-#' @aliases ModelParameters
+#' @aliases parameter
 #' @author Paul Staab
 #' @examples
 #' par_const(5)

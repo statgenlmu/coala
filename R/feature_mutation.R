@@ -11,11 +11,11 @@ Feature_mutation <- R6Class("Feature_mutation", inherit = Feature,
   public = list(
     initialize = function(rate, model, base_frequencies,
                           tstv_ratio, gtr_rates) {
-      private$rate = private$add_parameter(rate, add_par = FALSE)
+      private$rate <- private$add_parameter(rate, add_par = FALSE)
 
       assert_that(length(model) == 1)
       assert_that(any(model == c("IFS", "HKY", "GTR")))
-      private$model = model
+      private$model <- model
 
       if (model == "HKY") {
         if (is.na(tstv_ratio)) {
@@ -24,16 +24,16 @@ Feature_mutation <- R6Class("Feature_mutation", inherit = Feature,
         assert_that(all(!is.na(base_frequencies)))
         assert_that(is.numeric(tstv_ratio))
         assert_that(length(tstv_ratio) == 1)
-        private$tstv_ratio = tstv_ratio
+        private$tstv_ratio <- tstv_ratio
 
         if (any(is.na(base_frequencies))) {
-          stop("You need to specify base_frequencies for the HKY mutation model")
+          stop("missing base_frequencies for the HKY mutation model")
         }
         assert_that(all(!is.na(base_frequencies)))
         assert_that(is.numeric(base_frequencies))
         assert_that(length(base_frequencies) == 4)
         assert_that(sum(base_frequencies) == 1)
-        private$base_frequencies = base_frequencies
+        private$base_frequencies <- base_frequencies
       }
 
       else if (model == "GTR") {
@@ -42,7 +42,7 @@ Feature_mutation <- R6Class("Feature_mutation", inherit = Feature,
         }
         assert_that(is.numeric(gtr_rates))
         assert_that(length(gtr_rates) == 6)
-        private$gtr_rates = gtr_rates
+        private$gtr_rates <- gtr_rates
       }
     },
     get_model = function() private$model,
@@ -97,10 +97,6 @@ Feature_mutation <- R6Class("Feature_mutation", inherit = Feature,
 #' # A model with a mutation rate that can be estimated with Jaatha:
 #' model <- coal_model(c(15,20), 100) +
 #'   feat_mutation(par_range('theta', 1, 20))
-#'
-#' # A model with variable gamma distributed mutation rate
-#' model <- coal_model(c(15,20), 100) +
-#'   feat_mutation(par_range('theta', 1, 20), variance=100)
 feat_mutation <- function(rate,
                           model = "IFS",
                           base_frequencies = NA,
@@ -151,17 +147,26 @@ feat_mutation <- function(rate,
 
 is_feat_mutation <- function(feat) any("Feature_mutation" == class(feat))
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_ms_arg.Feature_mutation <- function(feature, model) {
   if (feature$get_model() != "IFS") stop("Unsupported mutation model")
   paste0("-t', par(", feature$get_rate(), "), '")
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_msms_arg.Feature_mutation <- conv_to_ms_arg.Feature_mutation
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_scrm_arg.Feature_mutation <- conv_to_ms_arg.Feature_mutation
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_seqgen_arg.Feature_mutation <- function(feature, model) {
   if (feature$get_model() == "GTR") {
-    rates <- paste("-g", paste(feature$get_gtr_rates(), collapse = " "))
+    rates <- paste("-r", paste(feature$get_gtr_rates(), collapse = " "))
   } else {
     rates <- paste("-f", paste(feature$get_base_frequencies(), collapse = " "),
                    "-t", feature$get_tstv_ratio())

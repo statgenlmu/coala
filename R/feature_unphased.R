@@ -7,8 +7,8 @@ Feature_unphased <- R6Class("Feature_unphased", inherit = Feature,
       assert_that(length(samples_per_ind) == 1)
       assert_that(is.numeric(samples_per_ind))
       assert_that(samples_per_ind <= ploidy)
-      private$ploidy = ploidy
-      private$samples_per_ind = samples_per_ind
+      private$ploidy <- ploidy
+      private$samples_per_ind <- samples_per_ind
     },
     get_ploidy = function() private$ploidy,
     get_samples_per_ind = function() private$samples_per_ind,
@@ -66,7 +66,18 @@ get_samples_per_ind <- function(model) {
 
 is_unphased <- function(model) !is.null(get_feature_unphased(model))
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_ms_arg.Feature_unphased <- ignore_par
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_msms_arg.Feature_unphased <- ignore_par
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_scrm_arg.Feature_unphased <- ignore_par
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_seqgen_arg.Feature_unphased <- ignore_par

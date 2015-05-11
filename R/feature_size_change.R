@@ -19,7 +19,7 @@ Feature_size_change <- R6Class("Feature_size_change", inherit = Feature,
 #' fraction of N0, the present day size of population one.
 #'
 #' If you want to add a slow, continuous change over some time,
-#' then use the \link{model.addGrowth} function.
+#' then use \link{feat_growth}.
 #'
 #' @param new_size A \code{\link{parameter}} giving the new size of the
 #'   population, as a factor of N0.
@@ -35,12 +35,22 @@ feat_size_change <- function(new_size, population, time="0") {
   Feature_size_change$new(new_size, population, time)
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_ms_arg.Feature_size_change <- function(feature, model) {
   paste0("-en', ", feature$get_time(), ", ",
          feature$get_population(), ", ",
          feature$get_rate(), ", '")
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_msms_arg.Feature_size_change <- conv_to_ms_arg.Feature_size_change
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_scrm_arg.Feature_size_change <- conv_to_ms_arg.Feature_size_change
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_seqgen_arg.Feature_size_change <- ignore_par

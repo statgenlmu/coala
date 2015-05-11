@@ -4,7 +4,8 @@
 \alias{feat_migration}
 \title{Add migration/gene flow between two populations to a demographic model}
 \usage{
-feat_migration(rate, pop_from, pop_to, symmetric = FALSE, time = "0")
+feat_migration(rate, pop_from = NULL, pop_to = NULL, symmetric = FALSE,
+  time = "0")
 }
 \arguments{
 \item{rate}{Instead of creating a new parameter, you can also
@@ -19,6 +20,8 @@ work (also this does not make much sense).}
 
 \item{pop_to}{The population to which the individuals move.}
 
+\item{symmetric}{Use the rate between all pairs of populations.}
+
 \item{time}{The time point at which the migration with this rate starts.}
 }
 \description{
@@ -28,13 +31,13 @@ and become a member of the other. This is usually used to model ongoing
 gene flow through hybridisation after the populations separated.
 }
 \details{
-You can enter a time ('time.start') at which the migration is
+You can enter a time (\code{time}) at which the migration is
 assumed to start (looking backwards in time). From that time on, a
-fixed number of migrants move from population 'pop.from' to
-population 'pop.to' each generation. This number is given via this
+fixed number of migrants move from population \code{pop_from} to
+population \code{pop_to} each generation. This number is given via this
 feature's parameter, which equals 4*N0*m,  where m is the
-fraction of 'pop.to' that is replaced with migrants each generation.
-If 'pop.to' has also size Ne, than this is just the
+fraction of \code{pop_to}that is replaced with migrants each generation.
+If \code{pop_to} has also size Ne, than this is just the
 expected number of individuals that migrate each generation.
 
 You can add different mutation rates at different times to your model.

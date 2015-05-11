@@ -2,10 +2,10 @@ Feature_selection <- R6Class("Feature_selection", inherit = Feature,
   private = list(strength_AA = NA, strength_Aa = NA),
   public = list(
     initialize = function(strength_AA, strength_Aa, population, time) {
-      private$strength_AA = private$add_parameter(strength_AA)
-      private$strength_Aa = private$add_parameter(strength_Aa)
+      private$strength_AA <- private$add_parameter(strength_AA)
+      private$strength_Aa <- private$add_parameter(strength_Aa)
       private$set_population(population)
-      private$time = private$add_parameter(time)
+      private$time <- private$add_parameter(time)
     },
     get_strength_AA = function() private$strength_AA,
     get_strength_Aa = function() private$strength_Aa,
@@ -22,6 +22,8 @@ Feature_selection <- R6Class("Feature_selection", inherit = Feature,
 #'
 #' @param population The populaton in which the allele is selected.
 #' @param time The time at which the selection starts.
+#' @param strength_AA The selection strength for the selected homozygote
+#' @param strength_Aa The selection strength for the heterozygote.
 #' @export
 #' @examples
 #' # Positive selection in population 2:
@@ -36,12 +38,18 @@ feat_selection <- function(strength_AA, strength_Aa, population = 1, time) {
   Feature_selection$new(strength_AA, strength_Aa, population, time)
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_ms_arg.Feature_selection <- function(feature, model) {
-  stop("selection is not supported")
+  stop("selection is not supported", call. = FALSE)
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_scrm_arg.Feature_selection <- conv_to_ms_arg.Feature_selection
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_msms_arg.Feature_selection <- function(feature, model) {
   n_pop <- length(get_populations(model))
   start_freq <- rep(0, n_pop)
@@ -53,4 +61,6 @@ conv_to_msms_arg.Feature_selection <- function(feature, model) {
          "-Sp 0.5 -SForceKeep -N 10000 ")
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_seqgen_arg.Feature_selection <- ignore_par

@@ -1,7 +1,17 @@
-# Translating the model into simulation commands
+#' Generate command line arguments for features
+#'
+#' These functions are exported only for technical reasons
+#' (because they are S3 methods) and are not indended for
+#' users.
+#'
+#' @param feature The feature for which the argument is generated
+#' @param model The complete model for which the argument is generated
 conv_to_ms_arg <- function(feature, model) UseMethod("conv_to_ms_arg")
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_ms_arg.default <- function(feature, model) {
-  stop("Unknown feature when generating ms command")
+  stop("Unknown feature", call. = FALSE)
 }
 
 
@@ -15,11 +25,10 @@ ms_generate_opts_cmd <- function(model) {
 }
 
 
-ms_generate_opts <- function(model, parameters, group, eval_pars = TRUE) {
-  if (eval_pars) locus_length <- get_locus_length(model, group = group)
-  else locus_length <- "locus_length"
+ms_generate_opts <- function(model, parameters, locus, eval_pars = TRUE) {
+  locus_length <- get_locus_length(model, group = locus)
 
-  ms_tmp <- create_par_env(model, parameters, locus = group,
+  ms_tmp <- create_par_env(model, parameters, locus = locus,
                            locus_length = locus_length,
                            for_cmd = !eval_pars)
 

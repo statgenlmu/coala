@@ -69,7 +69,7 @@ test_that('Creating features works', {
 test_that("adding parameter works", {
   feat <- R6::R6Class("Feature_test", inherit = Feature,
     public = list(
-      initialize = function() {},
+      initialize = function() {}, #nolint
       add_parameter = function(...) private$add_parameter(...)
     )
   )$new()

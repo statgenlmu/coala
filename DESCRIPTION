@@ -43,6 +43,7 @@ Collate:
     'locus.R'
     'model.R'
     'model_build.R'
+    'model_check.R'
     'model_examples.R'
     'model_getters.R'
     'model_print.R'

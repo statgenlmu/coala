@@ -20,7 +20,5 @@ SumstatDna <- R6Class('SumstatDna', inherit = Sumstat, #nolint
 #' @inheritParams sumstat_four_gamete
 #' @export
 sumstat_dna <- function(name = 'dna') {
-  coal_model() +
-    Feature$new('sumstat_dna', par_const(NA)) +
-    SumstatDna$new(name) #nolint
+  SumstatDna$new(name) #nolint
 }

@@ -8,7 +8,7 @@ population to a model.}
 feat_growth(rate, population, time = "0")
 }
 \arguments{
-\item{rate}{A \code{\link{Parameter}} stating the rate of the change.}
+\item{rate}{A \code{\link{parameter}} stating the rate of the change.}
 
 \item{population}{The population which starts to grow or decline.}
 
@@ -19,18 +19,18 @@ The demographic model with a size change.
 }
 \description{
 This function changes the growth factor of a population at given
-point in time ('at.time'). This factor than applies to the time
+point in time (\code{time}). This factor than applies to the time
 interval farther into the past from this point.
 }
 \details{
 The population size changes by factor exp(-alpha*t), where alpha
 is the growth parameter and t is the time since the growth has
-started. Hence, for positive alpha, the population will 'decline
-backwards in time' or grow forwards in time. Similar, will decline
+started. Hence, for positive alpha, the population will decline
+backwards in time or grow forwards in time. Similar, will decline
 in forwards time for a negative value of alpha.
 
 If you want to add an instantaneous change of the population size,
-then use the \link{model.addSizeChange} function.
+then use the \code{\link{feat_size_change}} function.
 }
 \examples{
 model <- coal_model(c(20,37), 88) +

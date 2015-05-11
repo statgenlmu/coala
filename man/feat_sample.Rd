@@ -11,8 +11,6 @@ feat_sample(sizes, time = "0")
 given as a numeric vector.}
 
 \item{time}{The time at which the sample is taken.}
-
-\item{population}{The population from with the indidivuals are sampled}
 }
 \value{
 The feature, which can be added to a model using `+`.

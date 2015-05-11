@@ -4,14 +4,14 @@ Feature_sample <- R6Class("Feature_sample", inherit = Feature,
     initialize = function(sizes, time) {
       assert_that(is.numeric(sizes))
       assert_that(length(sizes) >= 1)
-      private$size = sizes
+      private$size <- sizes
 
-      private$time = private$add_parameter(time)
+      private$time <- private$add_parameter(time)
     },
     get_sizes = function() private$size,
     print = function() {
-      pop = seq(along = private$size)[private$size > 0]
-      samples = private$size[private$size > 0]
+      pop <- seq(along = private$size)[private$size > 0]
+      samples <- private$size[private$size > 0]
       cat("Sampling of ")
       for (i in seq(along = samples)) {
         cat(samples[i], " (pop ", pop[i], ")", sep = "")
@@ -28,7 +28,6 @@ Feature_sample <- R6Class("Feature_sample", inherit = Feature,
 #'
 #' @param sizes The number of individuals that are sampled per population,
 #'   given as a numeric vector.
-#' @param population The population from with the indidivuals are sampled
 #' @param time The time at which the sample is taken.
 #' @return The feature, which can be added to a model using `+`.
 ## @export
@@ -65,6 +64,8 @@ get_sample_size <- function(model, for_sim=FALSE) {
   sample_size
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_ms_arg.Feature_sample <- function(feature, model) {
   sample_size <- get_sample_size(model, TRUE)
   if (length(feature$get_sizes()) == 1) return("")
@@ -72,7 +73,14 @@ conv_to_ms_arg.Feature_sample <- function(feature, model) {
          paste(sample_size, collapse = " "), " ")
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_msms_arg.Feature_sample <- conv_to_ms_arg.Feature_sample
-conv_to_scrm_arg.Feature_sample <- conv_to_ms_arg.Feature_sample
-conv_to_seqgen_arg.Feature_sample <- function(feature, model) ""
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
+conv_to_scrm_arg.Feature_sample <- conv_to_ms_arg.Feature_sample
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
+conv_to_seqgen_arg.Feature_sample <- function(feature, model) ""

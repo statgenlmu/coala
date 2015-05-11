@@ -1,7 +1,7 @@
 Feature_recombination <- R6Class("Feature_recombination", inherit = Feature,
   public = list(
     initialize = function(rate) {
-      private$rate = private$add_parameter(rate)
+      private$rate <- private$add_parameter(rate)
     },
     print = function() {
       cat("Recombination with rate", print_par(private$rate), "\n")
@@ -31,10 +31,20 @@ feat_recombination <- function(rate) {
   Feature_recombination$new(rate)
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_ms_arg.Feature_recombination <- function(feature, model) {
   paste0("-r', ", feature$get_rate(), ", par(locus_length), '")
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_msms_arg.Feature_recombination <- conv_to_ms_arg.Feature_recombination
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_scrm_arg.Feature_recombination <- conv_to_ms_arg.Feature_recombination
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_seqgen_arg.Feature_recombination <- ignore_par

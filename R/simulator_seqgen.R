@@ -45,7 +45,7 @@ generate_tree_model <- function(model) {
       any(c("Feature_seg_sites",
             "Feature_mutation",
             "Feature_outgroup") %in% class(x))
-    }, logical(1))
+    }, logical(1)) #nolint
     if (all(tree_model_features)) stop("seq-gen not required")
     tree_model$features <- model$features[tree_model_features]
 
@@ -62,7 +62,7 @@ generate_tree_model <- function(model) {
 
 #' Set the path to the executable for seqgen
 #'
-#' @param seqgen.exe Path to seqgen's executable.
+#' @param seqgen_exe The path to seqgen's executable.
 #' @export
 set_seqgen_exe <- function(seqgen_exe) {
   if (file.exists(seqgen_exe)) {
@@ -134,8 +134,8 @@ sg_generate_opt_cmd <- function(model) {
     else is_outer <- FALSE
 
     cmd <- lapply(is_outer, function(outer) {
-      cmd <- paste(vapply(model$features, function(x, model) { conv_to_seqgen_arg(x, model) },
-                          FUN.VALUE = character(1), model),
+      cmd <- paste(vapply(model$features, conv_to_seqgen_arg,
+                          FUN.VALUE = character(1), model = model),
                    collapse = "")
       cmd <- paste0("c(get_seqgen_path(), '", cmd, "')")
     })

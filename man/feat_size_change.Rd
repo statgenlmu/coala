@@ -27,7 +27,7 @@ fraction of N0, the present day size of population one.
 }
 \details{
 If you want to add a slow, continuous change over some time,
-then use the \link{model.addGrowth} function.
+then use \link{feat_growth}.
 }
 \examples{
 # A model with one smaller population

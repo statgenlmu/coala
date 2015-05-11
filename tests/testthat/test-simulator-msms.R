@@ -35,6 +35,12 @@ test_that("msms_simulate works", {
   set.seed(6688)
   sum_stats2 <- msms$simulate(model, c(1, 5))
   expect_equal(sum_stats, sum_stats2)
+
+  # With recombination
+  model <- model + feat_recombination(1)
+  sum_stats <- msms$simulate(model, c(1, 5))
+  expect_true(is.matrix(sum_stats$jsfs))
+  expect_true(sum(sum_stats$jsfs) > 0)
 })
 
 

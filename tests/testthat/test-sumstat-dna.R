@@ -23,8 +23,8 @@ s10       CCTCAGGGCC", file = seqgen_file)
   dna <- stat_dna$calculate(NULL, seqgen_file, model_tmp)
   expect_that(dna, is_a('list'))
   expect_equal(length(dna), 1)
-  expect_equal(dna[[1]][1:5,1], c("T", "T", "T", "T", "T"))
-  expect_equal(dna[[1]][6:10,2], c("C", "C", "C", "C", "C"))
+  expect_equal(dna[[1]][1:5, 1], c("T", "T", "T", "T", "T"))
+  expect_equal(dna[[1]][6:10, 2], c("C", "C", "C", "C", "C"))
 
   model_tmp <- coal_model(c(4, 5, 2), 1, 10) +
     feat_outgroup(3) +
@@ -40,8 +40,8 @@ s10       CCTCAGGGCC", file = seqgen_file)
 test_that("DNA can be simulated", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
   model <- coal_model(c(5, 5), 1, 10) +
-    feat_pop_merge(par_const(.5), 2, 1) +
-    feat_mutation(par_const(5), model = "HKY") +
+    feat_pop_merge(.5, 2, 1) +
+    feat_mutation(5, model = 'GTR', gtr_rates = 1:6) +
     feat_recombination(par_const(1)) +
     sumstat_dna()
 

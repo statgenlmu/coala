@@ -5,7 +5,7 @@ Feature_migration <- R6Class("Feature_migration", inherit = Feature,
       super$initialize(rate = rate, time = time)
 
       if (symmetric) {
-        private$population = "all"
+        private$population <- "all"
       } else {
         private$set_population(c(from=pop_from, to=pop_to), 2)
       }
@@ -31,13 +31,13 @@ Feature_migration <- R6Class("Feature_migration", inherit = Feature,
 #' and become a member of the other. This is usually used to model ongoing
 #' gene flow through hybridisation after the populations separated.
 #'
-#' You can enter a time ('time.start') at which the migration is
+#' You can enter a time (\code{time}) at which the migration is
 #' assumed to start (looking backwards in time). From that time on, a
-#' fixed number of migrants move from population 'pop.from' to
-#' population 'pop.to' each generation. This number is given via this
+#' fixed number of migrants move from population \code{pop_from} to
+#' population \code{pop_to} each generation. This number is given via this
 #' feature's parameter, which equals 4*N0*m,  where m is the
-#' fraction of 'pop.to' that is replaced with migrants each generation.
-#' If 'pop.to' has also size Ne, than this is just the
+#' fraction of \code{pop_to}that is replaced with migrants each generation.
+#' If \code{pop_to} has also size Ne, than this is just the
 #' expected number of individuals that migrate each generation.
 #'
 #' You can add different mutation rates at different times to your model.
@@ -54,6 +54,7 @@ Feature_migration <- R6Class("Feature_migration", inherit = Feature,
 #'            work (also this does not make much sense).
 #' @param pop_from The population from which the individuals leave.
 #' @param pop_to The population to which the individuals move.
+#' @param symmetric Use the rate between all pairs of populations.
 #' @param time The time point at which the migration with this rate starts.
 #' @export
 #'
@@ -75,6 +76,8 @@ feat_migration <- function(rate, pop_from = NULL, pop_to = NULL,
   }
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_ms_arg.Feature_migration <- function(feature, model) {
   if (all(feature$get_population() == "all")) {
     return( paste0("-eM', ", feature$get_time(), ", ",
@@ -86,6 +89,14 @@ conv_to_ms_arg.Feature_migration <- function(feature, model) {
          feature$get_rate(), ", '")
 }
 
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_msms_arg.Feature_migration <- conv_to_ms_arg.Feature_migration
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_scrm_arg.Feature_migration <- conv_to_ms_arg.Feature_migration
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_seqgen_arg.Feature_migration <- ignore_par

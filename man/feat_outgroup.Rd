@@ -17,8 +17,8 @@ to determine the ancestral allele in finite sites simulations.
 # A simple finite sites model
 model <- coal_model(c(4, 6, 1), 2, 10) +
    feat_outgroup(3) +
-   feat_pop_merge(par_range('tau', 0.5, 2), 2, 1) +
-   feat_pop_merge(par_expr('2*tau'), 3, 1) +
-   feat_mutation(par_range('theta', 1, 10), model="HKY")
+   feat_pop_merge(0.5, 2, 1) +
+   feat_pop_merge(2, 3, 1) +
+   feat_mutation(5, model="GTR", gtr_rates = 1:6)
 }
 

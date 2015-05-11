@@ -1,5 +1,5 @@
 SumstatTrees <- R6Class('SumstatTrees', inherit = Sumstat, #nolint
-  private = list(req_files = TRUE),
+  private = list(req_files = TRUE, req_trees = TRUE),
   public = list(
     calculate = function(seg_sites, files, model) {
       parse_trees(files, get_locus_number(model))

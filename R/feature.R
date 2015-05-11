@@ -9,7 +9,7 @@ Feature <- R6Class("Feature",
     set_population = function(population, expected_length = 1) {
       assert_that(is.numeric(population))
       assert_that(length(population) == expected_length)
-      private$population = population
+      private$population <- population
     },
     add_parameter = function(parameter, required = TRUE, add_par = TRUE) {
       expr <- NA
@@ -31,8 +31,8 @@ Feature <- R6Class("Feature",
   ),
   public = list(
     initialize = function(rate, population, time) {
-      if (!missing(rate)) private$rate = private$add_parameter(rate)
-      if (!missing(time)) private$time = private$add_parameter(time)
+      if (!missing(rate)) private$rate <- private$add_parameter(rate)
+      if (!missing(time)) private$time <- private$add_parameter(time)
       if (!missing(population)) private$set_population(population)
     },
 #     initialize = function(type, parameter,
@@ -74,7 +74,8 @@ Feature <- R6Class("Feature",
 #       private$par <- par_expr
 #
 #       private$population <- pop_source
-#       private$feature_table <- create_feature_table(type, par_expr, pop_source,
+#       private$feature_table <- create_feature_table(type, par_expr,
+#           pop_source,
 #                                                     pop_sink, time_point)
 #     },
     get_parameters = function() private$parameter,
@@ -95,4 +96,4 @@ is.feature <- function(feature) {
 
 ignore_par <- function(feature, model) ""
 
-print_par <- function(par) paste0("`", substr(par, 5, nchar(par)-1), "`")
+print_par <- function(par) paste0("`", substr(par, 5, nchar(par) - 1), "`")

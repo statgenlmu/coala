@@ -54,9 +54,5 @@ model <- coal_model(10, 1) + feat_mutation(rate = 5)
 # A model with a mutation rate that can be estimated with Jaatha:
 model <- coal_model(c(15,20), 100) +
   feat_mutation(par_range('theta', 1, 20))
-
-# A model with variable gamma distributed mutation rate
-model <- coal_model(c(15,20), 100) +
-  feat_mutation(par_range('theta', 1, 20), variance=100)
 }
 
