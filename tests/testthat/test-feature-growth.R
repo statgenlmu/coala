@@ -20,5 +20,5 @@ test_that("generating ms cmd for growth works", {
     feat_growth(par_expr(2 * a), 1, par_expr(3 * a))
   expect_equal(ms$get_cmd(model),
                "ms 9 1 -I 2 4 5 -t 1 -eM 0 1 -eg 3 * a 1 2 * a ")
-  expect_that(ms$simulate(model, .5), is_a('list'))
+  expect_that(ms$simulate(model, c(a = .5)), is_a('list'))
 })

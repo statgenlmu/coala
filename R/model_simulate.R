@@ -19,9 +19,10 @@
 #'
 #' simulate(model, pars=c(1, 5))
 simulate.Coalmodel <- function(object, nsim = 1, seed, ..., pars = numeric(0)) {
-  assert_that(is.numeric(pars))
   if (!missing(seed)) set.seed(seed)
   simprog <- select_simprog(object)
   if (is.null(simprog)) stop("No simulator found")
+
+  pars <- prepare_pars(pars, object)
   simprog$simulate(object, pars)
 }

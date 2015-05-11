@@ -3,7 +3,7 @@ context('Feature Migration')
 test_that('Creation of migration features works', {
   feat <- feat_migration(2, 2, 1)
   expect_equal(feat$get_rate(), "par(2)")
-  expect_equal(feat$get_population(), c(from=2, to=1))
+  expect_equal(feat$get_population(), c(from = 2, to = 1))
   expect_equal(feat$get_time(), "par(0)")
 
   feat <- feat_migration(2, symmetric = TRUE, time = 5)
@@ -28,5 +28,5 @@ test_that("migration can be simulated with ms", {
     feat_mutation(1) +
     par_range('m', 1, 2) +
     feat_migration(par_expr(2 * m), 2, 1, time = par_expr(log(m)))
-  expect_that(get_simulator("ms")$simulate(model, 1.5), is_a("list"))
+  expect_that(get_simulator("ms")$simulate(model, c(m = 1.5)), is_a("list"))
 })

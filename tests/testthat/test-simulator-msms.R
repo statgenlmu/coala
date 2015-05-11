@@ -28,17 +28,17 @@ test_that("msms_simulate works", {
   model <- model_theta_tau()
 
   set.seed(6688)
-  sum_stats <- msms$simulate(model, c(1, 5))
+  sum_stats <- msms$simulate(model, c(tau = 1, theta = 5))
   expect_true(is.matrix(sum_stats$jsfs))
   expect_true(sum(sum_stats$jsfs) > 0)
 
   set.seed(6688)
-  sum_stats2 <- msms$simulate(model, c(1, 5))
+  sum_stats2 <- msms$simulate(model, c(tau = 1, theta = 5))
   expect_equal(sum_stats, sum_stats2)
 
   # With recombination
   model <- model + feat_recombination(1)
-  sum_stats <- msms$simulate(model, c(1, 5))
+  sum_stats <- msms$simulate(model, c(tau = 1, theta = 5))
   expect_true(is.matrix(sum_stats$jsfs))
   expect_true(sum(sum_stats$jsfs) > 0)
 })
@@ -65,12 +65,12 @@ test_that('simulating unphased data works', {
   if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
   msms <- get_simulator("msms")
   model <- model_theta_tau() + feat_unphased(2, 1) + sumstat_seg_sites()
-  stats <- msms$simulate(model, c(1,5))
+  stats <- msms$simulate(model, c(tau = 1, theta = 5))
   expect_equal(dim(stats$jsfs), c(11, 16))
   expect_equal(nrow(stats$seg_sites[[1]]), 25)
 
   model <- model_theta_tau() + feat_unphased(3, 2) + sumstat_seg_sites()
-  stats <- msms$simulate(model, c(1,5))
+  stats <- msms$simulate(model, c(tau = 1, theta = 5))
   expect_equal(dim(stats$jsfs), c(21, 31))
   expect_equal(nrow(stats$seg_sites[[1]]), 50)
 })

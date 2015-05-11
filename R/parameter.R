@@ -161,55 +161,11 @@ par_range <- function(name, lower, upper) {
 }
 
 
-Par_Prior <- R6Class('Par_Prior', inherit = Par_Named, #nolint
-  private = list(prior = NA),
-  public = list(
-    initialize = function(name, prior) {
-      super$initialize(name)
-      if (!is.expression(prior)) stop("prior is not expression")
-      private$prior <- prior
-    },
-    print = function() {
-      cat(private$name, ": prior `",  as.character(private$prior), "`\n",
-          sep="")
-    },
-    generate_value = function(pars=NULL) {
-      eval(private$prior, envir = new.env())
-    }
-  )
-)
-
-
-#' @describeIn par_expr Creates a named parameter with a prior
-#'  distribution. Before each simulation, the expression for the prior
-#'  is evaluated. The resulting value can be used in
-#'  \code{\link{par_expr}} under the choosen name.
-#'
-#' @export
-#' @param prior An expression. Evaluation this expression should give
-#'   a sample from the prior distribution you want for the parameter.
-#'   For example using \code{rnorm(1)} gives a standard normal prior.
-par_prior <- function(name, prior) {
-  Par_Prior$new(name, as.expression(substitute(prior))) #nolint
-}
-
-
-is.prior_par <- function(par) any('Par_Prior' == class(par))
-
-
 create_par_env <- function(model, parameters, ..., for_cmd = FALSE) {
   par_env <- new.env()
 
   if (!for_cmd) {
     par_env[['par']] <- function(x) format(x, scientific = FALSE)
-
-    if (is.null(names(parameters))) {
-      par_names <- get_par_names(model, without_priors = TRUE)
-      if (length(parameters) != length(par_names)) {
-        stop("Unexpected number of parameters")
-      }
-      names(parameters) <- par_names
-    }
 
     for (par in get_parameter(model)) {
       par_env[[par$get_name()]] <- par$generate_value(parameters)
@@ -227,3 +183,21 @@ create_par_env <- function(model, parameters, ..., for_cmd = FALSE) {
 
   par_env
 }
+
+
+prepare_pars <- function(pars, model) {
+  assert_that(is.numeric(pars))
+
+  # Try to add names for non-prior parmeters if missing
+  if (is.null(names(pars))) {
+    par_names <- get_par_names(model, without_priors = TRUE)
+    if (length(pars) != length(par_names)) {
+      stop("Unexpected number of parameters")
+    }
+    names(pars) <- par_names
+  }
+
+  # Sample from priors and return
+  c(pars, sample_par_priors(model))
+}
+
