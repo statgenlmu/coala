@@ -90,9 +90,7 @@ Feature <- R6Class("Feature",
   )
 )
 
-is.feature <- function(feature) {
-  'Feature' %in% class(feature)
-}
+is.feature <- function(feature) inherits(feature, "Feature")
 
 ignore_par <- function(feature, model) ""
 

@@ -185,6 +185,11 @@ test_that('print works on models', {
   # Printing loci works
   out <- capture.output(print(coal_model(5) + locus_single(3131)))
   expect_that(length(grep("3131", out)), is_more_than(0))
+
+  out <- capture.output(print(coal_model(5) +
+                                locus_single(3131) +
+                                locus_single(3131)))
+  expect_that(length(grep("3131", out)), is_more_than(0))
 })
 
 

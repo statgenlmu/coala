@@ -1,12 +1,3 @@
-# --------------------------------------------------------------
-# simprog_seqgen.R
-# Adaptor to calling ms from a demographic model.
-#
-# Authors:  Paul R. Staab
-# Date:     2013-11-21
-# Licence:  GPLv3 or later
-# --------------------------------------------------------------
-
 sg_mutation_models <- c('HKY', 'GTR')
 
 sg_find_exe <- function(throw.error = TRUE, silent = FALSE) {
@@ -95,10 +86,10 @@ sg_call <- function(opts, ms_files) {
 }
 
 
-
-
-# Translating the model into simulation commands
 conv_to_seqgen_arg <- function(feature, model) UseMethod("conv_to_seqgen_arg")
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_seqgen_arg.default <- function(feature, model) {
   stop("Unknown feature when generating seqgen command")
 }

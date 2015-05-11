@@ -36,8 +36,10 @@ msms_find_jar <- function(throw_error = TRUE, silent = FALSE) {
 }
 
 
-# Translating the model into simulation commands
 conv_to_msms_arg <- function(feature, model) UseMethod("conv_to_msms_arg")
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_msms_arg.default <- function(feature, model) {
   stop("Unknown feature when generating ms command")
 }

@@ -15,16 +15,6 @@ add_to_model.default <- function(x, model, x_name) {
 }
 
 
-add_to_model.Coalmodel <- function(add, model, par_name) {
-  for (feat in get_features(add)) model <- model + feat
-  for (par in get_parameter(add)) model <- model + par
-  for (stat in add$sum_stats) model <- model + stat
-
-  model$loci <- rbind(model$loci, add$loci)
-  model
-}
-
-
 add_to_model.Parameter <- function(par, model, par_name) model
 
 

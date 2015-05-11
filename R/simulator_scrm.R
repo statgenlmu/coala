@@ -1,5 +1,7 @@
-# Translating the model into simulation commands
 conv_to_scrm_arg <- function(feature, model) UseMethod("conv_to_scrm_arg")
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
 conv_to_scrm_arg.default <- function(feature, model) {
   stop("Unknown feature when generating scrm command")
 }
