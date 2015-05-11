@@ -50,19 +50,19 @@ get_outgroup_size <- function(model, for_sim = FALSE) {
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
 conv_to_ms_arg.Feature_outgroup <- function(feature, model) {
-  stop("ms does not support outgroups")
+  stop("ms does not support outgroups", call. = FALSE)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
 conv_to_msms_arg.Feature_outgroup <- function(feature, model) {
-  stop("msms does not support outgroups")
+  stop("msms does not support outgroups", call. = FALSE)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
 conv_to_scrm_arg.Feature_outgroup <- function(feature, model) {
-  stop("scrm does not support outgroups")
+  stop("scrm does not support outgroups", call. = FALSE)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion

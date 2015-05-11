@@ -243,3 +243,11 @@ test_that('creating a parameter table works ', {
 
   expect_error(get_parameter_table(model + par_prior("x", rnorm(1))))
 })
+
+
+test_that("model checking give not errors", {
+  capture.output(check_model(model_theta_tau()))
+  capture.output(check_model(model_gtr()))
+  capture.output(check_model(model_hky()))
+  capture.output(check_model(model_trios()))
+})
