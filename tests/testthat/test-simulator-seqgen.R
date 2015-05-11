@@ -31,13 +31,13 @@ test_that("simulation with seq-gen works", {
   sg_simulate <- get_simulator("seq-gen")$simulate
 
   set.seed(100)
-  sum.stats <- sg_simulate(model_hky(), c(1, 10))
+  sum.stats <- sg_simulate(model_hky(), c(tau = 1, theta = 10))
   expect_true(is.list(sum.stats))
   expect_true(is.array(sum.stats$jsfs))
   expect_true(sum(sum.stats$jsfs) > 0)
 
   set.seed(100)
-  sum.stats2 <- sg_simulate(model_hky(), c(1, 10))
+  sum.stats2 <- sg_simulate(model_hky(), c(tau = 1, theta = 10))
   expect_equal(sum.stats2$jsfs, sum.stats$jsfs)
 })
 
@@ -163,12 +163,12 @@ test_that("seqgen works with inter-locus variation", {
 test_that('simulating unphased data works', {
   if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
   model <- model_hky() + feat_unphased(2, 1) + sumstat_seg_sites()
-  stats <- sg_simulate(model, c(1,5))
+  stats <- sg_simulate(model, c(tau = 1, theta = 10))
   expect_equal(dim(stats$jsfs), c(4, 4))
   expect_equal(nrow(stats$seg_sites[[1]]), 6)
 
   model <- model_hky() + feat_unphased(2, 2) + sumstat_seg_sites()
-  stats <- sg_simulate(model, c(1,5))
+  stats <- sg_simulate(model, c(tau = 1, theta = 10))
   expect_equal(dim(stats$jsfs), c(7, 7))
   expect_equal(nrow(stats$seg_sites[[1]]), 12)
 })

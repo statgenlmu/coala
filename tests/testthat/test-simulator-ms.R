@@ -9,7 +9,7 @@ test_that("msSimFunc is working", {
   ms <- get_simulator("ms")
   model_tt <- model_theta_tau()
   set.seed(789)
-  sum_stats <- ms$simulate(model_tt, c(1, 10))
+  sum_stats <- ms$simulate(model_tt, c(tau = 1, theta = 10))
   expect_true(is.matrix(sum_stats$jsfs))
   expect_true(sum(sum_stats$jsfs) > 0)
 })
@@ -37,12 +37,12 @@ test_that("msSimFunc works with inter-locus variation", {
 test_that('simulating unphased data works', {
   ms <- get_simulator("ms")
   model <- model_theta_tau() + feat_unphased(2, 1) + sumstat_seg_sites()
-  stats <- ms$simulate(model, c(1, 5))
+  stats <- ms$simulate(model, c(tau = 1, theta = 5))
   expect_equal(dim(stats$jsfs), c(11, 16))
   expect_equal(nrow(stats$seg_sites[[1]]), 25)
 
   model <- model_theta_tau() + feat_unphased(3, 2) + sumstat_seg_sites()
-  stats <- ms$simulate(model, c(1, 5))
+  stats <- ms$simulate(model, c(tau = 1, theta = 5))
   expect_equal(dim(stats$jsfs), c(21, 31))
   expect_equal(nrow(stats$seg_sites[[1]]), 50)
 })

@@ -89,22 +89,7 @@ test_that('par_range works', {
 })
 
 
-test_that("par_prior works", {
-  par <- par_prior("x", rnorm(1))
-  expect_equal(par$get_name(), "x")
-  expect_true(is.prior_par(par))
-
-  set.seed(18)
-  x <- sapply(1:10, par$generate_value)
-  expect_equal(length(unique(x)), 10)
-
-  set.seed(18)
-  y <- sapply(1:10, par$generate_value)
-  expect_equal(x, y)
-})
-
-
-test_that("Adding an expression par to a model give no error", {
+test_that("Adding an expression par to a model throws no error", {
   coal_model(5:6, 10, 100) + par_expr(2 * theta)
   coal_model(5:6, 10, 100) + par_expr(2 * theta) + par_expr(5)
 })
@@ -114,8 +99,6 @@ test_that("Creation of parameter enviroment works", {
   # With named parameters
   model <- coal_model(5) + par_named("x")
   par_envir <- create_par_env(model, c(x = 5))
-  expect_equal(par_envir[['x']], 5)
-  par_envir <- create_par_env(model, 5)
   expect_equal(par_envir[['x']], 5)
   par_envir <- create_par_env(model, c(y = 2, x = 5))
   expect_equal(par_envir[['x']], 5)
@@ -127,7 +110,7 @@ test_that("Creation of parameter enviroment works", {
   par_envir <- create_par_env(coal_model(5), numeric(0))
 
   # With ranged parameters (not really needed)
-  par_envir <- create_par_env(model_theta_tau(), c(1, 5))
+  par_envir <- create_par_env(model_theta_tau(), c(tau = 1, theta = 5))
   expect_equal(par_envir[['tau']], 1)
   expect_equal(par_envir[['theta']], 5)
 
@@ -135,22 +118,12 @@ test_that("Creation of parameter enviroment works", {
   expect_equal(par_envir[['tau']], 1)
   expect_equal(par_envir[['theta']], 5)
 
-  # With priors
-  model <- coal_model(5) + par_prior("x", 17)
-  par_envir <- create_par_env(model, numeric(0))
-  expect_equal(par_envir[["x"]], 17)
-
-  model <- model_theta_tau() + par_prior("x", 17)
-  par_envir <- create_par_env(model, c(1, 5))
-  expect_equal(par_envir[['tau']], 1)
-  expect_equal(par_envir[['theta']], 5)
-  expect_equal(par_envir[['x']], 17)
-
   # Additional options
-  par_envir <- create_par_env(model_theta_tau(), c(1, 5), locus = 17)
+  par_envir <- create_par_env(model_theta_tau(), c(tau = 1, theta = 5),
+                              locus = 17)
   expect_equal(par_envir[['locus']], 17)
 
-  par_envir <- create_par_env(model_theta_tau(), c(1, 5),
+  par_envir <- create_par_env(model_theta_tau(), c(tau = 1, theta = 5),
                               locus = 23, seed = 115)
   expect_equal(par_envir[['locus']], 23)
   expect_equal(par_envir[['seed']], 115)
@@ -158,4 +131,34 @@ test_that("Creation of parameter enviroment works", {
 
   # For cmd printing
   par_envir <- create_par_env(model_theta_tau(), for_cmd = TRUE)
+})
+
+
+test_that("preparing parameters works", {
+  expect_equal(prepare_pars(numeric(0), coal_model(5)), numeric(0))
+  model <- coal_model(5) + par_named("x")
+  expect_equal(prepare_pars(1.25, model), c(x = 1.25))
+
+  model <- coal_model(5, 1) + par_prior("r", rbinom(1, 3, .5))
+  expect_error(prepare_pars(c("1", "2"), model))
+  pars <- prepare_pars(numeric(), model)
+  expect_equal(names(pars), "r")
+  expect_true(all(pars %in% 0:3))
+
+  model <- coal_model(5, 1) +
+    par_prior("m", rbinom(1, 3, .5)) +
+    par_prior("r", rbinom(1, 3, .5))
+  pars <- prepare_pars(numeric(), model)
+  expect_equal(names(pars), c("m", "r"))
+  expect_true(all(pars %in% 0:3))
+
+  model <- coal_model(5, 1) +
+    par_named("m") +
+    par_prior("r", rbinom(1, 3, .5))
+  pars <- prepare_pars(1, model)
+  expect_equal(names(pars), c("m", "r"))
+  expect_true(all(pars %in% 0:3))
+  pars <- prepare_pars(c(m = 1), model)
+  expect_equal(names(pars), c("m", "r"))
+  expect_true(all(pars %in% 0:3))
 })
