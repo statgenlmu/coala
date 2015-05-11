@@ -16,10 +16,9 @@ test_that("msSimFunc is working", {
 
 
 test_that("msSimFunc works with inter-locus variation", {
-  skip("inter locus var deactivated")
   ms <- get_simulator("ms")
   model_tmp <- coal_model(5:6, 2) +
-    #feat_mutation(par_const(2), variance = '2') +
+    feat_mutation(par_variation(2, 2)) +
     feat_pop_merge(par_const(.5), 2, 1) +
     sumstat_jsfs()
 

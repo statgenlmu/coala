@@ -142,19 +142,18 @@ test_that('printing a seqgen command works', {
 
 test_that("seqgen works with inter-locus variation", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
-  skip("")
 
   model_tmp <- coal_model(c(3, 3, 1), 2) +
-    feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
-    feat_pop_merge(par_expr('2*tau'), 3, 1) +
-    feat_recombination(par_const(1)) +
+    feat_pop_merge(2.0, 2, 1) +
+    feat_pop_merge(3.0, 3, 1) +
+    feat_recombination(1) +
     feat_outgroup(3) +
-    feat_mutation(par_range('theta', 1, 10), model = 'F84', variance = 15) +
+    feat_mutation(par_variation(5, 10), model = 'GTR', gtr_rates = 1:6) +
     sumstat_jsfs()
-  expect_true(has_inter_locus_var(model_tmp))
+  expect_true(has_variation(model_tmp))
 
   set.seed(1100)
-  sum_stats <- sg_simulate(model_tmp, c(1,5))
+  sum_stats <- sg_simulate(model_tmp, parameters = numeric(0))
   expect_is(sum_stats$jsfs, 'matrix')
   expect_that(sum(sum_stats$jsfs), is_more_than(0))
 })
