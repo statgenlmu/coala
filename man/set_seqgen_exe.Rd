@@ -7,7 +7,7 @@
 set_seqgen_exe(seqgen_exe)
 }
 \arguments{
-\item{seqgen.exe}{Path to seqgen's executable.}
+\item{seqgen_exe}{The path to seqgen's executable.}
 }
 \description{
 Set the path to the executable for seqgen

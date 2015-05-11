@@ -4,7 +4,7 @@
 \alias{sumstat_tajimas_d}
 \title{Tajima's D}
 \usage{
-sumstat_tajimas_d(name = "tajimas_d", population = 1)
+sumstat_tajimas_d(name = "tajimas_d", population = "all")
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -24,6 +24,6 @@ This calculates Tajima's D from the simulation results when added to a model.
 Tajima's D was introducted by
 
 Tajima, F. (1989). "Statistical method for testing the neutral mutation
-hypothesis by DNA polymorphism.". Genetics 123 (3): 585–95.
+hypothesis by DNA polymorphism.". Genetics 123 (3): 585-95.
 }
 

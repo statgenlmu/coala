@@ -2,40 +2,29 @@
 % Please edit documentation in R/feature_recombination.R
 \name{feat_recombination}
 \alias{feat_recombination}
-\title{Creates a Recombination feature}
+\title{Feature: Recombination}
 \usage{
-feat_recombination(rate, variance = 0)
+feat_recombination(rate)
 }
 \arguments{
-\item{rate}{A \code{\link{Parameter}} defining the recombination rate
+\item{rate}{A \code{\link{parameter}} defining the recombination rate
 (see above).}
-
-\item{variance}{Set to a value different from 0 to introduce variation in the
-the parameter value for different loci. The
-variation follows a gamma distribution with mean equal to
-the value provided as \code{parameter}, and variance as given
-here. Can also be set to a previously
-created parameter, or an expression based on parameters.}
 }
 \value{
 The demographic model with recombination
 }
 \description{
-This function add the assumption to the model that recombination
-events may occur within each locus. The corresponding parameter
-equals 4*N0*r, where r is the
+Adds intra-locus recombination to a model.
+}
+\details{
+The corresponding rate parameter is 4*N0*r, where r is the
 probability that a recombination event within the locus will
 occur in one generation. Even when using an infinite sites
-mutation model, this assumes an finite locus length which is given
-by the 'seq.length' parameter of the demographic model.
+mutation model, this assumes an finite locus length.
 }
 \examples{
 # A model with a fixed recombination rate of 5
 model <- coal_model(c(25,25), 100, 1000) +
-  feat_recombination(par_const(5))
-
-# A model where the recombination is given by a parameter 'rho'
-model <- coal_model(c(25,25), 100) +
-  feat_recombination(par_range('rho', 1, 5))
+  feat_recombination(5)
 }
 

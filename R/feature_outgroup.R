@@ -1,7 +1,10 @@
 Feature_outgroup <- R6Class("Feature_outgroup", inherit = Feature,
   public = list(
+    initialize = function(population) {
+      private$set_population(population)
+    },
     print = function() {
-      cat("Outgroup: Population", self$get_par(), "\n")
+      cat("Outgroup: Population", private$population, "\n")
     }
   )
 )
@@ -17,9 +20,51 @@ Feature_outgroup <- R6Class("Feature_outgroup", inherit = Feature,
 #' # A simple finite sites model
 #' model <- coal_model(c(4, 6, 1), 2, 10) +
 #'    feat_outgroup(3) +
-#'    feat_pop_merge(par_range('tau', 0.5, 2), 2, 1) +
-#'    feat_pop_merge(par_expr('2*tau'), 3, 1) +
-#'    feat_mutation(par_range('theta', 1, 10), model="HKY")
+#'    feat_pop_merge(0.5, 2, 1) +
+#'    feat_pop_merge(2, 3, 1) +
+#'    feat_mutation(5, model="GTR", gtr_rates = 1:6)
 feat_outgroup <- function(population) {
-  Feature_outgroup$new("outgroup", par_const(population))
+  Feature_outgroup$new(population)
 }
+
+is_feat_outgroup <- function(feat) inherits(feat, "Feature_outgroup")
+
+
+#' @describeIn get_features Returns the population that is marked as outgroup
+#' @export
+get_outgroup <- function(model) {
+  mask <- vapply(model$features, is_feat_outgroup, logical(1))
+  if (sum(mask) != 1) stop("the model has no or multiple outgroups")
+  model$features[mask][[1]]$get_population()
+}
+
+
+#' @describeIn get_features Returns the number of samples in the outgroup
+#' @export
+get_outgroup_size <- function(model, for_sim = FALSE) {
+  outgroup_size <- get_sample_size(model, for_sim)[get_outgroup(model)]
+  if (length(outgroup_size) == 0) outgroup_size <- 0
+  outgroup_size
+}
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
+conv_to_ms_arg.Feature_outgroup <- function(feature, model) {
+  stop("ms does not support outgroups", call. = FALSE)
+}
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
+conv_to_msms_arg.Feature_outgroup <- function(feature, model) {
+  stop("msms does not support outgroups", call. = FALSE)
+}
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
+conv_to_scrm_arg.Feature_outgroup <- function(feature, model) {
+  stop("scrm does not support outgroups", call. = FALSE)
+}
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
+conv_to_seqgen_arg.Feature_outgroup <- ignore_par

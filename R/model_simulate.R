@@ -1,12 +1,15 @@
 #' Simulates data according to a demographic model
 #'
-#' @param model The demographic model according to which the simulations should be done
-#' @param parameters A vector of parameters which should be used for the simulations.
-#'           If a matrix is given, a simulation for each row of the matrix will be performed
-#' @return A matrix where each row is the vector of summary statistics for
-#'         the parameters in the same row of the "parameter" matrix
+#' @param object The coalescent model to be simulated
+#' @param nsim currently unused
+#' @param seed A random seed that is set before simulation.
+#' @param ... currently unused
+#' @param pars Values for parameters specificed with \code{\link{par_named}} or
+#'   \code{\link{par_range}}. Should be a named numeric vector.
+#' @return A list of summary statistics.
 #' @export
 #' @importFrom stats simulate
+#' @importFrom assertthat assert_that
 #'
 #' @examples
 #' model <- coal_model(c(5,10), 20) +
@@ -15,7 +18,10 @@
 #'   sumstat_jsfs()
 #'
 #' simulate(model, pars=c(1, 5))
-simulate.Coalmodel <- function(object, nsim = 1, seed, pars = numeric(0), ...) {
+simulate.Coalmodel <- function(object, nsim = 1, seed, ..., pars = numeric(0)) {
+  assert_that(is.numeric(pars))
+  if (!missing(seed)) set.seed(seed)
   simprog <- select_simprog(object)
+  if (is.null(simprog)) stop("No simulator found")
   simprog$simulate(object, pars)
 }

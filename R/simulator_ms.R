@@ -1,81 +1,34 @@
-ms_features  <- c("sample", "mutation", "migration", "migration_sym",
-                  "pop_merge", "recombination", "size_change", "growth",
-                  "inter_locus_variation", "trees", 'locus_trios',
-                  "unphased", "ploidy", "samples_per_ind")
-ms_sum_stats <- c("jsfs", "trees", "seg.sites", "file")
+#' Generate command line arguments for features
+#'
+#' These functions are exported only for technical reasons
+#' (because they are S3 methods) and are not indended for
+#' users.
+#'
+#' @param feature The feature for which the argument is generated
+#' @param model The complete model for which the argument is generated
+conv_to_ms_arg <- function(feature, model) UseMethod("conv_to_ms_arg")
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
+conv_to_ms_arg.default <- function(feature, model) {
+  stop("Unknown feature", call. = FALSE)
+}
 
 
 # This function generates an string that contains an R command for generating
 # an ms call to the current model.
 ms_generate_opts_cmd <- function(model) {
-  sample_size <- get_sample_size(model, for_sim = TRUE)
-  cmd <- c('c(')
-  if (length(sample_size) > 1) {
-    cmd <- c(cmd,'"-I"', ', ', length(sample_size), ', ',
-             paste(sample_size, collapse=","), ', ')
-  }
-
-  for (i in 1:dim(get_feature_table(model))[1] ) {
-    type <- as.character(get_feature_table(model)[i,"type"])
-    feat <- unlist(get_feature_table(model)[i, ])
-
-    if ( type == "mutation" ) {
-      cmd <- c(cmd, '"-t"', ', ',
-               'format(', feat['parameter'], ', scientific=FALSE), ')
-    }
-
-    else if (type == "pop_merge") {
-      cmd <- c(cmd, '"-ej"', ', ', feat["time.point"], ', ',
-               feat["pop.source"], ', ', feat["pop.sink"], ', ')
-    }
-
-    else if (type == "migration")
-      cmd <- c(cmd, '"-em"', ', ', feat['time.point'], ', ',
-               feat['pop.sink'], ', ', feat['pop.source']  , ', ',
-               feat['parameter'], ', ')
-
-    else if (type == "migration_sym")
-      cmd <- c(cmd, '"-eM"', ', ',
-               feat['time.point'], ', ',
-               feat['parameter'], ', ')
-
-    else if (type == "recombination") {
-      cmd <- c(cmd, '"-r"', ', ',
-               'format(', feat['parameter'], ', scientific=FALSE), ',
-               'format(locus_length, scientific=FALSE), ')
-    }
-
-    else if (type == "size_change") {
-      cmd <- c(cmd, '"-en"', ', ', feat['time.point'], ', ',
-               feat["pop.source"], ', ', feat['parameter'], ', ')
-    }
-
-    else if (type == "growth") {
-      cmd <- c(cmd, '"-eg"', ', ' , feat["time.point"], ', ',
-               feat["pop.source"], ', ', feat["parameter"], ', ')
-      }
-
-    else if (type == 'trees') {
-      cmd <- c(cmd, '"-T", ')
-    }
-
-    else if (type %in% c("sample", "loci.number", "loci.length",
-                         "selection", "selection_AA", "selection_Aa",
-                         "inter_locus_variation", "unphased",
-                         "ploidy", "samples_per_ind")) NULL
-    else stop("Unknown feature:", type)
-  }
-
-
-  cmd <- c(cmd, '" ")')
+  cmd <- paste(vapply(model$features, conv_to_ms_arg,
+                      FUN.VALUE = character(1), model),
+               collapse = "")
+  paste0("c('", cmd, "')")
 }
 
 
-ms_generate_opts <- function(model, parameters, group, eval_pars = TRUE) {
-  if (eval_pars) locus_length <- get_locus_length(model, group = group)
-  else locus_length <- "locus_length"
+ms_generate_opts <- function(model, parameters, locus, eval_pars = TRUE) {
+  locus_length <- get_locus_length(model, group = locus)
 
-  ms_tmp <- create_par_env(model, parameters, locus = group,
+  ms_tmp <- create_par_env(model, parameters, locus = locus,
                            locus_length = locus_length,
                            for_cmd = !eval_pars)
 
@@ -85,7 +38,6 @@ ms_generate_opts <- function(model, parameters, group, eval_pars = TRUE) {
     cache(model, 'ms_cmd', cmd)
   }
 
-  if (!eval_pars) cmd <- escape_par_expr(cmd)
   eval(parse(text = cmd), envir = ms_tmp)
 }
 
@@ -96,8 +48,6 @@ ms_generate_opts <- function(model, parameters, group, eval_pars = TRUE) {
 Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
   private = list(
     name = 'ms',
-    features = ms_features,
-    sumstats = ms_sum_stats,
     priority = 100
   ),
   public = list(
@@ -107,13 +57,14 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
       # Do the actuall simulation
       files <- lapply(1:get_locus_group_number(model) , function(i) {
         opts <- ms_generate_opts(model, parameters, i)
+        #print(opts)
         file <- tempfile('csr_ms')
 
         ms(sum(get_sample_size(model, for_sim = TRUE)),
-           format(get_locus_number(model, group=i), scientific=FALSE),
+           format(get_locus_number(model, group = i), scientific = FALSE),
            unlist(strsplit(opts, " ")), file)
 
-        if(file.info(file)$size == 0) stop("ms simulation output is empty")
+        if (file.info(file)$size == 0) stop("ms simulation output is empty")
         file
       })
 
@@ -137,13 +88,13 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
       sum_stats
     },
     get_cmd = function(model) {
-      cmd <- ms_generate_opts(model, get_parameter_table(model)$name,
-                              "locus", FALSE)
-      txt <- paste(cmd, collapse = ' ')
-      paste("ms", sum(get_sample_size(model)), get_locus_number(model), txt)
+      cmd <- ms_generate_opts(model, NULL, 1, FALSE)
+      paste("ms",
+            sum(get_sample_size(model, TRUE)),
+            get_locus_number(model),
+            paste(cmd, collapse = ' '))
     }
   )
 )
-
 
 register_simulator(Simulator_ms)

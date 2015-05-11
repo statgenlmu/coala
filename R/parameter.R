@@ -77,7 +77,7 @@ is.named_par <- function(par) {
 #' @describeIn par_expr Creates a parameter with value determined by evaluating an
 #'  expression.
 #' @export
-#' @aliases ModelParameters
+#' @aliases parameter
 #' @author Paul Staab
 #' @examples
 #' par_const(5)
@@ -201,6 +201,8 @@ create_par_env <- function(model, parameters, ..., for_cmd = FALSE) {
   par_env <- new.env()
 
   if (!for_cmd) {
+    par_env[['par']] <- function(x) format(x, scientific = FALSE)
+
     if (is.null(names(parameters))) {
       par_names <- get_par_names(model, without_priors = TRUE)
       if (length(parameters) != length(par_names)) {
@@ -213,9 +215,7 @@ create_par_env <- function(model, parameters, ..., for_cmd = FALSE) {
       par_env[[par$get_name()]] <- par$generate_value(parameters)
     }
   } else {
-    for (par in get_parameter(model)) {
-      par_env[[par$get_name()]] <- par$get_name()
-    }
+    par_env[['par']] <- function(x) substitute(x)
   }
 
   additional_pars <- list(...)
@@ -226,14 +226,4 @@ create_par_env <- function(model, parameters, ..., for_cmd = FALSE) {
   par_env[["locus_number"]] <- get_locus_number(model)
 
   par_env
-}
-
-
-escape_par_expr <- function(cmd) {
-  if (is.null(names(cmd))) return(cmd)
-  for (i in seq(along = cmd)) {
-    if (names(cmd)[i] == '') next
-    cmd[i] <- paste0('\"', cmd[i], '\"')
-  }
-  cmd
 }

@@ -112,7 +112,7 @@ test_that("Adding an expression par to a model give no error", {
 
 test_that("Creation of parameter enviroment works", {
   # With named parameters
-  model <- coal_model() + par_named("x")
+  model <- coal_model(5) + par_named("x")
   par_envir <- create_par_env(model, c(x = 5))
   expect_equal(par_envir[['x']], 5)
   par_envir <- create_par_env(model, 5)
@@ -124,7 +124,7 @@ test_that("Creation of parameter enviroment works", {
   expect_error(create_par_env(model, c(y = 2)))
 
   # Without parameters
-  par_envir <- create_par_env(coal_model(), numeric(0))
+  par_envir <- create_par_env(coal_model(5), numeric(0))
 
   # With ranged parameters (not really needed)
   par_envir <- create_par_env(model_theta_tau(), c(1, 5))
@@ -136,7 +136,7 @@ test_that("Creation of parameter enviroment works", {
   expect_equal(par_envir[['theta']], 5)
 
   # With priors
-  model <- coal_model() + par_prior("x", 17)
+  model <- coal_model(5) + par_prior("x", 17)
   par_envir <- create_par_env(model, numeric(0))
   expect_equal(par_envir[["x"]], 17)
 
@@ -158,6 +158,4 @@ test_that("Creation of parameter enviroment works", {
 
   # For cmd printing
   par_envir <- create_par_env(model_theta_tau(), for_cmd = TRUE)
-  expect_equal(par_envir[["theta"]], "theta")
-  expect_equal(par_envir[["tau"]], "tau")
 })

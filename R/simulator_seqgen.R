@@ -1,33 +1,4 @@
-# --------------------------------------------------------------
-# simprog_seqgen.R
-# Adaptor to calling ms from a demographic model.
-#
-# Authors:  Paul R. Staab
-# Date:     2013-11-21
-# Licence:  GPLv3 or later
-# --------------------------------------------------------------
-
-
-sg_only_features <- c('mutation_model', 'tstv_ratio',
-                      'base_freq_A', 'base_freq_C', 'base_freq_G',
-                      'base_freq_T',
-                      'gtr_rate_1', 'gtr_rate_2', 'gtr_rate_3',
-                      'gtr_rate_4','gtr_rate_5','gtr_rate_6',
-                      'gamma_categories', 'gamma_rate',
-                      'locus_trios', 'outgroup',
-                      'mutation_outer',
-                      'sumstat_dna')
-
-#' @include simulator_ms.R
-#' @include simulator_msms.R
-#' @include simulator_scrm.R
-sg_features <- unique(c(get_simulator("ms")$get_features(),
-                        get_simulator("msms")$get_features(),
-                        get_simulator("scrm")$get_features(),
-                        sg_only_features))
-
-sg_sum_stats <- c('jsfs', 'file', 'seg.sites')
-sg_mutation_models <- c('HKY', 'F84', 'GTR')
+sg_mutation_models <- c('HKY', 'GTR')
 
 sg_find_exe <- function(throw.error = TRUE, silent = FALSE) {
   if ((!is.null(get_seqgen_path())) && file.exists(get_seqgen_path())) {
@@ -61,8 +32,13 @@ generate_tree_model <- function(model) {
     tree_model <- model
 
     # Features
-    tree_model$features <-
-      model$features[!get_feature_table(model)$type %in% sg_only_features]
+    tree_model_features <- !vapply(model$features, function(x) {
+      any(c("Feature_seg_sites",
+            "Feature_mutation",
+            "Feature_outgroup") %in% class(x))
+    }, logical(1)) #nolint
+    if (all(tree_model_features)) stop("seq-gen not required")
+    tree_model$features <- model$features[tree_model_features]
 
     # Summary Stastics
     tree_model$sum_stats <- create_sumstat_container()
@@ -77,7 +53,7 @@ generate_tree_model <- function(model) {
 
 #' Set the path to the executable for seqgen
 #'
-#' @param seqgen.exe Path to seqgen's executable.
+#' @param seqgen_exe The path to seqgen's executable.
 #' @export
 set_seqgen_exe <- function(seqgen_exe) {
   if (file.exists(seqgen_exe)) {
@@ -93,127 +69,71 @@ sg_call <- function(opts, ms_files) {
   stopifnot(length(opts) == length(ms_files))
 
   sapply(seq(along = opts), function(i) {
-    if(file.info(ms_files[[i]])$size <= 1 ) {
+    if (file.info(ms_files[[i]])$size <= 1 ) {
       stop("No trees in file ", ms_files[[i]])
     }
 
     seqgen_file <- tempfile('seqgen')
     cmd <- paste(opts[i], "<", ms_files[[i]], ">", seqgen_file)
 
-    # Do the acctual simulation
     if (system(cmd, intern = FALSE) != 0) stop("seq-gen simulation failed")
 
-    if( !file.exists(seqgen_file) ) stop("seq-gen simulation failed!")
-    if( file.info(seqgen_file)$size <= 1 ) stop("seq-gen output is empty!")
+    if (!file.exists(seqgen_file)) stop("seq-gen simulation failed!")
+    if (file.info(seqgen_file)$size <= 1) stop("seq-gen output is empty!")
 
     seqgen_file
   })
 }
 
+
+conv_to_seqgen_arg <- function(feature, model) UseMethod("conv_to_seqgen_arg")
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
+conv_to_seqgen_arg.default <- function(feature, model) {
+  stop("Unknown feature when generating seqgen command")
+}
+
+
 sg_generate_opts <- function(model, parameters, locus,
-                             seeds, eval_pars = TRUE) {
-
-  if (eval_pars) locus_lengths <- get_locus_length(model,
-                                                  group = locus,
-                                                  total = FALSE)
-  else locus_lengths <- "locus_length"
-
-  cmd <- read_cache(model, 'seqgen_cmd')
-  if (is.null(cmd)) {
-    cmd <- sg_generate_opt_cmd(model)
-    cache(model, 'seqgen_cmd', cmd)
-  }
+                             seeds, for_cmd = FALSE) {
+  locus_lengths <- get_locus_length(model, group = locus, total = FALSE)
 
   if (length(locus_lengths) == 5) {
-    locus_lengths <- locus_lengths[c(1,3,5)]
+    locus_lengths <- locus_lengths[c(1, 3, 5)]
   }
+
+  cmd <- sg_generate_opt_cmd(model)
+  #print(cmd)
 
   # Fill the parameters in the template
   sapply(seq(along = locus_lengths), function(i) {
-    if (!eval_pars) cmd[[i]] <- escape_par_expr(cmd[[i]])
     par_envir <- create_par_env(model, parameters, locus = locus,
-                                    locus_length = locus_lengths[i],
-                                    seed = seeds[i], for_cmd = !eval_pars)
-    paste(eval(parse(text=cmd[[i]]), envir=par_envir), collapse=" ")
+                                locus_length = locus_lengths[i],
+                                seed = seeds[i], for_cmd = for_cmd)
+    paste(eval(parse(text = cmd[[i]]), envir = par_envir), collapse = " ")
   })
 }
 
 
 sg_generate_opt_cmd <- function(model) {
-  stopifnot(is.model(model))
 
-  if (has_trios(model)) is_outer <- c(TRUE, FALSE, TRUE)
-  else is_outer <- FALSE
+  cmd <- read_cache(model, 'seqgen_cmd')
 
-  lapply(is_outer, function(outer) {
-    opts <- c('c(', paste('"', get_seqgen_path(), '"', sep=""), ",")
-    base.freqs <- list()
-    gtr.rates <- list()
+  if (is.null(cmd)) {
+    if (has_trios(model)) is_outer <- c(TRUE, FALSE, TRUE)
+    else is_outer <- FALSE
 
-    for (i in 1:dim(get_feature_table(model))[1] ) {
-      type <- as.character(get_feature_table(model)[i,"type"])
-      feat <- unlist(get_feature_table(model)[i, ])
+    cmd <- lapply(is_outer, function(outer) {
+      cmd <- paste(vapply(model$features, conv_to_seqgen_arg,
+                          FUN.VALUE = character(1), model = model),
+                   collapse = "")
+      cmd <- paste0("c(get_seqgen_path(), '", cmd, "')")
+    })
 
-      if (type == "mutation_model") {
-        opts <- c(opts, paste('"-m', feat['parameter'], '"', sep=""), ",")
-      }
-
-      else if ( type %in% c('base_freq_A', 'base_freq_C',
-                            'base_freq_G', 'base_freq_T') )
-        base.freqs[[type]] <- feat['parameter']
-
-      else if ( type %in% c('gtr_rate_1', 'gtr_rate_2', 'gtr_rate_3',
-                            'gtr_rate_4', 'gtr_rate_5', 'gtr_rate_6') )
-        gtr.rates[[type]] <- feat['parameter']
-
-      else if (type == "tstv_ratio")
-        opts <- c(opts, '"-t"', ',', feat['parameter'], ',')
-
-      else if (type == "gamma_rate")
-        opts <- c(opts, '"-a"', ',', feat['parameter'], ',')
-
-      else if (type == "gamma_categories")
-        opts <- c(opts, '"-g"', ',', feat['parameter'], ',')
-    }
-
-    if (length(base.freqs) == 4) {
-      opts <- c(opts, '"-f"', ',', base.freqs[['base_freq_A']],
-                ',', base.freqs[['base_freq_C']],
-                ',', base.freqs[['base_freq_G']],
-                ',', base.freqs[['base_freq_T']], ',')
-    }
-
-    if (length(gtr.rates) == 6) {
-      opts <- c(opts, '"-r"', ',', gtr.rates[['gtr_rate_1']],
-                ',', gtr.rates[['gtr_rate_2']],
-                ',', gtr.rates[['gtr_rate_3']],
-                ',', gtr.rates[['gtr_rate_4']],
-                ',', gtr.rates[['gtr_rate_5']],
-                ',', gtr.rates[['gtr_rate_6']], ',')
-    }
-
-    opts <- c(opts, '"-l"', ',', 'locus_length', ',')
-    opts <- c(opts, '"-s"', ',',
-              s=paste(get_mutation_par(model, outer), ' / locus_length'), ',')
-    opts <- c(opts, '"-p"', ',', p='locus_length + 1', ',')
-    opts <- c(opts, '"-z"', ',', 'seed', ',')
-    opts <- c(opts, '"-q"', ')')
-    opts
-  })
-}
-
-
-sg_get_command <- function(model) {
-  tree_cmd <- get_cmd(generate_tree_model(model))
-
-  sg_cmd <- paste(sg_generate_opts(model, get_parameter_table(model)$name,
-                                   locus = 1, seeds = 'seed',
-                                   eval_pars = FALSE),
-                  collapse = ' ')
-  sg_cmd <- paste('seq-gen', sg_cmd)
-
-  paste("\n  Trees:", tree_cmd, "\n",
-        " seqgen:", sg_cmd)
+    cache(model, 'seqgen_cmd', cmd)
+  }
+  cmd
 }
 
 
@@ -222,7 +142,7 @@ sg_simulate <- function(model, parameters) {
 
   # Simulate the ancestral trees
   tree_model <- generate_tree_model(model)
-  trees <- simulate(tree_model, pars=parameters)$trees
+  trees <- simulate(tree_model, pars = parameters)$trees
   assert_that(!is.null(trees))
 
   # Call seq-gen for each locus (trio)
@@ -257,13 +177,15 @@ sg_simulate <- function(model, parameters) {
 Simulator_seqgen <- R6Class('Simulator_seqgen', inherit = Simulator,
   private = list(
     name = 'seqgen',
-    features = sg_features,
-    sumstats = sg_sum_stats,
     priority = 10
    ),
    public = list(
      simulate = sg_simulate,
-     get_cmd = sg_get_command
+     get_cmd = function(model) {
+       c(trees=get_cmd(generate_tree_model(model)),
+         sequence=paste(sg_generate_opts(model, NULL, 1, 0, TRUE),
+                        collapse = ' '))
+     }
    )
 )
 

@@ -2,35 +2,28 @@
 % Please edit documentation in R/feature_mutation.R
 \name{feat_mutation}
 \alias{feat_mutation}
-\title{Creates a Mutation Feature}
+\title{Feature: Mutation}
 \usage{
-feat_mutation(rate, variance = 0, model = "IFS", base_frequencies,
-  tstv_ratio, gtr_rates)
+feat_mutation(rate, model = "IFS", base_frequencies = NA, tstv_ratio = NA,
+  gtr_rates = NA)
 }
 \arguments{
-\item{rate}{A \code{\link{Parameter}} defining the mutation rate (see above).}
+\item{rate}{A \code{\link{parameter}} defining the mutation rate.}
 
-\item{variance}{Set to a value different from 0 to introduce variation in the
-the parameter value for different loci. The
-variation follows a gamma distribution with mean equal to
-the value provided as \code{parameter}, and variance as given
-here. Can also be set to a previously
-created parameter, or an expression based on parameters.}
+\item{model}{The mutation model you want to use.
+Can be either 'IFS' (default), 'HKY' or 'GTR'. Refer to the mutation model
+section for detailed information.}
 
-\item{model}{The mutation model you want to use. Can be IFS (default),
-HKY, F84 or GTR.}
+\item{base_frequencies}{The equilibrium frequencies of the four bases used in
+the 'HKY' mutation model. Must be a numeric vector of length four, with the
+values for A, C, G and T, in that order.}
 
-\item{tstv.ratio}{The ratio of transitions to transversions. The default is
-0.5, which means that all amino acid substitutions are
-equally likely. In this case, the HKY model is identical to
-the Felsenstein 81 model.}
+\item{tstv_ratio}{The ratio of transitions to transversions used in the 'HKY'
+muation model.}
 
-\item{base.frequencies}{The equilibrium frequencies of the four bases.
-Must be a numeric vector of length four.
-Order is A, C, G, T.}
-
-\item{gtr.rates}{The rates for the amino acid substitutions. Must be a
-numeric vector of length six. Order: A->C, A->G, A->T, C->G, C->T, G->T.}
+\item{gtr_rates}{The rates for the six amino acid substitutions used in the
+'GTR' model. Must be a numeric vector of length six.
+Order: A<->C, A<->G, A<->T, C<->G, C<->T, G<->T.}
 }
 \value{
 The feature, which can be added to a model using `+`.
@@ -42,16 +35,24 @@ a parameter usually named theta in population genetics. It equals 4*N0*mu,
 where N0 is the effective diploid population size of population one at the
 time of sampling and mu is the neutral mutation rate for an entire locus.
 }
+\section{Mutation Models}{
+
+The Hasegawa, Kishino and Yano (HKY) model (Hasegawa et al., 1985) allows
+for a different rate of transitions and transversions (tstv_ratio)
+and unequal
+frequencies of the four nucleotides (base_frequencies).
+
+The general reversible process (GTR) model (e.g. Yang, 1994) is more general
+than the HKY model and allows to define the rates for each
+type of substitution. The rates are assumed to be symmetric
+(e.g., the rate for T to G is equal to the one for G to T).
+}
 \examples{
-# A model with a constant scaled mutation rate of 5:
-model <- coal_model(c(15,20), 100) + feat_mutation(par_const(5))
+# A model with a constant mutation rate of 5:
+model <- coal_model(10, 1) + feat_mutation(rate = 5)
 
 # A model with a mutation rate that can be estimated with Jaatha:
 model <- coal_model(c(15,20), 100) +
   feat_mutation(par_range('theta', 1, 20))
-
-# A model with variable gamma distributed mutation rate
-model <- coal_model(c(15,20), 100) +
-  feat_mutation(par_range('theta', 1, 20), variance=100)
 }
 

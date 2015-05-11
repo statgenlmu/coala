@@ -1,15 +1,24 @@
-#' Creates a Recombination feature
+Feature_recombination <- R6Class("Feature_recombination", inherit = Feature,
+  public = list(
+    initialize = function(rate) {
+      private$rate <- private$add_parameter(rate)
+    },
+    print = function() {
+      cat("Recombination with rate", print_par(private$rate), "\n")
+    }
+  )
+)
+
+#' Feature: Recombination
 #'
-#' This function add the assumption to the model that recombination
-#' events may occur within each locus. The corresponding parameter
-#' equals 4*N0*r, where r is the
+#' Adds intra-locus recombination to a model.
+#'
+#' The corresponding rate parameter is 4*N0*r, where r is the
 #' probability that a recombination event within the locus will
 #' occur in one generation. Even when using an infinite sites
-#' mutation model, this assumes an finite locus length which is given
-#' by the 'seq.length' parameter of the demographic model.
+#' mutation model, this assumes an finite locus length.
 #'
-#' @inheritParams feat_mutation
-#' @param rate A \code{\link{Parameter}} defining the recombination rate
+#' @param rate A \code{\link{parameter}} defining the recombination rate
 #'   (see above).
 #' @return The demographic model with recombination
 #' @export
@@ -17,11 +26,25 @@
 #' @examples
 #' # A model with a fixed recombination rate of 5
 #' model <- coal_model(c(25,25), 100, 1000) +
-#'   feat_recombination(par_const(5))
-#'
-#' # A model where the recombination is given by a parameter 'rho'
-#' model <- coal_model(c(25,25), 100) +
-#'   feat_recombination(par_range('rho', 1, 5))
-feat_recombination <- function(rate, variance = 0) {
-  Feature$new("recombination", rate, variance = variance)
+#'   feat_recombination(5)
+feat_recombination <- function(rate) {
+  Feature_recombination$new(rate)
 }
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
+conv_to_ms_arg.Feature_recombination <- function(feature, model) {
+  paste0("-r', ", feature$get_rate(), ", par(locus_length), '")
+}
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
+conv_to_msms_arg.Feature_recombination <- conv_to_ms_arg.Feature_recombination
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
+conv_to_scrm_arg.Feature_recombination <- conv_to_ms_arg.Feature_recombination
+
+#' @describeIn conv_to_ms_arg Feature conversion
+#' @export
+conv_to_seqgen_arg.Feature_recombination <- ignore_par

@@ -1,5 +1,41 @@
 context("Feature Unphased")
 
+test_that('creating unphased features works', {
+  expect_equal(feat_unphased(2, 1)$get_ploidy(), 2)
+  expect_equal(feat_unphased(2, 1)$get_samples_per_ind(), 1)
+  expect_error(feat_unphased(2:1, 1))
+  expect_error(feat_unphased("A", 1))
+  expect_error(feat_unphased(2, 2:1))
+  expect_error(feat_unphased(2, "A"))
+  expect_true(is_feat_unphased(feat_unphased(2, 1)))
+})
+
+
+test_that("getting the unphased feature works", {
+  expect_equal(get_feature_unphased(model_theta_tau()), NULL)
+  model <- model_theta_tau() + feat_unphased(2, 1)
+  expect_true(is_feat_unphased(get_feature_unphased(model)))
+  expect_error(get_feature_unphased(model + feat_unphased(2, 1)))
+
+  model <- model_theta_tau() + feat_unphased(3, 2)
+  expect_equal(is_unphased(model), TRUE)
+  expect_equal(get_ploidy(model), 3)
+  expect_equal(get_samples_per_ind(model), 2)
+
+  model <- model_theta_tau()
+  expect_equal(is_unphased(model), FALSE)
+  expect_equal(get_ploidy(model), 1)
+  expect_equal(get_samples_per_ind(model), 1)
+})
+
+
+test_that("generating the ms command works", {
+  ms <- get_simulator("ms")
+  model <- coal_model(c(5, 10), 1) + feat_unphased(2, 1)
+  expect_equal(ms$get_cmd(model), "ms 30 1 -I 2 10 20 ")
+})
+
+
 
 test_that("unphasing works", {
   seg_sites <- list()

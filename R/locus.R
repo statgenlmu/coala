@@ -32,7 +32,7 @@ Locus <- R6Class('Locus',
     get_number = function() private$number,
     print = function() {
       cat(self$get_number(), ifelse(self$get_number() == 1, "locus", "loci"),
-          "of length", self$get_length())
+          "of length", self$get_length(), "\n")
     }
   )
 )

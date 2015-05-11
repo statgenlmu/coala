@@ -4,7 +4,8 @@
 \alias{feat_migration}
 \title{Add migration/gene flow between two populations to a demographic model}
 \usage{
-feat_migration(rate, pop_from, pop_to, symmetric = FALSE, time_start = "0")
+feat_migration(rate, pop_from = NULL, pop_to = NULL, symmetric = FALSE,
+  time = "0")
 }
 \arguments{
 \item{rate}{Instead of creating a new parameter, you can also
@@ -15,15 +16,13 @@ created. You can also use R expression here, so "2*M"
 or "5*M+2*tau" (if tau is another parameter) will also
 work (also this does not make much sense).}
 
-\item{pop.from}{The population from which the individuals leave.}
+\item{pop_from}{The population from which the individuals leave.}
 
-\item{pop.to}{The population to which the individuals move.}
+\item{pop_to}{The population to which the individuals move.}
 
-\item{time.start}{The time point at which the migration with this rate
-starts.}
-}
-\value{
-The demographic model with migration
+\item{symmetric}{Use the rate between all pairs of populations.}
+
+\item{time}{The time point at which the migration with this rate starts.}
 }
 \description{
 This function adds the assumption to the model that some individuals
@@ -32,13 +31,13 @@ and become a member of the other. This is usually used to model ongoing
 gene flow through hybridisation after the populations separated.
 }
 \details{
-You can enter a time ('time.start') at which the migration is
+You can enter a time (\code{time}) at which the migration is
 assumed to start (looking backwards in time). From that time on, a
-fixed number of migrants move from population 'pop.from' to
-population 'pop.to' each generation. This number is given via this
+fixed number of migrants move from population \code{pop_from} to
+population \code{pop_to} each generation. This number is given via this
 feature's parameter, which equals 4*N0*m,  where m is the
-fraction of 'pop.to' that is replaced with migrants each generation.
-If 'pop.to' has also size Ne, than this is just the
+fraction of \code{pop_to}that is replaced with migrants each generation.
+If \code{pop_to} has also size Ne, than this is just the
 expected number of individuals that migrate each generation.
 
 You can add different mutation rates at different times to your model.
@@ -49,8 +48,8 @@ speciation event in which the population is created.
 \examples{
 # Asymmetric migration for two populations
 model <- coal_model(c(25,25), 100) +
-  feat_migration(par_const(0.5), 1, 2) +
-  feat_migration(par_const(0.75), 2, 1)
+  feat_migration(0.5, 1, 2) +
+  feat_migration(0.75, 2, 1)
 
 # Symmetric Migration
 model <- coal_model(c(25,25), 100) +

@@ -15,16 +15,6 @@ add_to_model.default <- function(x, model, x_name) {
 }
 
 
-add_to_model.Coalmodel <- function(add, model, par_name) {
-  for (feat in get_features(add)) model <- model + feat
-  for (par in get_parameter(add)) model <- model + par
-  for (stat in add$sum_stats) model <- model + stat
-
-  model$loci <- rbind(model$loci, add$loci)
-  model
-}
-
-
 add_to_model.Parameter <- function(par, model, par_name) model
 
 
@@ -40,14 +30,19 @@ add_to_model.Par_Named <- function(par, model, par_name) {
 
 
 add_to_model.Feature <- function(feat, model, feat_name) {
-  for (para in feat$get_parameters()) model <- model + para
-  feat$reset_parameters()
-
-  model$features[[length(model$features) + 1]] <- feat
-
-  if (feat$get_inter_locus_var()) {
-    model <- add_inter_locus_var(model)
+  # Check that the population in the feature exists
+  pop <- feat$get_population()
+  if (!is.null(pop)) {
+    if (pop != "all" && !all(pop %in% get_populations(model))) {
+      stop("Invalid population in ", feat_name)
+    }
   }
+
+  # Add the parameters in the feature
+  for (para in feat$get_parameters()) model <- model + para
+
+  # Add the feature itself
+  model$features[[length(model$features) + 1]] <- feat
 
   model$id <- get_id()
   model

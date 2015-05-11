@@ -4,31 +4,11 @@
 #'
 #' @export
 #' @author Paul Staab
-#' @describeIn get_feature_table Returns the features of a model as a data.frame
-get_feature_table <- function(model) {
-  stopifnot(is.model(model))
-
-  feat_table <- read_cache(model, "feature_table")
-  if (is.null(feat_table)) {
-    if (length(get_features(model)) == 0) {
-      feat_table <- create_feature_table()
-    } else {
-      feat_table <- do.call(rbind, lapply(get_features(model), function (feat) {
-        feat$get_table()
-      }))
-    }
-    cache(model, "feature_table", feat_table)
-  }
-
-  feat_table
-}
-
-
 get_features <- function(model) model$features
 
 
 #' @export
-#' @describeIn get_feature_table Returns the ranged parameters of a model as a
+#' @describeIn get_features Returns the ranged parameters of a model as a
 #'   data.frame
 get_parameter_table <- function(model) {
   stopifnot(is.model(model))
@@ -59,7 +39,7 @@ get_parameter_table <- function(model) {
 
 
 #' @export
-#' @describeIn get_feature_table Returns the ranged parameters of a model
+#' @describeIn get_features Returns the ranged parameters of a model
 get_parameter <- function(model) {
   stopifnot(is.model(model))
   model$parameter
@@ -70,8 +50,9 @@ get_parameter <- function(model) {
 #' @param total If \code{FALSE}, the length of loci in a trio will be reported
 #'   individually. If \code{TRUE} the sum of the loci's length will be reported.
 #'   This does not affect non-trio loci.
+#' @param group The group of loci.
 #'
-#' @describeIn get_feature_table Returns the length of the loci in a locus group
+#' @describeIn get_features Returns the length of the loci in a locus group
 #' @export
 get_locus_length <- function(model, locus=NULL, group=NULL, total=TRUE) {
   assert_that(!(is.null(locus) & is.null(group)))
@@ -106,47 +87,17 @@ get_locus_group_number <- function(model) {
 }
 
 
-#' @describeIn get_feature_table Returns a vector of populations in the model
+#' @describeIn get_features Returns a vector of populations in the model
 #' @export
 get_populations <- function(model) {
-  unique(search_feature(model, 'sample')$pop.source)
+  feat <- model$features[vapply(model$features, is_feat_sample, logical(1))]
+  pop_number <- max(vapply(feat, function(x) length(x$get_sizes()), numeric(1)))
+  assert_that(pop_number > 0)
+  1:pop_number
 }
 
 
-#' @describeIn get_feature_table Returns a vector of samples sizes per
-#'   population.
-#' @param for_sim If true, the sample size used internally for the simulation
-#'   will be reported rather than the number of actuall samples. The numbers
-#'   can be unequal for the simulation of unphased data.
-#' @export
-get_sample_size <- function(model, for_sim=FALSE) {
-  sample_size <- read_cache(model, paste0("sample_size_", for_sim))
-
-  if (is.null(sample_size)) {
-    feat.samples <- search_feature(model, type="sample")
-    stopifnot(nrow(feat.samples) > 0)
-
-    sample_size <- rep(0, length(get_populations(model)))
-    for (row.nr in 1:nrow(feat.samples)) {
-      stopifnot(sample_size[feat.samples$pop.source[row.nr]] == 0)
-      sample_size[feat.samples$pop.source[row.nr]] <-
-        as.integer(feat.samples$parameter[row.nr])
-    }
-
-    if (for_sim) {
-      sample_size <- sample_size * get_ploidy(model)
-    } else {
-      sample_size <- sample_size * get_samples_per_ind(model)
-    }
-    cache(model, paste0("sample_size_", for_sim), sample_size)
-  }
-
-  sample_size
-}
-
-
-
-#' @describeIn get_feature_table Returns a matrix with detailed length
+#' @describeIn get_features Returns a matrix with detailed length
 #' information about the loci in the model.
 #' @export
 get_locus_length_matrix <- function(model) {
@@ -166,7 +117,7 @@ get_locus_length_matrix <- function(model) {
 }
 
 
-#' @describeIn get_feature_table Returns the number of loci in a locus group
+#' @describeIn get_features Returns the number of loci in a locus group
 #' @export
 get_locus_number <- function(model, group=NA) {
   numbers <- get_locus_length_matrix(model)[ , "number"]
@@ -176,24 +127,10 @@ get_locus_number <- function(model, group=NA) {
 }
 
 
-#' @describeIn get_feature_table Returns the population that is marked as outgroup
-#' @export
-get_outgroup <- function(model) {
-  as.integer(search_feature(model, 'outgroup')$parameter)
-}
-
-
-#' @describeIn get_feature_table Returns the number of samples in the outgroup
-#' @export
-get_outgroup_size <- function(model, for_sim = FALSE) {
-  outgroup_size <- get_sample_size(model, for_sim)[get_outgroup(model)]
-  if (length(outgroup_size) == 0) outgroup_size <- 0
-  outgroup_size
-}
-
-
-#' @describeIn get_feature_table Returns the index of the individuals of one
+#' @describeIn get_features Returns the index of the individuals of one
 #'   population
+#' @param zero_indexed If true, the names of the populations are started from
+#'   0 instead of from 1.
 #' @export
 get_population_indiviuals <- function(model, pop, zero_indexed = FALSE) {
   if (pop == "all") return(1:sum(get_sample_size(model)))
@@ -217,4 +154,8 @@ get_par_names <- function(model, without_priors=FALSE) {
 
 get_loci <- function(model) model$loci
 
-get_cmd <- function(model) select_simprog(model)$get_cmd(model)
+get_cmd <- function(model) {
+  suppressWarnings(prog <- select_simprog(model))
+  if (is.null(prog)) stop("No suitable simulator found.")
+  prog$get_cmd(model)
+}

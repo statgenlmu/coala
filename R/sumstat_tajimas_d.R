@@ -17,7 +17,7 @@ SumstatTajimasD <- R6Class('TajimasD', inherit = Sumstat, #nolint
         pi <- calc_nucleotide_div(seg_sites, ind)
         s <- sapply(seg_sites, ncol)
 
-        tmp <- 1 / (1:(n - 1))
+        tmp <- 1 / (1:(n - 1)) #nolint
         a1 <- sum(tmp)
         a2 <- sum(tmp ^ 2)
         b1 <- (n + 1) / (3 * (n - 1))
@@ -40,7 +40,7 @@ SumstatTajimasD <- R6Class('TajimasD', inherit = Sumstat, #nolint
 #' Tajima's D was introducted by
 #'
 #' Tajima, F. (1989). "Statistical method for testing the neutral mutation
-#' hypothesis by DNA polymorphism.". Genetics 123 (3): 585–95.
+#' hypothesis by DNA polymorphism.". Genetics 123 (3): 585-95.
 #'
 #' @inheritParams sumstat_four_gamete
 #' @return On simulation, this returns a vector with the value of Tajima's D for

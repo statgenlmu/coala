@@ -1,5 +1,29 @@
+#' Creates a coalescent model
+#'
+#' This creates a basic coalescent model to which more features, loci,
+#' parameters and summary statistics can be added. Data under the model
+#' can be simulated using the \code{simulate} function.
+#'
+#' @param sample_size Defines the number of populations and the number of
+#'   samples taken from each population. Given as an integer vector which
+#'   length defines the number of population and each entry gives the number
+#'   of haplodies sampled from the corresponding population.
+#' @param loci_number You can optionally add a number of loci with equal length
+#'   to the model. This gives to number of loci to add.
+#' @param loci_length This gives the length of the loci to add.
+#' @return The coalescent model
 #' @export
-coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
+#' @importFrom assertthat assert_that
+#' @examples
+#' model <- coal_model(5, 10, 100) + feat_mutation(1) + sumstat_sfs()
+#' simulate(model)
+#'
+#' model <- coal_model(c(2, 2), 1, 10) +
+#'   feat_recombination(1) +
+#'   feat_migration(0.5, symmetric = TRUE) +
+#'   sumstat_trees()
+#' simulate(model)
+coal_model <- function(sample_size, loci_number=0, loci_length=1000) {
   model <- list()
   class(model) <- c("Coalmodel")
 
@@ -12,10 +36,9 @@ coal_model <- function(sample_size=0, loci_number=0, loci_length=1000) {
   model$id <- get_id()
 
   # Add sample sizes
-  for (pop in seq(along = sample_size)) {
-    if (sample_size[pop] > 0) model <- model +
-      feat_sample(sample_size[pop], pop)
-  }
+  assert_that(is.numeric(sample_size))
+  assert_that(sum(sample_size) > 0)
+  model <- model + feat_sample(sample_size)
 
   # Add locus
   if (loci_number > 0) {
@@ -40,9 +63,8 @@ select_simprog <- function(model) {
 
     for (simprog_name in ls(simulators)) {
       simprog <- get_simulator(simprog_name)
-      if (all(get_feature_table(model)$type %in% simprog$get_features()) &
-            all(model$sum_stats$name %in% simprog$get_sumstats())) {
-
+      valid <- try(simprog$get_cmd(model), silent = TRUE)
+      if (all(class(valid) != "try-error")) {
         if (simprog$get_priority() > priority) {
           name <- simprog
           priority <- simprog$get_priority()
@@ -50,63 +72,11 @@ select_simprog <- function(model) {
       }
     }
 
-    if (is.null(name)) stop("No suitable simulation software found!")
+    if (is.null(name)) warning("No suitable simulation software found!")
     cache(model, 'simprog', name)
   }
 
   name
-}
-
-
-get_mutation_par <- function(model, outer=FALSE) {
-  if (outer) {
-    feat <- search_feature(model, "mutation_outer")
-    if (nrow(feat) == 0) {
-      feat <- search_feature(model, "mutation")
-    }
-  }  else {
-    feat <- search_feature(model, "mutation")
-  }
-  if (nrow(feat) != 1) stop("Failed to determine mutation rate")
-  feat[1, 'parameter']
-}
-
-
-search_feature <- function(model, type=NULL, pop.source=NULL,
-                          pop.sink=NULL, time.point=NULL,
-                          feat_table=TRUE) {
-
-  feat_tbl <- get_feature_table(model)
-  mask <- rep(TRUE, nrow(feat_tbl))
-
-  if (!is.null(type)) mask <- mask & feat_tbl$type %in% type
-
-  if (!is.null(pop.source)) {
-    if (is.na(pop.source)) {
-      mask <- mask & is.na(feat_tbl$pop.source)
-    } else {
-      mask <- mask & feat_tbl$pop.source %in% pop.source
-    }
-  }
-
-  if (!is.null(pop.sink)) {
-    if (is.na(pop.sink)) {
-      mask <- mask & is.na(feat_tbl$pop.sink)
-    } else {
-      mask <- mask & feat_tbl$pop.sink %in% pop.sink
-    }
-  }
-
-  if (!is.null(time.point)) {
-    if (is.na(time.point)) {
-      mask <- mask & is.na(feat_tbl$time.point)
-    } else {
-      mask <- mask & feat_tbl$time.point %in% time.point
-    }
-  }
-
-  if(!feat_table) return(get_features(model)[mask])
-  feat_tbl[mask, ]
 }
 
 
@@ -117,7 +87,8 @@ add_inter_locus_var <- function(model) {
 
 
 has_inter_locus_var <- function(model) {
-  nrow(search_feature(model, 'inter_locus_variation')) > 0
+  FALSE
+  #nrow(search_feature(model, 'inter_locus_variation')) > 0
 }
 
 
