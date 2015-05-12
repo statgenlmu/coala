@@ -1,25 +1,36 @@
 #' @importFrom R6 R6Class
-Par_variation <- R6Class("Par_variation", inherit=Parameter,
-  private = list(base_par = par_const(NA)),
-  public = list(
-    initialize = function(parameter, variance) {
+Par_variation <- R6Class("Par_variation", inherit = Parameter,
+  private = list(
+    base_par = list(),
+    func = "variation",
+    add_parameter = function(parameter) {
       if (is.numeric(parameter) && length(parameter) == 1) {
         expr <- parameter
       } else if (is.character(parameter) && length(parameter) == 1) {
         expr <- parameter
       } else if (is.par(parameter)) {
         idx <- as.character(length(private$parameter) + 1)
-        private$base_par <- parameter
+        private$base_par[[length(private$base_par) + 1]] <- parameter
         expr <- parameter$get_expression()
       } else {
         stop("Unexpected type of parameter")
       }
-      private$expr <- parse(text = paste0('rgamma(1, ', expr, '^2/', variance,
-                                          ', ', expr, '/', variance, ')'))
+      expr
+    }),
+  public = list(
+    initialize = function(parameter, variance) {
+      expr_mean <- private$add_parameter(parameter)
+      expr_var <- private$add_parameter(variance)
+      private$expr <- parse(text = paste0(private$func, "(", expr_mean,
+                                          ", ", expr_var, ")"))
     },
     get_base_par = function() private$base_par
   )
 )
+
+variation <- function(mean, variance) {
+  rgamma(1, mean ^ 2 / variance, mean / variance)
+}
 
 is.par_variation <- function(object) inherits(object, "Par_variation")
 
@@ -41,4 +52,3 @@ is.par_variation <- function(object) inherits(object, "Par_variation")
 par_variation <- function(par, variance) {
   Par_variation$new(par, variance)
 }
-

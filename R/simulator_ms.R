@@ -57,12 +57,12 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
       # Do the actuall simulation
       files <- lapply(1:get_locus_group_number(model) , function(i) {
         opts <- ms_generate_opts(model, parameters, i)
-        #print(opts)
+        print(opts)
         file <- tempfile('csr_ms')
 
         ms(sum(get_sample_size(model, for_sim = TRUE)),
            format(get_locus_number(model, group = i), scientific = FALSE),
-           unlist(strsplit(opts, " ")), file)
+           opts, file)
 
         if (file.info(file)$size == 0) stop("ms simulation output is empty")
         file

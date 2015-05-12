@@ -50,6 +50,7 @@ Collate:
     'model_scale.R'
     'model_simulate.R'
     'options.R'
+    'par_zero_inflation.R'
     'parameter.R'
     'parameter_prior.R'
     'parameter_variation.R'

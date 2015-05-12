@@ -161,17 +161,20 @@ par_range <- function(name, lower, upper) {
 }
 
 
+par_eval_func <- function(x) format(x, scientific = FALSE)
+par_print_func <- function(x) substitute(x)
+
 create_par_env <- function(model, parameters, ..., for_cmd = FALSE) {
   par_env <- new.env()
 
   if (!for_cmd) {
-    par_env[['par']] <- function(x) format(x, scientific = FALSE)
+    par_env[['par']] <- par_eval_func
 
     for (par in get_parameter(model)) {
       par_env[[par$get_name()]] <- par$generate_value(parameters)
     }
   } else {
-    par_env[['par']] <- function(x) substitute(x)
+    par_env[['par']] <- par_print_func
   }
 
   additional_pars <- list(...)

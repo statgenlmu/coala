@@ -20,6 +20,10 @@ test_that("Parameters with variation can be initialized", {
   x <- 100
   expect_that(par$eval(), is_a("numeric"))
 
+  par <- par_variation(5, par_named("v"))
+  v <- 20
+  expect_that(par$eval(), is_a("numeric"))
+
   expect_error(par_variation(mean, 100))
 })
 
@@ -34,5 +38,11 @@ test_that("Adding a parameter with variation to a model works", {
   model <- coal_model(5) + par_variation(par_named("x"), 100)
   expect_equal(length(get_parameter(model)), 1)
   expect_equal(get_parameter(model)[[1]]$get_name(), "x")
+  expect_true(has_variation(model))
+
+  model <- coal_model(5) + par_variation(par_named("x"), par_named("y"))
+  expect_equal(length(get_parameter(model)), 2)
+  expect_equal(get_parameter(model)[[1]]$get_name(), "x")
+  expect_equal(get_parameter(model)[[2]]$get_name(), "y")
   expect_true(has_variation(model))
 })

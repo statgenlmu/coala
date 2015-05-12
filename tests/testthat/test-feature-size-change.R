@@ -1,4 +1,4 @@
-context("Feature size change")
+context("Feature Size Change")
 
 test_that("generating ms cmd for size changes works", {
   model <- coal_model(15, 1) + feat_size_change(par_range("alpha", 0, 1), 1)
