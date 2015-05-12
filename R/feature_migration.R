@@ -11,7 +11,7 @@ Feature_migration <- R6Class("Feature_migration", inherit = Feature,
       }
     },
     print = function() {
-      if (all(feature$get_population() == "all")) {
+      if (all(private$population == "all")) {
         cat("Symmetric migration")
       } else {
         cat("Migration from pop", private$population,

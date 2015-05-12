@@ -11,8 +11,8 @@ call_msms <- function(msms_args) {
   # Execute the command
   capture.output(system(cmd))
 
-  if(!file.exists(out_file)) stop("msms simulation failed!")
-  if(file.info(out_file)$size == 0) stop("msms output is empty!")
+  if (!file.exists(out_file)) stop("msms simulation failed!")
+  if (file.info(out_file)$size == 0) stop("msms output is empty!")
 
   out_file
 }
@@ -45,32 +45,16 @@ conv_to_msms_arg.default <- function(feature, model) {
 }
 
 
-# This function generates an string that contains an R command for generating
-# an ms call to the current model.
-msms_generate_opts_cmd <- function(model) {
-  cmd <- paste(vapply(model$features, conv_to_msms_arg,
-                      FUN.VALUE = character(1), model),
-               collapse = "")
-  paste0("c('",
-         sum(get_sample_size(model, TRUE)),
-         "', format(locus_number, scientific = FALSE), '", cmd, "')")
-}
-
-
-msms_generate_opts <- function(model, parameters, locus, eval_pars = TRUE) {
-  msms_tmp <- create_par_env(model, parameters,
-                             locus_length = get_locus_length(model,
-                                                             group = locus),
-                             locus_number = get_locus_number(model, locus),
-                             locus = locus, for_cmd = !eval_pars)
-
+msms_create_cmd_tempalte <- function(model) {
   cmd <- read_cache(model, 'msms_cmd')
   if (is.null(cmd)) {
-    cmd <- msms_generate_opts_cmd(model)
+    cmd <- paste(vapply(model$features, conv_to_msms_arg,
+                        FUN.VALUE = character(1), model),
+                 collapse = "")
+    cmd <- paste0("c('", cmd, "')")
     cache(model, 'msms_cmd', cmd)
   }
-
-  eval(parse(text = cmd), envir = msms_tmp)
+  cmd
 }
 
 
@@ -83,17 +67,27 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
   ),
   public = list(
     get_cmd = function(model) {
-      cmd <- paste(msms_generate_opts(model, NULL, 1, FALSE),
-                   collapse = ' ')
-
-      paste("msms", cmd)
+      template <- msms_create_cmd_tempalte(model)
+      cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
+      paste("msms",
+            sum(get_sample_size(model, TRUE)),
+            cmd[1, "locus_number"],
+            cmd[1, "command"])
     },
     simulate = function(model, parameters=numeric(0)) {
+      template <- msms_create_cmd_tempalte(model)
+      sample_size <- sum(get_sample_size(model, for_sim = TRUE))
+
       # Run the simulation(s)
       files <- lapply(1:get_locus_group_number(model), function(i) {
-        msms_options <- paste(msms_generate_opts(model, parameters, i),
-                              collapse= " ")
-        call_msms(msms_options)
+        cmds <- fill_cmd_template(template, model, parameters, i)
+
+        vapply(1:nrow(cmds), function(i) {
+          msms_options <- paste(sample_size,
+                                cmds[i, "locus_number"],
+                                cmds[i, "command"])
+          call_msms(msms_options)
+        }, character(1))
       })
 
       # Parse the output and calculate summary statistics
@@ -112,7 +106,7 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
       sum_stats <- calc_sumstats(seg_sites, files, model, parameters)
 
       # Clean Up
-      unlink(files)
+      unlink(unlist(files))
       sum_stats
     }
   )

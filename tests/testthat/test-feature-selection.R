@@ -11,6 +11,14 @@ test_that("generation of selection cmd works", {
   expect_true(grepl("-SAA 111", cmd))
   expect_true(grepl("-SAa 222", cmd))
   expect_true(grepl(" $", cmd))
+
+  model <- model_theta_tau() +
+    feat_selection(strength_A = 123, population = 1, time = 5)
+  cmd <- msms$get_cmd(model)
+  expect_true(grepl("-N 10000", cmd))
+  expect_true(grepl("-SI 5 2 5e-04 0", cmd))
+  expect_true(grepl("-SA 123", cmd))
+  expect_true(grepl(" $", cmd))
 })
 
 
@@ -32,6 +40,15 @@ test_that("msms can simulate selection", {
     feat_selection(1000, 500, 1, time = 0.01) +
     feat_mutation(5) +
     feat_migration(1, symmetric = TRUE) +
+    sumstat_sfs()
+  expect_equal(select_simprog(model)$get_name(), "msms")
+  stat <- simulate(model)
+  expect_that(stat$sfs, is_a("numeric"))
+
+  # With additive selection
+  model <- coal_model(5, 1, 100) +
+    feat_selection(strength_A = 123, time = 0.03) +
+    feat_mutation(5) +
     sumstat_sfs()
   expect_equal(select_simprog(model)$get_name(), "msms")
   stat <- simulate(model)

@@ -30,7 +30,8 @@ add_to_model.Par_Named <- function(par, model, par_name) {
 
 
 add_to_model.Par_variation <- function(par, model, par_name) {
-  model <- add_variation(model) + par$get_base_par()
+  model <- add_variation(model)
+  for (par in par$get_base_par()) model <- model + par
   model$id <- get_id()
   model
 }
