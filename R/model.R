@@ -31,6 +31,7 @@ coal_model <- function(sample_size, loci_number=0, loci_length=1000) {
   model$loci <- list()
   model$parameter <- list()
   model$sum_stats <- create_sumstat_container()
+  model$has_variation <- FALSE
 
   model$scaling_factor <- 1
   model$id <- get_id()
@@ -80,16 +81,13 @@ select_simprog <- function(model) {
 }
 
 
-add_inter_locus_var <- function(model) {
-  if (has_inter_locus_var(model)) return(model)
-  model + Feature$new('inter_locus_variation', par_const(NA))
+add_variation <- function(model) {
+  model$has_variation <- TRUE
+  model
 }
 
 
-has_inter_locus_var <- function(model) {
-  FALSE
-  #nrow(search_feature(model, 'inter_locus_variation')) > 0
-}
+has_variation <- function(model) model$has_variation
 
 
 has_trios <- function(model) {

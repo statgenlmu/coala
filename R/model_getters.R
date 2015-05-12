@@ -59,7 +59,7 @@ get_locus_length <- function(model, locus=NULL, group=NULL, total=TRUE) {
   llm <- get_locus_length_matrix(model)
 
   # Group and locus are identical for ilv models
-  if (!is.null(group) && has_inter_locus_var(model)) {
+  if (!is.null(group) && has_variation(model)) {
     locus <- group
   }
 
@@ -82,7 +82,7 @@ get_locus_group <- function(model, locus) {
 
 
 get_locus_group_number <- function(model) {
-  if (has_inter_locus_var(model)) return(get_locus_number(model))
+  if (has_variation(model)) return(get_locus_number(model))
   nrow(get_locus_length_matrix(model))
 }
 
@@ -122,7 +122,7 @@ get_locus_length_matrix <- function(model) {
 get_locus_number <- function(model, group=NA) {
   numbers <- get_locus_length_matrix(model)[ , "number"]
   if (is.na(group)) return(sum(numbers))
-  if (has_inter_locus_var(model)) return(1)
+  if (has_variation(model)) return(1)
   numbers[group]
 }
 

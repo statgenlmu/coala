@@ -52,6 +52,7 @@ Collate:
     'options.R'
     'parameter.R'
     'parameter_prior.R'
+    'parameter_variation.R'
     'sample_seed.R'
     'simulator_class.R'
     'simulator_ms.R'
