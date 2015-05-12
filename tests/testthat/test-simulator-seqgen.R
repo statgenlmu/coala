@@ -67,7 +67,7 @@ test_that("test.seqgenWithMsms", {
   if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
   if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
 
-  m1 <- model_hky() + feat_selection(500, 250, 1, 0.1)
+  m1 <- model_hky() + feat_selection(500, 250, population = 1, time = 0.1)
   set.seed(4444)
   sum.stats <- simulate(m1, pars = c(1, 5))
   expect_false(is.null(sum.stats$jsfs))

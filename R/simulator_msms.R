@@ -11,8 +11,8 @@ call_msms <- function(msms_args) {
   # Execute the command
   capture.output(system(cmd))
 
-  if(!file.exists(out_file)) stop("msms simulation failed!")
-  if(file.info(out_file)$size == 0) stop("msms output is empty!")
+  if (!file.exists(out_file)) stop("msms simulation failed!")
+  if (file.info(out_file)$size == 0) stop("msms output is empty!")
 
   out_file
 }

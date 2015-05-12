@@ -1,19 +1,31 @@
 Feature_selection <- R6Class("Feature_selection", inherit = Feature,
-  private = list(strength_AA = NA, strength_Aa = NA),
+  private = list(strength_AA = NA, strength_Aa = NA, additive = FALSE),
   public = list(
-    initialize = function(strength_AA, strength_Aa, population, time) {
-      private$strength_AA <- private$add_parameter(strength_AA)
-      private$strength_Aa <- private$add_parameter(strength_Aa)
+    initialize = function(strength_AA, strength_Aa, population, time,
+                          additive = FALSE) {
+      if (additive) {
+        private$strength_AA <- private$add_parameter(strength_AA)
+        private$additive <- TRUE
+      } else {
+        private$strength_AA <- private$add_parameter(strength_AA)
+        private$strength_Aa <- private$add_parameter(strength_Aa)
+      }
+
       private$set_population(population)
       private$time <- private$add_parameter(time)
     },
     get_strength_AA = function() private$strength_AA,
     get_strength_Aa = function() private$strength_Aa,
+    is_additive = function() private$additive,
     print = function() {
-    cat("Selection with strength ", print_par(private$strength_AA),
-        "(AA) and ", print_par(private$strength_Aa), "(Aa)",
-        "in population", self$get_population(),
-        "starting at time", print_par(self$get_time()), "\n")
+      if (private$additive) {
+        cat("Additive selection with strength ", print_par(private$strength_AA))
+      } else {
+        cat("Selection with strength ", print_par(private$strength_AA),
+            "(AA) and ", print_par(private$strength_Aa), "(Aa)")
+      }
+      cat(" in population", self$get_population(),
+          "starting at time", print_par(self$get_time()), "\n")
     }
   )
 )
@@ -24,6 +36,9 @@ Feature_selection <- R6Class("Feature_selection", inherit = Feature,
 #' @param time The time at which the selection starts.
 #' @param strength_AA The selection strength for the selected homozygote
 #' @param strength_Aa The selection strength for the heterozygote.
+#' @param strength_A This sets the strength for the selected allele in an
+#'   haploid model. \code{strength_AA} and \code{strength_Aa} are ignored
+#'   when this is argument is given.
 #' @export
 #' @examples
 #' # Positive selection in population 2:
@@ -34,7 +49,14 @@ Feature_selection <- R6Class("Feature_selection", inherit = Feature,
 #'                  population = 2,
 #'                  time=par_expr(tau))
 #'
-feat_selection <- function(strength_AA, strength_Aa, population = 1, time) {
+feat_selection <- function(strength_AA, strength_Aa, strength_A,
+                           population = 1, time) {
+  if (!missing(strength_A)) {
+    return(Feature_selection$new(strength_A,
+                                 population = population,
+                                 time = time,
+                                 additive = TRUE))
+  }
   Feature_selection$new(strength_AA, strength_Aa, population, time)
 }
 
@@ -54,10 +76,15 @@ conv_to_msms_arg.Feature_selection <- function(feature, model) {
   n_pop <- length(get_populations(model))
   start_freq <- rep(0, n_pop)
   start_freq[feature$get_population()] <- 0.0005
+  if (feature$is_additive()) {
+    strength <- paste0("-SA',", feature$get_strength_AA(), ", '")
+  } else {
+    strength <- paste0("-SAA',", feature$get_strength_AA(), ", '",
+                       "-SAa',", feature$get_strength_Aa(), ", '")
+  }
   paste0("-SI', ", feature$get_time(), ", '",
          n_pop, " " , paste(start_freq, collapse = " "), " ",
-         "-SAA',", feature$get_strength_AA(), ", '",
-         "-SAa',", feature$get_strength_Aa(), ", '",
+         strength,
          "-Sp 0.5 -SForceKeep -N 10000 ")
 }
 

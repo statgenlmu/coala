@@ -4,12 +4,16 @@
 \alias{feat_selection}
 \title{Adds positiv selection to a model}
 \usage{
-feat_selection(strength_AA, strength_Aa, population = 1, time)
+feat_selection(strength_AA, strength_Aa, strength_A, population = 1, time)
 }
 \arguments{
 \item{strength_AA}{The selection strength for the selected homozygote}
 
 \item{strength_Aa}{The selection strength for the heterozygote.}
+
+\item{strength_A}{This sets the strength for the selected allele in an
+haploid model. \code{strength_AA} and \code{strength_Aa} are ignored
+when this is argument is given.}
 
 \item{population}{The populaton in which the allele is selected.}
 
