@@ -40,44 +40,46 @@ List parse_ms_output(const List file_names,
 
   for (int i = 0; i < file_names.size(); ++i) {
     CharacterVector file_name = as<CharacterVector>(file_names(i));
-    if (file_name.size() != 1) stop("Expecting one file per locus");
+    for (int j = 0; j < file_name.size(); ++ j) {
 
-    // Open the file
-    std::ifstream output(as<std::string>(file_name(0)).c_str(),
-                         std::ifstream::in);
-    if (!output.is_open()) {
-      stop(std::string("Cannot open file ") + file_name(0));
-    }
+      // Open the file
+      std::ifstream output(as<std::string>(file_name(j)).c_str(),
+                           std::ifstream::in);
 
-    // Read it line by line and read the relevant parts
-    while( output.good() ) {
-      std::getline(output, line);
-      if (line == "//") {
-        ++locus;
+      if (!output.is_open()) {
+        stop(std::string("Cannot open file ") + file_name(0));
       }
 
-      else if (line.substr(0, 9) == "segsites:") {
+      // Read it line by line and read the relevant parts
+      while( output.good() ) {
+        std::getline(output, line);
+        if (line == "//") {
+          ++locus;
+        }
 
-        if (line.substr(0, 11) == "segsites: 0") {
-          NumericMatrix ss = NumericMatrix(individuals, 0);
-          ss.attr("positions") = NumericVector(0);
-          seg_sites[locus] = ss;
-        } else {
-          std::getline(output, line);
+        else if (line.substr(0, 9) == "segsites:") {
 
-          // Parse Seg.Sites
-          NumericVector positions = parse_ms_positions(line);
-          NumericMatrix ss(individuals, positions.size());
-          ss.attr("positions") = positions;
-
-          for (size_t i = 0; i < individuals; ++i) {
+          if (line.substr(0, 11) == "segsites: 0") {
+            NumericMatrix ss = NumericMatrix(individuals, 0);
+            ss.attr("positions") = NumericVector(0);
+            seg_sites[locus] = ss;
+          } else {
             std::getline(output, line);
-            for (int j = 0; j < positions.size(); ++j) {
-              ss(i,j) = (line[j] == '1');
-            }
-          }
 
-          seg_sites[locus] = ss;
+            // Parse Seg.Sites
+            NumericVector positions = parse_ms_positions(line);
+            NumericMatrix ss(individuals, positions.size());
+            ss.attr("positions") = positions;
+
+            for (size_t i = 0; i < individuals; ++i) {
+              std::getline(output, line);
+              for (int j = 0; j < positions.size(); ++j) {
+                ss(i,j) = (line[j] == '1');
+              }
+            }
+
+            seg_sites[locus] = ss;
+          }
         }
       }
     }

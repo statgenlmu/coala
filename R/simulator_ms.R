@@ -15,30 +15,17 @@ conv_to_ms_arg.default <- function(feature, model) {
 }
 
 
-# This function generates an string that contains an R command for generating
-# an ms call to the current model.
-ms_generate_opts_cmd <- function(model) {
-  cmd <- paste(vapply(model$features, conv_to_ms_arg,
-                      FUN.VALUE = character(1), model),
-               collapse = "")
-  paste0("c('", cmd, "')")
-}
-
-
-ms_generate_opts <- function(model, parameters, locus, eval_pars = TRUE) {
-  locus_length <- get_locus_length(model, group = locus)
-
-  ms_tmp <- create_par_env(model, parameters, locus = locus,
-                           locus_length = locus_length,
-                           for_cmd = !eval_pars)
-
+ms_create_cmd_tempalte <- function(model) {
   cmd <- read_cache(model, 'ms_cmd')
   if (is.null(cmd)) {
-    cmd <- ms_generate_opts_cmd(model)
+    cmd <- paste(vapply(model$features, conv_to_ms_arg,
+                        FUN.VALUE = character(1), model),
+                 collapse = "")
+    cmd <- paste0("c('", cmd, "')")
     cache(model, 'ms_cmd', cmd)
   }
 
-  eval(parse(text = cmd), envir = ms_tmp)
+  cmd
 }
 
 
@@ -54,18 +41,22 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
     simulate = function(model, parameters=numeric()) {
       stopifnot(length(parameters) == 0 | all(is.numeric(parameters)))
 
+      template <- ms_create_cmd_tempalte(model)
+      sample_size <- sum(get_sample_size(model, for_sim = TRUE))
+
       # Do the actuall simulation
       files <- lapply(1:get_locus_group_number(model) , function(i) {
-        opts <- ms_generate_opts(model, parameters, i)
-        print(opts)
-        file <- tempfile('csr_ms')
+        sim_cmds <- fill_cmd_template(template, model, parameters, i)
+        #print(sim_cmds)
 
-        ms(sum(get_sample_size(model, for_sim = TRUE)),
-           format(get_locus_number(model, group = i), scientific = FALSE),
-           opts, file)
 
-        if (file.info(file)$size == 0) stop("ms simulation output is empty")
-        file
+        vapply(1:nrow(sim_cmds), function(i) {
+          file <- tempfile("ms")
+          ms(sample_size,
+             format(sim_cmds[i, "locus_number"], scientific = FALSE),
+             sim_cmds[i, "command"], file)
+          file
+        }, character(1))
       })
 
       # Parse the output and calculate summary statistics
@@ -84,15 +75,16 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
       sum_stats <- calc_sumstats(seg_sites, files, model, parameters)
 
       # Clean Up
-      unlink(files)
+      unlink(unlist(files))
       sum_stats
     },
     get_cmd = function(model) {
-      cmd <- ms_generate_opts(model, NULL, 1, FALSE)
+      template <- ms_create_cmd_tempalte(model)
+      cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
       paste("ms",
             sum(get_sample_size(model, TRUE)),
-            get_locus_number(model),
-            paste(cmd, collapse = ' '))
+            cmd[1, "locus_number"],
+            cmd[1, "command"])
     }
   )
 )

@@ -5,6 +5,43 @@ test_that("the ms sim program exists", {
 })
 
 
+test_that("parsing positions works", {
+  positions <- rep(0, 10)
+  positions <- parse_ms_positions("positions: 0.0010 0.0474 0.3171")
+  expect_equal(positions, c(0.001, 0.0474, 0.3171))
+
+  expect_equal(length(parse_ms_positions("positions: 0.1 0.2 0.3 0.4 0.5")), 5)
+  expect_equal(length(parse_ms_positions("positions: 0.1")), 1)
+  expect_error(parse_ms_positions("0.1 0.2 0.3"))
+  expect_error(parse_ms_positions(" "))
+  expect_error(parse_ms_positions("segsites: 0"))
+})
+
+
+test_that("parsing output works", {
+  set.seed(25)
+  folder <- tempfile('ms-parse-test')
+  model.tt <- model_theta_tau() + sumstat_file(folder)
+  ss <- get_sample_size(model.tt)
+  ln <- get_locus_number(model.tt)
+
+  ms.file <- simulate(model.tt, pars=c(1, 5))$file
+  expect_error(parse_ms_output(list("bulb.txt"), ss, ln))
+
+  seg_sites <- parse_ms_output(ms.file, ss, ln)
+  expect_true(is.list(seg_sites))
+  expect_equal(length(seg_sites), get_locus_number(model.tt))
+  for (seg_site in seg_sites) {
+    expect_true(is.matrix(seg_site))
+    expect_true(is.numeric(attr(seg_site, 'positions')))
+    expect_equal(nrow(seg_site), sum(ss))
+    expect_true(all(seg_site %in% c(0, 1)))
+  }
+
+  unlink(folder, recursive = TRUE)
+})
+
+
 test_that("msSimFunc is working", {
   ms <- get_simulator("ms")
   model_tt <- model_theta_tau()
@@ -58,17 +95,27 @@ test_that("ms can simulate locus trios", {
 
 test_that("ms works with scientific notation", {
   model <- coal_model(5, 1, 1e8) + feat_recombination(1)
-  opts <- ms_generate_opts(model, numeric(0), 1)
-  expect_true("100000000" %in% opts)
-  expect_false("1e8" %in% opts)
+  template <- ms_create_cmd_tempalte(model)
+  opts <- fill_cmd_template(template, model, numeric(0), 1)
+  expect_true(grepl("100000000", opts$command[1]))
 
   model <- coal_model(5, 1, 1000) + feat_recombination(1e8)
-  opts <- ms_generate_opts(model, numeric(0), 1)
-  expect_true("100000000" %in% opts)
-  expect_false("1e+08" %in% opts)
+  template <- ms_create_cmd_tempalte(model)
+  opts <- fill_cmd_template(template, model, numeric(0), 1)
+  expect_true(grepl("100000000", opts$command[1]))
 
   model <- coal_model(5, 1, 1000) + feat_mutation(1e8)
-  opts <- ms_generate_opts(model, numeric(0), 1)
-  expect_true("100000000" %in% opts)
-  expect_false("1e+08" %in% opts)
+  template <- ms_create_cmd_tempalte(model)
+  opts <- fill_cmd_template(template, model, numeric(0), 1)
+  expect_true(grepl("100000000", opts$command[1]))
+})
+
+
+test_that("ms can simulate zero inflation", {
+  model <- model_theta_tau() +
+    feat_recombination(par_zero_inflatation(1, .5)) +
+    locus_averaged(4, 100) +
+    locus_single(10)
+  stats <- simulate(model, pars = c(1, 5))
+  expect_that(stats, is_a("list"))
 })

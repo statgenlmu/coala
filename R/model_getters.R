@@ -82,7 +82,6 @@ get_locus_group <- function(model, locus) {
 
 
 get_locus_group_number <- function(model) {
-  if (has_variation(model)) return(get_locus_number(model))
   nrow(get_locus_length_matrix(model))
 }
 
@@ -119,10 +118,10 @@ get_locus_length_matrix <- function(model) {
 
 #' @describeIn get_features Returns the number of loci in a locus group
 #' @export
-get_locus_number <- function(model, group=NA) {
+get_locus_number <- function(model, group = NA, ignore_variation = FALSE) {
   numbers <- get_locus_length_matrix(model)[ , "number"]
   if (is.na(group)) return(sum(numbers))
-  if (has_variation(model)) return(1)
+  if (has_variation(model) && !ignore_variation) return(1)
   numbers[group]
 }
 

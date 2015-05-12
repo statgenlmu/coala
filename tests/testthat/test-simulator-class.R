@@ -18,3 +18,16 @@ test_that('simulators can be registered', {
   expect_error(register_simulator(1:10))
   expect_error(register_simulator(Feature))
 })
+
+
+test_that("reducing of simulation commands works", {
+  df <- data.frame(locus_number = rep(1, 10),
+                   command = as.character(1:10))
+  expect_equal(df, reduce_sim_commands(df))
+
+  df$command <- c(rep("a", 5), rep("b", 5))
+  expect_equivalent(reduce_sim_commands(df),
+                    data.frame(locus_number = c(5, 5),
+                               command = c("a", "b"),
+                               stringsAsFactors = FALSE))
+})
