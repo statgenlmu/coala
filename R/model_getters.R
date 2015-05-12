@@ -117,6 +117,7 @@ get_locus_length_matrix <- function(model) {
 
 
 #' @describeIn get_features Returns the number of loci in a locus group
+#' @param ignore_variation For internal use. Will likely be removed soon.
 #' @export
 get_locus_number <- function(model, group = NA, ignore_variation = FALSE) {
   numbers <- get_locus_length_matrix(model)[ , "number"]

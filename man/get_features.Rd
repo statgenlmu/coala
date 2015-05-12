@@ -33,7 +33,7 @@ get_populations(model)
 
 get_locus_length_matrix(model)
 
-get_locus_number(model, group = NA)
+get_locus_number(model, group = NA, ignore_variation = FALSE)
 
 get_population_indiviuals(model, pop, zero_indexed = FALSE)
 
@@ -53,6 +53,8 @@ can be unequal for the simulation of unphased data.}
 \item{total}{If \code{FALSE}, the length of loci in a trio will be reported
 individually. If \code{TRUE} the sum of the loci's length will be reported.
 This does not affect non-trio loci.}
+
+\item{ignore_variation}{For internal use. Will likely be removed soon.}
 
 \item{pop}{The population for which aspects are returned}
 
