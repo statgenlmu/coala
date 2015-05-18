@@ -16,7 +16,8 @@ SumstatSfs <- R6Class('SumstatSfs', inherit = Sumstat, #nolint
       } else {
         individuals <- get_population_indiviuals(model, private$population)
       }
-      as.vector(calc_jsfs(seg_sites, individuals, numeric()))
+      sfs <- as.vector(calc_jsfs(seg_sites, individuals, numeric()))
+      sfs[c(-1, -length(sfs))]
     }
   )
 )
