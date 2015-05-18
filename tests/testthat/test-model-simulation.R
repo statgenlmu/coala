@@ -34,3 +34,11 @@ test_that("models with priors can be simulated", {
   expect_equal(names(stats$pars), "r")
   expect_true(all(stats$pars %in% 0:3))
 })
+
+test_that("simulating with more than one repetition works", {
+  sim <- simulate(model_theta_tau(), 2, seed = 17, pars = c(1, 5))
+  expect_that(sim, is_a("list"))
+  expect_equal(length(sim), 2)
+  expect_equal(sim[[1]]$pars, c(tau = 1, theta = 5))
+  expect_equal(sim[[2]]$pars, c(tau = 1, theta = 5))
+})

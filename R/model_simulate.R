@@ -23,6 +23,13 @@ simulate.Coalmodel <- function(object, nsim = 1, seed, ..., pars = numeric(0)) {
   simprog <- select_simprog(object)
   if (is.null(simprog)) stop("No simulator found")
 
-  pars <- prepare_pars(pars, object)
-  simprog$simulate(object, pars)
+  results <- list()
+  length(results) <- nsim
+  for (i in seq(len = nsim)) {
+    current_pars <- prepare_pars(pars, object)
+    results[[i]] <- simprog$simulate(object, current_pars)
+  }
+
+  if (nsim == 1) return(results[[1]])
+  results
 }

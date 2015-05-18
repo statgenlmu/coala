@@ -1,0 +1,79 @@
+---
+title: "Using Coala For ABC"
+author: "Paul Staab"
+date: "coala `r packageVersion('coala')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Coala-ABC}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+[Approximate Bayesian Computation (ABC)](http://en.wikipedia.org/wiki/Approximate_Bayesian_computation)
+is a simulation based method for Bayesian inference. It is commonly used in
+evolutionary biology to estimate parameters of e.g. demographic models.
+Coala makes it easy to conduct the simulations for an ABC analysis and works
+well together with the `abc` package for doing the estimation. 
+To demonstrate the principle, we will estimate the parameter of an 
+over-simplified toy model. 
+
+Lets assume we have 50 genetic loci from 10 individuals from a panmictic 
+population. We'll use the site frequency spectrum of the data as a summary
+statistic to estimate the scaled mutation rate `theta`. Lets assume the
+frequency spectrum we get from the data is
+
+```{r sfs}
+sfs <- c(112, 57, 24, 34, 16, 29, 8, 10, 15)
+```
+
+
+
+We can now use coala to setup the model:
+
+```{r model setup}
+library(coala)
+model <- coal_model(10, 50) +
+  feat_mutation(par_prior("theta", runif(1, 1, 5))) +
+  sumstat_sfs()
+```
+
+Note that we used `par_prior` to set a flat uniform prior between 1 and 5 for
+`theta`. 
+
+We can now do easily simulate the model:
+
+```{r simulate, cache=TRUE}
+sim_data <- simulate(model, nsim = 2000, seed = 17)
+```
+
+For this toy model, we did just 2000 simulations (to keep the time for
+building this document within a reasonable range). A real analysis will need
+many more!
+
+
+We now need to prepare the simulation data for the `abc` package:
+
+```{r}
+# Getting the parameters
+sim_pars <- matrix(sapply(sim_data, function(x) x$pars), 2000, 1)
+colnames(sim_pars) <- "theta"
+head(sim_pars, n = 3)
+
+# Getting the summary statistics
+sim_sumstats <- t(sapply(sim_data, function(x) x$sfs))
+colnames(sim_sumstats) <- paste0("S", 1:9)
+head(sim_sumstats, n = 3)
+```
+
+
+And can now estimate `theta`:
+
+```{r abc, fig.align="center", fig.width=5}
+suppressPackageStartupMessages(library(abc))
+posterior <- abc(sfs, sim_pars, sim_sumstats, 0.05, method = "rejection")
+hist(posterior, breaks = 10)
+```
+
+Due to the low number of simulations we get a relatively flat posterior,
+but we still get an idea what the value for `theta` might be.
+

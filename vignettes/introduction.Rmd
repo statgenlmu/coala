@@ -4,7 +4,7 @@ author: "Paul Staab"
 date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction}
+  %\VignetteIndexEntry{Coala-Introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
@@ -245,16 +245,3 @@ model <- coal_model(4, 2) +
 
 creates a model with a a recombination rate that always is twice as high as the
 mutation rate. 
-
-
-
-# A more complex model
-Using this building blocks, we can construct and simulate quite sofisitcated 
-models. 
-
-```{r complex_model}
-coal_model(c(10, 15), 10) +
-    feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
-    feat_mutation(par_range('theta', 1, 10)) +
-    sumstat_jsfs()
-```
