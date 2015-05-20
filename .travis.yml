@@ -13,7 +13,7 @@ before_install:
   - ./travis-tool.sh bootstrap
 
 install:
-  - ./travis-tool.sh r_binary_install ape phyclust
+  - ./travis-tool.sh r_binary_install ape phyclust abc RcppArmadillo knitr
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh aptget_install seq-gen
   - wget http://www.mabs.at/ewing/msms/msms3.2rc-b163.jar && sudo mv msms3.2rc-b163.jar /usr/local/bin/msms.jar
