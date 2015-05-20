@@ -5,9 +5,9 @@ License: GPL (>= 3)
 Title: Simulating the evolution of DNA sequences
 Author: Paul R. Staab
 Maintainer: Paul R. Staab <develop@paulstaab.de>
-BugReports: https://github.com/paulstaab/coala/issues
+BugReports: https://github.com/statgenlmu/coala/issues
 Description: Blub
-URL: https://github.com/paulstaab/coala
+URL: https://github.com/statgenlmu/coala
 Depends:
     R (>= 3.1.0)
 Imports:
