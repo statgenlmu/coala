@@ -1,13 +1,23 @@
 Package: coala
-Version: 0.0.9103
-Date: 2015-05-18
+Version: 0.0.9104
+Date: 2015-05-20
 License: GPL (>= 3)
-Title: Simulating the evolution of DNA sequences
-Author: Paul R. Staab
-Maintainer: Paul R. Staab <develop@paulstaab.de>
+Title: A Framework for Coalescent Simulation
+Authors@R: c(
+    person('Paul', 'Staab', , 'develop@paulstaab.de', role=c('aut', 'cre', 'cph')),
+    person('Dirk', 'Metzler', role=c('ths'))
+    )
 BugReports: https://github.com/statgenlmu/coala/issues
-Description: Blub
 URL: https://github.com/statgenlmu/coala
+Description: Coalescent simulation allows to rapidly simulate biological
+    sequence evolving according to a given model of evolution. With 'ms', which
+    is included in package 'phyclust', and 'scrm', there are at least two
+    coalescent simulators available on CRAN. Coala
+    provides a way to specify evolutionary models in R, selects a suitable
+    simulator, conducts the simulation, reads the results and generates
+    additional summary statisics from it. Additional to 'ms' and 'scrm', it also
+    supports 'msms' and can use finite-sites mutation models by combining the
+    simulators with 'seq-gen'.
 Depends:
     R (>= 3.1.0)
 Imports:
