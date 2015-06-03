@@ -23,7 +23,7 @@ test_that('calculation of nSL works', {
   expect_equal(length(nsl2), 1)
   expect_that(nsl2[[1]], is_a('numeric'))
   expect_equal(length(nsl2[[1]]), 1)
-  expect_equal(nsl[[1]][3], nsl2[[1]])
+  expect_equivalent(nsl[[1]][3], nsl2[[1]])
 
   model <- coal_model(4, 3, 337)
   nsl <- stat_nsl$calculate(list(seg_sites, seg_sites, seg_sites), NULL, model)
