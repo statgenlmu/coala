@@ -35,15 +35,26 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
           return(private$empty_matrix)
         }
         snps <- private$get_snp(pos[[locus]], locus, model)
-        assert_that(length(snps) > 0)
         haplohh <- self$segsites_to_rehh_data(seg_sites[[locus]],
                                               pos[[locus]],
                                               ind)
-        rehh::scan_hh(haplohh)[snps , -(1:3), drop=FALSE] #nolint
+        if (!is.na(private$position)) {
+          assert_that(length(snps) == 1)
+          ihh <- matrix(0, 1, 3)
+          colnames(ihh) <- c("IHHa", "IHHd", "IES")
+          ihh[1, 1:2] <- rehh::calc_ehh(haplohh, mrk = snps, plotehh = FALSE)$ihh
+          ihh[1, 3] <- rehh::calc_ehhs(haplohh, mrk = snps, plotehh = FALSE)$ies
+          return(ihh)
+        }
+        rehh::scan_hh(haplohh)[snps , -(1:3), drop = FALSE] #nolint
       })
     },
     segsites_to_snp_map = function(seg_sites, pos) {
-      map <- data.frame(name=seq(along = pos), chr=1, pos = pos, anc=0, der=1)
+      map <- data.frame(name = seq(along = pos),
+                        chr = 1,
+                        pos = pos,
+                        anc = 0,
+                        der = 1)
       file <- tempfile('snp_map')
       write.table(map, file, row.names = FALSE, col.names = FALSE)
       file
@@ -57,9 +68,11 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
     segsites_to_rehh_data = function(seg_sites, pos, ind) {
       haplo <- self$segsites_to_haplo(seg_sites, ind)
       snp_map <- self$segsites_to_snp_map(seg_sites, pos)
-      capture.output(rehh <- rehh::data2haplohh(haplo,
-                                                snp_map,
-                                                recode.allele = TRUE))
+      suppressWarnings(
+        capture.output(rehh <- rehh::data2haplohh(haplo,
+                                                  snp_map,
+                                                  recode.allele = TRUE))
+      )
       unlink(c(snp_map, haplo))
       rehh
     }
