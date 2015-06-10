@@ -9,28 +9,20 @@ model <- coal_model(4, 1, 337)
 pos <- get_snp_positions(list(seg_sites), model, relative = FALSE)[[1]]
 
 
-test_that("generation of SNP maps works", {
-  if (!requireNamespace("rehh", quietly = TRUE)) skip("rehh not installed")
+test_that("generation of rehh data works", {
+  skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh(population = 1)
-  snp_map <- stat_ihh$segsites_to_snp_map(seg_sites, pos)
-  map <- read.table(snp_map, row.names = 1)
-  expect_equal(nrow(map), 5)
-  unlink(snp_map)
-})
-
-
-test_that("generation of haplotye file works", {
-  if (!requireNamespace("rehh", quietly = TRUE)) skip("rehh not installed")
-  stat_ihh <- sumstat_ihh(population = 1)
-  haplotypes <- stat_ihh$segsites_to_haplo(seg_sites, 1:4)
-  haplo <- read.table(haplotypes, row.names = 1)
-  expect_equivalent(haplo, as.data.frame(seg_sites))
-  unlink(haplotypes)
+  rehh_data <- stat_ihh$segsites_to_rehh_data(seg_sites, pos, 1:4)
+  expect_equivalent(rehh_data@haplo, seg_sites + 1)
+  expect_equal(rehh_data@position, pos)
+  expect_equal(rehh_data@snp.name, as.character(1:5))
+  expect_equal(rehh_data@nhap, 4)
+  expect_equal(rehh_data@nsnp, 5)
 })
 
 
 test_that('calculation of ihh works', {
-  if (!requireNamespace("rehh", quietly = TRUE)) skip("rehh not installed")
+  skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh()
   ihh <- stat_ihh$calculate(list(seg_sites), NULL, model)
   expect_that(ihh, is_a('list'))
@@ -57,7 +49,7 @@ test_that('calculation of ihh works', {
 
 
 test_that('ihh works with trios', {
-  if (!requireNamespace("rehh", quietly = TRUE)) skip("rehh not installed")
+  skip_if_not_installed("rehh")
   model <- model_trios()
   stats <- simulate(model)
   ihh <- sumstat_ihh(population = 1)
@@ -68,7 +60,7 @@ test_that('ihh works with trios', {
 
 
 test_that("ihh works with empty segsites", {
-  if (!requireNamespace("rehh", quietly = TRUE)) skip("rehh not installed")
+  skip_if_not_installed("rehh")
   model <- model_trios()
   seg_sites <- list(matrix(0, 5, 0))
   ihh <- sumstat_ihh(population = 1)

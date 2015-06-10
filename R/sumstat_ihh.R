@@ -49,32 +49,15 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
         rehh::scan_hh(haplohh)[snps , -(1:3), drop = FALSE] #nolint
       })
     },
-    segsites_to_snp_map = function(seg_sites, pos) {
-      map <- data.frame(name = seq(along = pos),
-                        chr = 1,
-                        pos = pos,
-                        anc = 0,
-                        der = 1)
-      file <- tempfile('snp_map')
-      write.table(map, file, row.names = FALSE, col.names = FALSE)
-      file
-    },
-    segsites_to_haplo = function(seg_sites, ind) {
-      file <- tempfile('haplotypes')
-      write.table(cbind(ind, seg_sites[ind, ]), file,
-                  row.names = FALSE, col.names = FALSE)
-      file
-    },
     segsites_to_rehh_data = function(seg_sites, pos, ind) {
-      haplo <- self$segsites_to_haplo(seg_sites, ind)
-      snp_map <- self$segsites_to_snp_map(seg_sites, pos)
-      suppressWarnings(
-        capture.output(rehh <- rehh::data2haplohh(haplo,
-                                                  snp_map,
-                                                  recode.allele = TRUE))
-      )
-      unlink(c(snp_map, haplo))
-      rehh
+      rehh_data <- new("haplohh")
+      rehh_data@haplo <- seg_sites[ind, ] + 1
+      rehh_data@position <- pos
+      rehh_data@snp.name <- as.character(seq(along = pos))
+      rehh_data@chr.name <- 1
+      rehh_data@nhap <- length(ind)
+      rehh_data@nsnp <- ncol(seg_sites)
+      rehh_data
     }
   )
 )

@@ -1,6 +1,6 @@
 Package: coala
-Version: 0.0.9105
-Date: 2015-06-03
+Version: 0.0.9106
+Date: 2015-06-10
 License: GPL (>= 3)
 Title: A Framework for Coalescent Simulation
 Authors@R: c(
@@ -31,7 +31,7 @@ Imports:
 Suggests:
     abc (>= 2.0),
     knitr,
-    testthat (>= 0.9.1),
+    testthat (>= 0.10.0),
     rehh (>= 1.11)
 LinkingTo: Rcpp, RcppArmadillo (>= 0.3.810.0)
 VignetteBuilder: knitr
