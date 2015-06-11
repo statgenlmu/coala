@@ -1,4 +1,6 @@
 #' @importFrom R6 R6Class
+#' @importClassesFrom rehh haplohh
+#' @importFrom rehh calc_ehh calc_ehhs
 SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
   private = list(
     req_segsites = TRUE,
@@ -14,10 +16,6 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
     }),
   public = list(
     initialize = function(name, position, population) {
-      if (!requireNamespace("rehh", quietly = TRUE)) {
-        stop("Package rehh is required to calculate the iHH summary statistic.",
-             " Please install it.", call. = FALSE)
-      }
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
       private$population <- population
@@ -35,23 +33,24 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
           return(private$empty_matrix)
         }
         snps <- private$get_snp(pos[[locus]], locus, model)
-        haplohh <- self$segsites_to_rehh_data(seg_sites[[locus]],
-                                              pos[[locus]],
-                                              ind)
+        rehh_data <- self$create_rehh_data(seg_sites[[locus]],
+                                           pos[[locus]],
+                                           ind)
         if (!is.na(private$position)) {
           assert_that(length(snps) == 1)
           ihh <- matrix(0, 1, 3)
           colnames(ihh) <- c("IHHa", "IHHd", "IES")
-          ihh[1, 1:2] <- rehh::calc_ehh(haplohh, mrk = snps, plotehh = FALSE)$ihh
-          ihh[1, 3] <- rehh::calc_ehhs(haplohh, mrk = snps, plotehh = FALSE)$ies
+          ihh[1, 1:2] <- calc_ehh(rehh_data, mrk = snps, plotehh = FALSE)$ihh
+          ihh[1, 3] <- calc_ehhs(rehh_data, mrk = snps, plotehh = FALSE)$ies
           return(ihh)
         }
-        rehh::scan_hh(haplohh)[snps , -(1:3), drop = FALSE] #nolint
+        rehh::scan_hh(rehh_data)[snps , -(1:3), drop = FALSE] #nolint
       })
     },
-    segsites_to_rehh_data = function(seg_sites, pos, ind) {
+    create_rehh_data = function(seg_sites, pos, ind) {
+      assert_that(is.matrix(seg_sites))
       rehh_data <- new("haplohh")
-      rehh_data@haplo <- seg_sites[ind, ] + 1
+      rehh_data@haplo <- seg_sites[ind, , drop = FALSE] + 1
       rehh_data@position <- pos
       rehh_data@snp.name <- as.character(seq(along = pos))
       rehh_data@chr.name <- 1
@@ -64,18 +63,15 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
 
 #' Integrated Extended Haplotype Homozygosity
 #'
-#' This summary statistic calculates a modified version of the iHH statistic
-#' and iES introduced by
+#' This summary statistic calculates a modified version of the iHH
+#' and iES statistics introduced by
 #'
 #'  Voight et al., A map of recent positive selection in the human genome.
 #'  PLoS Biol, 4(3):e72, Mar 2006
 #'
 #' Coala relies on \code{\link[rehh]{scan_hh}} from package \pkg{rehh} to
 #' calculate this statistic. Please refer
-#' to their documentation for detailed information on the concrete
-#' implementation.
-#' It is required to install the package \pkg{rehh} to use this
-#' function.
+#' to their documentation for detailed information on the implementation.
 #'
 #' @inheritParams sumstat_four_gamete
 #' @param position A position relative to the locus extent, e.g. 0.5 for the
