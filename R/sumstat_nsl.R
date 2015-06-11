@@ -1,15 +1,8 @@
 #' @importFrom R6 R6Class
 SumstatNsl <- R6Class('sumstat_nsl', inherit = SumstatIhh, #nolint
   public = list(
-    segsites_to_snp_map = function(seg_sites, pos) {
-      map <- data.frame(name = seq(along = pos),
-                        chr = 1,
-                        pos = seq(along = pos),
-                        anc = 0,
-                        der = 1)
-      file <- tempfile('snp_map')
-      write.table(map, file, row.names = FALSE, col.names = FALSE)
-      file
+    create_rehh_data = function(seg_sites, pos, ind) {
+      super$create_rehh_data(seg_sites, seq(along = pos), ind)
     },
     calculate = function(seg_sites, files, model) {
       stat <- super$calculate(seg_sites, files, model)
