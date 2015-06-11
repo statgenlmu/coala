@@ -29,8 +29,8 @@ When added to a model, the statistic returns a matrix for each locus.
   a row, sorted by position on the locus.
 }
 \description{
-This summary statistic calculates a modified version of the iHH statistic
-and iES introduced by
+This summary statistic calculates a modified version of the iHH
+and iES statistics introduced by
 }
 \details{
 Voight et al., A map of recent positive selection in the human genome.
@@ -38,9 +38,6 @@ Voight et al., A map of recent positive selection in the human genome.
 
 Coala relies on \code{\link[rehh]{scan_hh}} from package \pkg{rehh} to
 calculate this statistic. Please refer
-to their documentation for detailed information on the concrete
-implementation.
-It is required to install the package \pkg{rehh} to use this
-function.
+to their documentation for detailed information on the implementation.
 }
 

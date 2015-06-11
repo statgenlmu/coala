@@ -12,12 +12,18 @@ pos <- get_snp_positions(list(seg_sites), model, relative = FALSE)[[1]]
 test_that("generation of rehh data works", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh(population = 1)
-  rehh_data <- stat_ihh$segsites_to_rehh_data(seg_sites, pos, 1:4)
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
   expect_equivalent(rehh_data@haplo, seg_sites + 1)
   expect_equal(rehh_data@position, pos)
   expect_equal(rehh_data@snp.name, as.character(1:5))
   expect_equal(rehh_data@nhap, 4)
   expect_equal(rehh_data@nsnp, 5)
+
+  rehh_data <- stat_ihh$create_rehh_data(matrix(0, 4, 0), numeric(), 1:4)
+  expect_equal(rehh_data@haplo, matrix(0, 4, 0))
+
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, numeric())
+  expect_equal(rehh_data@haplo, matrix(0, 0, 5))
 })
 
 
