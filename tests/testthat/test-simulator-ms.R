@@ -25,7 +25,7 @@ test_that("parsing output works", {
   ss <- get_sample_size(model.tt)
   ln <- get_locus_number(model.tt)
 
-  ms.file <- simulate(model.tt, pars=c(1, 5))$file
+  ms.file <- simulate(model.tt, pars = c(1, 5))$file
   expect_error(parse_ms_output(list("bulb.txt"), ss, ln))
 
   seg_sites <- parse_ms_output(ms.file, ss, ln)
@@ -42,13 +42,42 @@ test_that("parsing output works", {
 })
 
 
-test_that("msSimFunc is working", {
+test_that("simulation with ms works", {
   ms <- get_simulator("ms")
-  model_tt <- model_theta_tau()
+  model_tt <- model_theta_tau() + sumstat_file("tmp")
   set.seed(789)
-  sum_stats <- ms$simulate(model_tt, c(tau = 1, theta = 10))
-  expect_true(is.matrix(sum_stats$jsfs))
-  expect_true(sum(sum_stats$jsfs) > 0)
+  sum_stats_1 <- ms$simulate(model_tt, c(tau = 1, theta = 10))
+  expect_true(is.matrix(sum_stats_1$jsfs))
+  expect_true(sum(sum_stats_1$jsfs) > 0)
+  expect_equal(sum_stats_1$pars, c(tau = 1, theta = 10))
+  expect_that(sum_stats_1$cmds, is_a("list"))
+
+  #set.seed(789)
+  #sum_stats_2 <- ms$simulate(model_tt, c(tau = 1, theta = 10))
+  #expect_equal(sum_stats_1, sum_stats_2)
+})
+
+
+test_that("Saving the simulation cmds works", {
+  ms <- get_simulator("ms")
+  model <- model_theta_tau() + locus_single(15)
+  stats <- ms$simulate(model, c(tau = 1, theta = 10))
+  expect_that(stats$cmds, is_a("list"))
+  expect_equal(length(stats$cmds), 2)
+  expect_equal(length(stats$cmds[[1]]), 1)
+  expect_true(grepl("^ms 25 10 ", stats$cmds[[1]]))
+  expect_equal(length(stats$cmds[[2]]), 1)
+  expect_true(grepl("^ms 25 1 ", stats$cmds[[2]]))
+
+  model <- coal_model(5, 10) +
+    locus_single(15) +
+    feat_mutation(1) +
+    feat_recombination(par_zero_inflatation(5, .5)) +
+    sumstat_sfs()
+  stats <- ms$simulate(model)
+  expect_equal(length(stats$cmds), 2)
+  expect_equal(length(stats$cmds[[1]]), 2)
+  expect_equal(length(stats$cmds[[2]]), 1)
 })
 
 

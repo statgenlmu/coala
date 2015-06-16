@@ -41,20 +41,21 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
     simulate = function(model, parameters=numeric()) {
       stopifnot(length(parameters) == 0 | all(is.numeric(parameters)))
 
-      template <- ms_create_cmd_tempalte(model)
+      # Generate the simulation commands
+      cmd_template <- ms_create_cmd_tempalte(model)
       sample_size <- sum(get_sample_size(model, for_sim = TRUE))
 
-      # Do the actuall simulation
-      files <- lapply(1:get_locus_group_number(model) , function(i) {
-        sim_cmds <- fill_cmd_template(template, model, parameters, i)
-        #print(sim_cmds)
+      sim_cmds <- lapply(1:get_locus_group_number(model), function(group) {
+        fill_cmd_template(cmd_template, model, parameters, group)
+      })
 
-
-        vapply(1:nrow(sim_cmds), function(i) {
+      # Do the actual simulation
+      files <- lapply(sim_cmds, function(sim_cmd) {
+        vapply(1:nrow(sim_cmd), function(j) {
           file <- tempfile("ms")
           ms(sample_size,
-             format(sim_cmds[i, "locus_number"], scientific = FALSE),
-             sim_cmds[i, "command"], file)
+             format(sim_cmd[j, "locus_number"], scientific = FALSE),
+             sim_cmd[j, "command"], file)
           file
         }, character(1))
       })
@@ -72,7 +73,11 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
         seg_sites <- NULL
       }
 
+
       sum_stats <- calc_sumstats(seg_sites, files, model, parameters)
+      sum_stats[['cmds']] <- lapply(sim_cmds, function(cmd) {
+        paste("ms", sample_size, cmd[ , 1], cmd[ , 2])
+      })
 
       # Clean Up
       unlink(unlist(files))
