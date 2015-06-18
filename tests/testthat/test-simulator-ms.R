@@ -280,4 +280,3 @@ test_that("Generating trees for trios works", {
 
   expect_error(generate_trio_trees(trees, matrix(c(0, 0, 20, 0, 0, 2), 3, 6)))
 })
-

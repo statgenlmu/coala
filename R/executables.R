@@ -17,7 +17,7 @@ search_executable <- function(name, file_name) {
   # Try to find it in the PATH folders and the Working directory
   else {
     if (Sys.info()[['sysname']] == "Windows") {
-      run_path = strsplit(Sys.getenv("PATH"), ";")[[1]]
+      run_path <- strsplit(Sys.getenv("PATH"), ";")[[1]]
     } else {
       run_path <- strsplit(Sys.getenv("PATH"), ":")[[1]]
     }
@@ -29,7 +29,7 @@ search_executable <- function(name, file_name) {
     for (candidate in candidates) {
       if (file.exists(candidate)) {
         exe <- candidate
-        break()
+        break
       }
     }
   }
@@ -42,7 +42,7 @@ search_executable <- function(name, file_name) {
 
 
 has_seqgen <- function() !is.null(executables[['seqgen']])
-has_msms = function() {
+has_msms <- function() {
   !(is.null(executables[['msms']]) || is.null(executables[['java']]))
 }
 
