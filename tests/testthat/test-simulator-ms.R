@@ -44,7 +44,7 @@ test_that("parsing output works", {
 
 test_that("simulation with ms works", {
   ms <- get_simulator("ms")
-  model_tt <- model_theta_tau() + sumstat_file("tmp")
+  model_tt <- model_theta_tau()
   set.seed(789)
   sum_stats_1 <- ms$simulate(model_tt, c(tau = 1, theta = 10))
   expect_true(is.matrix(sum_stats_1$jsfs))

@@ -1,6 +1,6 @@
 Package: coala
-Version: 0.0.9107
-Date: 2015-06-11
+Version: 0.0.9108
+Date: 2015-06-18
 License: GPL (>= 3)
 Title: A Framework for Coalescent Simulation
 Authors@R: c(
@@ -27,7 +27,6 @@ Imports:
     R6 (>= 2.0.1),
     rehh (>= 1.11),
     scrm (>= 1.5.0-1),
-    settings (>= 0.1.1),
     stats
 Suggests:
     abc (>= 2.0),
@@ -39,6 +38,7 @@ Collate:
     'RcppExports.R'
     'cache.R'
     'coala.R'
+    'executables.R'
     'feature.R'
     'feature_growth.R'
     'feature_migration.R'
@@ -60,7 +60,6 @@ Collate:
     'model_print.R'
     'model_scale.R'
     'model_simulate.R'
-    'options.R'
     'par_zero_inflation.R'
     'parameter.R'
     'parameter_prior.R'

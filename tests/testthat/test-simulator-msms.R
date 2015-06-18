@@ -1,7 +1,7 @@
 context('Simulator msms')
 
 test_that("calling msms works", {
-  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  if (!has_msms()) skip('msms not installed')
   msms.args <- "5 1 -r 10 100 -t 5 -I 2 3 2 1"
   set.seed(17)
   out_file <- call_msms(msms.args)
@@ -23,7 +23,7 @@ test_that("generating msms options works", {
 
 
 test_that("msms_simulate works", {
-  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  if (!has_msms()) skip('msms not installed')
   msms <- get_simulator("msms")
   model <- model_theta_tau()
 
@@ -45,7 +45,7 @@ test_that("msms_simulate works", {
 
 
 test_that("msms_simulate works with inter-locus variation", {
-  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  if (!has_msms()) skip('msms not installed')
   msms <- get_simulator("msms")
 
   model_tmp <- coal_model(5, 2) +
@@ -60,7 +60,7 @@ test_that("msms_simulate works with inter-locus variation", {
 
 
 test_that('simulating unphased data works', {
-  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  if (!has_msms()) skip('msms not installed')
   msms <- get_simulator("msms")
   model <- model_theta_tau() + feat_unphased(2, 1) + sumstat_seg_sites()
   stats <- msms$simulate(model, c(tau = 1, theta = 5))
@@ -75,7 +75,7 @@ test_that('simulating unphased data works', {
 
 
 test_that("msms can simulate locus trios", {
-  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  if (!has_msms()) skip('msms not installed')
   stat <- get_simulator("msms")$simulate(model_trios())
   expect_that(attr(stat$seg_sites[[1]], "locus"), is_a("numeric"))
   expect_true(all(attr(stat$seg_sites[[1]], "locus") %in% -1:1))

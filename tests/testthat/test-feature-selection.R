@@ -1,7 +1,7 @@
 context("Feature Selection")
 
 test_that("generation of selection cmd works", {
-  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  if (!has_msms()) skip('msms not installed')
   msms <- get_simulator("msms")
   model  <- model_theta_tau() +
     feat_selection(111, 222, population = 1, time = 5)
@@ -23,7 +23,7 @@ test_that("generation of selection cmd works", {
 
 
 test_that("msms can simulate selection", {
-  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  if (!has_msms()) skip('msms not installed')
   # With one population
   model <- coal_model(5, 1, 100) + par_named("s") + par_named("t") +
     feat_selection(par_expr(2 * s), par_expr(.5 * s), time = par_expr(t * 2)) +
@@ -35,7 +35,7 @@ test_that("msms can simulate selection", {
   expect_that(stat$sfs, is_a("numeric"))
 
   # With three population
-  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  if (!has_msms()) skip('msms not installed')
   model <- coal_model(c(5, 5, 5), 1, 100) +
     feat_selection(1000, 500, 1, time = 0.01) +
     feat_mutation(5) +

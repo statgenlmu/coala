@@ -1,29 +1,5 @@
 sg_mutation_models <- c('HKY', 'GTR')
 
-sg_find_exe <- function(throw.error = TRUE, silent = FALSE) {
-  if ((!is.null(get_seqgen_path())) && file.exists(get_seqgen_path())) {
-    return(TRUE)
-  }
-
-  # Works on Linux only maybe
-  run.path <- strsplit(Sys.getenv("PATH"), ":")[[1]]
-  executables <- c(file.path(run.path, "seq-gen"),
-                   file.path(run.path, "seqgen"))
-  for (exe in executables) {
-    if (file.exists(exe)) {
-      if (!silent) message(paste("Using", exe, "as seqgen executable\n"))
-      set_seqgen_path(exe)
-      return(TRUE)
-    }
-  }
-
-  if (throw.error) {
-    stop("No seqgen executable found. Please provide one using ",
-         "set_seqgen_exe()")
-  }
-
-  FALSE
-}
 
 generate_tree_model <- function(model) {
   tree_model <- read_cache(model, "tree_model")
@@ -51,16 +27,6 @@ generate_tree_model <- function(model) {
 }
 
 
-#' Set the path to the executable for seqgen
-#'
-#' @param seqgen_exe The path to seqgen's executable.
-#' @export
-set_seqgen_exe <- function(seqgen_exe) {
-  if (file.exists(seqgen_exe)) {
-    set_seqgen_path(seqgen_exe)
-  } else stop("File", seqgen_exe, "does not exist")
-}
-
 # Function to perform simulation using seqgen
 #
 # @param opts The options to pass to ms. Must either be a character or character
@@ -74,10 +40,11 @@ sg_call <- function(opts, ms_files) {
     }
 
     seqgen_file <- tempfile('seqgen')
-    cmd <- paste(opts[i], "<", ms_files[[i]], ">", seqgen_file)
+    cmd <- paste(opts[i], ms_files[[i]])
 
-    if (system(cmd, intern = FALSE) != 0) stop("seq-gen simulation failed")
+    ret <- system2(get_executable("seqgen"), cmd, stdout = seqgen_file)
 
+    if (ret != 0) stop("seq-gen simulation failed")
     if (!file.exists(seqgen_file)) stop("seq-gen simulation failed!")
     if (file.info(seqgen_file)$size <= 1) stop("seq-gen output is empty!")
 
@@ -128,7 +95,7 @@ sg_generate_opt_cmd <- function(model) {
       cmd <- paste(vapply(model$features, conv_to_seqgen_arg,
                           FUN.VALUE = character(1), model = model),
                    collapse = "")
-      cmd <- paste0("c(get_seqgen_path(), '", cmd, "')")
+      cmd <- paste0("c('", cmd, "')")
     })
 
     cache(model, 'seqgen_cmd', cmd)
@@ -138,8 +105,6 @@ sg_generate_opt_cmd <- function(model) {
 
 
 sg_simulate <- function(model, parameters) {
-  sg_find_exe()
-
   # Simulate the ancestral trees
   tree_model <- generate_tree_model(model)
   trees <- simulate(tree_model, pars = parameters)$trees
@@ -178,15 +143,15 @@ Simulator_seqgen <- R6Class('Simulator_seqgen', inherit = Simulator,
   private = list(
     name = 'seqgen',
     priority = 10
-   ),
-   public = list(
-     simulate = sg_simulate,
-     get_cmd = function(model) {
-       c(trees=get_cmd(generate_tree_model(model)),
-         sequence=paste(sg_generate_opts(model, NULL, 1, 0, TRUE),
-                        collapse = ' '))
-     }
-   )
+  ),
+  public = list(
+    simulate = sg_simulate,
+    get_cmd = function(model) {
+      c(trees = get_cmd(generate_tree_model(model)),
+        sequence = paste("seqgen", sg_generate_opts(model, NULL, 1, 0, TRUE),
+                         collapse = ' '))
+    }
+  )
 )
 
 

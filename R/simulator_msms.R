@@ -1,42 +1,23 @@
 call_msms <- function(msms_args) {
-  msms_find_jar()
-
   out_file <- tempfile('msms')
   seed <- sample_seed(1)
 
   # Create the command
-  cmd <- paste("java -jar", get_msms_path(), as.character(msms_args),
-               "-seed", seed, ">", out_file)
+  arg <- paste("-jar", get_executable("msms"),
+               as.character(msms_args), "-seed", seed)
 
   # Execute the command
-  capture.output(system(cmd))
+  status <- system2(get_executable("java"), args = arg, stdout = out_file)
 
-  if (!file.exists(out_file)) stop("msms simulation failed!")
-  if (file.info(out_file)$size == 0) stop("msms output is empty!")
+  if (status != 0 || !file.exists(out_file)) stop("msms simulation failed")
+  if (file.info(out_file)$size == 0) stop("msms output is empty")
 
   out_file
 }
 
-msms_find_jar <- function(throw_error = TRUE, silent = FALSE) {
-  if ((!is.null(get_msms_path())) && file.exists(get_msms_path())) return(TRUE)
-
-  # Works on Linux only maybe
-  run_path <- strsplit(Sys.getenv("PATH"), ":")[[1]]
-  executables <- file.path(c(run_path, getwd()), "msms.jar")
-  for (exe in executables) {
-    if (file.exists(exe)) {
-      if (!silent) message(paste("Using", exe, "as msms implementation\n"))
-      set_msms_path(exe)
-      return(TRUE)
-    }
-  }
-
-  if (throw_error) stop("No msms executable found_")
-  FALSE
-}
-
 
 conv_to_msms_arg <- function(feature, model) UseMethod("conv_to_msms_arg")
+
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
