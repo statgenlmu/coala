@@ -35,10 +35,15 @@ test_that('Calculation of Sumstats works', {
     })
   )
   model <- coal_model(5:6, 10) + Stat_Sum$new('sum')
-  stats <- calc_sumstats(list(1:3, 1:5, 7), '', model)
-  expect_equal(stats, list(sum=c(6, 15, 7)))
+  stats <- calc_sumstats(list(1:3, 1:5, 7), '', model, 1,
+                         1:3, get_simulator("scrm"))
+  expect_equal(stats$sum, c(6, 15, 7))
 
   model <- model + Stat_Sum$new('sum2')
-  stats <- calc_sumstats(list(1:3, 1:5, 7), '', model, 1:2)
-  expect_equal(stats, list(pars=1:2, sum=c(6, 15, 7), sum2=c(6, 15, 7)))
+  stats <- calc_sumstats(list(1:3, 1:5, 7), '', model, 1:2,
+                         1:3, get_simulator("scrm"))
+  expect_equal(stats$pars, 1:2)
+  expect_equal(stats$sum,  c(6, 15, 7))
+  expect_equal(stats$sum2, c(6, 15, 7))
+  expect_equal(stats$cmds, 1:3)
 })

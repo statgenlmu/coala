@@ -43,7 +43,7 @@ msms_create_cmd_tempalte <- function(model) {
 #' @include simulator_ms.R
 Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
   private = list(
-    name = 'msms',
+    name = "msms",
     priority = 40
   ),
   public = list(
@@ -56,17 +56,19 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
             cmd[1, "command"])
     },
     simulate = function(model, parameters=numeric(0)) {
-      template <- msms_create_cmd_tempalte(model)
+      cmd_template <- msms_create_cmd_tempalte(model)
       sample_size <- sum(get_sample_size(model, for_sim = TRUE))
 
-      # Run the simulation(s)
-      files <- lapply(1:get_locus_group_number(model), function(i) {
-        cmds <- fill_cmd_template(template, model, parameters, i)
+      sim_cmds <- lapply(1:get_locus_group_number(model), function(group) {
+        fill_cmd_template(cmd_template, model, parameters, group)
+      })
 
-        vapply(1:nrow(cmds), function(i) {
+      # Run the simulation(s)
+      files <- lapply(sim_cmds, function(sim_cmd) {
+        vapply(1:nrow(sim_cmd), function(i) {
           msms_options <- paste(sample_size,
-                                cmds[i, "locus_number"],
-                                cmds[i, "command"])
+                                sim_cmd[i, "locus_number"],
+                                sim_cmd[i, "command"])
           call_msms(msms_options)
         }, character(1))
       })
@@ -84,7 +86,12 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
         seg_sites <- NULL
       }
 
-      sum_stats <- calc_sumstats(seg_sites, files, model, parameters)
+      cmds <- lapply(sim_cmds, function(cmd) {
+        paste("ms", sample_size, cmd[ , 1], cmd[ , 2])
+      })
+
+      sum_stats <- calc_sumstats(seg_sites, files, model, parameters,
+                                 cmds, self)
 
       # Clean Up
       unlink(unlist(files))

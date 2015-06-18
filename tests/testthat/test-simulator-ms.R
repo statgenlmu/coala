@@ -50,7 +50,7 @@ test_that("simulation with ms works", {
   expect_true(is.matrix(sum_stats_1$jsfs))
   expect_true(sum(sum_stats_1$jsfs) > 0)
   expect_equal(sum_stats_1$pars, c(tau = 1, theta = 10))
-  expect_that(sum_stats_1$cmds, is_a("list"))
+  expect_that(sum_stats_1$cmds, is_a("character"))
 
   #set.seed(789)
   #sum_stats_2 <- ms$simulate(model_tt, c(tau = 1, theta = 10))
@@ -62,22 +62,19 @@ test_that("Saving the simulation cmds works", {
   ms <- get_simulator("ms")
   model <- model_theta_tau() + locus_single(15)
   stats <- ms$simulate(model, c(tau = 1, theta = 10))
-  expect_that(stats$cmds, is_a("list"))
+  expect_that(stats$cmds, is_a("character"))
   expect_equal(length(stats$cmds), 2)
-  expect_equal(length(stats$cmds[[1]]), 1)
-  expect_true(grepl("^ms 25 10 ", stats$cmds[[1]]))
+  expect_true(grepl("^ms 25 10 ", stats$cmds[1]))
   expect_equal(length(stats$cmds[[2]]), 1)
-  expect_true(grepl("^ms 25 1 ", stats$cmds[[2]]))
+  expect_true(grepl("^ms 25 1 ", stats$cmds[2]))
 
   model <- coal_model(5, 10) +
     locus_single(15) +
     feat_mutation(1) +
-    feat_recombination(par_zero_inflatation(5, .5)) +
+    feat_recombination(par_zero_inflation(5, .5)) +
     sumstat_sfs()
   stats <- ms$simulate(model)
-  expect_equal(length(stats$cmds), 2)
-  expect_equal(length(stats$cmds[[1]]), 2)
-  expect_equal(length(stats$cmds[[2]]), 1)
+  expect_equal(length(stats$cmds), 3)
 })
 
 
@@ -142,7 +139,7 @@ test_that("ms works with scientific notation", {
 
 test_that("ms can simulate zero inflation", {
   model <- model_theta_tau() +
-    feat_recombination(par_zero_inflatation(1, .5)) +
+    feat_recombination(par_zero_inflation(1, .5)) +
     locus_averaged(4, 100) +
     locus_single(10)
   stats <- simulate(model, pars = c(1, 5))

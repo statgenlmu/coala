@@ -11,6 +11,7 @@ Simulator <- R6Class("Simulator",
     get_features = function() private$features,
     get_sumstats = function() private$sumstats,
     get_priority = function() private$priority,
+    get_info = function() c(name = private$name),
     initialize = function() NULL
   )
 )

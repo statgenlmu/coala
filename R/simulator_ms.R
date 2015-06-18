@@ -73,11 +73,12 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
         seg_sites <- NULL
       }
 
-
-      sum_stats <- calc_sumstats(seg_sites, files, model, parameters)
-      sum_stats[['cmds']] <- lapply(sim_cmds, function(cmd) {
+      cmds <- lapply(sim_cmds, function(cmd) {
         paste("ms", sample_size, cmd[ , 1], cmd[ , 2])
       })
+
+      sum_stats <- calc_sumstats(seg_sites, files, model, parameters,
+                                 cmds, self)
 
       # Clean Up
       unlink(unlist(files))

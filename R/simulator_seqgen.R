@@ -129,7 +129,8 @@ sg_simulate <- function(model, parameters) {
     seg_sites <- NULL
   }
 
-  sum_stats <- calc_sumstats(seg_sites, seqgen_files, model, parameters)
+  sum_stats <- calc_sumstats(seg_sites, seqgen_files, model, parameters, NULL,
+                             get_simulator("seqgen"))
 
   # Clean Up
   unlink(unlist(seqgen_files))

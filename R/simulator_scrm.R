@@ -7,34 +7,16 @@ conv_to_scrm_arg.default <- function(feature, model) {
 }
 
 
-scrm_generate_opts_cmd <- function(model) {
+scrm_create_cmd_template <- function(model) {
   cmd <- read_cache(model, "scrm_cmd")
   if (is.null(cmd)) {
     cmd <- paste(vapply(model$features, conv_to_scrm_arg,
                         FUN.VALUE = character(1), model),
                  collapse = "")
-    cmd <- paste0("c(",
-                  sum(get_sample_size(model, for_sim = TRUE)), ", ",
-                  "format(locus_number, scientific = FALSE), '",
-                  cmd, "')")
+    cmd <- paste0("c('", cmd, "')")
     cache(model, "scrm_cmd", cmd)
   }
   cmd
-}
-
-
-scrm_generate_opts <- function(model, parameters, group, eval_pars = TRUE) {
-  locus_length <- get_locus_length(model, group = group)
-  locus_number <- get_locus_number(model, group = group)
-
-  par_env <- create_par_env(model, parameters, locus = group,
-                            locus_length = locus_length,
-                            locus_number = locus_number,
-                            for_cmd = !eval_pars)
-
-  cmd <- scrm_generate_opts_cmd(model)
-
-  eval(parse(text = cmd), envir = par_env)
 }
 
 
@@ -43,35 +25,67 @@ scrm_generate_opts <- function(model, parameters, group, eval_pars = TRUE) {
 #' @include simulator_ms.R
 SimulatorScrm <- R6Class('SimulatorScrm', inherit = Simulator, #nolint
   private = list(
-    name = 'scrm',
-    priority = 90
+    name = "scrm",
+    priority = 90,
+    version = packageDescription("scrm", fields = "Version")
   ),
   public = list(
     simulate = function(model, parameters) {
-      if (length(get_locus_group_number(model)) > 1)
-        stop("scrm can only simulate one group of loci at the moment.")
+      cmd_template <- scrm_create_cmd_template(model)
+      sample_size <- sum(get_sample_size(model, for_sim = TRUE))
 
-      args <- paste(scrm_generate_opts(model, parameters, 1), collapse = ' ')
+      sim_cmds <- lapply(1:get_locus_group_number(model), function(group) {
+        fill_cmd_template(cmd_template, model, parameters, group)
+      })
 
-      if (requires_files(model)) file <- tempfile('scrm')
-      else file <- ''
+      locus_number <- sum(get_locus_number(model))
+      seg_sites <- list()
+      if (requires_segsites(model)) {
+        length(seg_sites) <- locus_number
+      }
 
-      sum_stats <- scrm(args, file)
+      sim_number <- sum(sapply(sim_cmds, nrow))
+      if (requires_files(model)) {
+        files <- sapply(1:sim_number, function(x) tempfile('scrm'))
+      } else {
+        files <- rep("", sim_number)
+      }
 
-      seg_sites <- lapply(sum_stats$seg_sites, function(x) {
+      cl <- 1
+      j <- 0
+      for (cmds in sim_cmds) {
+        for (i in 1:nrow(cmds)) {
+          j <- j + 1
+          stats <- scrm(paste(sample_size, cmds[i, 1], cmds[i, 2]), files[j])
+
+          if (requires_segsites(model)) {
+            seg_sites[cl:(cl + cmds[i, 1] - 1)] <- stats$seg_sites[]
+            cl <- cl + cmds[i, 1]
+          }
+        }
+      }
+
+      seg_sites <- lapply(seg_sites, function(x) {
         attr(x, 'positions') <- as.numeric(colnames(x))
         x
       })
 
-      sum_stats <- calc_sumstats(seg_sites, file, model, parameters)
-      unlink(file)
+      cmds <- lapply(sim_cmds, function(cmd) {
+        paste("scrm", sample_size, cmd[ , 1], cmd[ , 2])
+      })
+
+      sum_stats <- calc_sumstats(seg_sites, files, model, parameters, cmds, self)
+      unlink(files)
 
       sum_stats
     },
     get_cmd = function(model) {
-      cmd <- scrm_generate_opts(model, NULL, 1, FALSE)
-      paste("scrm", paste(cmd, collapse = ' '))
-    }
+      template <- scrm_create_cmd_template(model)
+      cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
+      paste("scrm",
+            sum(get_sample_size(model, TRUE)), cmd[1, 1], cmd[1, 2])
+    },
+    get_info = function() c(name = "scrm", version = private$version)
   )
 )
 

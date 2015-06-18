@@ -19,6 +19,6 @@ zero_inflate <- function(x, prob) ifelse(rbinom(1, 1, prob), 0, x)
 #' @param prob The probability that the parameters value will be set to `0`
 #'   for each locus.
 #' @export
-par_zero_inflatation <- function(par, prob) {
+par_zero_inflation <- function(par, prob) {
   Par_zero_inflation$new(par, prob)
 }
