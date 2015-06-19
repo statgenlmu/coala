@@ -23,7 +23,7 @@ scrm_create_cmd_template <- function(model) {
 #' @importFrom scrm scrm
 #' @include simulator_class.R
 #' @include simulator_ms.R
-SimulatorScrm <- R6Class('SimulatorScrm', inherit = Simulator, #nolint
+scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
   private = list(
     name = "scrm",
     priority = 90,
@@ -59,7 +59,7 @@ SimulatorScrm <- R6Class('SimulatorScrm', inherit = Simulator, #nolint
           stats <- scrm(paste(sample_size, cmds[i, 1], cmds[i, 2]), files[j])
 
           if (requires_segsites(model)) {
-            seg_sites[cl:(cl + cmds[i, 1] - 1)] <- stats$seg_sites[]
+            seg_sites[cl:(cl + cmds[i, 1] - 1)] <- stats$seg_sites[] #nolint
             cl <- cl + cmds[i, 1]
           }
         }
@@ -74,10 +74,10 @@ SimulatorScrm <- R6Class('SimulatorScrm', inherit = Simulator, #nolint
         paste("scrm", sample_size, cmd[ , 1], cmd[ , 2])
       })
 
-      sum_stats <- calc_sumstats(seg_sites, files, model, parameters, cmds, self)
+      stats <- calc_sumstats(seg_sites, files, model, parameters, cmds, self)
       unlink(files)
 
-      sum_stats
+      stats
     },
     get_cmd = function(model) {
       template <- scrm_create_cmd_template(model)
@@ -88,6 +88,3 @@ SimulatorScrm <- R6Class('SimulatorScrm', inherit = Simulator, #nolint
     get_info = function() c(name = "scrm", version = private$version)
   )
 )
-
-
-register_simulator(SimulatorScrm) #nolint

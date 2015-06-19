@@ -1,7 +1,7 @@
-context('Simulator Class')
+context("Simulator Class")
 
-test_that('Simulator base class works', {
-  sim <- Simulator$new()
+test_that('simulator_class base class works', {
+  sim <- simulator_class$new()
   expect_equal(sim$get_name(), 'TEMPLATE')
   expect_equal(sim$get_features(), NULL)
   expect_equal(sim$get_sumstats(), NULL)
@@ -11,8 +11,8 @@ test_that('Simulator base class works', {
 })
 
 
-test_that('simulators can be registered', {
-  register_simulator(Simulator)
+test_that('simulator_classs can be registered', {
+  register_simulator(simulator_class$new())
   expect_true(is_simulator(get_simulator("TEMPLATE")))
 
   expect_error(register_simulator(1:10))

@@ -203,16 +203,16 @@ test_that("generation of tree models works", {
 
 test_that("simulation with seq-gen works", {
   if (!has_seqgen()) skip('seqgen not installed')
-  sg_simulate <- get_simulator("seq-gen")$simulate
+  sg <- get_simulator("seqgen")
 
   set.seed(100)
-  sum.stats <- sg_simulate(model_hky(), c(tau = 1, theta = 10))
+  sum.stats <- sg$simulate(model_hky(), c(tau = 1, theta = 10))
   expect_true(is.list(sum.stats))
   expect_true(is.array(sum.stats$jsfs))
   expect_true(sum(sum.stats$jsfs) > 0)
 
   set.seed(100)
-  sum.stats2 <- sg_simulate(model_hky(), c(tau = 1, theta = 10))
+  sum.stats2 <- sg$simulate(model_hky(), c(tau = 1, theta = 10))
   expect_equal(sum.stats2$jsfs, sum.stats$jsfs)
 })
 
@@ -308,15 +308,9 @@ test_that('a more complicated model works', {
 })
 
 
-test_that('printing a seqgen command works', {
-  sg <- get_simulator("seqgen")
-  cmd <- sg$get_cmd(model_gtr())
-  expect_equal(length(cmd), 2)
-})
-
-
 test_that("seqgen works with inter-locus variation", {
   if (!has_seqgen()) skip('seq-gen not installed')
+  sg <- get_simulator("seqgen")
 
   model_tmp <- coal_model(c(3, 3, 1), 2) +
     feat_pop_merge(2.0, 2, 1) +
@@ -328,7 +322,7 @@ test_that("seqgen works with inter-locus variation", {
   expect_true(has_variation(model_tmp))
 
   set.seed(1100)
-  sum_stats <- sg_simulate(model_tmp, parameters = numeric(0))
+  sum_stats <- sg$simulate(model_tmp, parameters = numeric(0))
   expect_is(sum_stats$jsfs, 'matrix')
   expect_that(sum(sum_stats$jsfs), is_more_than(0))
 })
@@ -336,13 +330,15 @@ test_that("seqgen works with inter-locus variation", {
 
 test_that('simulating unphased data works', {
   if (!has_seqgen()) skip('seq-gen not installed')
+  sg <- get_simulator("seqgen")
+
   model <- model_hky() + feat_unphased(2, 1) + sumstat_seg_sites()
-  stats <- sg_simulate(model, c(tau = 1, theta = 10))
+  stats <- sg$simulate(model, c(tau = 1, theta = 10))
   expect_equal(dim(stats$jsfs), c(4, 4))
   expect_equal(nrow(stats$seg_sites[[1]]), 6)
 
   model <- model_hky() + feat_unphased(2, 2) + sumstat_seg_sites()
-  stats <- sg_simulate(model, c(tau = 1, theta = 10))
+  stats <- sg$simulate(model, c(tau = 1, theta = 10))
   expect_equal(dim(stats$jsfs), c(7, 7))
   expect_equal(nrow(stats$seg_sites[[1]]), 12)
 })
@@ -379,6 +375,8 @@ test_that("seq-gen can simulate scaled models", {
 
 
 test_that("Printing the command works", {
+  if (!has_seqgen()) skip('seq-gen not installed')
   cmd <- get_cmd(model_gtr())
   expect_that(cmd, is_a("character"))
+  expect_equal(length(cmd), 2)
 })

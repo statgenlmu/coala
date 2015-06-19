@@ -31,26 +31,6 @@ generate_tree_model <- function(model) {
 #
 # @param opts The options to pass to ms. Must either be a character or character
 # vector.
-sg_call <- function(opts, ms_files) {
-  stopifnot(length(opts) == length(ms_files))
-
-  sapply(seq(along = opts), function(i) {
-    if (file.info(ms_files[[i]])$size <= 1 ) {
-      stop("No trees in file ", ms_files[[i]])
-    }
-
-    seqgen_file <- tempfile('seqgen')
-    cmd <- paste(opts[i], ms_files[[i]])
-
-    ret <- system2(get_executable("seqgen"), cmd, stdout = seqgen_file)
-
-    if (ret != 0) stop("seq-gen simulation failed")
-    if (!file.exists(seqgen_file)) stop("seq-gen simulation failed!")
-    if (file.info(seqgen_file)$size <= 1) stop("seq-gen output is empty!")
-
-    seqgen_file
-  })
-}
 
 
 conv_to_seqgen_arg <- function(feature, model) UseMethod("conv_to_seqgen_arg")
@@ -84,7 +64,6 @@ sg_generate_opts <- function(model, parameters, locus,
 
 
 sg_generate_opt_cmd <- function(model) {
-
   cmd <- read_cache(model, 'seqgen_cmd')
 
   if (is.null(cmd)) {
@@ -104,49 +83,82 @@ sg_generate_opt_cmd <- function(model) {
 }
 
 
-sg_simulate <- function(model, parameters) {
-  # Simulate the ancestral trees
-  tree_model <- generate_tree_model(model)
-  trees <- simulate(tree_model, pars = parameters)$trees
-  assert_that(!is.null(trees))
-
-  # Call seq-gen for each locus (trio)
-  seqgen_files <- lapply(1:length(trees), function(locus) {
-    seqgen_options <- sg_generate_opts(model, parameters, locus,
-                                       sample_seed(length(trees[[locus]])))
-    sg_call(seqgen_options, trees[[locus]])
-  })
-  unlink(unlist(trees))
-
-  # Generate the summary statistics
-  if (requires_segsites(model)) {
-    seg_sites <- parse_sg_output(seqgen_files,
-                                 sum(get_sample_size(model, for_sim = TRUE)),
-                                 get_locus_length_matrix(model),
-                                 get_locus_number(model),
-                                 outgroup_size = get_outgroup_size(model, TRUE))
-  } else {
-    seg_sites <- NULL
-  }
-
-  sum_stats <- calc_sumstats(seg_sites, seqgen_files, model, parameters, NULL,
-                             get_simulator("seqgen"))
-
-  # Clean Up
-  unlink(unlist(seqgen_files))
-  sum_stats
-}
-
-
 #' @importFrom R6 R6Class
 #' @include simulator_class.R
-Simulator_seqgen <- R6Class('Simulator_seqgen', inherit = Simulator,
+seqgen_class <- R6Class('Seqgen', inherit = simulator_class,
   private = list(
     name = 'seqgen',
+    binary = NULL,
     priority = 10
   ),
   public = list(
-    simulate = sg_simulate,
+    initialize = function(binary = NULL, priority = 10) {
+      # Try to automatically find a jar file and java if not given
+      if (is.null(binary)) {
+        binary <- search_executable(c("seqgen", "seq-gen",
+                                      "seqgen.exe", "seq-gen.exe"))
+      }
+      if (is.null(binary)) stop("No binary file for msms found.")
+      if (!file.exists(binary)) stop("seqgen binary (", binary,
+                                     ") does not exist.")
+      assert_that(is.character(binary) && length(binary) == 1)
+      private$binary <- binary
+
+      assert_that(is.numeric(priority) && length(priority) == 1)
+      private$priority <- priority
+    },
+    call = function(opts, ms_files) {
+      stopifnot(length(opts) == length(ms_files))
+
+      sapply(seq(along = opts), function(i) {
+        if (file.info(ms_files[[i]])$size <= 1 ) {
+          stop("No trees in file ", ms_files[[i]])
+        }
+
+        seqgen_file <- tempfile('seqgen')
+        cmd <- paste(opts[i], ms_files[[i]])
+
+        ret <- system2(private$binary, cmd, stdout = seqgen_file)
+
+        if (ret != 0) stop("seq-gen simulation failed")
+        if (!file.exists(seqgen_file)) stop("seq-gen simulation failed!")
+        if (file.info(seqgen_file)$size <= 1) stop("seq-gen output is empty!")
+
+        seqgen_file
+      })
+    },
+    simulate = function(model, parameters) {
+      # Simulate the ancestral trees
+      tree_model <- generate_tree_model(model)
+      trees <- simulate(tree_model, pars = parameters)$trees
+      assert_that(!is.null(trees))
+
+      # Call seq-gen for each locus (trio)
+      seqgen_files <- lapply(1:length(trees), function(locus) {
+        seqgen_options <- sg_generate_opts(model, parameters, locus,
+                                           sample_seed(length(trees[[locus]])))
+        self$call(seqgen_options, trees[[locus]])
+      })
+      unlink(unlist(trees))
+
+      # Generate the summary statistics
+      if (requires_segsites(model)) {
+        seg_sites <- parse_sg_output(seqgen_files,
+                                     sum(get_sample_size(model, TRUE)),
+                                     get_locus_length_matrix(model),
+                                     get_locus_number(model),
+                                     get_outgroup_size(model, TRUE))
+      } else {
+        seg_sites <- NULL
+      }
+
+      sum_stats <- calc_sumstats(seg_sites, seqgen_files, model, parameters,
+                                 NULL, get_simulator("seqgen"))
+
+      # Clean Up
+      unlink(unlist(seqgen_files))
+      sum_stats
+    },
     get_cmd = function(model) {
       c(trees = get_cmd(generate_tree_model(model)),
         sequence = paste("seqgen", sg_generate_opts(model, NULL, 1, 0, TRUE),
@@ -155,5 +167,4 @@ Simulator_seqgen <- R6Class('Simulator_seqgen', inherit = Simulator,
   )
 )
 
-
-register_simulator(Simulator_seqgen)
+has_seqgen <- function() !is.null(simulators[["seqgen"]])

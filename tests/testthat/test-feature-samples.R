@@ -15,11 +15,11 @@ test_that("sample sizes are reported corrently", {
 })
 
 
-test_that("generating ms cmd works", {
+test_that("generating scrm cmd works", {
   model <- coal_model(15, 1)
-  expect_equal(get_simulator("ms")$get_cmd(model), "ms 15 1 ")
+  expect_equal(get_simulator("scrm")$get_cmd(model), "scrm 15 1 ")
   model <- coal_model(15:16, 1)
-  expect_equal(get_simulator("ms")$get_cmd(model), "ms 31 1 -I 2 15 16 ")
+  expect_equal(get_simulator("scrm")$get_cmd(model), "scrm 31 1 -I 2 15 16 ")
   model <- coal_model(15:17, 1)
-  expect_equal(get_simulator("ms")$get_cmd(model), "ms 48 1 -I 3 15 16 17 ")
+  expect_equal(get_simulator("scrm")$get_cmd(model), "scrm 48 1 -I 3 15 16 17 ")
 })

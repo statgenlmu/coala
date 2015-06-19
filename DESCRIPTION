@@ -1,6 +1,6 @@
 Package: coala
-Version: 0.0.9108
-Date: 2015-06-18
+Version: 0.0.9200
+Date: 2015-06-19
 License: GPL (>= 3)
 Title: A Framework for Coalescent Simulation
 Authors@R: c(
@@ -10,23 +10,22 @@ Authors@R: c(
 BugReports: https://github.com/statgenlmu/coala/issues
 URL: https://github.com/statgenlmu/coala
 Description: Coalescent simulation allows to rapidly simulate biological
-    sequence evolving according to a given model of evolution. With 'ms', which
-    is included in package 'phyclust', and 'scrm', there are at least two
-    coalescent simulators available on CRAN. Coala
-    provides a way to specify evolutionary models in R, selects a suitable
-    simulator, conducts the simulation, reads the results and generates
-    additional summary statisics from it. Additional to 'ms' and 'scrm', it also
-    supports 'msms' and can use finite-sites mutation models by combining the
+    sequences evolving according to a given model of evolution.
+    This package allows to specify evolutionary models in R,
+    selects a suitable simulator, conducts the simulation, parses the results
+    and generates additional summary statisics.
+    It supports the simulator 'scrm' by default, and can optionally
+    call the programms 'ms' and 'msms' if installed on the system.
+    It also supports finite-sites mutation models by combining the
     simulators with 'seq-gen'.
 Depends:
     R (>= 3.1.0)
 Imports:
     assertthat (>= 0.1),
-    phyclust (>= 0.1-14),
-    Rcpp (>= 0.11.0),
     R6 (>= 2.0.1),
+    Rcpp (>= 0.11.0),
     rehh (>= 1.11),
-    scrm (>= 1.5.0-1),
+    scrm (>= 1.6.0-2),
     stats
 Suggests:
     abc (>= 2.0),
@@ -38,7 +37,6 @@ Collate:
     'RcppExports.R'
     'cache.R'
     'coala.R'
-    'executables.R'
     'feature.R'
     'feature_growth.R'
     'feature_migration.R'
@@ -60,11 +58,13 @@ Collate:
     'model_print.R'
     'model_scale.R'
     'model_simulate.R'
+    'onLoad.R'
     'par_zero_inflation.R'
     'parameter.R'
     'parameter_prior.R'
     'parameter_variation.R'
     'sample_seed.R'
+    'search_executable.R'
     'simulator_class.R'
     'simulator_ms.R'
     'simulator_msms.R'

@@ -29,10 +29,10 @@ test_that("getting the unphased feature works", {
 })
 
 
-test_that("generating the ms command works", {
-  ms <- get_simulator("ms")
+test_that("generating the scrm command works", {
+  scrm <- get_simulator("scrm")
   model <- coal_model(c(5, 10), 1) + feat_unphased(2, 1)
-  expect_equal(ms$get_cmd(model), "ms 30 1 -I 2 10 20 ")
+  expect_equal(scrm$get_cmd(model), "scrm 30 1 -I 2 10 20 ")
 })
 
 

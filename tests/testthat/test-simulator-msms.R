@@ -2,13 +2,14 @@ context('Simulator msms')
 
 test_that("calling msms works", {
   if (!has_msms()) skip('msms not installed')
+  msms <- get_simulator("msms")
   msms.args <- "5 1 -r 10 100 -t 5 -I 2 3 2 1"
   set.seed(17)
-  out_file <- call_msms(msms.args)
+  out_file <- msms$call_msms(msms.args)
   set.seed(17)
-  out_file_2 <- call_msms(msms.args)
+  out_file_2 <- msms$call_msms(msms.args)
   set.seed(20)
-  out_file_3 <- call_msms(msms.args)
+  out_file_3 <- msms$call_msms(msms.args)
   expect_equal(file.info(out_file_2)$size, file.info(out_file)$size)
   expect_true(file.info(out_file)$size != file.info(out_file_3)$size)
   unlink(c(out_file, out_file_2, out_file_3))

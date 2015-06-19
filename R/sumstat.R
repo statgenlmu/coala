@@ -62,6 +62,7 @@ get_summary_statistics <- function(model) {
 
 
 calc_sumstats <- function(seg_sites, files, model, pars, cmds, simulator) {
+  if (missing(pars)) pars <- numeric(0)
   stopifnot(is.model(model))
 
   if (is.list(cmds)) cmds <- do.call(c, cmds)

@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-Simulator <- R6Class("Simulator",
+simulator_class <- R6Class("Simulator",
   private = list(
     name = "TEMPLATE",
     priority = 50
@@ -24,9 +24,8 @@ is_simulator <- function(simulator) "Simulator" %in% class(simulator)
 if (!exists("simulators")) simulators <- new.env()
 
 register_simulator <- function(simulator) {
-  sim <- simulator$new()
-  assert_that(is_simulator(sim))
-  simulators[[sim$get_name()]] <- sim
+  assert_that(is_simulator(simulator))
+  simulators[[simulator$get_name()]] <- simulator
 }
 
 get_simulator <- function(name) {
@@ -66,7 +65,7 @@ reduce_sim_commands <- function(sim_commands) {
   if (length(grouped_commands) == nrow(sim_commands)) return(sim_commands)
   grouped_locus_number <- vapply(grouped_commands, function(cmd) {
     sum(sim_commands[sim_commands[ , 2] == cmd, 1])
-  }, numeric(1))
+  }, numeric(1)) #nolint
   data.frame(locus_number = grouped_locus_number,
              command = grouped_commands,
              stringsAsFactors = FALSE)

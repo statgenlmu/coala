@@ -1,6 +1,7 @@
 context('Simulator ms')
 
 test_that("the ms sim program exists", {
+  if (!has_ms()) skip("ms not installed")
   expect_that(get_simulator("ms"), is_a("Simulator"))
 })
 
@@ -19,13 +20,15 @@ test_that("parsing positions works", {
 
 
 test_that("parsing output works", {
+  if (!has_ms()) skip("ms not installed")
+  ms <- get_simulator("ms")
   set.seed(25)
   folder <- tempfile('ms-parse-test')
   model.tt <- model_theta_tau() + sumstat_file(folder)
   ss <- get_sample_size(model.tt)
   ln <- get_locus_number(model.tt)
 
-  ms.file <- simulate(model.tt, pars = c(1, 5))$file
+  ms.file <- ms$simulate(model.tt, c(tau = 1, theta = 5))$file
   expect_error(parse_ms_output(list("bulb.txt"), ss, ln))
 
   seg_sites <- parse_ms_output(ms.file, ss, ln)
@@ -43,7 +46,9 @@ test_that("parsing output works", {
 
 
 test_that("simulation with ms works", {
+  if (!has_ms()) skip("ms not installed")
   ms <- get_simulator("ms")
+
   model_tt <- model_theta_tau()
   set.seed(789)
   sum_stats_1 <- ms$simulate(model_tt, c(tau = 1, theta = 10))
@@ -52,14 +57,16 @@ test_that("simulation with ms works", {
   expect_equal(sum_stats_1$pars, c(tau = 1, theta = 10))
   expect_that(sum_stats_1$cmds, is_a("character"))
 
-  #set.seed(789)
-  #sum_stats_2 <- ms$simulate(model_tt, c(tau = 1, theta = 10))
-  #expect_equal(sum_stats_1, sum_stats_2)
+  set.seed(789)
+  sum_stats_2 <- ms$simulate(model_tt, c(tau = 1, theta = 10))
+  expect_equal(sum_stats_1, sum_stats_2)
 })
 
 
 test_that("Saving the simulation cmds works", {
+  if (!has_ms()) skip("ms not installed")
   ms <- get_simulator("ms")
+
   model <- model_theta_tau() + locus_single(15)
   stats <- ms$simulate(model, c(tau = 1, theta = 10))
   expect_that(stats$cmds, is_a("character"))
@@ -79,7 +86,9 @@ test_that("Saving the simulation cmds works", {
 
 
 test_that("msSimFunc works with inter-locus variation", {
+  if (!has_ms()) skip("ms not installed")
   ms <- get_simulator("ms")
+
   model_tmp <- coal_model(5:6, 2) +
     feat_mutation(par_variation(2, 2)) +
     feat_pop_merge(par_const(.5), 2, 1) +
@@ -97,7 +106,9 @@ test_that("msSimFunc works with inter-locus variation", {
 
 
 test_that('simulating unphased data works', {
+  if (!has_ms()) skip("ms not installed")
   ms <- get_simulator("ms")
+
   model <- model_theta_tau() + feat_unphased(2, 1) + sumstat_seg_sites()
   stats <- ms$simulate(model, c(tau = 1, theta = 5))
   expect_equal(dim(stats$jsfs), c(11, 16))
@@ -111,7 +122,9 @@ test_that('simulating unphased data works', {
 
 
 test_that("ms can simulate locus trios", {
+  if (!has_ms()) skip("ms not installed")
   stat <- get_simulator("ms")$simulate(model_trios())
+
   expect_that(attr(stat$seg_sites[[1]], "locus"), is_a("numeric"))
   expect_true(all(attr(stat$seg_sites[[1]], "locus") %in% -1:1))
   expect_true(all(attr(stat$seg_sites[[1]], "positions") >= 0))
@@ -120,31 +133,37 @@ test_that("ms can simulate locus trios", {
 
 
 test_that("ms works with scientific notation", {
+  if (!has_ms()) skip("ms not installed")
+  ms <- get_simulator("ms")
+
   model <- coal_model(5, 1, 1e8) + feat_recombination(1)
-  template <- ms_create_cmd_tempalte(model)
+  template <- ms$create_cmd_tempalte(model)
   opts <- fill_cmd_template(template, model, numeric(0), 1)
   expect_true(grepl("100000000", opts$command[1]))
 
   model <- coal_model(5, 1, 1000) + feat_recombination(1e8)
-  template <- ms_create_cmd_tempalte(model)
+  template <- ms$create_cmd_tempalte(model)
   opts <- fill_cmd_template(template, model, numeric(0), 1)
   expect_true(grepl("100000000", opts$command[1]))
 
   model <- coal_model(5, 1, 1000) + feat_mutation(1e8)
-  template <- ms_create_cmd_tempalte(model)
+  template <- ms$create_cmd_tempalte(model)
   opts <- fill_cmd_template(template, model, numeric(0), 1)
   expect_true(grepl("100000000", opts$command[1]))
 })
 
 
 test_that("ms can simulate zero inflation", {
+  if (!has_ms()) skip("ms not installed")
+
   model <- model_theta_tau() +
     feat_recombination(par_zero_inflation(1, .5)) +
     locus_averaged(4, 100) +
     locus_single(10)
-  stats <- simulate(model, pars = c(1, 5))
+  stats <- get_simulator("ms")$simulate(model, c(tau = 1, theta = 5))
   expect_that(stats, is_a("list"))
 })
+
 
 test_that("Trees are extracted from simulation output", {
   sim_output <- tempfile("sim_output")
