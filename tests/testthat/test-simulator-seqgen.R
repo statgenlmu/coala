@@ -380,3 +380,12 @@ test_that("Printing the command works", {
   expect_that(cmd, is_a("character"))
   expect_equal(length(cmd), 2)
 })
+
+
+test_that("seqgen can added manually", {
+  if (!has_seqgen()) skip("seqgen not installed")
+  sg_bin <- get_simulator("seqgen")$get_info()["binary"]
+  use_seqgen(sg_bin, 99)
+  expect_equal(get_simulator("seqgen")$get_priority(), 99)
+  expect_error(use_seqgen(tempfile("not-existant")))
+})

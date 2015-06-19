@@ -26,7 +26,7 @@ scrm_create_cmd_template <- function(model) {
 scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
   private = list(
     name = "scrm",
-    priority = 90,
+    priority = 400,
     version = packageDescription("scrm", fields = "Version")
   ),
   public = list(

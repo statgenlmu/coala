@@ -15,10 +15,10 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
     name = "msms",
     jar = NULL,
     java = NULL,
-    priority = 40
+    priority = 200
   ),
   public = list(
-    initialize = function(jar = NULL, java = NULL, priority = 40) {
+    initialize = function(jar = NULL, java = NULL, priority = 200) {
       # Try to automatically find a jar file and java if not given
       if (is.null(jar)) jar <- search_executable("msms.jar", "MSMS")
       if (is.null(jar)) stop("No jar file for msms found.")
@@ -110,8 +110,34 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
       # Clean Up
       unlink(unlist(files))
       sum_stats
+    },
+    get_info = function() {
+      c(name = "msms", jar = private$jar, java = private$java)
     }
   )
 )
 
 has_msms <- function() !is.null(simulators[['msms']])
+
+
+#' Use the simulator msms
+#'
+#' This adds the simulator 'msms' to the list of availiable simulators. To add
+#' msms, you need to download the jar file and have java installed on your
+#' system.
+#'
+#' @section Citation:
+#' Gregory Ewing and Joachim Hermisson.
+#' MSMS: a coalescent simulation program including recombination,
+#' demographic structure and selection at a single locus.
+#' Bioinformatics (2010) 26 (16): 2064-2065
+#' doi:10.1093/bioinformatics/btq322
+#'
+#' @param jar The path of the msms jar file.
+#' @param java The path of the java executable on your system.
+#' @inheritParams use_ms
+#' @export
+use_msms <- function(jar, java, priority = 200) {
+  register_simulator(msms_class$new(jar, java, priority))
+  invisible(NULL)
+}

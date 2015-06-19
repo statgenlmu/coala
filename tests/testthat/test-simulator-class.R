@@ -31,3 +31,8 @@ test_that("reducing of simulation commands works", {
                                command = c("a", "b"),
                                stringsAsFactors = FALSE))
 })
+
+
+test_that("simulators can be listed", {
+  sims <- list_simulators()
+})

@@ -89,10 +89,10 @@ seqgen_class <- R6Class('Seqgen', inherit = simulator_class,
   private = list(
     name = 'seqgen',
     binary = NULL,
-    priority = 10
+    priority = 100
   ),
   public = list(
-    initialize = function(binary = NULL, priority = 10) {
+    initialize = function(binary = NULL, priority = 100) {
       # Try to automatically find a jar file and java if not given
       if (is.null(binary)) {
         binary <- search_executable(c("seqgen", "seq-gen",
@@ -163,8 +163,34 @@ seqgen_class <- R6Class('Seqgen', inherit = simulator_class,
       c(trees = get_cmd(generate_tree_model(model)),
         sequence = paste("seqgen", sg_generate_opts(model, NULL, 1, 0, TRUE),
                          collapse = ' '))
-    }
+    },
+    get_info = function() c(name = "seqgen", binary = private$binary)
   )
 )
 
 has_seqgen <- function() !is.null(simulators[["seqgen"]])
+
+
+#' Use seq-gen for simulating finite sites mutation models
+#'
+#' This allows you to use seq-gen to simulate finite sites mutation models.
+#' You need to download the program from
+#' \url{http://tree.bio.ed.ac.uk/software/seqgen/}
+#' and compile the binary first.
+#'
+#' @section Citation:
+#' Andrew Rambaut and Nicholas C. Grass.
+#' Seq-Gen: an application for the Monte Carlo simulation of DNA sequence
+#' evolution along phylogenetic trees.
+#' Comput Appl Biosci (1997) 13 (3): 235-238
+#' doi:10.1093/bioinformatics/13.3.235
+#'
+#' @param binary The path of the seqgen binary that will be used
+#'  for simulations.
+#' @param priority The priority for this simulators. If multiple simulators
+#'   can simulate a model, the one with the highest priority will be used.
+#' @export
+use_seqgen <- function(binary, priority = 100) {
+  register_simulator(seqgen_class$new(binary, priority))
+  invisible(NULL)
+}

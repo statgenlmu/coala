@@ -24,7 +24,7 @@ ms_class <- R6Class("ms", inherit = simulator_class,
     binary = NULL
   ),
   public = list(
-    initialize = function(binary = NULL, priority = 100) {
+    initialize = function(binary = NULL, priority = 300) {
       # Try to automatically find a binary if none is given
       if (is.null(binary)) {
         binary <- search_executable(c("ms", "ms.exe"), "MS")
@@ -113,8 +113,32 @@ ms_class <- R6Class("ms", inherit = simulator_class,
             sum(get_sample_size(model, TRUE)),
             cmd[1, "locus_number"],
             cmd[1, "command"])
-    }
+    },
+    get_info = function() c(name = "ms", binary = private$binary)
   )
 )
 
 has_ms <- function() !is.null(simulators[['ms']])
+
+
+#' Use the simulator ms
+#'
+#' This adds the simulator 'ms' to the list of availiable simulators. In order
+#' to use 'ms', you first need to download its sources from
+#' \url{http://home.uchicago.edu/rhudson1/source/mksamples.html}
+#' and compile the binary following the instructions in the package.
+#'
+#' @section Citation:
+#' Richard R. Hudson.
+#' Generating samples under a Wright–Fisher neutral model of genetic variation.
+#' Bioinformatics (2002) 18 (2): 337-338
+#' doi:10.1093/bioinformatics/18.2.337
+#'
+#' @param binary The path of the ms binary that will be used for simulations.
+#' @param priority The priority for this simulator. If multiple simulators
+#'   can simulate a model, the one with the highest priority will be used.
+#' @export
+use_ms <- function(binary, priority = 300) {
+  register_simulator(ms_class$new(binary, priority))
+  invisible(NULL)
+}
