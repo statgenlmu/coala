@@ -4,10 +4,12 @@
 \alias{search_executable}
 \title{Search the working directory and the run path for an executable}
 \usage{
-search_executable(name)
+search_executable(name, envir_var = NULL)
 }
 \arguments{
 \item{name}{The name of the executable to look for}
+
+\item{envir_var}{the name of the environment variable to use}
 }
 \value{
 The complete path of the executable is found, or 'NULL' if not.
