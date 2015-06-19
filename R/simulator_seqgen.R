@@ -96,7 +96,7 @@ seqgen_class <- R6Class('Seqgen', inherit = simulator_class,
       # Try to automatically find a jar file and java if not given
       if (is.null(binary)) {
         binary <- search_executable(c("seqgen", "seq-gen",
-                                      "seqgen.exe", "seq-gen.exe"))
+                                      "seqgen.exe", "seq-gen.exe"), "SEQGEN")
       }
       if (is.null(binary)) stop("No binary file for msms found.")
       if (!file.exists(binary)) stop("seqgen binary (", binary,

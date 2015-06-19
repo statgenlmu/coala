@@ -6,6 +6,8 @@ env:
     - R_BUILD_ARGS=" "
     - R_CHECK_ARGS="--as-cran"
     - BOOTSTRAP_LATEX="1"
+    - MS="$PWD/ms"
+    - MSMS="$PWD/msms"
 
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
@@ -20,7 +22,9 @@ install:
   - wget http://pst-public.s3-website.eu-central-1.amazonaws.com/ms
   - chmod +x ms
 
-script: ./travis-tool.sh run_tests
+script:
+  - Rscript -e 'testthat::test_check()'
+  - ./travis-tool.sh run_tests
 
 after_failure:
   - ./travis-tool.sh dump_logs

@@ -27,7 +27,7 @@ ms_class <- R6Class("ms", inherit = simulator_class,
     initialize = function(binary = NULL, priority = 100) {
       # Try to automatically find a binary if none is given
       if (is.null(binary)) {
-        binary <- search_executable(c("ms", "ms.exe"))
+        binary <- search_executable(c("ms", "ms.exe"), "MS")
       }
       if (is.null(binary)) stop("No binary for ms found.")
       if (!file.exists(binary)) stop("ms binary (", binary, ") does not exist.")

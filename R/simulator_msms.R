@@ -20,7 +20,7 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
   public = list(
     initialize = function(jar = NULL, java = NULL, priority = 40) {
       # Try to automatically find a jar file and java if not given
-      if (is.null(jar)) jar <- search_executable("msms.jar")
+      if (is.null(jar)) jar <- search_executable("msms.jar", "MSMS")
       if (is.null(jar)) stop("No jar file for msms found.")
       if (!file.exists(jar)) stop("msms jar (", jar, ") does not exist.")
       assert_that(is.character(jar) && length(jar) == 1)

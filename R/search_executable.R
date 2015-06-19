@@ -7,30 +7,32 @@
 #' tries to use this as path of the binary.
 #'
 #'  @param name The name of the executable to look for
+#'  @param envir_var the name of the environment variable to use
 #'  @return The complete path of the executable is found, or 'NULL' if not.
-search_executable <- function(name) {
+search_executable <- function(name, envir_var = NULL) {
   # See if an environment variable is given
   exe <- NULL
-  exe_path <- Sys.getenv(toupper(name))
-  if (exe_path != "" && file.exists(exe_path)) exe <- exe_path
+
+  if (!is.null(envir_var)) {
+    exe_path <- Sys.getenv(envir_var)
+    if (exe_path != "" && file.exists(exe_path)) return(exe_path)
+  }
 
   # Try to find it in the PATH folders and the Working directory
-  else {
-    if (Sys.info()[['sysname']] == "Windows") {
-      run_path <- strsplit(Sys.getenv("PATH"), ";")[[1]]
-    } else {
-      run_path <- strsplit(Sys.getenv("PATH"), ":")[[1]]
-    }
+  if (Sys.info()[['sysname']] == "Windows") {
+    run_path <- strsplit(Sys.getenv("PATH"), ";")[[1]]
+  } else {
+    run_path <- strsplit(Sys.getenv("PATH"), ":")[[1]]
+  }
 
-    candidates <- do.call(c, lapply(name, function(x) {
-      file.path(c(getwd(), run_path), x)
-    }))
+  candidates <- do.call(c, lapply(name, function(x) {
+    file.path(c(getwd(), run_path), x)
+  }))
 
-    for (candidate in candidates) {
-      if (file.exists(candidate)) {
-        exe <- candidate
-        break
-      }
+  for (candidate in candidates) {
+    if (file.exists(candidate)) {
+      exe <- candidate
+      break
     }
   }
 
