@@ -22,9 +22,7 @@ install:
   - wget http://pst-public.s3-website.eu-central-1.amazonaws.com/ms
   - chmod +x ms
 
-script:
-  - Rscript -e 'testthat::test_check()'
-  - ./travis-tool.sh run_tests
+script: ./travis-tool.sh run_tests
 
 after_failure:
   - ./travis-tool.sh dump_logs
