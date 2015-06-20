@@ -15,7 +15,7 @@ before_install:
   - ./travis-tool.sh bootstrap
 
 install:
-  - ./travis-tool.sh r_binary_install ape abc RcppArmadillo knitr
+  - ./travis-tool.sh r_binary_install ape abc RcppArmadillo knitr rmarkdown
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh aptget_install seq-gen
   - wget http://pst-public.s3-website.eu-central-1.amazonaws.com/msms.jar
