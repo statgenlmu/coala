@@ -21,7 +21,7 @@ and compile the binary following the instructions in the package.
 \section{Citation}{
 
 Richard R. Hudson.
-Generating samples under a Wright–Fisher neutral model of genetic variation.
+Generating samples under a Wright-Fisher neutral model of genetic variation.
 Bioinformatics (2002) 18 (2): 337-338
 doi:10.1093/bioinformatics/18.2.337
 }
