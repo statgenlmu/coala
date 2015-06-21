@@ -176,7 +176,7 @@ test_that("parse_sg_output works with a single file", {
 
 
 test_that("test.sg_generate_opts", {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
+  if (!has_seqgen()) skip('seqgen not installed')
   model.hky <- model_hky()
   opts <- sg_generate_opts(model.hky, c(1, 10), 1, c(0, 0, 10, 0, 0), 1)
   opts <- strsplit(opts, " ")[[1]]
@@ -191,7 +191,7 @@ test_that("test.sg_generate_opts", {
 
 
 test_that("generation of tree models works", {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
+  if (!has_seqgen()) skip('seqgen not installed')
   for (model in list(model_hky(), model_gtr())) {
     tree_model <- generate_tree_model(model)
     stats <- simulate(tree_model, pars = c(1, 5))
@@ -202,23 +202,23 @@ test_that("generation of tree models works", {
 
 
 test_that("simulation with seq-gen works", {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  sg_simulate <- get_simulator("seq-gen")$simulate
+  if (!has_seqgen()) skip('seqgen not installed')
+  sg <- get_simulator("seqgen")
 
   set.seed(100)
-  sum.stats <- sg_simulate(model_hky(), c(tau = 1, theta = 10))
+  sum.stats <- sg$simulate(model_hky(), c(tau = 1, theta = 10))
   expect_true(is.list(sum.stats))
   expect_true(is.array(sum.stats$jsfs))
   expect_true(sum(sum.stats$jsfs) > 0)
 
   set.seed(100)
-  sum.stats2 <- sg_simulate(model_hky(), c(tau = 1, theta = 10))
+  sum.stats2 <- sg$simulate(model_hky(), c(tau = 1, theta = 10))
   expect_equal(sum.stats2$jsfs, sum.stats$jsfs)
 })
 
 
 test_that("All example models can be simulated", {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
+  if (!has_seqgen()) skip('seqgen not installed')
   set.seed(12)
   for (model in list(model_hky(), model_gtr())) {
     sum_stats <- simulate(model, pars=c(1, 5))
@@ -229,7 +229,7 @@ test_that("All example models can be simulated", {
 
 test_that("test.RateHeterogenity", {
   skip("Temporarily deactivated")
-  if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
+  if (!has_seqgen()) skip('seqgen not installed')
   set.seed(12)
   #model.rh <-
   #  model.addMutationRateHeterogenity(model.hky, 0.1, 5, categories.number = 5)
@@ -239,8 +239,8 @@ test_that("test.RateHeterogenity", {
 
 
 test_that("test.seqgenWithMsms", {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
-  if (!msms_find_jar(FALSE, TRUE)) skip('msms not installed')
+  if (!has_seqgen()) skip('seqgen not installed')
+  if (!has_msms()) skip('msms not installed')
 
   m1 <- model_hky() + feat_selection(500, 250, population = 1, time = 0.1)
   set.seed(4444)
@@ -254,7 +254,7 @@ test_that("test.seqgenWithMsms", {
 
 
 test_that("seq-gen can simulate trios", {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
+  if (!has_seqgen()) skip('seqgen not installed')
   model <- model_gtr() +
     locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5)) +
     locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5)) +
@@ -266,7 +266,7 @@ test_that("seq-gen can simulate trios", {
 
 
 test_that("Error is thrown without an outgroup", {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
+  if (!has_seqgen()) skip('seqgen not installed')
   temp_files_before <- list.files(tempdir(), pattern = '^coala-[0-9]+-')
 
   model <- coal_model(c(3, 3), 10) +
@@ -284,7 +284,7 @@ test_that("Error is thrown without an outgroup", {
 
 
 test_that('a more complicated model works', {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seqgen not installed')
+  if (!has_seqgen()) skip('seqgen not installed')
   model <- coal_model(c(5,5,2), 1, 100) +
     feat_mutation(par_range('theta', .1, 40), model = 'HKY',
                   base_frequencies = c(0.26, 0.20, 0.22, 0.32),
@@ -308,15 +308,9 @@ test_that('a more complicated model works', {
 })
 
 
-test_that('printing a seqgen command works', {
-  sg <- get_simulator("seqgen")
-  cmd <- sg$get_cmd(model_gtr())
-  expect_equal(length(cmd), 2)
-})
-
-
 test_that("seqgen works with inter-locus variation", {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
+  if (!has_seqgen()) skip('seq-gen not installed')
+  sg <- get_simulator("seqgen")
 
   model_tmp <- coal_model(c(3, 3, 1), 2) +
     feat_pop_merge(2.0, 2, 1) +
@@ -328,28 +322,30 @@ test_that("seqgen works with inter-locus variation", {
   expect_true(has_variation(model_tmp))
 
   set.seed(1100)
-  sum_stats <- sg_simulate(model_tmp, parameters = numeric(0))
+  sum_stats <- sg$simulate(model_tmp, parameters = numeric(0))
   expect_is(sum_stats$jsfs, 'matrix')
   expect_that(sum(sum_stats$jsfs), is_more_than(0))
 })
 
 
 test_that('simulating unphased data works', {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
+  if (!has_seqgen()) skip('seq-gen not installed')
+  sg <- get_simulator("seqgen")
+
   model <- model_hky() + feat_unphased(2, 1) + sumstat_seg_sites()
-  stats <- sg_simulate(model, c(tau = 1, theta = 10))
+  stats <- sg$simulate(model, c(tau = 1, theta = 10))
   expect_equal(dim(stats$jsfs), c(4, 4))
   expect_equal(nrow(stats$seg_sites[[1]]), 6)
 
   model <- model_hky() + feat_unphased(2, 2) + sumstat_seg_sites()
-  stats <- sg_simulate(model, c(tau = 1, theta = 10))
+  stats <- sg$simulate(model, c(tau = 1, theta = 10))
   expect_equal(dim(stats$jsfs), c(7, 7))
   expect_equal(nrow(stats$seg_sites[[1]]), 12)
 })
 
 
 test_that("seq-gen works without recombination", {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
+  if (!has_seqgen()) skip('seq-gen not installed')
   model <- coal_model(c(3, 3, 1), 2) +
     feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
     feat_pop_merge(par_expr('2*tau'), 3, 1) +
@@ -363,7 +359,7 @@ test_that("seq-gen works without recombination", {
 
 
 test_that("seq-gen can simulate scaled models", {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
+  if (!has_seqgen()) skip('seq-gen not installed')
   model <- coal_model(c(3, 3, 1), 100, 10) +
     feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
     feat_pop_merge(par_expr('2*tau'), 3, 1) +
@@ -379,6 +375,17 @@ test_that("seq-gen can simulate scaled models", {
 
 
 test_that("Printing the command works", {
+  if (!has_seqgen()) skip('seq-gen not installed')
   cmd <- get_cmd(model_gtr())
   expect_that(cmd, is_a("character"))
+  expect_equal(length(cmd), 2)
+})
+
+
+test_that("seqgen can added manually", {
+  if (!has_seqgen()) skip("seqgen not installed")
+  sg_bin <- get_simulator("seqgen")$get_info()["binary"]
+  use_seqgen(sg_bin, 99)
+  expect_equal(get_simulator("seqgen")$get_priority(), 99)
+  expect_error(use_seqgen(tempfile("not-existant")))
 })

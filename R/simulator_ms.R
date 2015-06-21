@@ -15,49 +15,72 @@ conv_to_ms_arg.default <- function(feature, model) {
 }
 
 
-ms_create_cmd_tempalte <- function(model) {
-  cmd <- read_cache(model, 'ms_cmd')
-  if (is.null(cmd)) {
-    cmd <- paste(vapply(model$features, conv_to_ms_arg,
-                        FUN.VALUE = character(1), model),
-                 collapse = "")
-    cmd <- paste0("c('", cmd, "')")
-    cache(model, 'ms_cmd', cmd)
-  }
-
-  cmd
-}
-
-
-#' @importFrom phyclust ms
 #' @importFrom R6 R6Class
 #' @include simulator_class.R
-Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
+ms_class <- R6Class("ms", inherit = simulator_class,
   private = list(
-    name = 'ms',
-    priority = 100
+    name = "ms",
+    priority = 100,
+    binary = NULL
   ),
   public = list(
+    initialize = function(binary = NULL, priority = 300) {
+      # Try to automatically find a binary if none is given
+      if (is.null(binary)) {
+        binary <- search_executable(c("ms", "ms.exe"), "MS")
+      }
+      if (is.null(binary)) stop("No binary for ms found.")
+      if (!file.exists(binary)) stop("ms binary (", binary, ") does not exist.")
+
+      assert_that(is.character(binary) && length(binary) == 1)
+      assert_that(is.numeric(priority) && length(priority) == 1)
+
+      private$binary <- binary
+      private$priority <- priority
+    },
+    create_cmd_tempalte = function(model) {
+      cmd <- read_cache(model, 'ms_cmd')
+      if (is.null(cmd)) {
+        cmd <- paste(vapply(model$features, conv_to_ms_arg,
+                            FUN.VALUE = character(1), model),
+                     collapse = "")
+        cmd <- paste0("c('", cmd, "')")
+        cache(model, 'ms_cmd', cmd)
+      }
+
+      cmd
+    },
     simulate = function(model, parameters=numeric()) {
       stopifnot(length(parameters) == 0 | all(is.numeric(parameters)))
 
-      template <- ms_create_cmd_tempalte(model)
+      # Generate the simulation commands
+      cmd_template <- self$create_cmd_tempalte(model)
       sample_size <- sum(get_sample_size(model, for_sim = TRUE))
 
-      # Do the actuall simulation
-      files <- lapply(1:get_locus_group_number(model) , function(i) {
-        sim_cmds <- fill_cmd_template(template, model, parameters, i)
-        #print(sim_cmds)
-
-
-        vapply(1:nrow(sim_cmds), function(i) {
-          file <- tempfile("ms")
-          ms(sample_size,
-             format(sim_cmds[i, "locus_number"], scientific = FALSE),
-             sim_cmds[i, "command"], file)
-          file
-        }, character(1))
+      sim_cmds <- lapply(1:get_locus_group_number(model), function(group) {
+        fill_cmd_template(cmd_template, model, parameters, group)
       })
+
+      wd <- getwd()
+      setwd(tempdir())
+
+      # Do the actual simulation
+      files <- lapply(sim_cmds, function(sim_cmd) {
+        vapply(1:nrow(sim_cmd), function(j) {
+          file <- tempfile("ms")
+          opts <- paste(sample_size,
+                        format(sim_cmd[j, "locus_number"], scientific = FALSE),
+                        sim_cmd[j, "command"],
+                        "-seeds", paste(sample_seed(3, TRUE), collapse = " "))
+          ret <- system2(private$binary, opts, stdout = file)
+          unlink("seedms")
+
+          if (!file.exists(file)) stop("ms simulation failed")
+          file
+        }, character(1)) #nolint
+      })
+
+      setwd(wd)
 
       # Parse the output and calculate summary statistics
       if (requires_segsites(model)) {
@@ -72,21 +95,50 @@ Simulator_ms <- R6Class('Simulator_ms', inherit = Simulator,
         seg_sites <- NULL
       }
 
-      sum_stats <- calc_sumstats(seg_sites, files, model, parameters)
+      cmds <- lapply(sim_cmds, function(cmd) {
+        paste("ms", sample_size, cmd[ , 1], cmd[ , 2])
+      })
+
+      sum_stats <- calc_sumstats(seg_sites, files, model, parameters,
+                                 cmds, self)
 
       # Clean Up
       unlink(unlist(files))
       sum_stats
     },
     get_cmd = function(model) {
-      template <- ms_create_cmd_tempalte(model)
+      template <- self$create_cmd_tempalte(model)
       cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
       paste("ms",
             sum(get_sample_size(model, TRUE)),
             cmd[1, "locus_number"],
             cmd[1, "command"])
-    }
+    },
+    get_info = function() c(name = "ms", binary = private$binary)
   )
 )
 
-register_simulator(Simulator_ms)
+has_ms <- function() !is.null(simulators[['ms']])
+
+
+#' Use the simulator ms
+#'
+#' This adds the simulator 'ms' to the list of availiable simulators. In order
+#' to use 'ms', you first need to download its sources from
+#' \url{http://home.uchicago.edu/rhudson1/source/mksamples.html}
+#' and compile the binary following the instructions in the package.
+#'
+#' @section Citation:
+#' Richard R. Hudson.
+#' Generating samples under a Wright-Fisher neutral model of genetic variation.
+#' Bioinformatics (2002) 18 (2): 337-338
+#' doi:10.1093/bioinformatics/18.2.337
+#'
+#' @param binary The path of the ms binary that will be used for simulations.
+#' @param priority The priority for this simulator. If multiple simulators
+#'   can simulate a model, the one with the highest priority will be used.
+#' @export
+use_ms <- function(binary, priority = 300) {
+  register_simulator(ms_class$new(binary, priority))
+  invisible(NULL)
+}

@@ -3,9 +3,11 @@ language: c
 env:
   global:
     - WARNINGS_ARE_ERRORS=1
+    - BOOTSTRAP_LATEX="1"
     - R_BUILD_ARGS=" "
     - R_CHECK_ARGS="--as-cran"
-    - BOOTSTRAP_LATEX="1"
+    - MS="$PWD/ms"
+    - MSMS="$PWD/msms"
 
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
@@ -13,10 +15,12 @@ before_install:
   - ./travis-tool.sh bootstrap
 
 install:
-  - ./travis-tool.sh r_binary_install ape phyclust abc RcppArmadillo knitr
+  - ./travis-tool.sh r_binary_install ape abc RcppArmadillo knitr rmarkdown
   - ./travis-tool.sh install_deps
-  - ./travis-tool.sh aptget_install seq-gen
-  - wget http://www.mabs.at/ewing/msms/msms3.2rc-b163.jar && sudo mv msms3.2rc-b163.jar /usr/local/bin/msms.jar
+  - ./travis-tool.sh aptget_install seq-gen pandoc pandoc-citeproc
+  - wget http://pst-public.s3-website.eu-central-1.amazonaws.com/msms.jar
+  - wget http://pst-public.s3-website.eu-central-1.amazonaws.com/ms
+  - chmod +x ms
 
 script: ./travis-tool.sh run_tests
 

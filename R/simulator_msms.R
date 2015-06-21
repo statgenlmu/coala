@@ -1,42 +1,5 @@
-call_msms <- function(msms_args) {
-  msms_find_jar()
-
-  out_file <- tempfile('msms')
-  seed <- sample_seed(1)
-
-  # Create the command
-  cmd <- paste("java -jar", get_msms_path(), as.character(msms_args),
-               "-seed", seed, ">", out_file)
-
-  # Execute the command
-  capture.output(system(cmd))
-
-  if (!file.exists(out_file)) stop("msms simulation failed!")
-  if (file.info(out_file)$size == 0) stop("msms output is empty!")
-
-  out_file
-}
-
-msms_find_jar <- function(throw_error = TRUE, silent = FALSE) {
-  if ((!is.null(get_msms_path())) && file.exists(get_msms_path())) return(TRUE)
-
-  # Works on Linux only maybe
-  run_path <- strsplit(Sys.getenv("PATH"), ":")[[1]]
-  executables <- file.path(c(run_path, getwd()), "msms.jar")
-  for (exe in executables) {
-    if (file.exists(exe)) {
-      if (!silent) message(paste("Using", exe, "as msms implementation\n"))
-      set_msms_path(exe)
-      return(TRUE)
-    }
-  }
-
-  if (throw_error) stop("No msms executable found_")
-  FALSE
-}
-
-
 conv_to_msms_arg <- function(feature, model) UseMethod("conv_to_msms_arg")
+
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
@@ -45,54 +8,88 @@ conv_to_msms_arg.default <- function(feature, model) {
 }
 
 
-msms_create_cmd_tempalte <- function(model) {
-  cmd <- read_cache(model, 'msms_cmd')
-  if (is.null(cmd)) {
-    cmd <- paste(vapply(model$features, conv_to_msms_arg,
-                        FUN.VALUE = character(1), model),
-                 collapse = "")
-    cmd <- paste0("c('", cmd, "')")
-    cache(model, 'msms_cmd', cmd)
-  }
-  cmd
-}
-
-
 #' @include simulator_class.R
 #' @include simulator_ms.R
-Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
+msms_class <- R6Class("Msms", inherit = simulator_class,
   private = list(
-    name = 'msms',
-    priority = 40
+    name = "msms",
+    jar = NULL,
+    java = NULL,
+    priority = 200
   ),
   public = list(
+    initialize = function(jar = NULL, java = NULL, priority = 200) {
+      # Try to automatically find a jar file and java if not given
+      if (is.null(jar)) jar <- search_executable("msms.jar", "MSMS")
+      if (is.null(jar)) stop("No jar file for msms found.")
+      if (!file.exists(jar)) stop("msms jar (", jar, ") does not exist.")
+      assert_that(is.character(jar) && length(jar) == 1)
+      private$jar <- jar
+
+      if (is.null(java)) java <- search_executable(c("java", "java.exe"))
+      if (is.null(java)) stop("Java not found.")
+      if (!file.exists(java)) stop("Java not found.")
+      assert_that(is.character(java) && length(java) == 1)
+      private$java <- java
+
+      assert_that(is.numeric(priority) && length(priority) == 1)
+      private$priority <- priority
+    },
+    call_msms = function(msms_args) {
+      out_file <- tempfile('msms')
+      seed <- sample_seed(1)
+
+      # Create the command
+      arg <- paste("-jar", private$jar, as.character(msms_args), "-seed", seed)
+
+      # Execute the command
+      status <- system2(private$java, args = arg, stdout = out_file)
+
+      if (status != 0 || !file.exists(out_file)) stop("msms simulation failed")
+      if (file.info(out_file)$size == 0) stop("msms output is empty")
+
+      out_file
+    },
     get_cmd = function(model) {
-      template <- msms_create_cmd_tempalte(model)
+      template <- self$create_cmd_tempalte(model)
       cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
       paste("msms",
             sum(get_sample_size(model, TRUE)),
             cmd[1, "locus_number"],
             cmd[1, "command"])
     },
+    create_cmd_tempalte = function(model) {
+      cmd <- read_cache(model, "msms_cmd")
+      if (is.null(cmd)) {
+        cmd <- paste(vapply(model$features, conv_to_msms_arg,
+                            FUN.VALUE = character(1), model),
+                     collapse = "")
+        cmd <- paste0("c('", cmd, "')")
+        cache(model, "msms_cmd", cmd)
+      }
+      cmd
+    },
     simulate = function(model, parameters=numeric(0)) {
-      template <- msms_create_cmd_tempalte(model)
+      cmd_template <- self$create_cmd_tempalte(model)
       sample_size <- sum(get_sample_size(model, for_sim = TRUE))
 
-      # Run the simulation(s)
-      files <- lapply(1:get_locus_group_number(model), function(i) {
-        cmds <- fill_cmd_template(template, model, parameters, i)
+      sim_cmds <- lapply(1:get_locus_group_number(model), function(group) {
+        fill_cmd_template(cmd_template, model, parameters, group)
+      })
 
-        vapply(1:nrow(cmds), function(i) {
+      # Run the simulation(s)
+      files <- lapply(sim_cmds, function(sim_cmd) {
+        vapply(1:nrow(sim_cmd), function(i) {
           msms_options <- paste(sample_size,
-                                cmds[i, "locus_number"],
-                                cmds[i, "command"])
-          call_msms(msms_options)
-        }, character(1))
+                                sim_cmd[i, "locus_number"],
+                                sim_cmd[i, "command"])
+          self$call_msms(msms_options)
+        }, character(1)) #nolint
       })
 
       # Parse the output and calculate summary statistics
       if (requires_segsites(model)) {
-        seg_sites <- parse_ms_output(files,
+        seg_sites <- parse_ms_output(files, #nolint
                                      get_sample_size(model, for_sim = TRUE),
                                      get_locus_number(model))
 
@@ -103,13 +100,44 @@ Simulator_msms <- R6Class("Simulator_msms", inherit = Simulator,
         seg_sites <- NULL
       }
 
-      sum_stats <- calc_sumstats(seg_sites, files, model, parameters)
+      cmds <- lapply(sim_cmds, function(cmd) {
+        paste("ms", sample_size, cmd[ , 1], cmd[ , 2])
+      })
+
+      sum_stats <- calc_sumstats(seg_sites, files, model, parameters,
+                                 cmds, self)
 
       # Clean Up
       unlink(unlist(files))
       sum_stats
+    },
+    get_info = function() {
+      c(name = "msms", jar = private$jar, java = private$java)
     }
   )
 )
 
-register_simulator(Simulator_msms)
+has_msms <- function() !is.null(simulators[['msms']])
+
+
+#' Use the simulator msms
+#'
+#' This adds the simulator 'msms' to the list of availiable simulators. To add
+#' msms, you need to download the jar file and have java installed on your
+#' system.
+#'
+#' @section Citation:
+#' Gregory Ewing and Joachim Hermisson.
+#' MSMS: a coalescent simulation program including recombination,
+#' demographic structure and selection at a single locus.
+#' Bioinformatics (2010) 26 (16): 2064-2065
+#' doi:10.1093/bioinformatics/btq322
+#'
+#' @param jar The path of the msms jar file.
+#' @param java The path of the java executable on your system.
+#' @inheritParams use_ms
+#' @export
+use_msms <- function(jar, java, priority = 200) {
+  register_simulator(msms_class$new(jar, java, priority))
+  invisible(NULL)
+}

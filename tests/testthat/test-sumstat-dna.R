@@ -38,7 +38,7 @@ s10       CCTCAGGGCC", file = seqgen_file)
 
 
 test_that("DNA can be simulated", {
-  if (!sg_find_exe(FALSE, TRUE)) skip('seq-gen not installed')
+  if (!has_seqgen()) skip('seq-gen not installed')
   model <- coal_model(c(5, 5), 1, 10) +
     feat_pop_merge(.5, 2, 1) +
     feat_mutation(5, model = 'GTR', gtr_rates = 1:6) +

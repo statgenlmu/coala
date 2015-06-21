@@ -16,3 +16,8 @@ test_that('there are no remaining temporary files', {
   }
   expect_equal(length(temp_files), 0)
 })
+
+
+test_that("no seedms files were created", {
+  expect_false(file.exists("seedms"))
+})

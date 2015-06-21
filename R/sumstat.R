@@ -61,10 +61,15 @@ get_summary_statistics <- function(model) {
 }
 
 
-calc_sumstats <- function(seg_sites, files, model, pars) {
+calc_sumstats <- function(seg_sites, files, model, pars, cmds, simulator) {
+  if (missing(pars)) pars <- numeric(0)
   stopifnot(is.model(model))
-  sum_stats <- list()
-  if (!missing(pars)) sum_stats[['pars']] <- pars
+
+  if (is.list(cmds)) cmds <- do.call(c, cmds)
+
+  sum_stats <- list(pars = pars,
+                    cmds = cmds,
+                    simulator = simulator$get_info())
 
   if (is_unphased(model) && requires_segsites(model)) {
     seg_sites <- unphase_segsites(seg_sites,

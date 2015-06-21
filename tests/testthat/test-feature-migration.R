@@ -14,19 +14,20 @@ test_that('Creation of migration features works', {
 })
 
 
-test_that("generating ms cmd for growth works", {
+test_that("generating scrm cmd for growth works", {
   model <- coal_model(4:5, 1) + feat_migration(par_range('m', 1, 2), 2, 1)
-  expect_equal(get_simulator("ms")$get_cmd(model),
-               "ms 9 1 -I 2 4 5 -em 0 2 1 m ")
+  expect_equal(get_simulator("scrm")$get_cmd(model),
+               "scrm 9 1 -I 2 4 5 -em 0 2 1 m ")
   model <- coal_model(4:5, 1) + feat_migration(3, symmetric = TRUE, time = 5)
-  expect_equal(get_simulator("ms")$get_cmd(model), "ms 9 1 -I 2 4 5 -eM 5 3 ")
+  expect_equal(get_simulator("scrm")$get_cmd(model),
+               "scrm 9 1 -I 2 4 5 -eM 5 3 ")
 })
 
 
-test_that("migration can be simulated with ms", {
+test_that("migration can be simulated with scrm", {
   model <- coal_model(4:5, 1) +
     feat_mutation(1) +
     par_range('m', 1, 2) +
     feat_migration(par_expr(2 * m), 2, 1, time = par_expr(log(m)))
-  expect_that(get_simulator("ms")$simulate(model, c(m = 1.5)), is_a("list"))
+  expect_that(get_simulator("scrm")$simulate(model, c(m = 1.5)), is_a("list"))
 })

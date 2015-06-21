@@ -5,12 +5,12 @@ test_that('Creation of growth features works', {
 })
 
 
-test_that("generating ms cmd for growth works", {
-  ms <- get_simulator("ms")
+test_that("generating scrm cmd for growth works", {
+  scrm <- get_simulator("scrm")
   model <- coal_model(15, 1, 25) + feat_recombination(par_range("rho", 0, 1))
-  expect_equal(ms$get_cmd(model), "ms 15 1 -r rho locus_length ")
+  expect_equal(scrm$get_cmd(model), "scrm 15 1 -r rho locus_length ")
   model <- coal_model(15, 1, 25) + feat_recombination(5)
-  expect_equal(ms$get_cmd(model), "ms 15 1 -r 5 locus_length ")
+  expect_equal(scrm$get_cmd(model), "scrm 15 1 -r 5 locus_length ")
 })
 
 

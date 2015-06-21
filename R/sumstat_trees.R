@@ -17,7 +17,7 @@ sumstat_trees <- function(name = "trees") {
 
 
 SumstatSgTrees <- R6Class('SumstatSgTrees', inherit = Sumstat, #nolint
-  private = list(req_trees = TRUE),
+  private = list(req_files = TRUE, req_trees = TRUE),
   public = list(
     calculate = function(seg_sites, files, model) {
       trees <- parse_trees(files, get_locus_number(model), FALSE)
@@ -28,7 +28,7 @@ SumstatSgTrees <- R6Class('SumstatSgTrees', inherit = Sumstat, #nolint
         files <- sapply(locus_trees, function(locus) {
           if (length(locus) > 0) {
             file <- tempfile("trio_tree")
-            write(locus, file, sep="\n")
+            write(locus, file, sep = "\n")
           } else {
             file <- NULL
           }

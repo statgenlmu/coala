@@ -201,4 +201,3 @@ prepare_pars <- function(pars, model) {
   # Sample from priors and return
   c(pars, sample_par_priors(model))
 }
-

@@ -25,27 +25,29 @@ test_that('Creation of finite sites features works', {
 })
 
 
-test_that("Parsing mutation to ms args works", {
+test_that("Parsing mutation to scrm args works", {
   feat <- feat_mutation(5)
-  ms_arg <- conv_to_ms_arg(feat, NULL)
-  expect_that(ms_arg, is_a("character"))
-  expect_true(grepl("-t", ms_arg))
-  expect_true(grepl("5", ms_arg))
+  scrm_arg <- conv_to_scrm_arg(feat, NULL)
+  expect_that(scrm_arg, is_a("character"))
+  expect_true(grepl("-t", scrm_arg))
+  expect_true(grepl("5", scrm_arg))
 
-  ms <- get_simulator("ms")
+  scrm <- get_simulator("scrm")
   model <- coal_model(15, 1) + feat_mutation(par_range("theta", 1, 2))
-  expect_equal(ms$get_cmd(model), "ms 15 1 -t theta ")
+  expect_equal(scrm$get_cmd(model), "scrm 15 1 -t theta ")
   model <- coal_model(15, 1) + feat_mutation(5)
-  expect_equal(ms$get_cmd(model), "ms 15 1 -t 5 ")
+  expect_equal(scrm$get_cmd(model), "scrm 15 1 -t 5 ")
   model <- coal_model(15, 1) +
     par_range("x", 1, 2) +
     feat_mutation(par_expr(2 * x))
-  expect_equal(ms$get_cmd(model), "ms 15 1 -t 2 * x ")
+  expect_equal(scrm$get_cmd(model), "scrm 15 1 -t 2 * x ")
 
-  expect_error(conv_to_ms_arg(feat_mutation(5, "GTR"), NULL))
+  expect_error(conv_to_scrm_arg(feat_mutation(5, "GTR"), NULL))
 })
 
+
 test_that("Parsing mutation to seqgen args works", {
+  if (!has_seqgen()) skip("seqgen not installed")
   sg <- get_simulator("seqgen")
   model <- coal_model(10, 1) + feat_mutation(5, model = 'GTR', gtr_rates = 1:6)
   sg$get_cmd(model)

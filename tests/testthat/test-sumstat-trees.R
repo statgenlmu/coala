@@ -16,7 +16,9 @@ test_that("simulating trees for seq-gen works", {
                                  locus_averaged(2, 10) +
                                  locus_trio(locus_length = c(1,3,5),
                                             distance = c(2,4)))
-  stats <- simulate(model, pars=c(1, 5))
+
+  expect_true(requires_files(model))
+  stats <- simulate(model, pars = c(1, 5))
   expect_equal(length(stats$trees), 3)
 
   for (i in 1:2) {
