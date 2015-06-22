@@ -7,7 +7,7 @@ SumstatTrees <- R6Class('SumstatTrees', inherit = Sumstat, #nolint
   )
 )
 
-#' Returns ancestral tress in NEWICK fromat from simulations
+#' Returns ancestral tress in NEWICK format from simulations
 #'
 #' @export
 #' @inheritParams sumstat_four_gamete

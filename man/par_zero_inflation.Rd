@@ -2,12 +2,12 @@
 % Please edit documentation in R/par_zero_inflation.R
 \name{par_zero_inflation}
 \alias{par_zero_inflation}
-\title{Zero inflation for Parmeters}
+\title{Zero inflation for Parameters}
 \usage{
 par_zero_inflation(par, prob)
 }
 \arguments{
-\item{par}{A parameter whichs value will be set variable.}
+\item{par}{A parameter whose value will be set variable.}
 
 \item{prob}{The probability that the parameters value will be set to `0`
 for each locus.}
@@ -17,7 +17,7 @@ This adds a zero inflation to the distribution of a parameter for the
 different loci. When using this, each locus will be simulated with a
 parameter value of 0 with probability \code{prob}, or with parameter's
 original value in the remaining cases.
-are called seperately for each locus, which can dramatically increase the
+are called separately for each locus, which can dramatically increase the
 time needed to simulate models with many loci.
 }
 

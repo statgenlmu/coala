@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_check.R
 \name{check_model}
 \alias{check_model}
-\title{Check which simulatior can simulate a model}
+\title{Check which simulator can simulate a model}
 \usage{
 check_model(model)
 }

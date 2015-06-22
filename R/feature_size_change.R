@@ -23,7 +23,7 @@ Feature_size_change <- R6Class("Feature_size_change", inherit = Feature,
 #'
 #' @param new_size A \code{\link{parameter}} giving the new size of the
 #'   population, as a factor of N0.
-#' @param population The number of the population whichs size is changed.
+#' @param population The number of the population whose size is changed.
 #' @param time The time point at which the size changes.
 #' @return A feature which can be added to a model.
 #' @export

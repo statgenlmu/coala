@@ -122,8 +122,8 @@ has_msms <- function() !is.null(simulators[['msms']])
 
 #' Use the simulator msms
 #'
-#' This adds the simulator 'msms' to the list of availiable simulators. To add
-#' msms, you need to download the jar file and have java installed on your
+#' This adds the simulator 'msms' to the list of available simulators. To add
+#' msms, you need to download the jar file and have Java installed on your
 #' system.
 #'
 #' @section Citation:
@@ -135,9 +135,9 @@ has_msms <- function() !is.null(simulators[['msms']])
 #'
 #' @param jar The path of the msms jar file.
 #' @param java The path of the java executable on your system.
-#' @inheritParams use_ms
+#' @inheritParams activate_ms
 #' @export
-use_msms <- function(jar, java, priority = 200) {
+activate_msms <- function(jar, java, priority = 200) {
   register_simulator(msms_class$new(jar, java, priority))
   invisible(NULL)
 }

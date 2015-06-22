@@ -42,7 +42,7 @@ is_feat_sample <- function(feat) any("Feature_sample" == class(feat))
 #' @describeIn get_features Returns a vector of samples sizes per
 #'   population.
 #' @param for_sim If true, the sample size used internally for the simulation
-#'   will be reported rather than the number of actuall samples. The numbers
+#'   will be reported rather than the number of actual samples. The numbers
 #'   can be unequal for the simulation of unphased data.
 #' @export
 get_sample_size <- function(model, for_sim=FALSE) {

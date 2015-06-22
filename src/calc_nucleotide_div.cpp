@@ -11,7 +11,7 @@ NumericVector calc_nucleotide_div(List seg_sites,
   size_t n = individuals.size(), m;
   double cnt, c = 2.0 / (n * (n - 1));
 
-  for (int locus = 0; locus < n_loci; ++locus) {
+  for (size_t locus = 0; locus < n_loci; ++locus) {
     ss = as<NumericMatrix>(seg_sites[locus]);
     m = ss.ncol();
     cnt = 0;

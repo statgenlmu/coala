@@ -181,7 +181,7 @@ conv_to_ms_arg(feature, model)
 }
 \description{
 These functions are exported only for technical reasons
-(because they are S3 methods) and are not indended for
+(because they are S3 methods) and are not intended for
 users.
 }
 \section{Methods (by class)}{

@@ -7,7 +7,7 @@
 #' @param sample_size Defines the number of populations and the number of
 #'   samples taken from each population. Given as an integer vector which
 #'   length defines the number of population and each entry gives the number
-#'   of haplodies sampled from the corresponding population.
+#'   of haploids sampled from the corresponding population.
 #' @param loci_number You can optionally add a number of loci with equal length
 #'   to the model. This gives to number of loci to add.
 #' @param loci_length This gives the length of the loci to add.

@@ -6,14 +6,14 @@
 using namespace Rcpp;
 
 NumericMatrix read_sequence(std::ifstream &output,
-                            const int individuals,
-                            const int locus_length) {
+                            const long unsigned int individuals,
+                            const long unsigned int locus_length) {
 
   NumericMatrix seq(individuals, locus_length);
   std::string tmp;
   size_t seq_nr;
 
-  for (int i=0; i<individuals; ++i) {
+  for (size_t i=0; i<individuals; ++i) {
     // Read sequence number
     if (!output.good())
     stop("Unexpeced end of seq-gen file.");

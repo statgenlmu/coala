@@ -56,7 +56,7 @@ is.locus <- function(locus) 'Locus' %in% class(locus)
 #'
 #' # A model with two loci. The first group consists of 10 loci with
 #' # a length 560bp each, the second one of two loci with length 750bp and 560pb,
-#' # repectively.
+#' # respectively.
 #' coal_model(20, 10, 560) +
 #'   locus_single(750) +
 #'   locus_single(430)
@@ -79,7 +79,7 @@ locus_averaged <- function(number, length) {
 #' @param locus_length An integer vector of length 3, giving the length of each
 #'   of the three loci (left, middle and right).
 #' @param distance A vector of two, giving the distance between left and middle,
-#'   and middle an right locus, in basepairs.
+#'   and middle an right locus, in base pairs.
 #' @export
 #' @examples
 #' coal_model(c(25,25)) +

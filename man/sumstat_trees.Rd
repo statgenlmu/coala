@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat_trees.R
 \name{sumstat_trees}
 \alias{sumstat_trees}
-\title{Returns ancestral tress in NEWICK fromat from simulations}
+\title{Returns ancestral tress in NEWICK format from simulations}
 \usage{
 sumstat_trees(name = "trees")
 }
@@ -12,6 +12,6 @@ the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 }
 \description{
-Returns ancestral tress in NEWICK fromat from simulations
+Returns ancestral tress in NEWICK format from simulations
 }
 

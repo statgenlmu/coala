@@ -2,11 +2,11 @@
 % Please edit documentation in R/simulator_class.R
 \name{list_simulators}
 \alias{list_simulators}
-\title{Returns a the available simulators}
+\title{Returns the available simulators}
 \usage{
 list_simulators()
 }
 \description{
-This returns a the usuable simulators and their options
+This returns the usable simulators and their options
 }
 

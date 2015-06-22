@@ -30,9 +30,9 @@ Feature_selection <- R6Class("Feature_selection", inherit = Feature,
   )
 )
 
-#' Adds positiv selection to a model
+#' Adds positive selection to a model
 #'
-#' @param population The populaton in which the allele is selected.
+#' @param population The population in which the allele is selected.
 #' @param time The time at which the selection starts.
 #' @param strength_AA The selection strength for the selected homozygote
 #' @param strength_Aa The selection strength for the heterozygote.

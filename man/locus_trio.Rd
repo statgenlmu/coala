@@ -12,7 +12,7 @@ locus_trio(locus_length = c(left = 1000, middle = 1000, right = 1000),
 of the three loci (left, middle and right).}
 
 \item{distance}{A vector of two, giving the distance between left and middle,
-and middle an right locus, in basepairs.}
+and middle an right locus, in base pairs.}
 
 \item{number}{The number of loci to add.}
 }

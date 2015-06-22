@@ -11,7 +11,7 @@ feat_size_change(new_size, population, time = "0")
 \item{new_size}{A \code{\link{parameter}} giving the new size of the
 population, as a factor of N0.}
 
-\item{population}{The number of the population whichs size is changed.}
+\item{population}{The number of the population whose size is changed.}
 
 \item{time}{The time point at which the size changes.}
 }

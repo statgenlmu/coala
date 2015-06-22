@@ -43,7 +43,7 @@ get_summary_statistics(model)
 \item{model}{The coalescent model from which aspects are returned}
 
 \item{for_sim}{If true, the sample size used internally for the simulation
-will be reported rather than the number of actuall samples. The numbers
+will be reported rather than the number of actual samples. The numbers
 can be unequal for the simulation of unphased data.}
 
 \item{locus}{The number of the locus.}

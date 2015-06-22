@@ -10,7 +10,7 @@ coal_model(sample_size, loci_number = 0, loci_length = 1000)
 \item{sample_size}{Defines the number of populations and the number of
 samples taken from each population. Given as an integer vector which
 length defines the number of population and each entry gives the number
-of haplodies sampled from the corresponding population.}
+of haploids sampled from the corresponding population.}
 
 \item{loci_number}{You can optionally add a number of loci with equal length
 to the model. This gives to number of loci to add.}

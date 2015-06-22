@@ -1,6 +1,4 @@
-private <- NULL
-self <- NULL
-
+#' @importFrom R6 R6Class
 Feature_mutation <- R6Class("Feature_mutation", inherit = Feature,
   private = list(
     model = NA,

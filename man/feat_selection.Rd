@@ -2,7 +2,7 @@
 % Please edit documentation in R/feature_selection.R
 \name{feat_selection}
 \alias{feat_selection}
-\title{Adds positiv selection to a model}
+\title{Adds positive selection to a model}
 \usage{
 feat_selection(strength_AA, strength_Aa, strength_A, population = 1, time)
 }
@@ -15,12 +15,12 @@ feat_selection(strength_AA, strength_Aa, strength_A, population = 1, time)
 haploid model. \code{strength_AA} and \code{strength_Aa} are ignored
 when this is argument is given.}
 
-\item{population}{The populaton in which the allele is selected.}
+\item{population}{The population in which the allele is selected.}
 
 \item{time}{The time at which the selection starts.}
 }
 \description{
-Adds positiv selection to a model
+Adds positive selection to a model
 }
 \examples{
 # Positive selection in population 2:

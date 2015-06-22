@@ -4,7 +4,7 @@ author: "Paul Staab"
 date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Coala-Installation}
+  %\VignetteIndexEntry{How to use ms, msms and seqgen}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
@@ -12,56 +12,69 @@ vignette: >
 Coala can call the coalescent simulators _ms_ [1], _msms_ [2] and _scrm_ [3] 
 and use _seq-gen_ [4] for finite sites simulations. 
 
+
+# Installation
+
 The R version of _scrm_ should get installed automatically as a dependeny of 
-coala. The other three programs need to be installed manually. Short 
-instructions  on obtaining and compiling the programs are given in the help 
-pages of `use_ms`, `use_msms` and `use_seqgen`. 
-This functions can also be used to activate the simulators from within R.
+coala. For the other programs, you need to have an executable binary available
+on your system. Short instructions on obtaining and compiling the programs are 
+given in the help pages of `activate_ms`, `activate_msms` and `activate_seqgen`. 
 
-Alternatively, you can also place the programs binaries in your working
+
+# Activation
+
+Additionally to having the binary for a simulator, you need to inform `coala`
+where the binary is. We refere to this process as _activation_ of a binary.
+Afterwards, `coala` will use the simulator automatically
+where appropriate.
+
+There are three different ways to activate a binary:
+
+1. Use the `activate_ms`, `activate_msms` and `activate_seqgen` functions to
+activate the simulators from within R. You should use the functions before
+creating a model.
+2. Alternatively, you can place the programs binaries in your working
 directory or in a folder listed in your _PATH_ environment variable using
-one of the expected names below. If you do that, coala should be able
-to automatically detect and activate the corresponding simulator when 
-it is loaded via `libary(coala)`.
-
-As a third option, you can start the R session with environment variables
+one of the names listed under "Expected Binary Names" below. If there is
+a match file, coala will automatically activate the simulator.
+3. You can start the R session with an environment variable
 that hold the path to the binaries. In this case, the simulators should
 also be automatically be activated when the coala package is loaded.
 
-| Simulator | Priority | Expected Binary Names                    | Environment Var | Function   |
-| ---       | ---      | ---                                      | ---             | ---        |
-| seq-gen   | 100      | seqgen, seq-gen, seqgen.exe, seq-gen.exe | SEQGEN          | use_seqgen |
-| msms      | 200      | msms.jar / java, java.exe                | MSMS / JAVA     | use_msms   |
-| ms        | 300      | ms, ms.exe                               | MS              | use_ms     |
-| scrm      | 400      |                                          |                 |            |
+| Simulator | Priority | Expected Binary Names                    | Environment Var | Function        |
+| ---       | ---      | ---                                      | ---             | ---             |
+| seq-gen   | 100      | seqgen, seq-gen, seqgen.exe, seq-gen.exe | SEQGEN          | activate_seqgen |
+| msms      | 200      | msms.jar / java, java.exe                | MSMS / JAVA     | activate_msms   |
+| ms        | 300      | ms, ms.exe                               | MS              | activate_ms     |
+| scrm      | 400      |                                          |                 |                 |
 
 
 In case multiple simulators can simulate a model, the one with the highest 
 priority is be used. The priority values can be adapted using the 
-`use_ms`, `use_msms` and `use_seqgen` commands.
+`activate_ms`, `activate_msms` and `activate_seqgen` commands.
 
 Finally, you can use the `list_simulators()` command to view which 
 simulators are currently available.
 
 
-References
-----------
+# References
+
 * __[1]__: Richard R. Hudson. 
   _Generating samples under a Wright-Fisher neutral model of genetic variation._
   Bioinformatics (2002) 18 (2): 337-338
-  [doi:10.1093/bioinformatics/18.2.337](http://doi.org/10.1093/bioinformatics/18.2.337)
+  [10.1093/bioinformatics/18.2.337](http://doi.org/10.1093/bioinformatics/18.2.337)
 * __[2]__: Gregory Ewing and Joachim Hermisson.
   _MSMS: a coalescent simulation program including recombination,
   demographic structure and selection at a single locus._
   Bioinformatics (2010) 26 (16): 2064-2065
-  [doi:10.1093/bioinformatics/btq322](http://doi.org/10.1093/bioinformatics/btq322)
+  [10.1093/bioinformatics/btq322](http://doi.org/10.1093/bioinformatics/btq322)
 * __[3]__: Paul R. Staab, Sha Zhu, Dirk Metzler and Gerton Lunter. 
   _scrm: efficiently simulating long sequences using the approximated 
   coalescent with recombination._
   Bioinformatics (2015) 31 (10): 1680-1682. 
-  [doi:10.1093/bioinformatics/btu861](http://doi.org/doi:10.1093/bioinformatics/btu861)
+  [10.1093/bioinformatics/btu861](http://doi.org/doi:10.1093/bioinformatics/btu861)
 * __[4]__: Andrew Rambaut and Nicholas C. Grass.
   _Seq-Gen: an application for the Monte Carlo simulation of DNA sequence
   evolution along phylogenetic trees._
   Comput Appl Biosci (1997) 13 (3): 235-238
-  [doi:10.1093/bioinformatics/13.3.235](http://doi.org/10.1093/bioinformatics/13.3.235)
+  [10.1093/bioinformatics/13.3.235](http://doi.org/10.1093/bioinformatics/13.3.235)

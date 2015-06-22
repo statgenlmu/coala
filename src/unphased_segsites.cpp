@@ -6,8 +6,8 @@ using namespace Rcpp;
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 List unphase_segsites(const List seg_sites,
-                      const int ploidy,
-                      const int samples_per_ind) {
+                      const long unsigned int ploidy,
+                      const long unsigned int samples_per_ind) {
 
   NumericMatrix target, source = as<NumericMatrix>(seg_sites[0]);
   size_t individuals = source.nrow() / ploidy;
@@ -51,7 +51,7 @@ List unphase_segsites(const List seg_sites,
       NumericVector pos = no_init(new_n_snps);
       NumericVector loc = no_init(new_n_snps) ;
 
-      for (int i = 0, j = 0; i < n_snps; i++) {
+      for (size_t i = 0, j = 0; i < n_snps; i++) {
         if (is_snp[i]) {
           out(_,j) = target(_,i);
           pos[j] = positions[i];

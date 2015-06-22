@@ -26,9 +26,9 @@ SumstatFourGamete <- R6Class('SumstatFourGamete', inherit = Sumstat, #nolint
 #' of derived and ancestral alleles at the SNPs are observed in a gamete/a
 #' haplotype. Under an Infinite-Sites mutation model, a violation indicates that
 #' there must have been at least one recombination event between the SNPs.
-#' This summmary statistic calculates the percentage of certain pairs of SNPs
+#' This summary statistic calculates the percentage of certain pairs of SNPs
 #' that violate the Four-Gamete-Condition.
-#' It is sensitive for recombination and particulary useful when estimating
+#' It is sensitive for recombination and particularly useful when estimating
 #' recombination rates.
 #'
 #' The statistic generates a matrix where each row represents one locus, and the

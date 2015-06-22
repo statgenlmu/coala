@@ -21,7 +21,7 @@ On simulation, this returns a vector with the value of Tajima's D for
 This calculates Tajima's D from the simulation results when added to a model.
 }
 \details{
-Tajima's D was introducted by
+Tajima's D was introduced by
 
 Tajima, F. (1989). "Statistical method for testing the neutral mutation
 hypothesis by DNA polymorphism.". Genetics 123 (3): 585-95.

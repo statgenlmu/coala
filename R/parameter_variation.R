@@ -42,10 +42,10 @@ is.par_variation <- function(object) inherits(object, "Par_variation")
 #' will follow a gamma distribution with mean of the parameters original
 #' value, and the variance specified as argument \code{variance}. This requires
 #' that the original value is always positive. When using this, the simulators
-#' are called seperately for each locus, which can dramatically increase the
+#' are called separately for each locus, which can dramatically increase the
 #' time needed to simulate models with many loci.
 #'
-#' @param par A parameter whichs value will be set variable.
+#' @param par A parameter whose value will be set variable.
 #' @param variance The variance of the gamma distribution, which the values used
 #'   for simulation will follow.
 #' @export

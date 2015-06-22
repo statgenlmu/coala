@@ -122,14 +122,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // unphase_segsites
-List unphase_segsites(const List seg_sites, const int ploidy, const int samples_per_ind);
+List unphase_segsites(const List seg_sites, const long unsigned int ploidy, const long unsigned int samples_per_ind);
 RcppExport SEXP coala_unphase_segsites(SEXP seg_sitesSEXP, SEXP ploidySEXP, SEXP samples_per_indSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< const List >::type seg_sites(seg_sitesSEXP);
-    Rcpp::traits::input_parameter< const int >::type ploidy(ploidySEXP);
-    Rcpp::traits::input_parameter< const int >::type samples_per_ind(samples_per_indSEXP);
+    Rcpp::traits::input_parameter< const long unsigned int >::type ploidy(ploidySEXP);
+    Rcpp::traits::input_parameter< const long unsigned int >::type samples_per_ind(samples_per_indSEXP);
     __result = Rcpp::wrap(unphase_segsites(seg_sites, ploidy, samples_per_ind));
     return __result;
 END_RCPP

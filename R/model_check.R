@@ -1,4 +1,4 @@
-#' Check which simulatior can simulate a model
+#' Check which simulator can simulate a model
 #'
 #' This function allows to check which of the available simulators can
 #' simulate a given model. It also states the problems for the ones that
