@@ -4,7 +4,7 @@ coala
 [![Linux Build Status](https://travis-ci.org/statgenlmu/coala.png?branch=master)](https://travis-ci.org/statgenlmu/coala) 
 [![Windows Build status](https://ci.appveyor.com/api/projects/status/uoduv0q64ddnqfva/branch/master?svg=true)](https://ci.appveyor.com/project/paulstaab/coala-02w83/branch/master)
 [![Coverage Status](https://coveralls.io/repos/statgenlmu/coala/badge.svg?branch=master)](https://coveralls.io/r/statgenlmu/coala)
-[![CRAN Status](http://www.r-pkg.org/badges/version/jaatha)](http://cran.r-project.org/web/packages/jaatha)
+[![CRAN Status](http://www.r-pkg.org/badges/version/coala)](http://cran.r-project.org/web/packages/coala)
 
 Coala is an R package that allows to simulate biological sequences according
 to a given model of evolution.  Rather than conduction the simulations itself,
@@ -39,7 +39,7 @@ Usage
 -----
 Coala comes with a [vignette](http://rpubs.com/paulstaab/coala-introduction)
 that explains the packages concepts and is a good place to start.
-The [ABC vignette](http://rpubs.com/paulstaab/coala-abc) given an example
+The [ABC vignette](http://rpubs.com/paulstaab/coala-abc) gives an example
 how coala can be used to conduct the simulations for an Approximate Bayesian
 Computation analysis.
 
