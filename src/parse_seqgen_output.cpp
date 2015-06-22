@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 NumericMatrix read_sequence(std::ifstream &output,
-                            const size_t individuals,
-                            const size_t locus_length) {
+                            const long unsigned int individuals,
+                            const long unsigned int locus_length) {
 
   NumericMatrix seq(individuals, locus_length);
   std::string tmp;
