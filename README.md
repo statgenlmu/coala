@@ -15,7 +15,7 @@ models. It directly imports the simulation results into R, and allows to
 calculate additional summary statistics from the results.
 
 __Coala is currently in an early version. Please make sure to always
-check the simulation commands that it executes before drawing conclusions
+check the simulation commands it executes before drawing conclusions
 from the simulation results.__
 
 
