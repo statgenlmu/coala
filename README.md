@@ -22,7 +22,7 @@ from the simulation results.__
 Installation
 ------------
 
-The package can be installed from CRAN using
+The package can be installed from CRAN (once published) using
 
 ```R
 install.packages("coala")
