@@ -13,9 +13,9 @@ Description: Coalescent simulation allows to rapidly simulate biological
     sequences evolving according to a given model of evolution.
     This package allows to specify evolutionary models in R,
     selects a suitable simulator, conducts the simulation, parses the results
-    and generates additional summary statisics.
+    and generates additional summary statistics.
     It supports the simulator 'scrm' by default, and can optionally
-    call the programms 'ms' and 'msms' if installed on the system.
+    call the programs 'ms' and 'msms' if installed on the system.
     It also supports finite-sites mutation models by combining the
     simulators with 'seq-gen'.
 Depends:
