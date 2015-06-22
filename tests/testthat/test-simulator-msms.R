@@ -90,7 +90,7 @@ test_that("ms can added manually", {
   if (!has_msms()) skip("msms not installed")
   msms_jar <- get_simulator("msms")$get_info()["jar"]
   java <- get_simulator("msms")$get_info()["java"]
-  use_msms(msms_jar, java, 199)
+  activate_msms(msms_jar, java, 199)
   expect_equal(get_simulator("msms")$get_priority(), 199)
   expect_error(use_msms(tempfile("not-existant"), tempfile("not-existant")))
 })

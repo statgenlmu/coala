@@ -1,5 +1,4 @@
-self <- private <- super <- NULL # Mute warnings about R6 objects
-
+#' @importFrom R6 R6Class
 Feature <- R6Class("Feature",
   private = list(
     parameter = list(),
@@ -35,49 +34,6 @@ Feature <- R6Class("Feature",
       if (!missing(time)) private$time <- private$add_parameter(time)
       if (!missing(population)) private$set_population(population)
     },
-#     initialize = function(type, parameter,
-#                           pop_source=NA, pop_sink=NA,
-#                           time_point=NA,
-#                           variance=0, zero_inflation=0) {
-#
-#       # Add the time point, which might also be a parameter
-#       if (is.numeric(time_point)) time_point <- as.character(time_point)
-#       else if (is.par(time_point)) {
-#         self$add_parameter(time_point)
-#         time_point <- as.character(time_point$get_expression())
-#       }
-#       else if (is.character(time_point) | is.na(time_point)) NULL
-#       else stop("Unexpected type of argument 'time_point'")
-#       private$time_point <- time_point
-#
-#       # Add the primary parameter (if any)
-#       if (is.numeric(parameter)) par_expr <- as.character(parameter)
-#       else if (is.character(parameter)) par_expr <- parameter
-#       else if (is.par(parameter)) {
-#         self$add_parameter(parameter)
-#         par_expr <- as.character(parameter$get_expression())
-#       }
-#       else stop("Unexpected type of argument 'parameter'")
-#
-#       if (variance != 0) {
-#         private$inter_locus_var <- TRUE
-#         par_expr <- paste0('rgamma(1, ', par_expr, '^2/', variance,
-#                             ', ', par_expr, '/', variance, ')')
-#       }
-#
-#       if (zero_inflation != 0) {
-#         private$inter_locus_var <- TRUE
-#         par_expr <- paste0('ifelse(locus <= ',
-#                             zero_inflation, ' * locus_number',
-#                             ', 0, ', par_expr, ')')
-#       }
-#       private$par <- par_expr
-#
-#       private$population <- pop_source
-#       private$feature_table <- create_feature_table(type, par_expr,
-#           pop_source,
-#                                                     pop_sink, time_point)
-#     },
     get_parameters = function() private$parameter,
     get_population = function() private$population,
     get_time = function() private$time,

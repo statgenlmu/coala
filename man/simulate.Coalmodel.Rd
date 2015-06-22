@@ -15,7 +15,7 @@
 
 \item{...}{currently unused}
 
-\item{pars}{Values for parameters specificed with \code{\link{par_named}} or
+\item{pars}{Values for parameters specified with \code{\link{par_named}} or
 \code{\link{par_range}}. Should be a named numeric vector.}
 }
 \value{

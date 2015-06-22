@@ -44,7 +44,7 @@ For example using \code{rnorm(1)} gives a standard normal prior.}
 }
 \description{
 This functions allow to add parameters to a model. Parameters can either
-be used in features, or added directely to a model using the plus operator.
+be used in features, or added directly to a model using the plus operator.
 The value of parameters can be specified in the simulation command
 (for \code{par_named} and \code{par_range}), sampled from a prior
 distribution (\code{par_prior}) or can be derived from other parameters
@@ -58,7 +58,7 @@ expression.
 \item \code{par_const}: Creates an parameter that is equal to a fixed value.
 Different to par_expr, the value is evaluated on parameter creation.
 
-\item \code{par_named}: Creates an parameter which's value is specified via the
+\item \code{par_named}: Creates an parameter whose value is specified via the
 \code{pars} argument in \code{\link{simulate.Coalmodel}}.
 
 \item \code{par_range}: Creates an parameter that can take a range of possible
@@ -71,7 +71,7 @@ Different to par_expr, the value is evaluated on parameter creation.
 \item \code{par_prior}: Creates a named parameter with a prior
  distribution. Before each simulation, the expression for the prior
  is evaluated. The resulting value can be used in
- \code{\link{par_expr}} under the choosen name.
+ \code{\link{par_expr}} under the chosen name.
 }}
 \examples{
 par_const(5)

@@ -187,10 +187,9 @@ has_seqgen <- function() !is.null(simulators[["seqgen"]])
 #'
 #' @param binary The path of the seqgen binary that will be used
 #'  for simulations.
-#' @param priority The priority for this simulators. If multiple simulators
-#'   can simulate a model, the one with the highest priority will be used.
+#' @inheritParams activate_ms
 #' @export
-use_seqgen <- function(binary, priority = 100) {
+activate_seqgen <- function(binary, priority = 100) {
   register_simulator(seqgen_class$new(binary, priority))
   invisible(NULL)
 }

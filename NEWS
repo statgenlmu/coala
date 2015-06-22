@@ -1,18 +1,4 @@
-coala 0.1
-------------
+coala 0.1.0
+-----------
 
-* Imported coalescent simulation functionality from package jaatha.
-* Redesigned the user interface using S3 and R6 classes (#1, #2, #5, #6).
-* Added a caching mechanism for simulation commands (#7).
-* Re-enabled bulk simulation for seq-gen (#8, #10).
-* Redesigned the summary statistics system in a modular way (#17).
-* Added the following summary statistics:
-  + Segregating Sites
-  + Site Frequency Spectrum (#24)
-  + Joint Site Frequency Spectrum
-  + iHH, iHS & nSL (#25, #63, #64)
-  + DNA (#40)
-  + a Four-Gamete-Test based statistics
-  + Nucleotide Diveristy (pi)
-  + Tajima's D
-* Added the feature to simulate unphased data (#26).
+* Initial release version

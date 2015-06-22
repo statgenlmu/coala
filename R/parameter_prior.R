@@ -20,7 +20,7 @@ Par_Prior <- R6Class('Par_Prior', inherit = Par_Named, #nolint
 #' @describeIn par_expr Creates a named parameter with a prior
 #'  distribution. Before each simulation, the expression for the prior
 #'  is evaluated. The resulting value can be used in
-#'  \code{\link{par_expr}} under the choosen name.
+#'  \code{\link{par_expr}} under the chosen name.
 #'
 #' @export
 #' @param prior An expression. Evaluation this expression should give

@@ -4,7 +4,7 @@
 #' @param nsim currently unused
 #' @param seed A random seed that is set before simulation.
 #' @param ... currently unused
-#' @param pars Values for parameters specificed with \code{\link{par_named}} or
+#' @param pars Values for parameters specified with \code{\link{par_named}} or
 #'   \code{\link{par_range}}. Should be a named numeric vector.
 #' @return A list of summary statistics.
 #' @export

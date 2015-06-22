@@ -3,13 +3,13 @@
 #' This function reduces the number of loci in all averaged loci by a
 #' certain factor.
 #' Non-averaged loci as created with \code{\link{locus_single}} are not
-#' modified in any way. This function is primiarily designed for jaatha,
+#' modified in any way. This function is primarily designed for jaatha,
 #' and might be unsuitable for other purposes.
 #'
 #' @param model The model to downscale
 #' @param scaling_factor The factor by which the number of loci are reduced.
 #'   A value of 2 changes to numbers to half their value (rounded),
-#'   a value of 3 to a thrid an so on.
+#'   a value of 3 to a third an so on.
 #' @export
 #' @examples
 #' model <- coal_model(10, loci_number = 10) + locus_single(100)

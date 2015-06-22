@@ -4,20 +4,31 @@ author: "Paul Staab"
 date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Coala-Introduction}
+  %\VignetteIndexEntry{A introduction to coala}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
 
-Coalescent simulation referrers to the idea to simulate the evolution of 
+Coalescent simulation referrers to the idea of simulating the evolution of 
 biological sequences like DNA by tracing their ancestry back in time. The
 `coala` package is an interface for calling a number of commonly used
-coalescent simulators from R.
+coalescent simulators from R. It should be able to use the simulator
+`scrm` out of the box. Other simulators need to be installed separately
+and must explicitely be activated. This is described in the `installation`
+vignette:
+
+```{r installation, eval=FALSE}
+vignette("installation", package = "coala")
+```
+
+In this introduction we'll stick to using `scrm`.
 
 # Creating a model
-Use the function `coal_model` to create a basic coalescent model:
+In order to conduct simulations, we first need to specify a model of
+evolution that is used for the simulations. The function `coal_model` 
+creates a basic coalescent model:
 
-```{r}
+```{r create_model}
 library(coala)
 model <- coal_model(sample_size = 3, loci_number = 1)
 ```
@@ -26,8 +37,8 @@ This creates a basic model with one population of constant size.
 Simulated is one genetic locus for 3 haplotypes sampled from the population. 
 
 Printing the model gives a short summary of this content:
-```{r}
-print(model)
+```{r print_model}
+model
 ```
 
 Models consist of 

@@ -1,7 +1,7 @@
 #' Generate command line arguments for features
 #'
 #' These functions are exported only for technical reasons
-#' (because they are S3 methods) and are not indended for
+#' (because they are S3 methods) and are not intended for
 #' users.
 #'
 #' @param feature The feature for which the argument is generated
@@ -123,7 +123,7 @@ has_ms <- function() !is.null(simulators[['ms']])
 
 #' Use the simulator ms
 #'
-#' This adds the simulator 'ms' to the list of availiable simulators. In order
+#' This adds the simulator 'ms' to the list of available simulators. In order
 #' to use 'ms', you first need to download its sources from
 #' \url{http://home.uchicago.edu/rhudson1/source/mksamples.html}
 #' and compile the binary following the instructions in the package.
@@ -138,7 +138,7 @@ has_ms <- function() !is.null(simulators[['ms']])
 #' @param priority The priority for this simulator. If multiple simulators
 #'   can simulate a model, the one with the highest priority will be used.
 #' @export
-use_ms <- function(binary, priority = 300) {
+activate_ms <- function(binary, priority = 300) {
   register_simulator(ms_class$new(binary, priority))
   invisible(NULL)
 }

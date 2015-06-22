@@ -11,7 +11,7 @@ feat_unphased(ploidy, samples_per_ind = ploidy)
 individual.}
 
 \item{samples_per_ind}{The number of pseudo-chromosomes that are created
-from the phased chromosomes for each indidivual.}
+from the phased chromosomes for each individual.}
 }
 \value{
 The feature, which can be added to a model using `+`.

@@ -62,7 +62,7 @@ is.named_par <- function(par) {
 #' Define Model Parameters
 #'
 #' This functions allow to add parameters to a model. Parameters can either
-#' be used in features, or added directely to a model using the plus operator.
+#' be used in features, or added directly to a model using the plus operator.
 #' The value of parameters can be specified in the simulation command
 #' (for \code{par_named} and \code{par_range}), sampled from a prior
 #' distribution (\code{par_prior}) or can be derived from other parameters
@@ -102,7 +102,7 @@ par_const <- function(constant) {
 }
 
 
-#' @describeIn par_expr Creates an parameter which's value is specified via the
+#' @describeIn par_expr Creates an parameter whose value is specified via the
 #'   \code{pars} argument in \code{\link{simulate.Coalmodel}}.
 #' @export
 #' @param name Character. The name of the parameter. Must be unique in a model.
@@ -189,7 +189,7 @@ create_par_env <- function(model, parameters, ..., for_cmd = FALSE) {
 prepare_pars <- function(pars, model) {
   assert_that(is.numeric(pars))
 
-  # Try to add names for non-prior parmeters if missing
+  # Try to add names for non-prior parameters if missing
   if (is.null(names(pars))) {
     par_names <- get_par_names(model, without_priors = TRUE)
     if (length(pars) != length(par_names)) {

@@ -32,7 +32,7 @@ coal_model(15, 10, 950)
 
 # A model with two loci. The first group consists of 10 loci with
 # a length 560bp each, the second one of two loci with length 750bp and 560pb,
-# repectively.
+# respectively.
 coal_model(20, 10, 560) +
   locus_single(750) +
   locus_single(430)

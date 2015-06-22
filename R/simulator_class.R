@@ -19,8 +19,8 @@ simulator_class <- R6Class("Simulator",
 is_simulator <- function(simulator) "Simulator" %in% class(simulator)
 
 
-# Keep a user modifiable list of availible simulation programs in a private
-# enviroment
+# Keep a user modifiable list of available simulation programs in a private
+# environment
 if (!exists("simulators")) simulators <- new.env()
 
 register_simulator <- function(simulator) {
@@ -71,9 +71,10 @@ reduce_sim_commands <- function(sim_commands) {
              stringsAsFactors = FALSE)
 }
 
-#' Returns a the available simulators
+
+#' Returns the available simulators
 #'
-#' This returns a the usuable simulators and their options
+#' This returns the usable simulators and their options
 #' @export
 list_simulators <- function() {
   do.call(rbind, lapply(ls(simulators), function(simulator) {

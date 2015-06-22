@@ -32,7 +32,7 @@ Feature_unphased <- R6Class("Feature_unphased", inherit = Feature,
 #' @param ploidy The number of phased chromosomes that are simulated per
 #'   individual.
 #' @param samples_per_ind The number of pseudo-chromosomes that are created
-#'   from the phased chromosomes for each indidivual.
+#'   from the phased chromosomes for each individual.
 #' @return The feature, which can be added to a model using `+`.
 #' @export
 feat_unphased <- function(ploidy, samples_per_ind=ploidy) {
