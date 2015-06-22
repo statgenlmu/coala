@@ -24,7 +24,7 @@ inline bool is_singleton(const NumericMatrix seg_sites,
                          const size_t snp) {
 
   size_t mut_count = 0;
-  for (int i = 0; i < n_ind; ++i) {
+  for (size_t i = 0; i < n_ind; ++i) {
     mut_count += seg_sites(individuals[i]-1, snp);
   }
 
@@ -95,7 +95,7 @@ NumericMatrix calc_four_gamete_stat(const List seg_sites_list,
         std::fill(combinations.begin(), combinations.end(), false);
 
         // Count combinations
-        for (int k = 0; k < n_ind; ++k) {
+        for (size_t k = 0; k < n_ind; ++k) {
           combinations[2*seg_sites(individuals[k]-1, idx_i) +
                          seg_sites(individuals[k]-1, idx_j)] = true;
         }

@@ -23,24 +23,26 @@ NumericMatrix calc_jsfs(const List seg_sites,
   else nrows_required = max(NumericVector::create(max(pop1), max(pop2)));
 
   NumericMatrix jsfs(n_pop1+1, n_pop2+1);
-  size_t idx1, idx2, ncol;
+  size_t idx1, idx2, ncol, nrow;
   NumericMatrix ss;
   NumericVector trio_locus;
 
   for (int locus = 0; locus < seg_sites.size(); ++locus) {
     ss = as<NumericMatrix>(seg_sites[locus]);
     ncol = ss.ncol();
+    nrow = ss.nrow();
+
     if (ncol == 0) continue;
-    if (ss.nrow() < nrows_required) stop("Seg. Sites has too few rows.");
+    if (nrow < nrows_required) stop("Seg. Sites has too few rows.");
     trio_locus = getTrioLocus(ss);
 
-    for (int j = 0; j < ncol; ++j) {
+    for (size_t j = 0; j < ncol; ++j) {
       if (trio_locus(j) != 0) continue; // Only calculate for middle locus
 
       idx1 = 0; idx2 = 0;
 
-      for (int i = 0; i < n_pop1; ++i) idx1 += ss(pop1[i]-1,j);
-      for (int i = 0; i < n_pop2; ++i) idx2 += ss(pop2[i]-1,j);
+      for (size_t i = 0; i < n_pop1; ++i) idx1 += ss(pop1[i]-1,j);
+      for (size_t i = 0; i < n_pop2; ++i) idx2 += ss(pop2[i]-1,j);
 
       //Rcout << "SNP " << j << ": " << idx1 << "-" << idx2 << std::endl;
       ++jsfs(idx1, idx2);

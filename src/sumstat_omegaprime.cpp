@@ -13,12 +13,12 @@ int maxsplit(const NumericMatrix ss,
   std::map<unsigned int,unsigned int> m;
   unsigned int key;
 
-  for (unsigned int snp = 0; snp < ss.ncol(); ++snp) {
+  for (int snp = 0; snp < ss.ncol(); ++snp) {
     if (trio_locus_vec[snp] != trio_locus) continue;
 
     // For each SNP, create a binary representation of the SNP...
     key=0;
-	  for(unsigned int k=1; k < individuals.size(); ++k) {
+	  for(int k=1; k < individuals.size(); ++k) {
 	    key *= 2;
 	    key += (ss(individuals[k]-1, snp) != ss(individuals[0]-1, snp));
 	  }
@@ -51,7 +51,7 @@ NumericVector calc_omegaprime(List seg_sites, NumericVector individuals) {
 
   NumericMatrix ss;
 
-  for (int locus = 0; locus < n_loci; ++locus) {
+  for (size_t locus = 0; locus < n_loci; ++locus) {
     ss = as<NumericMatrix>(seg_sites[locus]);
     if (max(individuals) > ss.nrow()) stop("Invalid individuals");
     if (ss.ncol() == 0) omega_prime[locus] = NA_REAL;

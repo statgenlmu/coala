@@ -89,9 +89,10 @@ List generate_trio_trees(const List trees,
   std::string tree;
   size_t digits, pos, locus, len, seg_len, locus_end;
   List result = List(trees.size());
-  size_t llm_row = 0, llm_row_counter = 0;
+  size_t llm_row = 0, llm_row_counter = 0, n_trees = trees.size(),
+         llm_n_row = llm.nrow();
 
-  for (size_t i = 0; i < trees.size(); ++i) {
+  for (size_t i = 0; i < n_trees; ++i) {
     locus_trees = as<CharacterVector>(trees[i]);
 
     digits = 0;            // Number of digits of the length of the tree
@@ -105,7 +106,7 @@ List generate_trio_trees(const List trees,
     CharacterVector middle;
     CharacterVector right;
 
-    for (size_t j = 0; j < locus_trees.size(); ++j) {
+    for (int j = 0; j < locus_trees.size(); ++j) {
       tree = as<std::string>(locus_trees[j]);
 
       // Get the number of bases for which the tree is valid
@@ -144,7 +145,7 @@ List generate_trio_trees(const List trees,
           ++llm_row_counter;
           if (llm_row_counter == llm(llm_row, 5)) {
             ++llm_row;
-            if (llm_row == llm.nrow()) break; //avoid invalid read
+            if (llm_row == llm_n_row) break; //avoid invalid read
             llm_row_counter = 0;
           }
 
@@ -168,6 +169,6 @@ List generate_trio_trees(const List trees,
                              _["right"] = right);
   }
 
-  if (llm_row != llm.nrow()) stop("Wrong number of trees");
+  if (llm_row != llm_n_row) stop("Wrong number of trees");
   return(result);
 }
