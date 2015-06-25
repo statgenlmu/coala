@@ -58,16 +58,15 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// parse_trees
-List parse_trees(const List file_names, const int loci_number, const bool separate_loci);
-RcppExport SEXP coala_parse_trees(SEXP file_namesSEXP, SEXP loci_numberSEXP, SEXP separate_lociSEXP) {
+// parse_ms_trees
+List parse_ms_trees(const List files, const int loci_number);
+RcppExport SEXP coala_parse_ms_trees(SEXP filesSEXP, SEXP loci_numberSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const List >::type file_names(file_namesSEXP);
+    Rcpp::traits::input_parameter< const List >::type files(filesSEXP);
     Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP);
-    Rcpp::traits::input_parameter< const bool >::type separate_loci(separate_lociSEXP);
-    __result = Rcpp::wrap(parse_trees(file_names, loci_number, separate_loci));
+    __result = Rcpp::wrap(parse_ms_trees(files, loci_number));
     return __result;
 END_RCPP
 }

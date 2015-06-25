@@ -5,53 +5,45 @@ using namespace Rcpp;
 
 
 // [[Rcpp::export]]
-List parse_trees(const List file_names,
-                 const int loci_number,
-                 const bool separate_loci = true) {
+List parse_ms_trees(const List files,
+                    const int loci_number) {
 
-  int file_number = file_names.size();
   int locus = -1;
-  int file_nr = 0;
-
   List trees;
-  if (separate_loci) trees = List(loci_number);
-  else trees = List(file_number);
+  trees = List(loci_number);
 
   CharacterVector locus_trees;
-  CharacterVector file_name;
+  CharacterVector files_vec;
   std::string line;
 
-  for (int i = 0; i < file_names.size(); ++i) {
-    file_name = as<CharacterVector>(file_names(i));
-    if (file_name.size() != 1) stop("Expecting one file per locus");
+  for (int i = 0; i < files.size(); ++i) {
+    files_vec = as<CharacterVector>(files(i));
+    for (int j = 0; j < files_vec.size(); j++) {
+      // Open the file
+      std::ifstream input(as<std::string>(files_vec(0)).c_str(),
+                          std::ifstream::in);
+      if (!input.is_open()) {
+        stop(std::string("Cannot open file ") + files_vec(0));
+      }
 
-    // Open the file
-    std::ifstream input(as<std::string>(file_name(0)).c_str(),
-                        std::ifstream::in);
-    if (!input.is_open()) {
-      stop(std::string("Cannot open file ") + file_name(0));
-    }
+      while (getline(input, line)) {
+        // A new locus starts
+        if (line.substr(0, 2) == "//") {
+            if (locus >= 0) trees(locus) = locus_trees;
+            ++locus;
+            locus_trees = CharacterVector();
+        }
 
-    while (getline(input, line)) {
-      if (line.substr(0, 2) == "//") {
-        if (separate_loci) {
-          if (locus >= 0) trees(locus) = locus_trees;
-          ++locus;
-          locus_trees = CharacterVector();
+        // Save tree lines
+        else if (line.substr(0, 1) == "[" || line.substr(0, 1) == "(") {
+          locus_trees.push_back(line);
         }
       }
-      if (line.substr(0, 1) == "[" || line.substr(0, 1) == "(") {
-        locus_trees.push_back(line);
-      }
-    }
-    if (!separate_loci) {
-      trees(file_nr) = locus_trees;
-      ++file_nr;
-      locus_trees = CharacterVector();
     }
   }
 
-  if (separate_loci) trees(locus) = locus_trees;
+  // Save last locus tree
+  trees(locus) = locus_trees;
 
   return(trees);
 }
@@ -88,87 +80,81 @@ List generate_trio_trees(const List trees,
   CharacterVector locus_trees;
   std::string tree;
   size_t digits, pos, locus, len, seg_len, locus_end;
-  List result = List(trees.size());
-  size_t llm_row = 0, llm_row_counter = 0, n_trees = trees.size(),
-         llm_n_row = llm.nrow();
 
-  for (size_t i = 0; i < n_trees; ++i) {
-    locus_trees = as<CharacterVector>(trees[i]);
+  size_t i = 0, llm_n_row = llm.nrow();
+  List result = List(llm_n_row);
 
-    digits = 0;            // Number of digits of the length of the tree
-    pos = 0;               // Current position on the locus trio
-    locus = 0;             // The locus that we are currently in
-    len = 0;               // The length of the current tree
-    seg_len = 0;
-    locus_end = llm(llm_row, 0); // The end of the current locus
-
+  for (size_t llm_row = 0; llm_row < llm_n_row; ++llm_row) {
     CharacterVector left;
     CharacterVector middle;
     CharacterVector right;
 
-    for (int j = 0; j < locus_trees.size(); ++j) {
-      tree = as<std::string>(locus_trees[j]);
+    for (size_t llm_row_counter = 0; llm_row_counter < llm(llm_row, 5); ++llm_row_counter) {
+      locus_trees = as<CharacterVector>(trees(i++));
 
-      // Get the number of bases for which the tree is valid
-      if (tree.substr(0, 1) != "[") {
-        len = llm(llm_row, 0) +
-              llm(llm_row, 1) +
-              llm(llm_row, 2) +
-              llm(llm_row, 3) +
-              llm(llm_row, 4);
-      } else {
-        digits = tree.find("]")-1;
-        len = std::atoi(tree.substr(1, digits).c_str());
-        tree = tree.substr(digits+2, std::string::npos);
-      }
+      digits = 0;            // Number of digits of the length of the tree
+      pos = 0;               // Current position on the locus trio
+      locus = 0;             // The locus that we are currently in
+      len = 0;               // The length of the current tree
+      seg_len = 0;
+      locus_end = llm(llm_row, 0); // The end of the current locus
 
-      // If the current tree is valid for a sequence that ends behind the
-      // end of the locus, we need to do a few things:
-      while (pos + len >= locus_end) {
-        // First print a tree spanning until the end of the current locus
-        seg_len = locus_end - pos;
-        addTree(tree, seg_len, locus, left, middle, right);
+      for (int j = 0; j < locus_trees.size(); ++j) {
+        tree = as<std::string>(locus_trees[j]);
 
-        // Now the position move towards the end of the current locus.
-        len -= seg_len;
-        pos += seg_len;
-
-        // And look at the next locus.
-        if (locus < 4) {
-          ++locus;
-          locus_end += llm(llm_row, locus);
+        // Get the number of bases for which the tree is valid
+        if (tree.substr(0, 1) != "[") {
+          len = llm(llm_row, 0) +
+                llm(llm_row, 1) +
+                llm(llm_row, 2) +
+                llm(llm_row, 3) +
+                llm(llm_row, 4);
         } else {
-          // The last tree should end exactly end at the end of the last locus
-          if (len != 0) stop("Tree and locus length do not match.");
-          pos = 0;
-
-          ++llm_row_counter;
-          if (llm_row_counter == llm(llm_row, 5)) {
-            ++llm_row;
-            if (llm_row == llm_n_row) break; //avoid invalid read
-            llm_row_counter = 0;
-          }
-
-          // Reset the stats and go one to the next locus trio.
-          locus = 0;
-          locus_end = llm(llm_row, 0);
+          digits = tree.find("]")-1;
+          len = std::atoi(tree.substr(1, digits).c_str());
+          tree = tree.substr(digits+2, std::string::npos);
         }
-      }
 
-      // If we are here the tree should end within the current locus.
-      // Print the rest and move until to the end of the tree.
-      if (len > 0) {
-        pos += len;
-        addTree(tree, len, locus, left, middle, right);
+        // If the current tree is valid for a sequence that ends behind the
+        // end of the locus, we need to do a few things:
+        while (pos + len >= locus_end) {
+          // First print a tree spanning until the end of the current locus
+          seg_len = locus_end - pos;
+          addTree(tree, seg_len, locus, left, middle, right);
+
+          // Now the position move towards the end of the current locus.
+          len -= seg_len;
+          pos += seg_len;
+
+          // And look at the next locus.
+          if (locus < 4) {
+            ++locus;
+            locus_end += llm(llm_row, locus);
+          } else {
+            // The last tree should end exactly end at the end of the last locus
+            if (len != 0) stop("Tree and locus length do not match.");
+            pos = 0;
+
+            // Reset the stats and go one to the next locus trio.
+            locus = 0;
+            locus_end = llm(llm_row, 0);
+          }
+        }
+
+        // If we are here the tree should end within the current locus.
+        // Print the rest and move until to the end of the tree.
+        if (len > 0) {
+          pos += len;
+          addTree(tree, len, locus, left, middle, right);
+        }
       }
     }
 
     if (pos != 0) stop("Error parsing trees");
-    result[i] = List::create(_["left"] = left,
-                             _["middle"] = middle,
-                             _["right"] = right);
+    result[llm_row] = List::create(_["left"] = left,
+                                   _["middle"] = middle,
+                                   _["right"] = right);
   }
 
-  if (llm_row != llm_n_row) stop("Wrong number of trees");
   return(result);
 }

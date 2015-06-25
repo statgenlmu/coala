@@ -2,7 +2,7 @@
 SumstatSegSites <- R6Class('SumstatSegSites', inherit = Sumstat, #nolint
   private = list(req_segsites = TRUE),
   public = list(
-    calculate = function(seg_sites, files, model) seg_sites
+    calculate = function(seg_sites, trees, files, model) seg_sites
   )
 )
 

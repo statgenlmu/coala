@@ -4,8 +4,8 @@ SumstatNsl <- R6Class('sumstat_nsl', inherit = SumstatIhh, #nolint
     create_rehh_data = function(seg_sites, pos, ind) {
       super$create_rehh_data(seg_sites, seq(along = pos), ind)
     },
-    calculate = function(seg_sites, files, model) {
-      stat <- super$calculate(seg_sites, files, model)
+    calculate = function(seg_sites, trees, files, model) {
+      stat <- super$calculate(seg_sites, trees, files, model)
       lapply(stat, function(x) {
         colnames(x) <- NULL
         x[ , 3]

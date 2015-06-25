@@ -25,9 +25,9 @@ test_that("nuc. div. statistik works", {
                         0, 1, 1, 1, 1), 5, 3)
   model <- coal_model(5, 1)
   pi <- sumstat_nucleotide_div("pi", 1)
-  expect_equal(pi$calculate(list(seg_sites), NULL, model), 1.6)
+  expect_equal(pi$calculate(list(seg_sites), NULL, NULL, model), 1.6)
 
   expect_error(sumstat_nucleotide_div("pi", 1:2))
   expect_error(sumstat_nucleotide_div("pi", 2)$calculate(list(seg_sites),
-                                                         NULL, model))
+                                                         NULL, NULL, model))
 })

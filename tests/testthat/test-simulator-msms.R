@@ -24,25 +24,64 @@ test_that("generating msms options works", {
 })
 
 
-test_that("msms_simulate works", {
+test_that("msms can simulate seg. sites", {
   if (!has_msms()) skip('msms not installed')
   msms <- get_simulator("msms")
-  model <- model_theta_tau()
 
-  set.seed(6688)
-  sum_stats <- msms$simulate(model, c(tau = 1, theta = 5))
-  expect_true(is.matrix(sum_stats$jsfs))
-  expect_true(sum(sum_stats$jsfs) > 0)
-
-  set.seed(6688)
-  sum_stats2 <- msms$simulate(model, c(tau = 1, theta = 5))
-  expect_equal(sum_stats, sum_stats2)
+  # Generating Seg. Sites
+  model <- coal_model(10, 2, 100) + feat_mutation(5) + sumstat_seg_sites()
+  set.seed(110); stats_1 <- msms$simulate(model)
+  set.seed(110); stats_2 <- msms$simulate(model)
+  expect_equal(stats_1, stats_2)
+  expect_that(stats_1$seg_sites, is_a("list"))
+  expect_equal(length(stats_1$seg_sites), 2)
+  expect_equal(length(attr(stats_1$seg_sites[[1]], "positions")),
+               ncol(stats_1$seg_sites[[1]]))
 
   # With recombination
   model <- model + feat_recombination(1)
-  sum_stats <- msms$simulate(model, c(tau = 1, theta = 5))
-  expect_true(is.matrix(sum_stats$jsfs))
-  expect_true(sum(sum_stats$jsfs) > 0)
+  stats <- msms$simulate(model)
+  expect_that(stats_1$seg_sites, is_a("list"))
+  expect_equal(length(stats_1$seg_sites), 2)
+})
+
+
+test_that("msms can simulate trees", {
+  if (!has_msms()) skip('msms not installed')
+  msms <- get_simulator("msms")
+
+  model <- coal_model(10, 2, 100) + sumstat_trees()
+  set.seed(110); stats_1 <- msms$simulate(model)
+  set.seed(110); stats_2 <- msms$simulate(model)
+  expect_equal(stats_1, stats_2)
+  expect_that(stats_1$trees, is_a("list"))
+  expect_equal(length(stats_1$trees), 2)
+  for (i in 1:2) expect_equal(length(stats_1$trees[[i]]), 1)
+
+  # With inter locus variation
+  model <- coal_model(10, 2, 100) +
+    feat_selection(strength_A = par_variation(100, 5),
+                   population = 1, time = 0.05) +
+    sumstat_trees()
+  stats <- msms$simulate(model)
+  expect_that(stats_1$trees, is_a("list"))
+  expect_equal(length(stats_1$trees), 2)
+})
+
+
+test_that("msms can simulate files", {
+  if (!has_msms()) skip('msms not installed')
+  msms <- get_simulator("msms")
+
+  # Generating Files
+  test_folder <- tempfile("msms_test_folder")
+  model <- coal_model(10, 2, 100) +
+    feat_mutation(5) +
+    sumstat_file(test_folder)
+  stats <- msms$simulate(model)
+  expect_true(file.exists(test_folder))
+  expect_true(file.exists(stats$file[1]))
+  unlink(test_folder, recursive = TRUE)
 })
 
 

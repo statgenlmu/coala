@@ -1,8 +1,8 @@
 SumstatTrees <- R6Class('SumstatTrees', inherit = Sumstat, #nolint
-  private = list(req_files = TRUE, req_trees = TRUE),
+  private = list(req_files = FALSE, req_trees = TRUE),
   public = list(
-    calculate = function(seg_sites, files, model) {
-      parse_trees(files, get_locus_number(model))
+    calculate = function(seg_sites, trees, files, model) {
+      trees
     }
   )
 )
@@ -17,10 +17,9 @@ sumstat_trees <- function(name = "trees") {
 
 
 SumstatSgTrees <- R6Class('SumstatSgTrees', inherit = Sumstat, #nolint
-  private = list(req_files = TRUE, req_trees = TRUE),
+  private = list(req_trees = TRUE),
   public = list(
-    calculate = function(seg_sites, files, model) {
-      trees <- parse_trees(files, get_locus_number(model), FALSE)
+    calculate = function(seg_sites, trees, files, model) {
       llm <- get_locus_length_matrix(model)
 
       trio_trees <- generate_trio_trees(trees, llm)

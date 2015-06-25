@@ -42,7 +42,7 @@ test_that('initialzation of statistic works', {
   attr(seg_sites[[1]], 'locus') <- rep(c(-1, 0, 1), each = 4)
 
   stat <- sumstat_omegaprime(name = 'omega_prime', 1)
-  op <- stat$calculate(seg_sites, NULL, coal_model(4))
+  op <- stat$calculate(seg_sites, NULL, NULL, coal_model(4))
   expect_that(op, is_a('numeric'))
   expect_equal(length(op), 1)
   expect_true(op >= 0 & op <= 1)

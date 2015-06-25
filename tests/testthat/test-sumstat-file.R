@@ -18,7 +18,7 @@ test_that('File statistic works', {
   cat('test2', file = files[2])
 
   expect_equal(stat$get_name(), 'file')
-  files_copy <- stat$calculate(NULL, files, NULL)
+  files_copy <- stat$calculate(NULL, NULL, files, NULL)
 
   expect_true(file.exists(folder))
   expect_true(all(file.exists(files_copy)))

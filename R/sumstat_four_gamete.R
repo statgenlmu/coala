@@ -11,7 +11,7 @@ SumstatFourGamete <- R6Class('SumstatFourGamete', inherit = Sumstat, #nolint
       private$population <- population
       super$initialize(name)
     },
-    calculate = function(seg_sites, files, model) {
+    calculate = function(seg_sites, trees, files, model) {
       calc_four_gamete_stat(seg_sites,
                             get_population_indiviuals(model,
                                                       private$population),

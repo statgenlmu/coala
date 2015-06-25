@@ -40,9 +40,10 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
 
       locus_number <- sum(get_locus_number(model))
       seg_sites <- list()
-      if (requires_segsites(model)) {
-        length(seg_sites) <- locus_number
-      }
+      if (requires_segsites(model)) length(seg_sites) <- locus_number
+
+      trees <- list()
+      if (requires_trees(model)) length(trees) <- locus_number
 
       sim_number <- sum(sapply(sim_cmds, nrow))
       if (requires_files(model)) {
@@ -60,8 +61,15 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
 
           if (requires_segsites(model)) {
             seg_sites[cl:(cl + cmds[i, 1] - 1)] <- stats$seg_sites[] #nolint
-            cl <- cl + cmds[i, 1]
           }
+
+          if (requires_trees(model)) {
+            split_tree <- lapply(stats$trees, function(x) {
+              strsplit(x, split = "\n", fixed = TRUE)[[1]]
+            })
+            trees[cl:(cl + cmds[i, 1] - 1)] <- split_tree[]  #nolint
+          }
+          cl <- cl + cmds[i, 1]
         }
       }
 
@@ -74,7 +82,8 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
         paste("scrm", sample_size, cmd[ , 1], cmd[ , 2])
       })
 
-      stats <- calc_sumstats(seg_sites, files, model, parameters, cmds, self)
+      stats <- calc_sumstats(seg_sites, trees, files,
+                             model, parameters, cmds, self)
       unlink(files)
 
       stats

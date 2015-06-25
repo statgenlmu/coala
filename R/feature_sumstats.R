@@ -35,7 +35,7 @@ Feature_trees <- R6Class("Feature_trees", inherit = Feature,
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_trees <- function(feature, model) "-T"
+conv_to_ms_arg.Feature_trees <- function(feature, model) "-T "
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export

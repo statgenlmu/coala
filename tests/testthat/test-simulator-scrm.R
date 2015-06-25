@@ -1,13 +1,45 @@
 context("Simulator scrm")
 
-test_that("simulation with scrm works", {
+test_that("scrm can simulate seg. sites", {
   scrm <- get_simulator("scrm")
-  model <- model_theta_tau()
-  sum_stats <- scrm$simulate(model, c(tau = 1, theta = 5))
-  expect_true(is.list(sum_stats))
-  expect_false(is.null(sum_stats$pars))
-  expect_false(is.null(sum_stats$jsfs))
-  expect_true(sum(sum_stats$jsfs) > 0)
+
+  # Generating Seg. Sites
+  model <- coal_model(10, 2, 100) + feat_mutation(5) + sumstat_seg_sites()
+  set.seed(110); stats_1 <- scrm$simulate(model)
+  set.seed(110); stats_2 <- scrm$simulate(model)
+  expect_equal(stats_1, stats_2)
+  expect_that(stats_1$seg_sites, is_a("list"))
+  expect_equal(length(stats_1$seg_sites), 2)
+  expect_equal(length(attr(stats_1$seg_sites[[1]], "positions")),
+               ncol(stats_1$seg_sites[[1]]))
+})
+
+
+test_that("scrm can simulate trees", {
+  scrm <- get_simulator("scrm")
+
+  model <- coal_model(10, 2, 100) + sumstat_trees()
+  set.seed(110); stats_1 <- scrm$simulate(model)
+  set.seed(110); stats_2 <- scrm$simulate(model)
+  expect_equal(stats_1, stats_2)
+  expect_that(stats_1$trees, is_a("list"))
+  expect_equal(length(stats_1$trees), 2)
+  for (i in 1:2) expect_equal(length(stats_1$trees[[i]]), 1)
+
+  # With recombination
+  set.seed(11011)
+  stats <- scrm$simulate(model + feat_recombination(5))
+  expect_equal(length(stats_1$trees), 2)
+  for (i in 1:2) expect_true(length(stats$trees[[i]]) > 1)
+
+  # With inter locus variation
+  model <- coal_model(10, 2, 100) +
+    feat_recombination(par_variation(5, 1)) +
+    sumstat_trees()
+  stats <- scrm$simulate(model)
+  expect_that(stats_1$trees, is_a("list"))
+  expect_equal(length(stats_1$trees), 2)
+  expect_true(all(stats_1$trees[[1]] != stats_1$trees[[2]]))
 })
 
 

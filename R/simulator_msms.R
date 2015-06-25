@@ -100,11 +100,17 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
         seg_sites <- NULL
       }
 
+      if (requires_trees(model)) {
+        trees <- parse_ms_trees(files, get_locus_number(model))
+      } else {
+        trees <- NULL
+      }
+
       cmds <- lapply(sim_cmds, function(cmd) {
-        paste("ms", sample_size, cmd[ , 1], cmd[ , 2])
+        paste("msms", sample_size, cmd[ , 1], cmd[ , 2])
       })
 
-      sum_stats <- calc_sumstats(seg_sites, files, model, parameters,
+      sum_stats <- calc_sumstats(seg_sites, trees, files, model, parameters,
                                  cmds, self)
 
       # Clean Up

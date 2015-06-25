@@ -10,7 +10,7 @@ SumstatSfs <- R6Class('SumstatSfs', inherit = Sumstat, #nolint
       private$population <- population
       super$initialize(name)
     },
-    calculate = function(seg_sites, files, model) {
+    calculate = function(seg_sites, trees, files, model) {
       if ('all' %in% private$population) {
         individuals <- 1:sum(get_sample_size(model))
       } else {
