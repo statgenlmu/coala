@@ -250,17 +250,25 @@ test_that("test.seqgenWithMsms", {
   set.seed(4444)
   sum.stats2 <- simulate(m1, pars = c(1, 5))
   expect_equal(sum.stats2, sum.stats)
+
+  # With interlocus variation
+  m2 <- model_hky() +
+    feat_selection(strength_A = par_zero_inflation(1000, .5),
+                   population = 1, time = 0.1)
+    #feat_migration(par_zero_inflation(1, .5), symmetric = TRUE)
+  stats <- simulate(m2, pars = c(1, 5))
+  expect_false(is.null(sum.stats$jsfs))
 })
 
 
 test_that("seq-gen can simulate trios", {
   if (!has_seqgen()) skip('seqgen not installed')
   model <- model_gtr() +
-    locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5)) +
+    locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5), number = 2) +
     locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5)) +
     sumstat_seg_sites()
 
-  sum.stats <- simulate(model, pars=c(1, 10))
+  sum.stats <- simulate(model, pars = c(1, 10))
   expect_true(sum(sum.stats$jsfs) <= sum(sapply(sum.stats$seg_sites, ncol)))
 })
 
@@ -388,4 +396,21 @@ test_that("seqgen can added manually", {
   activate_seqgen(sg_bin, 99)
   expect_equal(get_simulator("seqgen")$get_priority(), 99)
   expect_error(use_seqgen(tempfile("not-existant")))
+})
+
+
+test_that("seqgen works with zero inflation", {
+  if (!has_seqgen()) skip("seqgen not installed")
+
+  model <- coal_model(c(3, 3, 1)) +
+    locus_trio(rep(100, 3), rep(100, 2), 10) +
+    feat_pop_merge(.5, 2, 1) +
+    feat_pop_merge(1, 3, 1) +
+    feat_outgroup(3) +
+    feat_mutation(2, model = 'GTR', gtr_rates = 1:6) +
+    feat_migration(par_zero_inflation(1, .5), symmetric = TRUE) +
+    sumstat_jsfs()
+
+  stats <- simulate(model)
+  expect_is(stats, "list")
 })

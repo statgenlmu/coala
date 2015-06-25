@@ -11,7 +11,7 @@ SumstatJsfs <- R6Class('SumstatJsfs', inherit = Sumstat, #nolint
       private$populations <- populations
       super$initialize(name)
     },
-    calculate = function(seg_sites, files, model) {
+    calculate = function(seg_sites, trees, files, model) {
       calc_jsfs(seg_sites,
                 get_population_indiviuals(model, private$populations[1]),
                 get_population_indiviuals(model, private$populations[2]))

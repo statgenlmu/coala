@@ -9,8 +9,8 @@ SumstatTajimasD <- R6Class('TajimasD', inherit = Sumstat, #nolint
         assert_that(length(population) == 1)
         private$population <- population
         super$initialize(name)
-      },
-      calculate = function(seg_sites, files, model) {
+    },
+    calculate = function(seg_sites, trees, files, model) {
         ind <- get_population_indiviuals(model, private$population)
         n <- length(ind)
         if (n < 2) stop("At least two individuals are needed for Tajima's D")

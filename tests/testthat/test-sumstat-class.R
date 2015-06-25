@@ -30,17 +30,17 @@ test_that('Adding Sumstats to a model works', {
 
 test_that('Calculation of Sumstats works', {
   Stat_Sum <- R6::R6Class('Stat_Sum', inherit = Sumstat,
-    public = list(calculate = function(seg_sites, files, model) {
+    public = list(calculate = function(seg_sites, trees, files, model) {
       sapply(seg_sites, sum)
     })
   )
   model <- coal_model(5:6, 10) + Stat_Sum$new('sum')
-  stats <- calc_sumstats(list(1:3, 1:5, 7), '', model, 1,
+  stats <- calc_sumstats(list(1:3, 1:5, 7), NULL, '', model, 1,
                          1:3, get_simulator("scrm"))
   expect_equal(stats$sum, c(6, 15, 7))
 
   model <- model + Stat_Sum$new('sum2')
-  stats <- calc_sumstats(list(1:3, 1:5, 7), '', model, 1:2,
+  stats <- calc_sumstats(list(1:3, 1:5, 7), NULL, '', model, 1:2,
                          1:3, get_simulator("scrm"))
   expect_equal(stats$pars, 1:2)
   expect_equal(stats$sum,  c(6, 15, 7))

@@ -2,7 +2,7 @@
 SumstatDna <- R6Class('SumstatDna', inherit = Sumstat, #nolint
   private = list(req_files = TRUE),
   public = list(
-    calculate = function(seg_sites, files, model) {
+    calculate = function(seg_sites, trees, files, model) {
       dna <- parse_sg_output(files,
                             sum(get_sample_size(model, for_sim = TRUE)),
                             get_locus_length_matrix(model),

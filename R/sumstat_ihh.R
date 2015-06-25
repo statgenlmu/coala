@@ -22,7 +22,7 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
       private$position <- position
       super$initialize(name)
     },
-    calculate = function(seg_sites, files, model) {
+    calculate = function(seg_sites, trees, files, model) {
       assert_that(is.list(seg_sites))
       assert_that(is.model(model))
       pos <- get_snp_positions(seg_sites, model, relative = FALSE)

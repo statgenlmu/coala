@@ -9,7 +9,7 @@ Sumstat <- R6Class('Sumstat',
     initialize = function(name) {
       private$name <- name
     },
-    calculate = function(seg_sites, files, model) {
+    calculate = function(seg_sites, trees, files, model) {
       stop("Overwrite this function with the calculation of the statistic.")
     },
     get_name = function() private$name,
@@ -61,7 +61,8 @@ get_summary_statistics <- function(model) {
 }
 
 
-calc_sumstats <- function(seg_sites, files, model, pars, cmds, simulator) {
+calc_sumstats <- function(seg_sites, trees, files, model,
+                          pars, cmds, simulator) {
   if (missing(pars)) pars <- numeric(0)
   stopifnot(is.model(model))
 
@@ -78,7 +79,8 @@ calc_sumstats <- function(seg_sites, files, model, pars, cmds, simulator) {
   }
 
   for (stat in model$sum_stats) {
-    sum_stats[[stat$get_name()]] <- stat$calculate(seg_sites, files, model)
+    sum_stats[[stat$get_name()]] <- stat$calculate(seg_sites, trees,
+                                                   files, model)
   }
 
   sum_stats

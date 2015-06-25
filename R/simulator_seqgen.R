@@ -152,7 +152,7 @@ seqgen_class <- R6Class('Seqgen', inherit = simulator_class,
         seg_sites <- NULL
       }
 
-      sum_stats <- calc_sumstats(seg_sites, seqgen_files, model, parameters,
+      sum_stats <- calc_sumstats(seg_sites, NULL, seqgen_files, model, parameters,
                                  NULL, get_simulator("seqgen"))
 
       # Clean Up

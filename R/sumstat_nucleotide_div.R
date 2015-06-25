@@ -10,7 +10,7 @@ SumstatPi <- R6Class('SumstatPi', inherit = Sumstat, #nolint
       private$population <- population
       super$initialize(name)
     },
-    calculate = function(seg_sites, files, model) {
+    calculate = function(seg_sites, trees, files, model) {
       ind <- get_population_indiviuals(model, private$population)
       calc_nucleotide_div(seg_sites, ind)
     }

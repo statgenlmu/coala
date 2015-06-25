@@ -20,7 +20,7 @@ s8        GCGGAAGCCT
 s9        CCGGCTGCAG
 s10       CCTCAGGGCC", file = seqgen_file)
 
-  dna <- stat_dna$calculate(NULL, seqgen_file, model_tmp)
+  dna <- stat_dna$calculate(NULL, NULL, seqgen_file, model_tmp)
   expect_that(dna, is_a('list'))
   expect_equal(length(dna), 1)
   expect_equal(dna[[1]][1:5, 1], c("T", "T", "T", "T", "T"))
@@ -30,7 +30,7 @@ s10       CCTCAGGGCC", file = seqgen_file)
     feat_outgroup(3) +
     feat_pop_merge(par_range('tau', 0.5, 2), 2, 1) +
     feat_pop_merge(par_expr('2*tau'), 3, 1)
-  dna2 <- stat_dna$calculate(NULL, seqgen_file, model_tmp)
+  dna2 <- stat_dna$calculate(NULL, NULL, seqgen_file, model_tmp)
   expect_equal(dna2, dna)
 
   unlink(seqgen_file)
