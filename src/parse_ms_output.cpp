@@ -36,6 +36,9 @@ List parse_ms_output(const List file_names,
   size_t individuals = sum(sample_size);
 
   List seg_sites(loci_number);
+  List trees(loci_number);
+  CharacterVector locus_trees;
+
   int locus = -1;
 
   for (int i = 0; i < file_names.size(); ++i) {
@@ -46,19 +49,24 @@ List parse_ms_output(const List file_names,
       std::ifstream output(as<std::string>(file_name(j)).c_str(),
                            std::ifstream::in);
 
-      if (!output.is_open()) {
+      if (!output.good()) {
         stop(std::string("Cannot open file ") + file_name(0));
       }
 
+      std::getline(output, line);
       // Read it line by line and read the relevant parts
-      while( output.good() ) {
-        std::getline(output, line);
+      while (output.good()) {
+         // Rcout << "Line: " << line << std::endl;
         if (line == "//") {
           ++locus;
+          if (locus >= loci_number) stop("Too many loci in ms output");
+          // Rcout << "Locus: " << locus << std::endl;
+          std::getline(output, line);
         }
 
+        // Parse Segregating Sites
         else if (line.substr(0, 9) == "segsites:") {
-
+          // Rcout << "Parsing Seg. Sites" << std::endl;
           if (line.substr(0, 11) == "segsites: 0") {
             NumericMatrix ss = NumericMatrix(individuals, 0);
             ss.attr("positions") = NumericVector(0);
@@ -80,10 +88,27 @@ List parse_ms_output(const List file_names,
 
             seg_sites[locus] = ss;
           }
+          std::getline(output, line);
         }
+
+        // Parse Trees
+        else if (line.substr(0, 1) == "[" || line.substr(0, 1) == "(") {
+          // Rcout << "Parsing Trees" << std::endl;
+          while (line.substr(0, 1) == "[" || line.substr(0, 1) == "(") {
+            locus_trees.push_back(line);
+            std::getline(output, line);
+          }
+          trees[locus] = locus_trees;
+          locus_trees = CharacterVector();
+        }
+
+        else std::getline(output, line);
       }
     }
   }
 
-  return seg_sites;
+  if (locus != loci_number - 1) stop("Too few loci in ms output");
+
+  return List::create(_["segsites"] = seg_sites,
+                      _["trees"] = trees);
 }

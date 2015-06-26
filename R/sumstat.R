@@ -13,7 +13,6 @@ Sumstat <- R6Class('Sumstat',
       stop("Overwrite this function with the calculation of the statistic.")
     },
     get_name = function() private$name,
-    get_group = function() private$group,
     requires_files = function() private$req_files,
     requires_segsites = function() private$req_segsites,
     requires_trees = function() private$req_trees,
@@ -72,10 +71,17 @@ calc_sumstats <- function(seg_sites, trees, files, model,
                     cmds = cmds,
                     simulator = simulator$get_info())
 
-  if (is_unphased(model) && requires_segsites(model)) {
-    seg_sites <- unphase_segsites(seg_sites,
-                                  get_ploidy(model),
-                                  get_samples_per_ind(model))
+  # Process seg_sites for trios and unphase if neccessary
+  if (requires_segsites(model)) {
+    if (has_trios(model) && simulator$get_name() != "seqgen") {
+      seg_sites <- conv_for_trios(seg_sites, model)
+    }
+
+    if (is_unphased(model)) {
+      seg_sites <- unphase_segsites(seg_sites,
+                                    get_ploidy(model),
+                                    get_samples_per_ind(model))
+    }
   }
 
   for (stat in model$sum_stats) {

@@ -30,18 +30,6 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// parse_ms_trees
-List parse_ms_trees(const List files, const int loci_number);
-RcppExport SEXP coala_parse_ms_trees(SEXP filesSEXP, SEXP loci_numberSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const List >::type files(filesSEXP);
-    Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP);
-    __result = Rcpp::wrap(parse_ms_trees(files, loci_number));
-    return __result;
-END_RCPP
-}
 // parse_sg_output
 List parse_sg_output(const List file_names, const int sample_size, const NumericMatrix sequence_length, const int loci_number, const int outgroup_size, const bool calc_seg_sites);
 RcppExport SEXP coala_parse_sg_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP sequence_lengthSEXP, SEXP loci_numberSEXP, SEXP outgroup_sizeSEXP, SEXP calc_seg_sitesSEXP) {
