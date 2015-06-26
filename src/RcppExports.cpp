@@ -6,18 +6,6 @@
 
 using namespace Rcpp;
 
-// calc_nucleotide_div
-NumericVector calc_nucleotide_div(List seg_sites, const NumericVector individuals);
-RcppExport SEXP coala_calc_nucleotide_div(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< List >::type seg_sites(seg_sitesSEXP);
-    Rcpp::traits::input_parameter< const NumericVector >::type individuals(individualsSEXP);
-    __result = Rcpp::wrap(calc_nucleotide_div(seg_sites, individuals));
-    return __result;
-END_RCPP
-}
 // parse_ms_positions
 NumericVector parse_ms_positions(const std::string line);
 RcppExport SEXP coala_parse_ms_positions(SEXP lineSEXP) {
@@ -58,18 +46,6 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// parse_ms_trees
-List parse_ms_trees(const List files, const int loci_number);
-RcppExport SEXP coala_parse_ms_trees(SEXP filesSEXP, SEXP loci_numberSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const List >::type files(filesSEXP);
-    Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP);
-    __result = Rcpp::wrap(parse_ms_trees(files, loci_number));
-    return __result;
-END_RCPP
-}
 // generate_trio_trees
 List generate_trio_trees(const List trees, const NumericMatrix llm);
 RcppExport SEXP coala_generate_trio_trees(SEXP treesSEXP, SEXP llmSEXP) {
@@ -105,6 +81,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericVector >::type pop1(pop1SEXP);
     Rcpp::traits::input_parameter< const NumericVector >::type pop2(pop2SEXP);
     __result = Rcpp::wrap(calc_jsfs(seg_sites, pop1, pop2));
+    return __result;
+END_RCPP
+}
+// calc_nucleotide_div
+NumericVector calc_nucleotide_div(List seg_sites, const NumericVector individuals);
+RcppExport SEXP coala_calc_nucleotide_div(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< List >::type seg_sites(seg_sitesSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type individuals(individualsSEXP);
+    __result = Rcpp::wrap(calc_nucleotide_div(seg_sites, individuals));
     return __result;
 END_RCPP
 }
