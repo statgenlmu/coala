@@ -6,18 +6,6 @@
 
 using namespace Rcpp;
 
-// calc_nucleotide_div
-NumericVector calc_nucleotide_div(List seg_sites, const NumericVector individuals);
-RcppExport SEXP coala_calc_nucleotide_div(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< List >::type seg_sites(seg_sitesSEXP);
-    Rcpp::traits::input_parameter< const NumericVector >::type individuals(individualsSEXP);
-    __result = Rcpp::wrap(calc_nucleotide_div(seg_sites, individuals));
-    return __result;
-END_RCPP
-}
 // parse_ms_positions
 NumericVector parse_ms_positions(const std::string line);
 RcppExport SEXP coala_parse_ms_positions(SEXP lineSEXP) {
@@ -42,6 +30,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// parse_ms_trees
+List parse_ms_trees(const List files, const int loci_number);
+RcppExport SEXP coala_parse_ms_trees(SEXP filesSEXP, SEXP loci_numberSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const List >::type files(filesSEXP);
+    Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP);
+    __result = Rcpp::wrap(parse_ms_trees(files, loci_number));
+    return __result;
+END_RCPP
+}
 // parse_sg_output
 List parse_sg_output(const List file_names, const int sample_size, const NumericMatrix sequence_length, const int loci_number, const int outgroup_size, const bool calc_seg_sites);
 RcppExport SEXP coala_parse_sg_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP sequence_lengthSEXP, SEXP loci_numberSEXP, SEXP outgroup_sizeSEXP, SEXP calc_seg_sitesSEXP) {
@@ -55,18 +55,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type outgroup_size(outgroup_sizeSEXP);
     Rcpp::traits::input_parameter< const bool >::type calc_seg_sites(calc_seg_sitesSEXP);
     __result = Rcpp::wrap(parse_sg_output(file_names, sample_size, sequence_length, loci_number, outgroup_size, calc_seg_sites));
-    return __result;
-END_RCPP
-}
-// parse_ms_trees
-List parse_ms_trees(const List files, const int loci_number);
-RcppExport SEXP coala_parse_ms_trees(SEXP filesSEXP, SEXP loci_numberSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const List >::type files(filesSEXP);
-    Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP);
-    __result = Rcpp::wrap(parse_ms_trees(files, loci_number));
     return __result;
 END_RCPP
 }
@@ -105,6 +93,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericVector >::type pop1(pop1SEXP);
     Rcpp::traits::input_parameter< const NumericVector >::type pop2(pop2SEXP);
     __result = Rcpp::wrap(calc_jsfs(seg_sites, pop1, pop2));
+    return __result;
+END_RCPP
+}
+// calc_nucleotide_div
+NumericVector calc_nucleotide_div(List seg_sites, const NumericVector individuals);
+RcppExport SEXP coala_calc_nucleotide_div(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< List >::type seg_sites(seg_sitesSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type individuals(individualsSEXP);
+    __result = Rcpp::wrap(calc_nucleotide_div(seg_sites, individuals));
     return __result;
 END_RCPP
 }
