@@ -40,7 +40,8 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
       seed <- sample_seed(1)
 
       # Create the command
-      arg <- paste("-jar", private$jar, as.character(msms_args), "-seed", seed)
+      arg <- paste("-jar", private$jar, as.character(msms_args),
+                   "-seed", format(seed, scientific = FALSE))
 
       # Execute the command
       status <- system2(private$java, args = arg, stdout = out_file)
