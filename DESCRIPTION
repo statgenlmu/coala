@@ -1,6 +1,6 @@
 Package: coala
-Version: 0.0.9903
-Date: 2015-06-25
+Version: 0.0.9904
+Date: 2015-06-29
 License: GPL (>= 3)
 Title: A Framework for Coalescent Simulation
 Authors@R: c(
