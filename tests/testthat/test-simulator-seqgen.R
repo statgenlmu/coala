@@ -171,6 +171,22 @@ test_that("parse_sg_output works with a single file", {
   expect_equal(length(attr(seg_sites[[1]], 'locus')), ncol(seg_sites[[1]]))
   expect_equal(length(attr(seg_sites[[1]], 'positions')), ncol(seg_sites[[1]]))
 
+  # Unexpected sequence character
+  cat(" 11 10
+s11       AATTTTGCCT
+s2        TTCCCAAGTT
+s4        TTCACAAGTG
+s1        TTCCCAAGTG
+s3        TTCCTAAGTG
+s5        TCGGAAGCAG
+s7        TCGGAAGCAG
+s6        CCGGAAGCCT
+s8        GCGGAAGCCT
+s9        CCGGNTGCAG
+s10       CCTCAGGGCC", file = seqgen_file)
+  expect_error(parse_sg_output(list(seqgen_file), 11,
+                               get_locus_length_matrix(model_tmp), 1))
+
   unlink(c(seqgen_file, seqgen_file_1, seqgen_file_2))
 })
 
