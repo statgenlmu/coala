@@ -32,7 +32,7 @@ NumericMatrix read_sequence(std::ifstream &output,
       else if (tmp[j] == 'C') seq(seq_nr, j) = 2;
       else if (tmp[j] == 'G') seq(seq_nr, j) = 3;
       else if (tmp[j] == 'T') seq(seq_nr, j) = 4;
-      else stop("unexpected sequence character");
+      else stop("unexpected sequence character: ", tmp[j]);
     }
   }
 
