@@ -184,8 +184,10 @@ s6        CCGGAAGCCT
 s8        GCGGAAGCCT
 s9        CCGGNTGCAG
 s10       CCTCAGGGCC", file = seqgen_file)
-  expect_error(parse_sg_output(list(seqgen_file), 11,
-                               get_locus_length_matrix(model_tmp), 1))
+  capture.output(
+    expect_error(parse_sg_output(list(seqgen_file), 11,
+                                 get_locus_length_matrix(model_tmp), 1))
+  )
 
   unlink(c(seqgen_file, seqgen_file_1, seqgen_file_2))
 })
