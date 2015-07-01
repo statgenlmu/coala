@@ -32,7 +32,12 @@ NumericMatrix read_sequence(std::ifstream &output,
       else if (tmp[j] == 'C') seq(seq_nr, j) = 2;
       else if (tmp[j] == 'G') seq(seq_nr, j) = 3;
       else if (tmp[j] == 'T') seq(seq_nr, j) = 4;
-      else stop(std::string("unexpected sequence character: ") + tmp[j]);
+      else {
+        Rcout << "Error parsing seq-gen sequence " << seq_nr + 1
+              << " position " << j + 1 << std::endl
+              << "Seq: " << tmp << std::endl;
+        stop(std::string("unexpected sequence character: ") + tmp[j]);
+      }
     }
   }
 
