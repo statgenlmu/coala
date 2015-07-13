@@ -6,6 +6,7 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
     req_segsites = TRUE,
     position = NA,
     population = NULL,
+    max_snps = Inf,
     empty_matrix = matrix(0, 0, 3,
                           dimnames = list(NULL, c("IHHa", "IHHd", "IES"))),
     get_snp = function(positions, locus, model) {
@@ -15,11 +16,14 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
       which.min(abs(pos - positions))
     }),
   public = list(
-    initialize = function(name, position, population) {
+    initialize = function(name, population, position, max_snps) {
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
+      assert_that(is.numeric(max_snps))
+      assert_that(length(max_snps) == 1)
       private$population <- population
       private$position <- position
+      private$max_snps <- max_snps
       super$initialize(name)
     },
     calculate = function(seg_sites, trees, files, model) {
@@ -44,19 +48,25 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
           ihh[1, 3] <- calc_ehhs(rehh_data, mrk = snps, plotehh = FALSE)$ies
           return(ihh)
         }
-        rehh::scan_hh(rehh_data)[snps , -(1:3), drop = FALSE] #nolint
+        rehh::scan_hh(rehh_data)[ , -(1:3), drop = FALSE] #nolint
       })
     },
     create_rehh_data = function(seg_sites, pos, ind) {
       assert_that(is.matrix(seg_sites))
+      snp_mask <- self$create_snp_mask(seg_sites)
       rehh_data <- new("haplohh")
-      rehh_data@haplo <- seg_sites[ind, , drop = FALSE] + 1
-      rehh_data@position <- pos
-      rehh_data@snp.name <- as.character(seq(along = pos))
+      rehh_data@haplo <- seg_sites[ind, snp_mask, drop = FALSE] + 1
+      rehh_data@position <- pos[snp_mask]
+      rehh_data@snp.name <- as.character(seq(along = rehh_data@position))
       rehh_data@chr.name <- 1
       rehh_data@nhap <- length(ind)
-      rehh_data@nsnp <- ncol(seg_sites)
+      rehh_data@nsnp <- length(rehh_data@position)
       rehh_data
+    },
+    create_snp_mask = function(seg_sites) {
+      n_snps <- ncol(seg_sites)
+      if (n_snps < private$max_snps) return(rep(TRUE, n_snps))
+      sample.int(n_snps, private$max_snps, replace = FALSE)
     }
   )
 )
@@ -80,6 +90,10 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
 #'   Otherwise, it will be calculated for all SNPs.
 #'   The position is relative to the middle locus' extend if trios
 #'   are used.
+#' @param max_snps The maximal number of SNPs per locus that are used for the
+#'   calculation. If a locus has more SNPs than this number, only a
+#'   evenly distributed subset of this size will be used for calculating iHS
+#'   to increase performance. Set to \code{Inf} to use all SNPs.
 #' @return When added to a model, the statistic returns a matrix for each locus.
 #'   The columns of the values state the values for integrated EHH for the
 #'   ancestral allele (IHHa), integrated EHH for the derived allele (IHHd) and
@@ -87,6 +101,7 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
 #'   for the SNP nearest to the selected position. Each SNP is represented by
 #'   a row, sorted by position on the locus.
 #' @export
-sumstat_ihh <- function(name = 'ihh', position=NA, population=1) {
-  SumstatIhh$new(name, position, population) #nolint
+sumstat_ihh <- function(name = 'ihh', position = NA, population = 1,
+                        max_snps = 1000) {
+  SumstatIhh$new(name, population, position, max_snps) #nolint
 }
