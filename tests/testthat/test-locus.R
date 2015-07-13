@@ -1,20 +1,20 @@
 context('Locus Class')
 
 test_that('Creating loci works', {
-  locus <- Locus$new(1013)
+  locus <- locus_class$new(1013)
   expect_true(is.locus(locus))
   expect_equal(locus$get_length(), 1013)
   expect_equal(locus$get_number(), 1)
 
-  locus <- Locus$new(1014, 10)
+  locus <- locus_class$new(1014, 10)
   expect_true(is.locus(locus))
   expect_equal(locus$get_length(), 1014)
   expect_equal(locus$get_number(), 10)
 
-  expect_error(Locus$new("abc", 10))
-  expect_error(Locus$new(-5, 10))
-  expect_error(Locus$new(10, "10"))
-  expect_error(Locus$new(10, -3))
+  expect_error(locus_class$new("abc", 10))
+  expect_error(locus_class$new(-5, 10))
+  expect_error(locus_class$new(10, "10"))
+  expect_error(locus_class$new(10, -3))
 })
 
 

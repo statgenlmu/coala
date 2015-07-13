@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-Locus <- R6Class('Locus',
+locus_class <- R6Class('locus',
   private = list(
     number = 0,
     length = NA
@@ -38,7 +38,7 @@ Locus <- R6Class('Locus',
 )
 
 
-is.locus <- function(locus) 'Locus' %in% class(locus)
+is.locus <- function(locus) any("locus" == class(locus))
 
 
 #' Add one locus or multiple loci to a Model
@@ -61,7 +61,7 @@ is.locus <- function(locus) 'Locus' %in% class(locus)
 #'   locus_single(750) +
 #'   locus_single(430)
 locus_single <- function(length) {
-  Locus$new(length, 1)
+  locus_class$new(length, 1)
 }
 
 
@@ -69,7 +69,7 @@ locus_single <- function(length) {
 #' @param number The number of loci to add.
 #' @export
 locus_averaged <- function(number, length) {
-  Locus$new(round(length), number)
+  locus_class$new(round(length), number)
 }
 
 
@@ -85,8 +85,11 @@ locus_averaged <- function(number, length) {
 #' coal_model(c(25,25)) +
 #'   locus_trio(locus_length=c(1250, 1017, 980),
 #'              distance=c(257, 814))
-locus_trio <- function(locus_length = c(left=1000, middle=1000, right=1000),
-                       distance = c(left_middle=500, middle_right=500),
+locus_trio <- function(locus_length = c(left = 1000,
+                                        middle = 1000,
+                                        right = 1000),
+                       distance = c(left_middle = 500,
+                                    middle_right = 500),
                        number = 1) {
 
   stopifnot(length(locus_length) == 3)
@@ -98,15 +101,15 @@ locus_trio <- function(locus_length = c(left=1000, middle=1000, right=1000),
     distance <- distance[c('left_middle', 'middle_right')]
   }
 
-  Locus$new(locus_length = c(locus_length, distance)[c(1,4,2,5,3)],
-            locus_number = number)
+  locus_class$new(locus_length = c(locus_length, distance)[c(1, 4, 2, 5, 3)],
+                  locus_number = number)
 }
 
 
 # Converts a position on the middle locus to the relative position
 # on the simulated stretch
 conv_middle_to_trio_pos <- function(pos, model, locus,
-                                    relative_out=TRUE, relative_in=TRUE) {
+                                    relative_out = TRUE, relative_in = TRUE) {
 
   llm <- get_locus_length_matrix(model)
   group <- get_locus_group(model, locus)

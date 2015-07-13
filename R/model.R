@@ -25,7 +25,7 @@
 #' simulate(model)
 coal_model <- function(sample_size, loci_number=0, loci_length=1000) {
   model <- list()
-  class(model) <- c("Coalmodel")
+  class(model) <- c("coalmodel")
 
   model$features <- list()
   model$loci <- list()
@@ -51,7 +51,7 @@ coal_model <- function(sample_size, loci_number=0, loci_length=1000) {
 
 
 is.model <- function(model) {
-  "Coalmodel" %in% class(model)
+  "coalmodel" %in% class(model)
 }
 
 
