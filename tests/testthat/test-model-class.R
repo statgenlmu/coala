@@ -34,9 +34,9 @@ test_that("adding parameters works", {
 
 test_that("adding features works", {
   expect_equal(length(get_features(coal_model(5))), 1)
-  model <- coal_model(5) + Feature$new(1, 1, 5)
+  model <- coal_model(5) + feature_class$new(1, 1, 5)
   expect_equal(length(get_features(model)), 2)
-  model <- model + Feature$new(2, 1, 3)
+  model <- model + feature_class$new(2, 1, 3)
   expect_equal(length(get_features(model)), 3)
 })
 

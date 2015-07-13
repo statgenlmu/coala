@@ -201,3 +201,6 @@ prepare_pars <- function(pars, model) {
   # Sample from priors and return
   c(pars, sample_par_priors(model))
 }
+
+
+print_par <- function(par) paste0("`", substr(par, 5, nchar(par) - 1), "`")

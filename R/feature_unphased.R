@@ -1,4 +1,4 @@
-Feature_unphased <- R6Class("Feature_unphased", inherit = Feature,
+unphased_class <- R6Class("unphased", inherit = feature_class,
   private = list(ploidy = NA, samples_per_ind = NA),
   public = list(
     initialize = function(ploidy, samples_per_ind) {
@@ -36,11 +36,11 @@ Feature_unphased <- R6Class("Feature_unphased", inherit = Feature,
 #' @return The feature, which can be added to a model using `+`.
 #' @export
 feat_unphased <- function(ploidy, samples_per_ind=ploidy) {
-  Feature_unphased$new(ploidy, samples_per_ind)
+  unphased_class$new(ploidy, samples_per_ind)
 }
 
 
-is_feat_unphased <- function(feat) any("Feature_unphased" == class(feat))
+is_feat_unphased <- function(feat) any("unphased" == class(feat))
 
 get_feature_unphased <- function(model) {
   mask <- vapply(model$features, is_feat_unphased, logical(1))
@@ -68,16 +68,16 @@ is_unphased <- function(model) !is.null(get_feature_unphased(model))
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_unphased <- ignore_par
+conv_to_ms_arg.unphased <- ignore_par
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.Feature_unphased <- ignore_par
+conv_to_msms_arg.unphased <- ignore_par
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.Feature_unphased <- ignore_par
+conv_to_scrm_arg.unphased <- ignore_par
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.Feature_unphased <- ignore_par
+conv_to_seqgen_arg.unphased <- ignore_par

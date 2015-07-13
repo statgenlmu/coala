@@ -1,4 +1,4 @@
-Feature_growth <- R6Class("Feature_growth", inherit = Feature,
+growth_class <- R6Class("growth", inherit = feature_class,
   public = list(
     print = function() {
       cat("Exponential growth/decline with rate", print_par(private$rate),
@@ -33,13 +33,13 @@ Feature_growth <- R6Class("Feature_growth", inherit = Feature,
 #' model <- coal_model(c(20,37), 88) +
 #'   feat_growth(par_range('alpha', 0.1, 2), population=2, time="0")
 feat_growth <- function(rate, population, time="0") {
-  Feature_growth$new(rate, population, time)
+  growth_class$new(rate, population, time)
 }
 
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_growth <- function(feature, model) {
+conv_to_ms_arg.growth <- function(feature, model) {
   all_pops <- feature$get_population() == "all" ||
     (feature$get_population() == 1 && length(get_populations(model)) == 1)
   present <- feature$get_time() == "par(0)"
@@ -60,12 +60,12 @@ conv_to_ms_arg.Feature_growth <- function(feature, model) {
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.Feature_growth <- conv_to_ms_arg.Feature_growth
+conv_to_msms_arg.growth <- conv_to_ms_arg.growth
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.Feature_growth <- conv_to_ms_arg.Feature_growth
+conv_to_scrm_arg.growth <- conv_to_ms_arg.growth
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.Feature_growth <- ignore_par
+conv_to_seqgen_arg.growth <- ignore_par

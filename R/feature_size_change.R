@@ -1,4 +1,4 @@
-Feature_size_change <- R6Class("Feature_size_change", inherit = Feature,
+size_change_class <- R6Class("size_change", inherit = feature_class,
   public = list(
     print = function() {
       cat("Instanious size change to", print_par(private$rate),
@@ -32,12 +32,12 @@ Feature_size_change <- R6Class("Feature_size_change", inherit = Feature,
 #' model <- coal_model(c(20,37), 88) +
 #'   feat_size_change(.1, 2, time="1")
 feat_size_change <- function(new_size, population, time="0") {
-  Feature_size_change$new(new_size, population, time)
+  size_change_class$new(new_size, population, time)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_size_change <- function(feature, model) {
+conv_to_ms_arg.size_change <- function(feature, model) {
   paste0("-en', ", feature$get_time(), ", ",
          feature$get_population(), ", ",
          feature$get_rate(), ", '")
@@ -45,12 +45,12 @@ conv_to_ms_arg.Feature_size_change <- function(feature, model) {
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.Feature_size_change <- conv_to_ms_arg.Feature_size_change
+conv_to_msms_arg.size_change <- conv_to_ms_arg.size_change
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.Feature_size_change <- conv_to_ms_arg.Feature_size_change
+conv_to_scrm_arg.size_change <- conv_to_ms_arg.size_change
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.Feature_size_change <- ignore_par
+conv_to_seqgen_arg.size_change <- ignore_par

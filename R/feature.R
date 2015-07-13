@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-Feature <- R6Class("Feature",
+feature_class <- R6Class("feature",
   private = list(
     parameter = list(),
     population = NULL,
@@ -46,8 +46,6 @@ Feature <- R6Class("Feature",
   )
 )
 
-is.feature <- function(feature) inherits(feature, "Feature")
+is.feature <- function(feature) inherits(feature, "feature")
 
 ignore_par <- function(feature, model) ""
-
-print_par <- function(par) paste0("`", substr(par, 5, nchar(par) - 1), "`")

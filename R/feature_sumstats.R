@@ -1,4 +1,4 @@
-Feature_segsites <- R6Class("Feature_seg_sites", inherit = Feature,
+segsites_feat_class <- R6Class("seg_sites_feat", inherit = feature_class,
   public = list(
     print = function() cat("Generating Seg. Sites\n")
   )
@@ -6,7 +6,7 @@ Feature_segsites <- R6Class("Feature_seg_sites", inherit = Feature,
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_seg_sites <- function(feature, model) {
+conv_to_ms_arg.seg_sites_feat <- function(feature, model) {
   if (!any(vapply(get_features(model), is_feat_mutation, logical(1)))) {
     stop("model requires mutation to calculate summary statistics")
   }
@@ -15,19 +15,19 @@ conv_to_ms_arg.Feature_seg_sites <- function(feature, model) {
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.Feature_seg_sites <- conv_to_ms_arg.Feature_seg_sites
+conv_to_msms_arg.seg_sites_feat <- conv_to_ms_arg.seg_sites_feat
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.Feature_seg_sites <- conv_to_ms_arg.Feature_seg_sites
+conv_to_scrm_arg.seg_sites_feat <- conv_to_ms_arg.seg_sites_feat
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.Feature_seg_sites <- conv_to_ms_arg.Feature_seg_sites
+conv_to_seqgen_arg.seg_sites_feat <- conv_to_ms_arg.seg_sites_feat
 
 
 
-Feature_trees <- R6Class("Feature_trees", inherit = Feature,
+trees_feat_class <- R6Class("trees_feat", inherit = feature_class,
   public = list(
     print = function() cat("Generating Trees\n")
   )
@@ -35,25 +35,25 @@ Feature_trees <- R6Class("Feature_trees", inherit = Feature,
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_trees <- function(feature, model) "-T "
+conv_to_ms_arg.trees_feat <- function(feature, model) "-T "
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.Feature_trees <- conv_to_ms_arg.Feature_trees
+conv_to_msms_arg.trees_feat <- conv_to_ms_arg.trees_feat
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.Feature_trees <- conv_to_ms_arg.Feature_trees
+conv_to_scrm_arg.trees_feat <- conv_to_ms_arg.trees_feat
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.Feature_trees <- function(feature, model) {
+conv_to_seqgen_arg.trees_feat <- function(feature, model) {
   stop("generation of trees is not supported.")
 }
 
 
 
-Feature_files <- R6Class("Feature_files", inherit = Feature,
+files_feat_class <- R6Class("files_feat", inherit = feature_class,
   public = list(
     print = function() cat("Generating Files\n")
   )
@@ -61,16 +61,16 @@ Feature_files <- R6Class("Feature_files", inherit = Feature,
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_files <- ignore_par
+conv_to_ms_arg.files_feat <- ignore_par
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.Feature_files <- ignore_par
+conv_to_msms_arg.files_feat <- ignore_par
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.Feature_files <- ignore_par
+conv_to_scrm_arg.files_feat <- ignore_par
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.Feature_files <- ignore_par
+conv_to_seqgen_arg.files_feat <- ignore_par

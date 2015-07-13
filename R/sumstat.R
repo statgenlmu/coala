@@ -37,11 +37,11 @@ add_to_model.Sumstat <- function(sum_stat, model, feat_name) {
          "There is already a statistic with name ", sum_stat$get_name())
 
   if (sum_stat$requires_files() && !requires_files(model))
-    model <- model + Feature_files$new()
+    model <- model + files_feat_class$new()
   if (sum_stat$requires_segsites() && !requires_segsites(model))
-    model <- model + Feature_segsites$new()
+    model <- model + segsites_feat_class$new()
   if (sum_stat$requires_trees() && !requires_trees(model))
-    model <- model + Feature_trees$new()
+    model <- model + trees_feat_class$new()
 
   # Save the statistic
   model$sum_stats[[sum_stat$get_name()]] <- sum_stat

@@ -9,9 +9,9 @@ generate_tree_model <- function(model) {
 
     # Features
     tree_model_features <- !vapply(model$features, function(x) {
-      any(c("Feature_seg_sites",
-            "Feature_mutation",
-            "Feature_outgroup") %in% class(x))
+      any(c("seg_sites_feat",
+            "mutation",
+            "outgroup") %in% class(x))
     }, logical(1)) #nolint
     if (all(tree_model_features)) stop("seq-gen not required")
     tree_model$features <- model$features[tree_model_features]

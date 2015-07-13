@@ -16,7 +16,7 @@ test_that('simulator_classs can be registered', {
   expect_true(is_simulator(get_simulator("TEMPLATE")))
 
   expect_error(register_simulator(1:10))
-  expect_error(register_simulator(Feature))
+  expect_error(register_simulator(feature))
 })
 
 

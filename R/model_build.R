@@ -37,7 +37,7 @@ add_to_model.Par_variation <- function(par, model, par_name) {
 }
 
 
-add_to_model.Feature <- function(feat, model, feat_name) {
+add_to_model.feature <- function(feat, model, feat_name) {
   # Check that the population in the feature exists
   pop <- feat$get_population()
   if (!is.null(pop)) {

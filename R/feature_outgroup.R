@@ -1,4 +1,4 @@
-Feature_outgroup <- R6Class("Feature_outgroup", inherit = Feature,
+outgroup_class <- R6Class("outgroup", inherit = feature_class,
   public = list(
     initialize = function(population) {
       private$set_population(population)
@@ -24,10 +24,10 @@ Feature_outgroup <- R6Class("Feature_outgroup", inherit = Feature,
 #'    feat_pop_merge(2, 3, 1) +
 #'    feat_mutation(5, model="GTR", gtr_rates = 1:6)
 feat_outgroup <- function(population) {
-  Feature_outgroup$new(population)
+  outgroup_class$new(population)
 }
 
-is_feat_outgroup <- function(feat) inherits(feat, "Feature_outgroup")
+is_feat_outgroup <- function(feat) inherits(feat, "outgroup")
 
 
 #' @describeIn get_features Returns the population that is marked as outgroup
@@ -49,22 +49,22 @@ get_outgroup_size <- function(model, for_sim = FALSE) {
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_outgroup <- function(feature, model) {
+conv_to_ms_arg.outgroup <- function(feature, model) {
   stop("ms does not support outgroups", call. = FALSE)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.Feature_outgroup <- function(feature, model) {
+conv_to_msms_arg.outgroup <- function(feature, model) {
   stop("msms does not support outgroups", call. = FALSE)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.Feature_outgroup <- function(feature, model) {
+conv_to_scrm_arg.outgroup <- function(feature, model) {
   stop("scrm does not support outgroups", call. = FALSE)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.Feature_outgroup <- ignore_par
+conv_to_seqgen_arg.outgroup <- ignore_par
