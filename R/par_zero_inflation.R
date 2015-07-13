@@ -1,5 +1,6 @@
 #' @importFrom R6 R6Class
-Par_zero_inflation <- R6Class("Par_zero_inflation", inherit = Par_variation,
+zero_inflation_par_class <- R6Class("zero_inflation_par",
+  inherit = variation_par_class,
   private = list(func = "zero_inflate")
 )
 
@@ -20,5 +21,5 @@ zero_inflate <- function(x, prob) ifelse(rbinom(1, 1, prob), 0, x)
 #'   for each locus.
 #' @export
 par_zero_inflation <- function(par, prob) {
-  Par_zero_inflation$new(par, prob)
+  zero_inflation_par_class$new(par, prob)
 }

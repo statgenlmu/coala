@@ -1,10 +1,10 @@
 context('Parameter Class')
 
 test_that('Getting and Setting Expressions works', {
-  expect_error(Parameter$new(2 * x))
-  expect_error(Parameter$new(2))
-  expect_error(Parameter$new('2'))
-  basic_par <- Parameter$new(expression(2 * x))
+  expect_error(parameter_class$new(2 * x))
+  expect_error(parameter_class$new(2))
+  expect_error(parameter_class$new('2'))
+  basic_par <- parameter_class$new(expression(2 * x))
   x <- 5
   expect_equal(basic_par$eval(), 10)
 
@@ -24,7 +24,7 @@ test_that('Getting and Setting Expressions works', {
 
 test_that('par_expr works', {
   basic_par <- par_expr(2 * x)
-  expect_is(basic_par, 'Parameter')
+  expect_true(is.par(basic_par))
   x <- 5
   expect_equal(basic_par$eval(), 10)
   x <- 6

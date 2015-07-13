@@ -15,10 +15,10 @@ add_to_model.default <- function(x, model, x_name) {
 }
 
 
-add_to_model.Parameter <- function(par, model, par_name) model
+add_to_model.parameter <- function(par, model, par_name) model
 
 
-add_to_model.Par_Named <- function(par, model, par_name) {
+add_to_model.named_par <- function(par, model, par_name) {
   if (par$get_name() %in% get_par_names(model))
     stop("There is already a parameter with name ", par_name)
 
@@ -29,7 +29,7 @@ add_to_model.Par_Named <- function(par, model, par_name) {
 }
 
 
-add_to_model.Par_variation <- function(par, model, par_name) {
+add_to_model.variation_par <- function(par, model, par_name) {
   model <- add_variation(model)
   for (par in par$get_base_par()) model <- model + par
   model$id <- get_id()

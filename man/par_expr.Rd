@@ -7,7 +7,7 @@
 \alias{par_prior}
 \alias{par_range}
 \alias{parameter}
-\title{Define Model Parameters}
+\title{Define Model parameters}
 \usage{
 par_expr(expr)
 
@@ -43,7 +43,7 @@ a sample from the prior distribution you want for the parameter.
 For example using \code{rnorm(1)} gives a standard normal prior.}
 }
 \description{
-This functions allow to add parameters to a model. Parameters can either
+This functions allow to add parameters to a model. parameters can either
 be used in features, or added directly to a model using the plus operator.
 The value of parameters can be specified in the simulation command
 (for \code{par_named} and \code{par_range}), sampled from a prior
