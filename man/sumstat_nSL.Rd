@@ -4,7 +4,8 @@
 \alias{sumstat_nSL}
 \title{Number  of  Segregating  Sites  by  Length}
 \usage{
-sumstat_nSL(name = "ihh", position = NA, population = 1)
+sumstat_nSL(name = "ihh", position = NA, population = 1,
+  max_snps = 10000)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -19,6 +20,11 @@ The position is relative to the middle locus' extend if trios
 are used.}
 
 \item{population}{The population for which the statistic is calculated.}
+
+\item{max_snps}{The maximal number of SNPs per locus that are used for the
+calculation. If a locus has more SNPs than this number, only a
+evenly distributed subset of this size will be used for calculating iHS
+to increase performance. Set to \code{Inf} to use all SNPs.}
 }
 \value{
 When added to a model, the statistic returns a vector for each locus,

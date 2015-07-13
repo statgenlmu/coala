@@ -35,6 +35,7 @@ SumstatNsl <- R6Class('sumstat_nsl', inherit = SumstatIhh, #nolint
 #'   given or for the SNP nearest to the selected position.
 #'   SNPs are sorted by their positions on the locus.
 #' @export
-sumstat_nSL <- function(name = 'ihh', position=NA, population=1) { #nolint
-  SumstatNsl$new(name, position, population) #nolint
+sumstat_nSL <- function(name = 'ihh', position = NA, population = 1,
+                        max_snps = 1e4) { #nolint
+  SumstatNsl$new(name, population, position, max_snps) #nolint
 }

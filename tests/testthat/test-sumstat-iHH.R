@@ -27,6 +27,20 @@ test_that("generation of rehh data works", {
 })
 
 
+test_that("selection of snps works", {
+  stat_ihh <- sumstat_ihh(population = 1, max_snps = 2)
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
+  expect_equal(dim(rehh_data@haplo), c(4, 2))
+  expect_equal(rehh_data@nsnp, 2)
+  expect_equal(rehh_data@nhap, 4)
+
+  stat_ihh <- sumstat_ihh(population = 1, max_snps = 3)
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
+  expect_equal(dim(rehh_data@haplo), c(4, 3))
+  expect_equal(rehh_data@nsnp, 3)
+})
+
+
 test_that('calculation of ihh works', {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh()
