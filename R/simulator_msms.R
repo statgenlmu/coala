@@ -36,7 +36,7 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
       private$priority <- priority
     },
     call_msms = function(msms_args) {
-      out_file <- tempfile('msms')
+      out_file <- tempfile("msms")
       seed <- sample_seed(1)
 
       # Create the command
@@ -114,7 +114,7 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
   )
 )
 
-has_msms <- function() !is.null(simulators[['msms']])
+has_msms <- function() !is.null(simulators[["msms"]])
 
 
 #' Use the simulator msms

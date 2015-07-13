@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-locus_class <- R6Class('locus',
+locus_class <- R6Class("locus",
   private = list(
     number = 0,
     length = NA
@@ -25,8 +25,8 @@ locus_class <- R6Class('locus',
         locus_length <- private$length
       } else stop("Failed to get locus length")
 
-      names(locus_length) <- c('length_l', 'length_il', 'length_m',
-                               'length_ir', 'length_r')
+      names(locus_length) <- c("length_l", "length_il", "length_m",
+                               "length_ir", "length_r")
       locus_length
     },
     get_number = function() private$number,
@@ -94,11 +94,11 @@ locus_trio <- function(locus_length = c(left = 1000,
 
   stopifnot(length(locus_length) == 3)
   if (!is.null(names(locus_length))) {
-    locus_length <- locus_length[c('left', 'middle', 'right')]
+    locus_length <- locus_length[c("left", "middle", "right")]
   }
   stopifnot(length(distance) == 2)
   if (!is.null(names(distance))) {
-    distance <- distance[c('left_middle', 'middle_right')]
+    distance <- distance[c("left_middle", "middle_right")]
   }
 
   locus_class$new(locus_length = c(locus_length, distance)[c(1, 4, 2, 5, 3)],

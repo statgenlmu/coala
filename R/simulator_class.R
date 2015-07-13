@@ -79,7 +79,7 @@ reduce_sim_commands <- function(sim_commands) {
 list_simulators <- function() {
   do.call(rbind, lapply(ls(simulators), function(simulator) {
     info <- get_simulator(simulator)$get_info()
-    name <- info[['name']]
+    name <- info[["name"]]
     info <- info[-1]
     pars <- paste(names(info), ":", info, collapse = ", ")
     c(name = name, info = pars)

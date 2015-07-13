@@ -18,7 +18,7 @@ parameter_class <- R6Class("parameter",
 
 
 is.par <- function(par) {
-  any('parameter' == class(par))
+  any("parameter" == class(par))
 }
 
 
@@ -27,12 +27,12 @@ is.par <- function(par) {
 # Model parameters have a name, and a value is assigned to a variable of that
 # name for each simulation.
 #' @importFrom R6 R6Class
-named_par_class <- R6Class('named_par', inherit = parameter_class,
+named_par_class <- R6Class("named_par", inherit = parameter_class,
   private = list(name = NA),
   public = list(
     initialize = function(name) {
       if (!(is.character(name) & length(name) == 1))
-        stop('The parameter name must be a character')
+        stop("The parameter name must be a character")
 
       super$initialize(parse(text = name))
       private$name <- name
@@ -103,7 +103,7 @@ par_const <- function(constant) {
 
 
 #' @describeIn par_expr Creates an parameter whose value is specified via the
-#'   \code{pars} argument in \code{\link{simulate.Coalmodel}}.
+#'   \code{pars} argument in \code{\link{simulate.coalmodel}}.
 #' @export
 #' @param name Character. The name of the parameter. Must be unique in a model.
 par_named <- function(name) {
@@ -111,7 +111,7 @@ par_named <- function(name) {
 }
 
 
-range_par_class <- R6Class('range_par', inherit = named_par_class,
+range_par_class <- R6Class("range_par", inherit = named_par_class,
   private = list(range = NA),
   public = list(
     initialize = function(lower, upper, name) {
@@ -126,7 +126,7 @@ range_par_class <- R6Class('range_par', inherit = named_par_class,
     get_range = function() private$range,
     print = function() {
       cat(private$name, ": range between", private$range[1],
-                           'and', private$range[2], "\n")
+                           "and", private$range[2], "\n")
     },
     check_value = function(value) {
       if ((!is.numeric(value)) || length(value) != 1) {
@@ -152,8 +152,8 @@ is.ranged_par <- function(par) inherits(par, "range_par")
 #'  \pkg{jaatha}.
 #'
 #' @export
-#' @param lower A numeric. The lower boundary of the parameter's range.
-#' @param upper A numeric. The upper boundary of the parameter's range.
+#' @param lower A numeric. The lower boundary of the parameter"s range.
+#' @param upper A numeric. The upper boundary of the parameter"s range.
 par_range <- function(name, lower, upper) {
   range_par_class$new(lower, upper, name)
 }
@@ -166,13 +166,13 @@ create_par_env <- function(model, parameters, ..., for_cmd = FALSE) {
   par_env <- new.env()
 
   if (!for_cmd) {
-    par_env[['par']] <- par_eval_func
+    par_env[["par"]] <- par_eval_func
 
     for (par in get_parameter(model)) {
       par_env[[par$get_name()]] <- par$generate_value(parameters)
     }
   } else {
-    par_env[['par']] <- par_print_func
+    par_env[["par"]] <- par_print_func
   }
 
   additional_pars <- list(...)

@@ -71,7 +71,7 @@ test_that("printing command works", {
 
 test_that("simulating files works", {
   scrm <- get_simulator("scrm")
-  folder <- tempfile('scrm_test')
+  folder <- tempfile("scrm_test")
   model <- model_theta_tau() + sumstat_file(folder)
   sum_stats <- scrm$simulate(model, c(tau = 1, theta = 5))
   expect_true(is.list(sum_stats))
@@ -83,7 +83,7 @@ test_that("simulating files works", {
 })
 
 
-test_that('simulating unphased data works', {
+test_that("simulating unphased data works", {
   scrm <- get_simulator("scrm")
   model <- model_theta_tau() + feat_unphased(2, 1) + sumstat_seg_sites()
   stats <- scrm$simulate(model, c(tau = 1, theta = 5))

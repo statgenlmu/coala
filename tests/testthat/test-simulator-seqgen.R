@@ -4,12 +4,12 @@ test_that("parse_sg_output works with a single file", {
   # --- One Group -----------------------------------------------
   model_base <- coal_model(c(4, 6, 1)) +
     feat_outgroup(3) +
-    feat_pop_merge(par_range('tau', 0.5, 2), 2, 1) +
-    feat_pop_merge(par_expr('2*tau'), 3, 1)
+    feat_pop_merge(par_range("tau", 0.5, 2), 2, 1) +
+    feat_pop_merge(par_expr("2*tau"), 3, 1)
 
   model_tmp <- model_base + locus_averaged(2, 10)
 
-  seqgen_file <- tempfile('seqgen_parser_test')
+  seqgen_file <- tempfile("seqgen_parser_test")
   cat(" 11 10
       s11       AATTTTGCCT
       s2        TTCCCAAGTT
@@ -37,7 +37,7 @@ test_that("parse_sg_output works with a single file", {
 
   seg_sites <- parse_sg_output(list(seqgen_file), 11,
                                get_locus_length_matrix(model_tmp), 2)
-  expect_is(seg_sites, 'list')
+  expect_is(seg_sites, "list")
   expect_equal(length(seg_sites), 2)
 
   seg_sites_1 <- matrix(c(1, 1, 1, 1, 1, 1, 1,
@@ -50,8 +50,8 @@ test_that("parse_sg_output works with a single file", {
                           1, 1, 1, 0, 0, 0, 0,
                           1, 1, 0, 0, 0, 1, 1,
                           0, 1, 1, 0, 1, 0, 1),
-                        10, 7, byrow=TRUE)
-  attr(seg_sites_1, 'positions') <- c(2, 4:9) / 9
+                        10, 7, byrow = TRUE)
+  attr(seg_sites_1, "positions") <- c(2, 4:9) / 9
   expect_equal(seg_sites[[1]], seg_sites_1)
 
   seg_sites_2 <- matrix(c(1, 1, 1, 1, 1,
@@ -64,15 +64,15 @@ test_that("parse_sg_output works with a single file", {
                           0, 1, 1, 0, 1,
                           1, 1, 1, 1, 1,
                           0, 1, 1, 1, 0),
-                        10, 5, byrow=TRUE)
-  attr(seg_sites_2, 'positions') <- c(1, 2, 3, 8, 9) / 9
+                        10, 5, byrow = TRUE)
+  attr(seg_sites_2, "positions") <- c(1, 2, 3, 8, 9) / 9
   expect_equal(seg_sites[[2]], seg_sites_2)
 
   # get DNA
   seg_sites <- parse_sg_output(list(seqgen_file), 11,
                                get_locus_length_matrix(model_tmp), 2,
                                calc_seg_sites = FALSE)
-  expect_is(seg_sites, 'list')
+  expect_is(seg_sites, "list")
   expect_equal(length(seg_sites), 2)
   expect_true(all(seg_sites[[1]] %in% 1:4))
 
@@ -80,12 +80,12 @@ test_that("parse_sg_output works with a single file", {
   seg_sites <- parse_sg_output(list(seqgen_file), 11,
                                get_locus_length_matrix(model_tmp),
                                2, outgroup_size = 3)
-  seg_sites_o1 <- seg_sites_1[1:8, 4, drop=FALSE]
-  attr(seg_sites_o1, 'positions') <- attr(seg_sites_1, 'positions')[4]
+  seg_sites_o1 <- seg_sites_1[1:8, 4, drop = FALSE]
+  attr(seg_sites_o1, "positions") <- attr(seg_sites_1, "positions")[4]
   expect_equal(seg_sites[[1]], seg_sites_o1)
 
-  seg_sites_o2 <- seg_sites_1[1:8, c(), drop=FALSE]
-  attr(seg_sites_o2, 'positions') <- attr(seg_sites_1, 'positions')[c()]
+  seg_sites_o2 <- seg_sites_1[1:8, c(), drop = FALSE]
+  attr(seg_sites_o2, "positions") <- attr(seg_sites_1, "positions")[c()]
   expect_equal(seg_sites[[2]], seg_sites_o2)
 
   # With trios
@@ -94,13 +94,13 @@ test_that("parse_sg_output works with a single file", {
   expect_equal(seg_sites[[1]][, 1:7], seg_sites_1[, ])
   expect_equal(seg_sites[[1]][, 8:14], seg_sites_1[, ])
   expect_equal(seg_sites[[1]][, 15:21], seg_sites_1[, ])
-  expect_equal(attr(seg_sites[[1]], 'locus'), rep(c(-1,0,1), each = 7))
-  expect_equal(attr(seg_sites[[1]], 'positions'), rep(c(2, 4:9) / 9, 3))
+  expect_equal(attr(seg_sites[[1]], "locus"), rep(c(-1,0,1), each = 7))
+  expect_equal(attr(seg_sites[[1]], "positions"), rep(c(2, 4:9) / 9, 3))
   expect_equal(seg_sites[[2]][, 1:5], seg_sites_2[, ])
   expect_equal(seg_sites[[2]][, 6:10], seg_sites_2[, ])
   expect_equal(seg_sites[[2]][, 11:15], seg_sites_2[, ])
-  expect_equal(attr(seg_sites[[2]], 'locus'), rep(c(-1,0,1), each = 5))
-  expect_equal(attr(seg_sites[[2]], 'positions'), rep(c(1, 2, 3, 8, 9) / 9, 3))
+  expect_equal(attr(seg_sites[[2]], "locus"), rep(c(-1,0,1), each = 5))
+  expect_equal(attr(seg_sites[[2]], "positions"), rep(c(1, 2, 3, 8, 9) / 9, 3))
 
 
 
@@ -109,10 +109,10 @@ test_that("parse_sg_output works with a single file", {
   model_tmp <- coal_model(c(4, 6, 1)) +
     locus_averaged(2, 10) + locus_single(8) +
     feat_outgroup(3) +
-    feat_pop_merge(par_range('tau', 0.5, 2), 2, 1) +
-    feat_pop_merge(par_expr('2*tau'), 3, 1)
+    feat_pop_merge(par_range("tau", 0.5, 2), 2, 1) +
+    feat_pop_merge(par_expr("2*tau"), 3, 1)
 
-  seqgen_file_1 <- tempfile('seqgen_parser_test')
+  seqgen_file_1 <- tempfile("seqgen_parser_test")
   cat(" 11 10
       s11       AATTTTGCCT
       s2        TTCCCAAGTT
@@ -126,7 +126,7 @@ test_that("parse_sg_output works with a single file", {
       s9        CCGGCTGCAG
       s10       CCTCAGGGCC", file = seqgen_file_1)
 
-  seqgen_file_2 <- tempfile('seqgen_parser_test')
+  seqgen_file_2 <- tempfile("seqgen_parser_test")
   cat(" 11 8
       s11       ATTGAACC
       s5        GTATATTT
@@ -148,7 +148,7 @@ test_that("parse_sg_output works with a single file", {
                                get_locus_length_matrix(model_tmp),
                                get_locus_number(model_tmp))
 
-  expect_is(seg_sites, 'list')
+  expect_is(seg_sites, "list")
   expect_equal(length(seg_sites), 3)
   expect_equivalent(seg_sites[[1]], seg_sites_1)
   expect_equivalent(seg_sites[[2]], seg_sites_1)
@@ -156,8 +156,8 @@ test_that("parse_sg_output works with a single file", {
 
   # with trios
   model_tmp <- model_base +
-    locus_trio(locus_length = c(10, 10, 8), dist = 1:2, number = 2) +
-    locus_trio(locus_length = c(10, 8, 8), dist = 1:2, number = 1)
+    locus_trio(locus_length = c(10, 10, 8), distance = 1:2, number = 2) +
+    locus_trio(locus_length = c(10, 8, 8), distance = 1:2, number = 1)
 
   files <- list(c(seqgen_file_1, seqgen_file_1, seqgen_file_2),
                 c(seqgen_file_1, seqgen_file_1, seqgen_file_2),
@@ -168,8 +168,8 @@ test_that("parse_sg_output works with a single file", {
                                get_locus_number(model_tmp))
 
   expect_equal(seg_sites[[1]][,], cbind(seg_sites_1, seg_sites_1, seg_sites_2))
-  expect_equal(length(attr(seg_sites[[1]], 'locus')), ncol(seg_sites[[1]]))
-  expect_equal(length(attr(seg_sites[[1]], 'positions')), ncol(seg_sites[[1]]))
+  expect_equal(length(attr(seg_sites[[1]], "locus")), ncol(seg_sites[[1]]))
+  expect_equal(length(attr(seg_sites[[1]], "positions")), ncol(seg_sites[[1]]))
 
   # Unexpected sequence character
   cat(" 11 10
@@ -194,7 +194,7 @@ s10       CCTCAGGGCC", file = seqgen_file)
 
 
 test_that("test.sg_generate_opts", {
-  if (!has_seqgen()) skip('seqgen not installed')
+  if (!has_seqgen()) skip("seqgen not installed")
   model.hky <- model_hky()
   opts <- sg_generate_opts(model.hky, c(1, 10), 1, c(0, 0, 10, 0, 0), 1)
   opts <- strsplit(opts, " ")[[1]]
@@ -209,7 +209,7 @@ test_that("test.sg_generate_opts", {
 
 
 test_that("generation of tree models works", {
-  if (!has_seqgen()) skip('seqgen not installed')
+  if (!has_seqgen()) skip("seqgen not installed")
   for (model in list(model_hky(), model_gtr())) {
     tree_model <- generate_tree_model(model)
     stats <- simulate(tree_model, pars = c(1, 5))
@@ -220,7 +220,7 @@ test_that("generation of tree models works", {
 
 
 test_that("simulation with seq-gen works", {
-  if (!has_seqgen()) skip('seqgen not installed')
+  if (!has_seqgen()) skip("seqgen not installed")
   sg <- get_simulator("seqgen")
 
   set.seed(100)
@@ -236,10 +236,10 @@ test_that("simulation with seq-gen works", {
 
 
 test_that("All example models can be simulated", {
-  if (!has_seqgen()) skip('seqgen not installed')
+  if (!has_seqgen()) skip("seqgen not installed")
   set.seed(12)
   for (model in list(model_hky(), model_gtr())) {
-    sum_stats <- simulate(model, pars=c(1, 5))
+    sum_stats <- simulate(model, pars = c(1, 5))
     expect_true(sum(sum_stats$jsfs) > 0)
   }
 })
@@ -247,7 +247,7 @@ test_that("All example models can be simulated", {
 
 test_that("test.RateHeterogenity", {
   skip("Temporarily deactivated")
-  if (!has_seqgen()) skip('seqgen not installed')
+  if (!has_seqgen()) skip("seqgen not installed")
   set.seed(12)
   #model.rh <-
   #  model.addMutationRateHeterogenity(model.hky, 0.1, 5, categories.number = 5)
@@ -257,8 +257,8 @@ test_that("test.RateHeterogenity", {
 
 
 test_that("test.seqgenWithMsms", {
-  if (!has_seqgen()) skip('seqgen not installed')
-  if (!has_msms()) skip('msms not installed')
+  if (!has_seqgen()) skip("seqgen not installed")
+  if (!has_msms()) skip("msms not installed")
 
   m1 <- model_hky() + feat_selection(500, 250, population = 1, time = 0.1)
   set.seed(4444)
@@ -280,7 +280,7 @@ test_that("test.seqgenWithMsms", {
 
 
 test_that("seq-gen can simulate trios", {
-  if (!has_seqgen()) skip('seqgen not installed')
+  if (!has_seqgen()) skip("seqgen not installed")
   model <- model_gtr() +
     locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5), number = 2) +
     locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5)) +
@@ -292,38 +292,38 @@ test_that("seq-gen can simulate trios", {
 
 
 test_that("Error is thrown without an outgroup", {
-  if (!has_seqgen()) skip('seqgen not installed')
-  temp_files_before <- list.files(tempdir(), pattern = '^coala-[0-9]+-')
+  if (!has_seqgen()) skip("seqgen not installed")
+  temp_files_before <- list.files(tempdir(), pattern = "^coala-[0-9]+-")
 
   model <- coal_model(c(3, 3), 10) +
-    feat_mutation(par_range('theta', 5, 10), model = 'HKY',
+    feat_mutation(par_range("theta", 5, 10), model = "HKY",
                   tstv_ratio = .5, base_frequencies = rep(.25, 4)) +
-    feat_pop_merge(par_range('tau', .5, 1), 2, 1) +
+    feat_pop_merge(par_range("tau", .5, 1), 2, 1) +
     sumstat_jsfs()
   expect_error(simulate(model, pars = c(7.5, .75)))
 
   # Remove tempfiles that may remain because of error exit
-  temp_files_after <- list.files(tempdir(), pattern = '^coala-[0-9]+-')
+  temp_files_after <- list.files(tempdir(), pattern = "^coala-[0-9]+-")
   temp_files_diff <- temp_files_after[!temp_files_after %in% temp_files_before]
   unlink(file.path(tempdir(), temp_files_diff))
 })
 
 
-test_that('a more complicated model works', {
-  if (!has_seqgen()) skip('seqgen not installed')
+test_that("a more complicated model works", {
+  if (!has_seqgen()) skip("seqgen not installed")
   model <- coal_model(c(5,5,2), 1, 100) +
-    feat_mutation(par_range('theta', .1, 40), model = 'HKY',
+    feat_mutation(par_range("theta", .1, 40), model = "HKY",
                   base_frequencies = c(0.26, 0.20, 0.22, 0.32),
                   tstv_ratio = 1.26) +
-    feat_migration(par_range('m12', 0.001, 5), 1, 2) +
-    feat_migration(par_range('m21', 0.001, 5), 2, 1) +
-    feat_size_change(par_range('q', 0.05, 40), population = 2, time = 0) +
+    feat_migration(par_range("m12", 0.001, 5), 1, 2) +
+    feat_migration(par_range("m21", 0.001, 5), 2, 1) +
+    feat_size_change(par_range("q", 0.05, 40), population = 2, time = 0) +
     par_range("s1", 0.01, 2) + par_range("s2", 0.01, 2) +
     feat_growth(par_expr(log(1 / s1) / tau), population = 1, time = 0) +
     feat_growth(par_expr(log(q / s2) / tau), population = 2, time = 0) +
     feat_size_change(par_expr(s1 + s2), population = 1,
                      time = par_expr(tau)) +
-    feat_pop_merge(par_range('tau', 0.001, 5), 2, 1) +
+    feat_pop_merge(par_range("tau", 0.001, 5), 2, 1) +
     feat_pop_merge(par_expr(2 * tau), 3, 1) +
     feat_recombination(par_const(10)) +
     feat_outgroup(3) +
@@ -335,7 +335,7 @@ test_that('a more complicated model works', {
 
 
 test_that("seqgen works with inter-locus variation", {
-  if (!has_seqgen()) skip('seq-gen not installed')
+  if (!has_seqgen()) skip("seq-gen not installed")
   sg <- get_simulator("seqgen")
 
   model_tmp <- coal_model(c(3, 3, 1), 2) +
@@ -343,19 +343,19 @@ test_that("seqgen works with inter-locus variation", {
     feat_pop_merge(3.0, 3, 1) +
     feat_recombination(1) +
     feat_outgroup(3) +
-    feat_mutation(par_variation(5, 10), model = 'GTR', gtr_rates = 1:6) +
+    feat_mutation(par_variation(5, 10), model = "GTR", gtr_rates = 1:6) +
     sumstat_jsfs()
   expect_true(has_variation(model_tmp))
 
   set.seed(1100)
   sum_stats <- sg$simulate(model_tmp, parameters = numeric(0))
-  expect_is(sum_stats$jsfs, 'matrix')
+  expect_is(sum_stats$jsfs, "matrix")
   expect_that(sum(sum_stats$jsfs), is_more_than(0))
 })
 
 
-test_that('simulating unphased data works', {
-  if (!has_seqgen()) skip('seq-gen not installed')
+test_that("simulating unphased data works", {
+  if (!has_seqgen()) skip("seq-gen not installed")
   sg <- get_simulator("seqgen")
 
   model <- model_hky() + feat_unphased(2, 1) + sumstat_seg_sites()
@@ -371,12 +371,12 @@ test_that('simulating unphased data works', {
 
 
 test_that("seq-gen works without recombination", {
-  if (!has_seqgen()) skip('seq-gen not installed')
+  if (!has_seqgen()) skip("seq-gen not installed")
   model <- coal_model(c(3, 3, 1), 2) +
-    feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
-    feat_pop_merge(par_expr('2*tau'), 3, 1) +
+    feat_pop_merge(par_range("tau", 0.01, 5), 2, 1) +
+    feat_pop_merge(par_expr("2*tau"), 3, 1) +
     feat_outgroup(3) +
-    feat_mutation(par_range('theta', 1, 10), model = 'GTR', gtr_rates = 1:6) +
+    feat_mutation(par_range("theta", 1, 10), model = "GTR", gtr_rates = 1:6) +
     sumstat_jsfs()
 
   stats <- simulate(model, pars = c(1, 5))
@@ -385,12 +385,12 @@ test_that("seq-gen works without recombination", {
 
 
 test_that("seq-gen can simulate scaled models", {
-  if (!has_seqgen()) skip('seq-gen not installed')
+  if (!has_seqgen()) skip("seq-gen not installed")
   model <- coal_model(c(3, 3, 1), 100, 10) +
-    feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
-    feat_pop_merge(par_expr('2*tau'), 3, 1) +
+    feat_pop_merge(par_range("tau", 0.01, 5), 2, 1) +
+    feat_pop_merge(par_expr("2*tau"), 3, 1) +
     feat_outgroup(3) +
-    feat_mutation(par_range('theta', 1, 10), model = 'GTR', gtr_rates = 1:6) +
+    feat_mutation(par_range("theta", 1, 10), model = "GTR", gtr_rates = 1:6) +
     sumstat_jsfs()
 
   model <- scale_model(model, 5)
@@ -401,7 +401,7 @@ test_that("seq-gen can simulate scaled models", {
 
 
 test_that("Printing the command works", {
-  if (!has_seqgen()) skip('seq-gen not installed')
+  if (!has_seqgen()) skip("seq-gen not installed")
   cmd <- get_cmd(model_gtr())
   expect_that(cmd, is_a("character"))
   expect_equal(length(cmd), 2)
@@ -425,7 +425,7 @@ test_that("seqgen works with zero inflation", {
     feat_pop_merge(.5, 2, 1) +
     feat_pop_merge(1, 3, 1) +
     feat_outgroup(3) +
-    feat_mutation(2, model = 'GTR', gtr_rates = 1:6) +
+    feat_mutation(2, model = "GTR", gtr_rates = 1:6) +
     feat_migration(par_zero_inflation(1, .5), symmetric = TRUE) +
     sumstat_jsfs()
 

@@ -39,13 +39,13 @@ ms_class <- R6Class("ms", inherit = simulator_class,
       private$priority <- priority
     },
     create_cmd_tempalte = function(model) {
-      cmd <- read_cache(model, 'ms_cmd')
+      cmd <- read_cache(model, "ms_cmd")
       if (is.null(cmd)) {
         cmd <- paste(vapply(model$features, conv_to_ms_arg,
                             FUN.VALUE = character(1), model),
                      collapse = "")
         cmd <- paste0("c('", cmd, "')")
-        cache(model, 'ms_cmd', cmd)
+        cache(model, "ms_cmd", cmd)
       }
 
       cmd
@@ -114,7 +114,7 @@ ms_class <- R6Class("ms", inherit = simulator_class,
   )
 )
 
-has_ms <- function() !is.null(simulators[['ms']])
+has_ms <- function() !is.null(simulators[["ms"]])
 
 
 #' Use the simulator ms

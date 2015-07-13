@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat_omegaprime.R
 \name{sumstat_omegaprime}
 \alias{sumstat_omegaprime}
-\title{Calculates the (experimental) Omega' Statistic}
+\title{Calculates the (experimental) Omega" Statistic}
 \usage{
 sumstat_omegaprime(name = "omegaprime", population = 1)
 }
@@ -14,6 +14,6 @@ with this name. Summary statistic names must be unique in a model.}
 \item{population}{The population for which the statistic is calculated.}
 }
 \description{
-Calculates the (experimental) Omega' Statistic
+Calculates the (experimental) Omega" Statistic
 }
 

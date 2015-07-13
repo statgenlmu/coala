@@ -1,4 +1,4 @@
-sumstat_class <- R6Class('sumstat',
+sumstat_class <- R6Class("sumstat",
   private = list(
     name = NA,
     req_files = FALSE,
@@ -31,7 +31,7 @@ create_sumstat_container <- function() list()
 # Add a summary statistic to a model
 add_to_model.sumstat <- function(sum_stat, model, feat_name) {
   if (sum_stat$get_name() %in% names(model$sum_stats))
-    stop("Can't add ", feat_name, " to model: ",
+    stop("Can not add ", feat_name, " to model: ",
          "There is already a statistic with name ", sum_stat$get_name())
 
   if (sum_stat$requires_files() && !requires_files(model))

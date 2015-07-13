@@ -1,4 +1,4 @@
-context('Simulator ms')
+context("Simulator ms")
 
 
 test_that("parsing positions works", {
@@ -48,12 +48,12 @@ positions: 0.3718 0.8443
   ss2 <- matrix(c(0, 0, 1, 1, 1, 0), 3, 2)
   attr(ss2, "positions") <- c(0.3718, 0.8443)
 
-  trees1 <- c('[2](2:0.865,(1:0.015,3:0.015):0.850);',
-              '[3](2:0.865,(1:0.015,3:0.015):0.850);',
-              '[4](2:1.261,(1:0.015,3:0.015):1.246);',
-              '[11](2:1.261,(1:0.015,3:0.015):1.246);')
-  trees2 <- c('[2](3:0.613,(1:0.076,2:0.076):0.537);',
-              '[18](3:0.460,(1:0.076,2:0.076):0.384);')
+  trees1 <- c("[2](2:0.865,(1:0.015,3:0.015):0.850);",
+              "[3](2:0.865,(1:0.015,3:0.015):0.850);",
+              "[4](2:1.261,(1:0.015,3:0.015):1.246);",
+              "[11](2:1.261,(1:0.015,3:0.015):1.246);")
+  trees2 <- c("[2](3:0.613,(1:0.076,2:0.076):0.537);",
+              "[18](3:0.460,(1:0.076,2:0.076):0.384);")
 
   expect_equal(output, list(segsites = list(ss1, ss2),
                             trees = list(trees1, trees2)))
@@ -86,7 +86,7 @@ test_that("the ms sim program exists", {
 
 
 test_that("msms can simulate seg. sites", {
-  if (!has_ms()) skip('ms not installed')
+  if (!has_ms()) skip("ms not installed")
   ms <- get_simulator("ms")
 
   # Generating Seg. Sites
@@ -108,7 +108,7 @@ test_that("msms can simulate seg. sites", {
 
 
 test_that("ms can simulate trees", {
-  if (!has_ms()) skip('ms not installed')
+  if (!has_ms()) skip("ms not installed")
   ms <- get_simulator("ms")
 
   model <- coal_model(10, 2, 100) + sumstat_trees()
@@ -130,7 +130,7 @@ test_that("ms can simulate trees", {
 
 
 test_that("msms can simulate files", {
-  if (!has_ms()) skip('msms not installed')
+  if (!has_ms()) skip("msms not installed")
   ms <- get_simulator("ms")
 
   # Generating Files
@@ -167,7 +167,7 @@ test_that("Saving the simulation cmds works", {
 })
 
 
-test_that('simulating unphased data works', {
+test_that("simulating unphased data works", {
   if (!has_ms()) skip("ms not installed")
   ms <- get_simulator("ms")
 

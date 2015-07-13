@@ -18,9 +18,9 @@ stat_omega_prime_class <- R6Class("stat_omega_prime", inherit = sumstat_class,
   )
 )
 
-#' Calculates the (experimental) Omega' Statistic
+#' Calculates the (experimental) Omega" Statistic
 #'
 #' @inheritParams sumstat_four_gamete
-sumstat_omegaprime  <- function(name='omegaprime', population=1) {
+sumstat_omegaprime  <- function(name="omegaprime", population=1) {
   stat_omega_prime_class$new(name, population) #nolint
 }

@@ -12,7 +12,7 @@ the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
 \item{population}{Either the number of a population for with the SFS is
-calculated, or \code{'all'} to calculate the combined SFS of all
+calculated, or \code{"all"} to calculate the combined SFS of all
 populations.}
 }
 \description{

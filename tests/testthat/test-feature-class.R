@@ -1,7 +1,7 @@
-context('Feature Class')
+context("Feature Class")
 
-test_that('Creating features works', {
-  feat <- feature_class$new('abc', 5)
+test_that("Creating features works", {
+  feat <- feature_class$new("abc", 5)
   expect_true(is.feature(feat))
   expect_false(is.feature("blub"))
   expect_equal(feat$get_parameters(), list())

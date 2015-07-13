@@ -57,7 +57,7 @@ is.model <- function(model) {
 
 # Selects a program for simulation that is capable of all current features
 select_simprog <- function(model) {
-  name <- read_cache(model, 'simprog')
+  name <- read_cache(model, "simprog")
 
   if (is.null(name)) {
     priority <- -Inf
@@ -74,7 +74,7 @@ select_simprog <- function(model) {
     }
 
     if (is.null(name)) warning("No suitable simulation software found!")
-    cache(model, 'simprog', name)
+    cache(model, "simprog", name)
   }
 
   name
@@ -97,7 +97,7 @@ has_trios <- function(model) {
 
 get_snp_positions <- function(seg_sites, model, relative=TRUE) {
   lapply(1:length(seg_sites), function(locus) {
-    pos <- attr(seg_sites[[locus]], 'position')
+    pos <- attr(seg_sites[[locus]], "position")
     locus_length <- get_locus_length(model, locus, total = FALSE)
 
     # Nothing changes without trios
@@ -107,7 +107,7 @@ get_snp_positions <- function(seg_sites, model, relative=TRUE) {
     }
 
     # Convert if we have trios
-    trio_locus <- attr(seg_sites[[locus]], 'locus')
+    trio_locus <- attr(seg_sites[[locus]], "locus")
     if (is.null(trio_locus)) trio_locus <- 0
     pos[trio_locus == -1] <- pos[trio_locus == -1] * locus_length[1]
     pos[trio_locus == 0] <- pos[trio_locus == 0] * locus_length[3] +

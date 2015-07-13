@@ -48,7 +48,7 @@ get_parameter <- function(model) {
 
 #' @param locus The number of the locus.
 #' @param total If \code{FALSE}, the length of loci in a trio will be reported
-#'   individually. If \code{TRUE} the sum of the loci's length will be reported.
+#'   individually. If \code{TRUE} the sum of the loci"s length will be reported.
 #'   This does not affect non-trio loci.
 #' @param group The group of loci.
 #'
@@ -135,7 +135,7 @@ get_locus_number <- function(model, group = NA, ignore_variation = FALSE) {
 get_population_indiviuals <- function(model, pop, zero_indexed = FALSE) {
   if (pop == "all") return(1:sum(get_sample_size(model)))
 
-  if (!pop %in% get_populations(model)) stop('Invalid population')
+  if (!pop %in% get_populations(model)) stop("Invalid population")
   sample_size <- get_sample_size(model)
   from <- cumsum(c(0, sample_size)) + 1
   to <- cumsum(sample_size)

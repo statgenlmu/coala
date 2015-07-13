@@ -35,6 +35,6 @@ stat_pi_class <- R6Class("stat_pi", inherit = sumstat_class,
 #' @return On simulation, this returns a vector with the value of pi for
 #'   each locus.
 #' @export
-sumstat_nucleotide_div <- function(name='pi', population=1) {
+sumstat_nucleotide_div <- function(name="pi", population=1) {
   stat_pi_class$new(name, population) #nolint
 }

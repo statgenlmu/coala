@@ -1,6 +1,6 @@
-context('Feature Sample')
+context("Feature Sample")
 
-test_that('Creation of sample features works', {
+test_that("Creation of sample features works", {
   expect_equal(feat_sample(2)$get_sizes(), 2)
   expect_equal(feat_sample(1:5)$get_sizes(), 1:5)
   expect_error(feat_sample("blub"))

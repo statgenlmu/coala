@@ -8,7 +8,7 @@ test_that("creating models works", {
   expect_equal(get_locus_number(model), 111)
   expect_equal(get_locus_length(model, 1), 1234)
 
-  expect_is(model$id, 'character')
+  expect_is(model$id, "character")
 })
 
 
@@ -27,7 +27,7 @@ test_that("adding parameters works", {
   expect_equal(length(get_parameter(model)), 2)
 
   test <- list(1:10)
-  class(test) <- 'BLUB'
+  class(test) <- "BLUB"
   expect_error(model + test)
 })
 
@@ -88,7 +88,7 @@ test_that("get loci length and number works", {
 })
 
 
-test_that('locus length matrix generations works', {
+test_that("locus length matrix generations works", {
   # Multiple loci with equal length
   expect_equivalent(get_locus_length_matrix(model_theta_tau()),
                     matrix(c(0, 0, 1000, 0, 0, 10), 1, 6))
@@ -124,18 +124,18 @@ test_that("Adding and Getting inter locus variation works", {
 })
 
 
-test_that('setTrioMutationsRates works', {
+test_that("setTrioMutationsRates works", {
   warning("test about model with trio mutation rates deactivated")
-#   model <- model.setTrioMutationRates(model_trios, '17', 'theta', group=2)
-#   expect_equal(nrow(search_feature(model, 'mutation', group=2)), 1)
-#   expect_equal(search_feature(model, 'mutation', group=2)$parameter, "17")
-#   expect_equal(nrow(search_feature(model, 'mutation_outer', group=2)), 1)
-#   expect_equal(search_feature(model, 'mutation_outer', group=2)$parameter,
+#   model <- model.setTrioMutationRates(model_trios, "17", "theta", group=2)
+#   expect_equal(nrow(search_feature(model, "mutation", group=2)), 1)
+#   expect_equal(search_feature(model, "mutation", group=2)$parameter, "17")
+#   expect_equal(nrow(search_feature(model, "mutation_outer", group=2)), 1)
+#   expect_equal(search_feature(model, "mutation_outer", group=2)$parameter,
 #                "theta")
 })
 
 
-test_that('getting the available Populations works', {
+test_that("getting the available Populations works", {
   model <- coal_model(10:11, 100)
   expect_equal(get_populations(model), 1:2)
   expect_equal(get_populations(model_theta_tau()), 1:2)
@@ -144,7 +144,7 @@ test_that('getting the available Populations works', {
 })
 
 
-test_that('get population individuals works', {
+test_that("get population individuals works", {
   expect_equal(get_population_indiviuals(model_theta_tau(), 1), 1:10)
   expect_equal(get_population_indiviuals(model_theta_tau(), 2), 11:25)
   expect_equal(get_population_indiviuals(model_theta_tau(), "all"), 1:25)
@@ -157,7 +157,7 @@ test_that('get population individuals works', {
 })
 
 
-test_that('getting the ploidy and individuals works', {
+test_that("getting the ploidy and individuals works", {
   model <- model_theta_tau()
   expect_equal(get_ploidy(model), 1L)
   expect_equal(get_samples_per_ind(model), 1L)
@@ -173,7 +173,7 @@ test_that('getting the ploidy and individuals works', {
 })
 
 
-test_that('print works on models', {
+test_that("print works on models", {
   # Printing an empty model works
   out <- capture.output(print(coal_model(5)))
   expect_that(length(out), is_more_than(0))
@@ -193,7 +193,7 @@ test_that('print works on models', {
 })
 
 
-test_that('getting par names works', {
+test_that("getting par names works", {
   expect_equal(get_par_names(coal_model(5)), character(0))
 
   model <- coal_model(5) + par_range("a", 1, 2) + par_range("b", 2, 3)
@@ -206,7 +206,7 @@ test_that('getting par names works', {
 })
 
 
-test_that('getting model command works', {
+test_that("getting model command works", {
   cmd <- get_cmd(model_theta_tau())
   expect_that(cmd, is_a("character"))
   expect_that(nchar(cmd), is_more_than(0))
@@ -220,23 +220,23 @@ test_that("has_trios works", {
 })
 
 
-test_that('creating a parameter table works ', {
+test_that("creating a parameter table works ", {
   expect_equal(get_parameter_table(coal_model(5)),
                data.frame(name = character(0),
                           lower.range = numeric(0),
                           upper.range = numeric(0),
                           stringsAsFactors = FALSE))
 
-  model <- coal_model(5:6, 10, 100) + par_range('theta', 1, 2)
+  model <- coal_model(5:6, 10, 100) + par_range("theta", 1, 2)
   expect_equal(get_parameter_table(model),
-               data.frame(name = 'theta', lower.range = 1, upper.range = 2,
+               data.frame(name = "theta", lower.range = 1, upper.range = 2,
                           stringsAsFactors = FALSE))
 
   model <- coal_model(5:6, 10, 100) +
-    par_range('theta', 1, 2) +
-    par_range('tau', 5, 6)
+    par_range("theta", 1, 2) +
+    par_range("tau", 5, 6)
   expect_equal(get_parameter_table(model),
-               data.frame(name = c('theta','tau'),
+               data.frame(name = c("theta","tau"),
                           lower.range = c(1, 5),
                           upper.range = c(2, 6),
                           stringsAsFactors = FALSE))

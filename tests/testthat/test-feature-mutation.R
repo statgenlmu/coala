@@ -1,12 +1,12 @@
-context('Feature Mutation')
+context("Feature Mutation")
 
 
-test_that('Creation of finite sites features works', {
+test_that("Creation of finite sites features works", {
   expect_error(feat_mutation(5, model = "BLUB"))
   expect_error(feat_mutation(5, model = "F84"))
 
   # HKY
-  feat <- feat_mutation(17, 'HKY', tstv_ratio = 2,
+  feat <- feat_mutation(17, "HKY", tstv_ratio = 2,
                         base_frequencies = rep(.25, 4))
   expect_equal(feat$get_tstv_ratio(), 2)
   expect_equal(feat$get_base_frequencies(), rep(.25, 4))
@@ -18,10 +18,10 @@ test_that('Creation of finite sites features works', {
 
 
   # GTR rates
-  feat <- feat_mutation(5, model = 'GTR', gtr_rates = 1:6)
+  feat <- feat_mutation(5, model = "GTR", gtr_rates = 1:6)
   expect_equal(feat$get_gtr_rates(), 1:6)
-  expect_error(feat_mutation(5, model = 'GTR', gtr_rates = 1:5))
-  expect_error(feat_mutation(5, model = 'GTR', gtr_rates = "Blub"))
+  expect_error(feat_mutation(5, model = "GTR", gtr_rates = 1:5))
+  expect_error(feat_mutation(5, model = "GTR", gtr_rates = "Blub"))
 })
 
 
@@ -49,6 +49,6 @@ test_that("Parsing mutation to scrm args works", {
 test_that("Parsing mutation to seqgen args works", {
   if (!has_seqgen()) skip("seqgen not installed")
   sg <- get_simulator("seqgen")
-  model <- coal_model(10, 1) + feat_mutation(5, model = 'GTR', gtr_rates = 1:6)
+  model <- coal_model(10, 1) + feat_mutation(5, model = "GTR", gtr_rates = 1:6)
   sg$get_cmd(model)
 })

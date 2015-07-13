@@ -9,7 +9,6 @@ variation_par_class <- R6Class("variation_par", inherit = parameter_class,
       } else if (is.character(parameter) && length(parameter) == 1) {
         expr <- parameter
       } else if (is.par(parameter)) {
-        idx <- as.character(length(private$parameter) + 1)
         private$base_par[[length(private$base_par) + 1]] <- parameter
         expr <- parameter$get_expression()
       } else {

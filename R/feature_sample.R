@@ -31,8 +31,8 @@ sample_class <- R6Class("sample", inherit = feature_class,
 #' @param time The time at which the sample is taken.
 #' @return The feature, which can be added to a model using `+`.
 ## @export
-feat_sample <- function(sizes, time = '0') {
-  if (time != '0')
+feat_sample <- function(sizes, time = "0") {
+  if (time != "0")
     stop("Samples at time different from 0 at not supported at the moment")
   sample_class$new(sizes, time)
 }

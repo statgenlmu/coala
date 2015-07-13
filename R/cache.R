@@ -1,10 +1,10 @@
 cache_env <- new.env()
 
-cache_env[['counter']] <- 0
+cache_env[["counter"]] <- 0
 
 get_id <- function() {
-  cache_env[['counter']] <- cache_env[['counter']] + 1
-  as.character(cache_env[['counter']])
+  cache_env[["counter"]] <- cache_env[["counter"]] + 1
+  as.character(cache_env[["counter"]])
 }
 
 cache <- function(model, name, variable) {

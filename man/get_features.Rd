@@ -51,7 +51,7 @@ can be unequal for the simulation of unphased data.}
 \item{group}{The group of loci.}
 
 \item{total}{If \code{FALSE}, the length of loci in a trio will be reported
-individually. If \code{TRUE} the sum of the loci's length will be reported.
+individually. If \code{TRUE} the sum of the loci"s length will be reported.
 This does not affect non-trio loci.}
 
 \item{ignore_variation}{For internal use. Will likely be removed soon.}
