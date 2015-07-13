@@ -7,7 +7,7 @@ migration_class <- R6Class("migration", inherit = feature_class,
       if (symmetric) {
         private$population <- "all"
       } else {
-        private$set_population(c(from=pop_from, to=pop_to), 2)
+        private$set_population(c(from = pop_from, to = pop_to), 2)
       }
     },
     print = function() {

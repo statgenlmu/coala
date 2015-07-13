@@ -1,4 +1,4 @@
-SumstatFile <- R6Class('SumstatFile', inherit = Sumstat, #nolint
+stat_file_class <- R6Class('stat_file', inherit = sumstat_class, #nolint
   private = list(
     folder = NULL,
     req_files = TRUE
@@ -25,5 +25,5 @@ SumstatFile <- R6Class('SumstatFile', inherit = Sumstat, #nolint
 #' @param folder The path of a folder where the files will be written.
 #' @export
 sumstat_file <- function(folder) {
-  SumstatFile$new(folder) #nolint
+  stat_file_class$new(folder) #nolint
 }

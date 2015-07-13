@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-SumstatTajimasD <- R6Class('TajimasD', inherit = Sumstat, #nolint
+stat_tajimas_d_class <- R6Class('stat_tajimas_d', inherit = sumstat_class,
   private = list(
     population = NULL,
     req_segsites = TRUE
@@ -47,5 +47,5 @@ SumstatTajimasD <- R6Class('TajimasD', inherit = Sumstat, #nolint
 #'   each locus.
 #' @export
 sumstat_tajimas_d <- function(name='tajimas_d', population="all") {
-  SumstatTajimasD$new(name, population) #nolint
+  stat_tajimas_d_class$new(name, population) #nolint
 }

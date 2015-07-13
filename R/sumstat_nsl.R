@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-SumstatNsl <- R6Class('sumstat_nsl', inherit = SumstatIhh, #nolint
+stat_nsl_class <- R6Class('stat_nsl', inherit = stat_ihh_class,
   public = list(
     create_rehh_data = function(seg_sites, pos, ind) {
       super$create_rehh_data(seg_sites, seq(along = pos), ind)
@@ -35,7 +35,7 @@ SumstatNsl <- R6Class('sumstat_nsl', inherit = SumstatIhh, #nolint
 #'   given or for the SNP nearest to the selected position.
 #'   SNPs are sorted by their positions on the locus.
 #' @export
-sumstat_nSL <- function(name = 'ihh', position = NA, population = 1,
-                        max_snps = 1e4) { #nolint
-  SumstatNsl$new(name, population, position, max_snps) #nolint
+sumstat_nSL <- function(name = 'ihh', position = NA, population = 1, #nolint
+                        max_snps = 1e4) {
+  stat_nsl_class$new(name, population, position, max_snps)
 }

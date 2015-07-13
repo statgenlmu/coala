@@ -1,4 +1,4 @@
-SumstatTrees <- R6Class('SumstatTrees', inherit = Sumstat, #nolint
+stat_trees_class <- R6Class("stat_trees", inherit = sumstat_class,
   private = list(req_files = FALSE, req_trees = TRUE),
   public = list(
     calculate = function(seg_sites, trees, files, model) {
@@ -12,11 +12,11 @@ SumstatTrees <- R6Class('SumstatTrees', inherit = Sumstat, #nolint
 #' @export
 #' @inheritParams sumstat_four_gamete
 sumstat_trees <- function(name = "trees") {
-  SumstatTrees$new(name) #nolint
+  stat_trees_class$new(name) #nolint
 }
 
 
-SumstatSgTrees <- R6Class('SumstatSgTrees', inherit = Sumstat, #nolint
+stat_sg_trees_class <- R6Class("stat_sg_trees", inherit = sumstat_class,
   private = list(req_trees = TRUE),
   public = list(
     calculate = function(seg_sites, trees, files, model) {
@@ -41,5 +41,5 @@ SumstatSgTrees <- R6Class('SumstatSgTrees', inherit = Sumstat, #nolint
 
 # Returns ancestral tress as files for seq-gen
 sumstat_sg_trees <- function() {
-    SumstatSgTrees$new('trees') #nolint
+  stat_sg_trees_class$new("trees")
 }

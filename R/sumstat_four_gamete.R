@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-SumstatFourGamete <- R6Class('SumstatFourGamete', inherit = Sumstat, #nolint
+stat_four_gamete_class <- R6Class('stat_four_gamete', inherit = sumstat_class,
   private = list(
     population = NULL,
     req_segsites = TRUE
@@ -56,5 +56,5 @@ SumstatFourGamete <- R6Class('SumstatFourGamete', inherit = Sumstat, #nolint
 #' @param population The population for which the statistic is calculated.
 #' @export
 sumstat_four_gamete  <- function(name='four_gamete', population=1) {
-  SumstatFourGamete$new(name, population) #nolint
+  stat_four_gamete_class$new(name, population) #nolint
 }

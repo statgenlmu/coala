@@ -1,7 +1,7 @@
 context("SumStat DNA")
 
 test_that("calculation of the DNA sumstat works", {
-  stat_dna <- SumstatDna$new('dna') #nolint
+  stat_dna <- sumstat_dna('dna') #nolint
 
   model_tmp <- coal_model(c(5, 6), 1, 10) +
     feat_pop_merge(par_range('tau', 0.5, 2), 2, 1)

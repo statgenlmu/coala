@@ -1,11 +1,11 @@
 context('SumStat Class')
 
 test_that('Sumstat initialization works', {
-  ss1 <- Sumstat$new('1')
+  ss1 <- sumstat_class$new('1')
   expect_true(is.sum_stat(ss1))
   expect_error(ss1$calculate())
 
-  ss1 <- Sumstat$new('1')
+  ss1 <- sumstat_class$new('1')
   expect_true(is.sum_stat(ss1))
 
   expect_false(is.sum_stat(1:3))
@@ -13,23 +13,23 @@ test_that('Sumstat initialization works', {
 
 
 test_that('getting the name works', {
-  ss1 <- Sumstat$new('test')
+  ss1 <- sumstat_class$new('test')
   expect_equal(ss1$get_name(), 'test')
 })
 
 
 test_that('Adding Sumstats to a model works', {
-  model <- coal_model(5:6, 10) + Sumstat$new('1')
+  model <- coal_model(5:6, 10) + sumstat_class$new('1')
   expect_equal(get_summary_statistics(model)[[1]]$get_name(), "1")
-  expect_error(model + Sumstat$new('1'))
+  expect_error(model + sumstat_class$new('1'))
 
-  model <- model + Sumstat$new('2')
+  model <- model + sumstat_class$new('2')
   expect_equal(names(get_summary_statistics(model)), c('1', '2'))
 })
 
 
 test_that('Calculation of Sumstats works', {
-  Stat_Sum <- R6::R6Class('Stat_Sum', inherit = Sumstat,
+  Stat_Sum <- R6::R6Class('Stat_Sum', inherit = sumstat_class,
     public = list(calculate = function(seg_sites, trees, files, model) {
       sapply(seg_sites, sum)
     })

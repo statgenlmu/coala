@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-SumstatPi <- R6Class('SumstatPi', inherit = Sumstat, #nolint
+stat_pi_class <- R6Class("stat_pi", inherit = sumstat_class,
   private = list(
     population = NULL,
     req_segsites = TRUE
@@ -36,5 +36,5 @@ SumstatPi <- R6Class('SumstatPi', inherit = Sumstat, #nolint
 #'   each locus.
 #' @export
 sumstat_nucleotide_div <- function(name='pi', population=1) {
-  SumstatPi$new(name, population) #nolint
+  stat_pi_class$new(name, population) #nolint
 }

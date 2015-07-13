@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-SumstatDna <- R6Class('SumstatDna', inherit = Sumstat, #nolint
+stat_dna_class <- R6Class('dna_stat', inherit = sumstat_class,
   private = list(req_files = TRUE),
   public = list(
     calculate = function(seg_sites, trees, files, model) {
@@ -20,5 +20,5 @@ SumstatDna <- R6Class('SumstatDna', inherit = Sumstat, #nolint
 #' @inheritParams sumstat_four_gamete
 #' @export
 sumstat_dna <- function(name = 'dna') {
-  SumstatDna$new(name) #nolint
+  stat_dna_class$new(name) #nolint
 }

@@ -2,7 +2,7 @@
 #' @importClassesFrom rehh haplohh
 #' @importFrom rehh calc_ehh calc_ehhs
 #' @importFrom methods new checkAtAssignment
-SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
+stat_ihh_class <- R6Class('stat_ihh', inherit = sumstat_class,
   private = list(
     req_segsites = TRUE,
     position = NA,
@@ -105,5 +105,5 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
 #' @export
 sumstat_ihh <- function(name = 'ihh', position = NA, population = 1,
                         max_snps = 1000) {
-  SumstatIhh$new(name, population, position, max_snps) #nolint
+  stat_ihh_class$new(name, population, position, max_snps)
 }

@@ -19,16 +19,16 @@ get_parameter_table <- function(model) {
       stop("Can not create a parameter table with non-ranged pars in model")
     }
     if (length(get_parameter(model)) == 0) {
-      par_table <- (data.frame(name=character(),
-                               lower.range=numeric(),
-                               upper.range=numeric(),
-                               stringsAsFactors=F))
+      par_table <- (data.frame(name = character(),
+                               lower.range = numeric(),
+                               upper.range = numeric(),
+                               stringsAsFactors = FALSE))
     } else {
-      par_table <- do.call(rbind, lapply(get_parameter(model), function (par) {
-        data.frame(name=par$get_name(),
-                   lower.range=par$get_range()[1],
-                   upper.range=par$get_range()[2],
-                   stringsAsFactors=F)
+      par_table <- do.call(rbind, lapply(get_parameter(model), function(par) {
+        data.frame(name = par$get_name(),
+                   lower.range = par$get_range()[1],
+                   upper.range = par$get_range()[2],
+                   stringsAsFactors = FALSE)
       }))
     }
     cache(model, "par_table", par_table)

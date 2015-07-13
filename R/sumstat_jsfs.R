@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-SumstatJsfs <- R6Class('SumstatJsfs', inherit = Sumstat, #nolint
+stat_jsfs_class <- R6Class('stat_jsfs', inherit = sumstat_class,
   private = list(
     populations = NULL,
     req_segsites = TRUE
@@ -25,5 +25,5 @@ SumstatJsfs <- R6Class('SumstatJsfs', inherit = Sumstat, #nolint
 #' @param populations The populations for which the statistic is calculated.
 #' @export
 sumstat_jsfs <- function(name='jsfs', populations=c(1,2)) {
-  SumstatJsfs$new(name, populations) #nolint
+  stat_jsfs_class$new(name, populations) #nolint
 }

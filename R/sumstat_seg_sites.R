@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-SumstatSegSites <- R6Class('SumstatSegSites', inherit = Sumstat, #nolint
+stat_segsites_class <- R6Class("stat_segsites", inherit = sumstat_class,
   private = list(req_segsites = TRUE),
   public = list(
     calculate = function(seg_sites, trees, files, model) seg_sites
@@ -11,8 +11,8 @@ SumstatSegSites <- R6Class('SumstatSegSites', inherit = Sumstat, #nolint
 #'
 #' @inheritParams sumstat_four_gamete
 #' @export
-sumstat_seg_sites <- function(name = 'seg_sites') {
-  SumstatSegSites$new(name) #nolint
+sumstat_seg_sites <- function(name = "seg_sites") {
+  stat_segsites_class$new(name) #nolint
 }
 
 
@@ -27,7 +27,7 @@ conv_for_trios <- function(seg_sites, model) {
     left <- pos < borders[1]
     middle <- pos >= borders[2] & pos < borders[3]
     right <- pos >= borders[4]
-    seg_sites[[i]] <- seg_sites[[i]][, left | middle | right, drop=FALSE]
+    seg_sites[[i]] <- seg_sites[[i]][, left | middle | right, drop = FALSE]
     assert_that(nrow(seg_sites[[i]]) > 0)
 
     pos[left] <- pos[left] * total_length / locus_length[1]
