@@ -1,24 +1,24 @@
-context('Locus Class')
+context("Locus Class")
 
-test_that('Creating loci works', {
-  locus <- Locus$new(1013)
+test_that("Creating loci works", {
+  locus <- locus_class$new(1013)
   expect_true(is.locus(locus))
   expect_equal(locus$get_length(), 1013)
   expect_equal(locus$get_number(), 1)
 
-  locus <- Locus$new(1014, 10)
+  locus <- locus_class$new(1014, 10)
   expect_true(is.locus(locus))
   expect_equal(locus$get_length(), 1014)
   expect_equal(locus$get_number(), 10)
 
-  expect_error(Locus$new("abc", 10))
-  expect_error(Locus$new(-5, 10))
-  expect_error(Locus$new(10, "10"))
-  expect_error(Locus$new(10, -3))
+  expect_error(locus_class$new("abc", 10))
+  expect_error(locus_class$new(-5, 10))
+  expect_error(locus_class$new(10, "10"))
+  expect_error(locus_class$new(10, -3))
 })
 
 
-test_that('Adding a locus to a model works', {
+test_that("Adding a locus to a model works", {
   model2 <- coal_model(10) + locus_averaged(10, 1010)
   expect_equal(get_locus_number(model2), 10)
   expect_equal(get_locus_length(model2, 1), 1010)
@@ -34,21 +34,21 @@ test_that('Adding a locus to a model works', {
 })
 
 
-test_that('Adding a locus trio works', {
+test_that("Adding a locus trio works", {
   m <- coal_model(10) +
     locus_trio(locus_length = c(10, 30, 50),
                distance = c(20, 40)) +
-    locus_trio(locus_length = c(middle=30, left=10, right=50),
+    locus_trio(locus_length = c(middle = 30, left = 10, right = 50),
                distance = c(20, 40)) +
     locus_trio(locus_length = c(10, 30, 50),
-               distance = c(middle_right=40, left_middle=20))
+               distance = c(middle_right = 40, left_middle = 20))
 
   expect_equivalent(get_locus_length_matrix(m),
                     cbind(matrix(1:5 * 10, 3, 5, byrow = TRUE), 1))
 })
 
 
-test_that('locus positions are converted correctly', {
+test_that("locus positions are converted correctly", {
   model <- coal_model(5:6) +
     locus_trio(locus_length = c(10, 30, 50), distance = c(20, 40)) +
     locus_trio(locus_length = c(50, 30, 10), distance = c(40, 20)) +
@@ -74,8 +74,8 @@ test_that('locus positions are converted correctly', {
                                        relative_in = FALSE), 40)
 
   ss <- matrix(0, 6, 5)
-  attr(ss, 'positions') <- c(0.1, 0.5, 0.2, 0.6, 0.5, 1)
-  attr(ss, 'locus') <- rep(c(-1, 0, 1), each = 2)
+  attr(ss, "positions") <- c(0.1, 0.5, 0.2, 0.6, 0.5, 1)
+  attr(ss, "locus") <- rep(c(-1, 0, 1), each = 2)
   expect_equal(get_snp_positions(list(ss, ss, ss, ss), model),
                list(c(1, 5, 36, 48, 125, 150) / 150,
                     c(5, 25, 96, 108, 145, 150) / 150,

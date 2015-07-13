@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-Par_variation <- R6Class("Par_variation", inherit = Parameter,
+variation_par_class <- R6Class("variation_par", inherit = parameter_class,
   private = list(
     base_par = list(),
     func = "variation",
@@ -9,7 +9,6 @@ Par_variation <- R6Class("Par_variation", inherit = Parameter,
       } else if (is.character(parameter) && length(parameter) == 1) {
         expr <- parameter
       } else if (is.par(parameter)) {
-        idx <- as.character(length(private$parameter) + 1)
         private$base_par[[length(private$base_par) + 1]] <- parameter
         expr <- parameter$get_expression()
       } else {
@@ -32,7 +31,7 @@ variation <- function(mean, variance) {
   rgamma(1, mean ^ 2 / variance, mean / variance)
 }
 
-is.par_variation <- function(object) inherits(object, "Par_variation")
+is.par_variation <- function(object) inherits(object, "variation_par")
 
 
 #' Let the parameter values vary between different loci
@@ -50,5 +49,5 @@ is.par_variation <- function(object) inherits(object, "Par_variation")
 #'   for simulation will follow.
 #' @export
 par_variation <- function(par, variance) {
-  Par_variation$new(par, variance)
+  variation_par_class$new(par, variance)
 }

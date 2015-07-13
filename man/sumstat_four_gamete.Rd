@@ -29,10 +29,10 @@ columns give the statistic for different classes of pairs of SNPs:
 
 \describe{
 \item{mid_near}{The value for all pairs of SNPs that are close together, that
-  is within 10 percent of the locus' length. If locus trios are used, only pairs of
+  is within 10 percent of the locus" length. If locus trios are used, only pairs of
   SNPs were both SNPs are on the middle locus are considered.}
 \item{mid_far}{Same as \code{mid_near}, but for pairs of SNPs that are
-  more that 10 percent of the locus' length apart. }
+  more that 10 percent of the locus" length apart. }
 \item{outer}{Only when using locus trios. The statistic for pairs
   where both SNPs are on the same outer locus.}
 \item{between}{Only when using locus trios. The statistic for pairs

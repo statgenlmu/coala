@@ -22,14 +22,14 @@ test_that("Generating trees for trios works", {
   expect_that(trio_trees, is_a("list"))
   expect_equal(length(trio_trees), 1)
 
-  expect_equal(trio_trees[[1]][[1]][1], '[2](2:0.865,(1:0.015,3:0.015):0.850);')
-  expect_equal(trio_trees[[1]][[2]][1], '[3](2:1.261,(1:0.015,3:0.015):1.246);')
-  expect_equal(trio_trees[[1]][[2]][2], '[5](2:1.261,(1:0.015,3:0.015):1.246);')
-  expect_equal(trio_trees[[1]][[3]][1], '[4](2:1.261,(1:0.015,3:0.015):1.246);')
+  expect_equal(trio_trees[[1]][[1]][1], "[2](2:0.865,(1:0.015,3:0.015):0.850);")
+  expect_equal(trio_trees[[1]][[2]][1], "[3](2:1.261,(1:0.015,3:0.015):1.246);")
+  expect_equal(trio_trees[[1]][[2]][2], "[5](2:1.261,(1:0.015,3:0.015):1.246);")
+  expect_equal(trio_trees[[1]][[3]][1], "[4](2:1.261,(1:0.015,3:0.015):1.246);")
 
-  expect_equal(trio_trees[[1]][[1]][2], '[2](3:0.613,(1:0.076,2:0.076):0.537);')
-  expect_equal(trio_trees[[1]][[2]][3], '[8](3:0.460,(1:0.076,2:0.076):0.384);')
-  expect_equal(trio_trees[[1]][[3]][2], '[4](3:0.460,(1:0.076,2:0.076):0.384);')
+  expect_equal(trio_trees[[1]][[1]][2], "[2](3:0.613,(1:0.076,2:0.076):0.537);")
+  expect_equal(trio_trees[[1]][[2]][3], "[8](3:0.460,(1:0.076,2:0.076):0.384);")
+  expect_equal(trio_trees[[1]][[3]][2], "[4](3:0.460,(1:0.076,2:0.076):0.384);")
 
 
   trio_trees_2 <- generate_trio_trees(list(trees[[1]], trees[[2]],
@@ -37,23 +37,23 @@ test_that("Generating trees for trios works", {
                                       matrix(c(2, 4, 8, 2, 4, 2), 2, 6, TRUE))
   expect_equal(trio_trees_2, list(trio_trees[[1]], trio_trees[[1]]))
 
-  trio_trees <- generate_trio_trees(trees, matrix(c(9, 2, 2, 5, 2, 2), 1, 6))
-  expect_equal(trio_trees[[1]][[1]][1], '[2](2:0.865,(1:0.015,3:0.015):0.850);')
-  expect_equal(trio_trees[[1]][[1]][2], '[3](2:0.865,(1:0.015,3:0.015):0.850);')
-  expect_equal(trio_trees[[1]][[1]][3], '[4](2:1.261,(1:0.015,3:0.015):1.246);')
-  expect_equal(trio_trees[[1]][[2]][1], '[2](2:1.261,(1:0.015,3:0.015):1.246);')
-  expect_equal(trio_trees[[1]][[3]][1], '[2](2:1.261,(1:0.015,3:0.015):1.246);')
-  expect_equal(trio_trees[[1]][[1]][4], '[2](3:0.613,(1:0.076,2:0.076):0.537);')
-  expect_equal(trio_trees[[1]][[1]][5], '[7](3:0.460,(1:0.076,2:0.076):0.384);')
-  expect_equal(trio_trees[[1]][[2]][2], '[2](3:0.460,(1:0.076,2:0.076):0.384);')
-  expect_equal(trio_trees[[1]][[3]][2], '[2](3:0.460,(1:0.076,2:0.076):0.384);')
+  trio_trees <- generate_trio_trees(trees, matrix(c(9, 2, 2, 5, 2, 2), 1, 6)) #nolint
+  expect_equal(trio_trees[[1]][[1]][1], "[2](2:0.865,(1:0.015,3:0.015):0.850);")
+  expect_equal(trio_trees[[1]][[1]][2], "[3](2:0.865,(1:0.015,3:0.015):0.850);")
+  expect_equal(trio_trees[[1]][[1]][3], "[4](2:1.261,(1:0.015,3:0.015):1.246);")
+  expect_equal(trio_trees[[1]][[2]][1], "[2](2:1.261,(1:0.015,3:0.015):1.246);")
+  expect_equal(trio_trees[[1]][[3]][1], "[2](2:1.261,(1:0.015,3:0.015):1.246);")
+  expect_equal(trio_trees[[1]][[1]][4], "[2](3:0.613,(1:0.076,2:0.076):0.537);")
+  expect_equal(trio_trees[[1]][[1]][5], "[7](3:0.460,(1:0.076,2:0.076):0.384);")
+  expect_equal(trio_trees[[1]][[2]][2], "[2](3:0.460,(1:0.076,2:0.076):0.384);")
+  expect_equal(trio_trees[[1]][[3]][2], "[2](3:0.460,(1:0.076,2:0.076):0.384);")
 
   # Works on trees without recombination
   trio_trees <- generate_trio_trees(list("(2:0.865,(1:0.015,3:0.015):0.850);"),
                                     matrix(c(9, 2, 2, 5, 2, 1), 1, 6))
-  expect_equal(trio_trees[[1]][[1]][1], '[9](2:0.865,(1:0.015,3:0.015):0.850);')
-  expect_equal(trio_trees[[1]][[2]][1], '[2](2:0.865,(1:0.015,3:0.015):0.850);')
-  expect_equal(trio_trees[[1]][[3]][1], '[2](2:0.865,(1:0.015,3:0.015):0.850);')
+  expect_equal(trio_trees[[1]][[1]][1], "[9](2:0.865,(1:0.015,3:0.015):0.850);")
+  expect_equal(trio_trees[[1]][[2]][1], "[2](2:0.865,(1:0.015,3:0.015):0.850);")
+  expect_equal(trio_trees[[1]][[3]][1], "[2](2:0.865,(1:0.015,3:0.015):0.850);")
 
 
   # Works for non-trio loci
@@ -98,13 +98,13 @@ test_that("simulating and importing trees works", {
     locus_single(10) +
     sumstat_trees("trees")
 
-  stats <- simulate(model, pars=c(1, 5))
+  stats <- simulate(model, pars = c(1, 5))
   expect_that(stats$trees, is_a("list"))
   expect_equal(length(stats$trees), get_locus_number(model))
 
 
   model <- model_theta_tau() + sumstat_trees("trees")
-  stats <- simulate(model, pars=c(1, 5))
+  stats <- simulate(model, pars = c(1, 5))
   expect_that(stats$trees, is_a("list"))
   expect_equal(length(stats$trees), get_locus_number(model))
   expect_true(all(sapply(stats$trees, length) == 1))

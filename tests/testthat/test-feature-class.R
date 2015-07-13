@@ -1,7 +1,7 @@
-context('Feature Class')
+context("Feature Class")
 
-test_that('Creating features works', {
-  feat <- Feature$new('abc', 5)
+test_that("Creating features works", {
+  feat <- feature_class$new("abc", 5)
   expect_true(is.feature(feat))
   expect_false(is.feature("blub"))
   expect_equal(feat$get_parameters(), list())
@@ -9,7 +9,7 @@ test_that('Creating features works', {
 
 
 test_that("adding parameter works", {
-  feat <- R6::R6Class("Feature_test", inherit = Feature,
+  feat <- R6::R6Class("Feature_test", inherit = feature_class,
     public = list(
       initialize = function() {}, #nolint
       add_parameter = function(...) private$add_parameter(...)

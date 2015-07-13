@@ -1,4 +1,4 @@
-Feature_sample <- R6Class("Feature_sample", inherit = Feature,
+sample_class <- R6Class("sample", inherit = feature_class,
   private = list(size = NA),
   public = list(
     initialize = function(sizes, time) {
@@ -31,13 +31,13 @@ Feature_sample <- R6Class("Feature_sample", inherit = Feature,
 #' @param time The time at which the sample is taken.
 #' @return The feature, which can be added to a model using `+`.
 ## @export
-feat_sample <- function(sizes, time = '0') {
-  if (time != '0')
+feat_sample <- function(sizes, time = "0") {
+  if (time != "0")
     stop("Samples at time different from 0 at not supported at the moment")
-  Feature_sample$new(sizes, time)
+  sample_class$new(sizes, time)
 }
 
-is_feat_sample <- function(feat) any("Feature_sample" == class(feat))
+is_feat_sample <- function(feat) any("sample" == class(feat))
 
 #' @describeIn get_features Returns a vector of samples sizes per
 #'   population.
@@ -66,7 +66,7 @@ get_sample_size <- function(model, for_sim=FALSE) {
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_sample <- function(feature, model) {
+conv_to_ms_arg.sample <- function(feature, model) {
   sample_size <- get_sample_size(model, TRUE)
   if (length(feature$get_sizes()) == 1) return("")
   paste0("-I ", length(sample_size), " ",
@@ -75,12 +75,12 @@ conv_to_ms_arg.Feature_sample <- function(feature, model) {
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.Feature_sample <- conv_to_ms_arg.Feature_sample
+conv_to_msms_arg.sample <- conv_to_ms_arg.sample
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.Feature_sample <- conv_to_ms_arg.Feature_sample
+conv_to_scrm_arg.sample <- conv_to_ms_arg.sample
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.Feature_sample <- function(feature, model) ""
+conv_to_seqgen_arg.sample <- function(feature, model) ""

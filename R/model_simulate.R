@@ -18,7 +18,7 @@
 #'   sumstat_jsfs()
 #'
 #' simulate(model, pars=c(1, 5))
-simulate.Coalmodel <- function(object, nsim = 1, seed, ..., pars = numeric(0)) {
+simulate.coalmodel <- function(object, nsim = 1, seed, ..., pars = numeric(0)) {
   if (!missing(seed)) set.seed(seed)
   simprog <- select_simprog(object)
   if (is.null(simprog)) stop("No simulator found")

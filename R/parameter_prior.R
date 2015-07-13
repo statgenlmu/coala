@@ -1,4 +1,4 @@
-Par_Prior <- R6Class('Par_Prior', inherit = Par_Named, #nolint
+prior_par_class <- R6Class("prior_par", inherit = named_par_class,
   private = list(prior = NA),
   public = list(
     initialize = function(name, prior) {
@@ -27,11 +27,11 @@ Par_Prior <- R6Class('Par_Prior', inherit = Par_Named, #nolint
 #'   a sample from the prior distribution you want for the parameter.
 #'   For example using \code{rnorm(1)} gives a standard normal prior.
 par_prior <- function(name, prior) {
-  Par_Prior$new(name, as.expression(substitute(prior))) #nolint
+  prior_par_class$new(name, as.expression(substitute(prior)))
 }
 
 
-is.prior_par <- function(par) inherits(par, "Par_Prior")
+is.prior_par <- function(par) inherits(par, "prior_par")
 
 
 sample_par_priors <- function(model) {

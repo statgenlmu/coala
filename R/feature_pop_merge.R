@@ -1,4 +1,4 @@
-Feature_pop_merge <- R6Class("Feature_pop_merge", inherit = Feature,
+pop_merge_class <- R6Class("pop_merge", inherit = feature_class,
   public = list(
     initialize = function(time, pop_from, pop_to) {
       private$time <- private$add_parameter(time)
@@ -31,12 +31,12 @@ Feature_pop_merge <- R6Class("Feature_pop_merge", inherit = Feature,
 #'   feat_pop_merge(0.5, 2, 1) +
 #'   feat_mutation(5)
 feat_pop_merge <- function(time, pop_source, pop_target) {
-  Feature_pop_merge$new(time, pop_source, pop_target)
+  pop_merge_class$new(time, pop_source, pop_target)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_pop_merge <- function(feature, model) {
+conv_to_ms_arg.pop_merge <- function(feature, model) {
   paste0("-ej', ", feature$get_time(), ", ",
          feature$get_population()[1], ", ",
          feature$get_population()[2], ", '")
@@ -44,12 +44,12 @@ conv_to_ms_arg.Feature_pop_merge <- function(feature, model) {
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.Feature_pop_merge <- conv_to_ms_arg.Feature_pop_merge
+conv_to_msms_arg.pop_merge <- conv_to_ms_arg.pop_merge
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.Feature_pop_merge <- conv_to_ms_arg.Feature_pop_merge
+conv_to_scrm_arg.pop_merge <- conv_to_ms_arg.pop_merge
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.Feature_pop_merge <- ignore_par
+conv_to_seqgen_arg.pop_merge <- ignore_par

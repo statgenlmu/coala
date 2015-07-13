@@ -8,7 +8,7 @@
 #'
 #'  @param name The name of the executable to look for
 #'  @param envir_var the name of the environment variable to use
-#'  @return The complete path of the executable is found, or 'NULL' if not.
+#'  @return The complete path of the executable is found, or "NULL" if not.
 search_executable <- function(name, envir_var = NULL) {
   # See if an environment variable is given
   exe <- NULL
@@ -19,7 +19,7 @@ search_executable <- function(name, envir_var = NULL) {
   }
 
   # Try to find it in the PATH folders and the Working directory
-  if (Sys.info()[['sysname']] == "Windows") {
+  if (Sys.info()[["sysname"]] == "Windows") {
     run_path <- strsplit(Sys.getenv("PATH"), ";")[[1]]
   } else {
     run_path <- strsplit(Sys.getenv("PATH"), ":")[[1]]

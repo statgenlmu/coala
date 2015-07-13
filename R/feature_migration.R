@@ -1,4 +1,4 @@
-Feature_migration <- R6Class("Feature_migration", inherit = Feature,
+migration_class <- R6Class("migration", inherit = feature_class,
   private = list(rate = NA),
   public = list(
     initialize = function(rate, pop_from, pop_to, time, symmetric = FALSE) {
@@ -7,7 +7,7 @@ Feature_migration <- R6Class("Feature_migration", inherit = Feature,
       if (symmetric) {
         private$population <- "all"
       } else {
-        private$set_population(c(from=pop_from, to=pop_to), 2)
+        private$set_population(c(from = pop_from, to = pop_to), 2)
       }
     },
     print = function() {
@@ -70,15 +70,15 @@ Feature_migration <- R6Class("Feature_migration", inherit = Feature,
 feat_migration <- function(rate, pop_from = NULL, pop_to = NULL,
                            symmetric = FALSE, time = "0") {
   if (symmetric) {
-    return(Feature_migration$new(rate, time = time, symmetric = TRUE))
+    return(migration_class$new(rate, time = time, symmetric = TRUE))
   } else {
-    return(Feature_migration$new(rate, pop_from, pop_to, time))
+    return(migration_class$new(rate, pop_from, pop_to, time))
   }
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_migration <- function(feature, model) {
+conv_to_ms_arg.migration <- function(feature, model) {
   if (all(feature$get_population() == "all")) {
     return( paste0("-eM', ", feature$get_time(), ", ",
                     feature$get_rate(), ", '"))
@@ -91,12 +91,12 @@ conv_to_ms_arg.Feature_migration <- function(feature, model) {
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.Feature_migration <- conv_to_ms_arg.Feature_migration
+conv_to_msms_arg.migration <- conv_to_ms_arg.migration
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.Feature_migration <- conv_to_ms_arg.Feature_migration
+conv_to_scrm_arg.migration <- conv_to_ms_arg.migration
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.Feature_migration <- ignore_par
+conv_to_seqgen_arg.migration <- ignore_par

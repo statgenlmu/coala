@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-simulator_class <- R6Class("Simulator",
+simulator_class <- R6Class("simulator",
   private = list(
     name = "TEMPLATE",
     priority = 50
@@ -16,7 +16,7 @@ simulator_class <- R6Class("Simulator",
   )
 )
 
-is_simulator <- function(simulator) "Simulator" %in% class(simulator)
+is_simulator <- function(simulator) inherits(simulator, "simulator")
 
 
 # Keep a user modifiable list of available simulation programs in a private
@@ -79,7 +79,7 @@ reduce_sim_commands <- function(sim_commands) {
 list_simulators <- function() {
   do.call(rbind, lapply(ls(simulators), function(simulator) {
     info <- get_simulator(simulator)$get_info()
-    name <- info[['name']]
+    name <- info[["name"]]
     info <- info[-1]
     pars <- paste(names(info), ":", info, collapse = ", ")
     c(name = name, info = pars)

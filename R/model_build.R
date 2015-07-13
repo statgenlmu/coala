@@ -3,7 +3,7 @@
 #' @param e1 The Model to which the feature/parameter should be added
 #' @param e2 The feature/parameter to add
 #' @return The extended model
-"+.Coalmodel" <- function(e1, e2) {
+"+.coalmodel" <- function(e1, e2) {
   e2name <- deparse(substitute(e2)) # Passed throw for error messages
   add_to_model(e2, e1, e2name)
 }
@@ -15,10 +15,10 @@ add_to_model.default <- function(x, model, x_name) {
 }
 
 
-add_to_model.Parameter <- function(par, model, par_name) model
+add_to_model.parameter <- function(par, model, par_name) model
 
 
-add_to_model.Par_Named <- function(par, model, par_name) {
+add_to_model.named_par <- function(par, model, par_name) {
   if (par$get_name() %in% get_par_names(model))
     stop("There is already a parameter with name ", par_name)
 
@@ -29,7 +29,7 @@ add_to_model.Par_Named <- function(par, model, par_name) {
 }
 
 
-add_to_model.Par_variation <- function(par, model, par_name) {
+add_to_model.variation_par <- function(par, model, par_name) {
   model <- add_variation(model)
   for (par in par$get_base_par()) model <- model + par
   model$id <- get_id()
@@ -37,7 +37,7 @@ add_to_model.Par_variation <- function(par, model, par_name) {
 }
 
 
-add_to_model.Feature <- function(feat, model, feat_name) {
+add_to_model.feature <- function(feat, model, feat_name) {
   # Check that the population in the feature exists
   pop <- feat$get_population()
   if (!is.null(pop)) {
@@ -57,7 +57,7 @@ add_to_model.Feature <- function(feat, model, feat_name) {
 }
 
 
-add_to_model.Locus <- function(locus, model, locus_name) {
+add_to_model.locus <- function(locus, model, locus_name) {
   model$loci[[length(model$loci) + 1]] <- locus
   model$id <- get_id()
   model

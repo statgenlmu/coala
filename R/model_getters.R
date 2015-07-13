@@ -19,16 +19,16 @@ get_parameter_table <- function(model) {
       stop("Can not create a parameter table with non-ranged pars in model")
     }
     if (length(get_parameter(model)) == 0) {
-      par_table <- (data.frame(name=character(),
-                               lower.range=numeric(),
-                               upper.range=numeric(),
-                               stringsAsFactors=F))
+      par_table <- (data.frame(name = character(),
+                               lower.range = numeric(),
+                               upper.range = numeric(),
+                               stringsAsFactors = FALSE))
     } else {
-      par_table <- do.call(rbind, lapply(get_parameter(model), function (par) {
-        data.frame(name=par$get_name(),
-                   lower.range=par$get_range()[1],
-                   upper.range=par$get_range()[2],
-                   stringsAsFactors=F)
+      par_table <- do.call(rbind, lapply(get_parameter(model), function(par) {
+        data.frame(name = par$get_name(),
+                   lower.range = par$get_range()[1],
+                   upper.range = par$get_range()[2],
+                   stringsAsFactors = FALSE)
       }))
     }
     cache(model, "par_table", par_table)
@@ -48,7 +48,7 @@ get_parameter <- function(model) {
 
 #' @param locus The number of the locus.
 #' @param total If \code{FALSE}, the length of loci in a trio will be reported
-#'   individually. If \code{TRUE} the sum of the loci's length will be reported.
+#'   individually. If \code{TRUE} the sum of the loci"s length will be reported.
 #'   This does not affect non-trio loci.
 #' @param group The group of loci.
 #'
@@ -135,7 +135,7 @@ get_locus_number <- function(model, group = NA, ignore_variation = FALSE) {
 get_population_indiviuals <- function(model, pop, zero_indexed = FALSE) {
   if (pop == "all") return(1:sum(get_sample_size(model)))
 
-  if (!pop %in% get_populations(model)) stop('Invalid population')
+  if (!pop %in% get_populations(model)) stop("Invalid population")
   sample_size <- get_sample_size(model)
   from <- cumsum(c(0, sample_size)) + 1
   to <- cumsum(sample_size)

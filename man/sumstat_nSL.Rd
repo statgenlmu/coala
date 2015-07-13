@@ -16,7 +16,7 @@ with this name. Summary statistic names must be unique in a model.}
 middle of the locus. If provided, the statistic will be calculate
 for the SNP closest to the given position.
 Otherwise, it will be calculated for all SNPs.
-The position is relative to the middle locus' extend if trios
+The position is relative to the middle locus" extend if trios
 are used.}
 
 \item{population}{The population for which the statistic is calculated.}

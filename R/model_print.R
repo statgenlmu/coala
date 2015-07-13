@@ -13,7 +13,7 @@ print_model_part <- function(model, part, part_name) {
 }
 
 #' @export
-print.Coalmodel <- function(x, ...) {
+print.coalmodel <- function(x, ...) {
   print_model_part(x, "features", "Features")
   cat("\n")
 
@@ -37,7 +37,7 @@ print.Coalmodel <- function(x, ...) {
       cat("Failed to generate command: \n  ")
       cat(cmd)
     } else {
-      cat("Command:", paste(cmd, collapse="\n"), "\n")
+      cat("Command:", paste(cmd, collapse = "\n"), "\n")
     }
   }
 }

@@ -1,4 +1,4 @@
-context('Parameter Priors')
+context("Parameter Priors")
 
 test_that("creating parameters with priors works", {
   par <- par_prior("x", rnorm(1))

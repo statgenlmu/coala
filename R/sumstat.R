@@ -1,4 +1,4 @@
-Sumstat <- R6Class('Sumstat',
+sumstat_class <- R6Class("sumstat",
   private = list(
     name = NA,
     req_files = FALSE,
@@ -21,27 +21,25 @@ Sumstat <- R6Class('Sumstat',
 )
 
 
-is.sum_stat <- function(sum_stat) 'Sumstat' %in% class(sum_stat)
+is.sum_stat <- function(sumstat) inherits(sumstat, "sumstat")
 
 
 # Written to `model$sum_stats` on initialization
-create_sumstat_container <- function() {
-  list()
-}
+create_sumstat_container <- function() list()
 
 
 # Add a summary statistic to a model
-add_to_model.Sumstat <- function(sum_stat, model, feat_name) {
+add_to_model.sumstat <- function(sum_stat, model, feat_name) {
   if (sum_stat$get_name() %in% names(model$sum_stats))
-    stop("Can't add ", feat_name, " to model: ",
+    stop("Can not add ", feat_name, " to model: ",
          "There is already a statistic with name ", sum_stat$get_name())
 
   if (sum_stat$requires_files() && !requires_files(model))
-    model <- model + Feature_files$new()
+    model <- model + files_feat_class$new()
   if (sum_stat$requires_segsites() && !requires_segsites(model))
-    model <- model + Feature_segsites$new()
+    model <- model + segsites_feat_class$new()
   if (sum_stat$requires_trees() && !requires_trees(model))
-    model <- model + Feature_trees$new()
+    model <- model + trees_feat_class$new()
 
   # Save the statistic
   model$sum_stats[[sum_stat$get_name()]] <- sum_stat

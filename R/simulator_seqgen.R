@@ -1,4 +1,4 @@
-sg_mutation_models <- c('HKY', 'GTR')
+sg_mutation_models <- c("HKY", "GTR")
 
 
 generate_tree_model <- function(model) {
@@ -9,9 +9,9 @@ generate_tree_model <- function(model) {
 
     # Features
     tree_model_features <- !vapply(model$features, function(x) {
-      any(c("Feature_seg_sites",
-            "Feature_mutation",
-            "Feature_outgroup") %in% class(x))
+      any(c("seg_sites_feat",
+            "mutation",
+            "outgroup") %in% class(x))
     }, logical(1)) #nolint
     if (all(tree_model_features)) stop("seq-gen not required")
     tree_model$features <- model$features[tree_model_features]
@@ -64,7 +64,7 @@ sg_generate_opts <- function(model, parameters, locus,
 
 
 sg_generate_opt_cmd <- function(model) {
-  cmd <- read_cache(model, 'seqgen_cmd')
+  cmd <- read_cache(model, "seqgen_cmd")
 
   if (is.null(cmd)) {
     if (has_trios(model)) is_outer <- c(TRUE, FALSE, TRUE)
@@ -77,7 +77,7 @@ sg_generate_opt_cmd <- function(model) {
       cmd <- paste0("c('", cmd, "')")
     })
 
-    cache(model, 'seqgen_cmd', cmd)
+    cache(model, "seqgen_cmd", cmd)
   }
   cmd
 }
@@ -85,9 +85,9 @@ sg_generate_opt_cmd <- function(model) {
 
 #' @importFrom R6 R6Class
 #' @include simulator_class.R
-seqgen_class <- R6Class('Seqgen', inherit = simulator_class,
+seqgen_class <- R6Class("seqgen", inherit = simulator_class,
   private = list(
-    name = 'seqgen',
+    name = "seqgen",
     binary = NULL,
     priority = 100
   ),
@@ -115,7 +115,7 @@ seqgen_class <- R6Class('Seqgen', inherit = simulator_class,
           stop("No trees in file ", ms_files[[i]])
         }
 
-        seqgen_file <- tempfile('seqgen')
+        seqgen_file <- tempfile("seqgen")
         cmd <- paste(opts[i], ms_files[[i]])
 
         ret <- system2(private$binary, cmd, stdout = seqgen_file)
@@ -130,7 +130,7 @@ seqgen_class <- R6Class('Seqgen', inherit = simulator_class,
     simulate = function(model, parameters) {
       # Simulate the ancestral trees
       tree_model <- generate_tree_model(model)
-      trees <- simulate(tree_model, pars = parameters)$trees
+      trees <- simulate.coalmodel(tree_model, pars = parameters)$trees
       assert_that(!is.null(trees))
 
       # Call seq-gen for each locus (trio)
@@ -152,8 +152,8 @@ seqgen_class <- R6Class('Seqgen', inherit = simulator_class,
         seg_sites <- NULL
       }
 
-      sum_stats <- calc_sumstats(seg_sites, NULL, seqgen_files, model, parameters,
-                                 NULL, get_simulator("seqgen"))
+      sum_stats <- calc_sumstats(seg_sites, NULL, seqgen_files, model,
+                                 parameters, NULL, get_simulator("seqgen"))
 
       # Clean Up
       unlink(unlist(seqgen_files))
@@ -162,7 +162,7 @@ seqgen_class <- R6Class('Seqgen', inherit = simulator_class,
     get_cmd = function(model) {
       c(trees = get_cmd(generate_tree_model(model)),
         sequence = paste("seqgen", sg_generate_opts(model, NULL, 1, 0, TRUE),
-                         collapse = ' '))
+                         collapse = " "))
     },
     get_info = function() c(name = "seqgen", binary = private$binary)
   )

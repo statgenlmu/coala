@@ -1,7 +1,7 @@
 # Base class for all parameters.
 # Contains an expression that can be assigned to some part of a feature.
 #' @importFrom R6 R6Class
-Parameter <- R6Class('Parameter',
+parameter_class <- R6Class("parameter",
   private = list(expr = NA),
   public = list(
     initialize = function(expr) {
@@ -18,23 +18,23 @@ Parameter <- R6Class('Parameter',
 
 
 is.par <- function(par) {
-  any('Parameter' == class(par))
+  any("parameter" == class(par))
 }
 
 
 
-# Base class for Model Parameters.
+# Base class for Model parameters.
 # Model parameters have a name, and a value is assigned to a variable of that
 # name for each simulation.
 #' @importFrom R6 R6Class
-Par_Named <- R6Class('Par_Named', inherit=Parameter,
+named_par_class <- R6Class("named_par", inherit = parameter_class,
   private = list(name = NA),
   public = list(
     initialize = function(name) {
       if (!(is.character(name) & length(name) == 1))
-        stop('The parameter name must be a character')
+        stop("The parameter name must be a character")
 
-      super$initialize(parse(text=name))
+      super$initialize(parse(text = name))
       private$name <- name
     },
     get_name = function() private$name,
@@ -55,13 +55,13 @@ Par_Named <- R6Class('Par_Named', inherit=Parameter,
 
 
 is.named_par <- function(par) {
-  'Par_Named' %in% class(par)
+  any("named_par" == class(par))
 }
 
 
-#' Define Model Parameters
+#' Define Model parameters
 #'
-#' This functions allow to add parameters to a model. Parameters can either
+#' This functions allow to add parameters to a model. parameters can either
 #' be used in features, or added directly to a model using the plus operator.
 #' The value of parameters can be specified in the simulation command
 #' (for \code{par_named} and \code{par_range}), sampled from a prior
@@ -86,7 +86,7 @@ is.named_par <- function(par) {
 #' par_range("z", 1, 5)
 #' par_expr(2*x + y * z)
 par_expr <- function(expr) {
-  Parameter$new(as.expression(substitute(expr)))
+  parameter_class$new(as.expression(substitute(expr)))
 }
 
 
@@ -98,20 +98,20 @@ par_expr <- function(expr) {
 #'   Different to \code{expr}, the expression is evaluated immediately and
 #'   can not depend on other named parameters.
 par_const <- function(constant) {
-  Parameter$new(as.expression(constant))
+  parameter_class$new(as.expression(constant))
 }
 
 
 #' @describeIn par_expr Creates an parameter whose value is specified via the
-#'   \code{pars} argument in \code{\link{simulate.Coalmodel}}.
+#'   \code{pars} argument in \code{\link{simulate.coalmodel}}.
 #' @export
 #' @param name Character. The name of the parameter. Must be unique in a model.
 par_named <- function(name) {
-  Par_Named$new(name)
+  named_par_class$new(name)
 }
 
 
-Par_Range <- R6Class('Par_Range', inherit = Par_Named,
+range_par_class <- R6Class("range_par", inherit = named_par_class,
   private = list(range = NA),
   public = list(
     initialize = function(lower, upper, name) {
@@ -126,7 +126,7 @@ Par_Range <- R6Class('Par_Range', inherit = Par_Named,
     get_range = function() private$range,
     print = function() {
       cat(private$name, ": range between", private$range[1],
-                           'and', private$range[2], "\n")
+                           "and", private$range[2], "\n")
     },
     check_value = function(value) {
       if ((!is.numeric(value)) || length(value) != 1) {
@@ -141,9 +141,7 @@ Par_Range <- R6Class('Par_Range', inherit = Par_Named,
 )
 
 
-is.ranged_par <- function(par) {
-  'Par_Range' %in% class(par)
-}
+is.ranged_par <- function(par) inherits(par, "range_par")
 
 
 #' @describeIn par_expr Creates an parameter that can take a range of possible
@@ -154,10 +152,10 @@ is.ranged_par <- function(par) {
 #'  \pkg{jaatha}.
 #'
 #' @export
-#' @param lower A numeric. The lower boundary of the parameter's range.
-#' @param upper A numeric. The upper boundary of the parameter's range.
+#' @param lower A numeric. The lower boundary of the parameter"s range.
+#' @param upper A numeric. The upper boundary of the parameter"s range.
 par_range <- function(name, lower, upper) {
-  Par_Range$new(lower, upper, name)
+  range_par_class$new(lower, upper, name)
 }
 
 
@@ -168,13 +166,13 @@ create_par_env <- function(model, parameters, ..., for_cmd = FALSE) {
   par_env <- new.env()
 
   if (!for_cmd) {
-    par_env[['par']] <- par_eval_func
+    par_env[["par"]] <- par_eval_func
 
     for (par in get_parameter(model)) {
       par_env[[par$get_name()]] <- par$generate_value(parameters)
     }
   } else {
-    par_env[['par']] <- par_print_func
+    par_env[["par"]] <- par_print_func
   }
 
   additional_pars <- list(...)
@@ -201,3 +199,6 @@ prepare_pars <- function(pars, model) {
   # Sample from priors and return
   c(pars, sample_par_priors(model))
 }
+
+
+print_par <- function(par) paste0("`", substr(par, 5, nchar(par) - 1), "`")

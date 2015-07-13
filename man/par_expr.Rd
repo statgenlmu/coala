@@ -7,7 +7,7 @@
 \alias{par_prior}
 \alias{par_range}
 \alias{parameter}
-\title{Define Model Parameters}
+\title{Define Model parameters}
 \usage{
 par_expr(expr)
 
@@ -34,16 +34,16 @@ can not depend on other named parameters.}
 
 \item{name}{Character. The name of the parameter. Must be unique in a model.}
 
-\item{lower}{A numeric. The lower boundary of the parameter's range.}
+\item{lower}{A numeric. The lower boundary of the parameter"s range.}
 
-\item{upper}{A numeric. The upper boundary of the parameter's range.}
+\item{upper}{A numeric. The upper boundary of the parameter"s range.}
 
 \item{prior}{An expression. Evaluation this expression should give
 a sample from the prior distribution you want for the parameter.
 For example using \code{rnorm(1)} gives a standard normal prior.}
 }
 \description{
-This functions allow to add parameters to a model. Parameters can either
+This functions allow to add parameters to a model. parameters can either
 be used in features, or added directly to a model using the plus operator.
 The value of parameters can be specified in the simulation command
 (for \code{par_named} and \code{par_range}), sampled from a prior
@@ -59,7 +59,7 @@ expression.
 Different to par_expr, the value is evaluated on parameter creation.
 
 \item \code{par_named}: Creates an parameter whose value is specified via the
-\code{pars} argument in \code{\link{simulate.Coalmodel}}.
+\code{pars} argument in \code{\link{simulate.coalmodel}}.
 
 \item \code{par_range}: Creates an parameter that can take a range of possible
  values.

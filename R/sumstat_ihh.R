@@ -2,7 +2,7 @@
 #' @importClassesFrom rehh haplohh
 #' @importFrom rehh calc_ehh calc_ehhs
 #' @importFrom methods new checkAtAssignment
-SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
+stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
   private = list(
     req_segsites = TRUE,
     position = NA,
@@ -45,8 +45,8 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
           assert_that(length(snps) == 1)
           ihh <- matrix(0, 1, 3)
           colnames(ihh) <- c("IHHa", "IHHd", "IES")
-          ihh[1, 1:2] <- calc_ehh(rehh_data, mrk = snps, plotehh = FALSE)$ihh
-          ihh[1, 3] <- calc_ehhs(rehh_data, mrk = snps, plotehh = FALSE)$ies
+          ihh[1, 1:2] <- calc_ehh(rehh_data, mrk = snps, plotehh = FALSE)$ihh #nolint
+          ihh[1, 3] <- calc_ehhs(rehh_data, mrk = snps, plotehhs = FALSE)$ies #nolint
           return(ihh)
         }
         rehh::scan_hh(rehh_data)[ , -(1:3), drop = FALSE] #nolint
@@ -90,7 +90,7 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
 #'   middle of the locus. If provided, the statistic will be calculate
 #'   for the SNP closest to the given position.
 #'   Otherwise, it will be calculated for all SNPs.
-#'   The position is relative to the middle locus' extend if trios
+#'   The position is relative to the middle locus" extend if trios
 #'   are used.
 #' @param max_snps The maximal number of SNPs per locus that are used for the
 #'   calculation. If a locus has more SNPs than this number, only a
@@ -103,7 +103,7 @@ SumstatIhh <- R6Class('sumstat_ihh', inherit = Sumstat, #nolint
 #'   for the SNP nearest to the selected position. Each SNP is represented by
 #'   a row, sorted by position on the locus.
 #' @export
-sumstat_ihh <- function(name = 'ihh', position = NA, population = 1,
+sumstat_ihh <- function(name = "ihh", position = NA, population = 1,
                         max_snps = 1000) {
-  SumstatIhh$new(name, population, position, max_snps) #nolint
+  stat_ihh_class$new(name, population, position, max_snps)
 }

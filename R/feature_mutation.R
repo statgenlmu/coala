@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-Feature_mutation <- R6Class("Feature_mutation", inherit = Feature,
+mutation_class <- R6Class("mutation", inherit = feature_class,
   private = list(
     model = NA,
     base_frequencies = NA,
@@ -101,7 +101,7 @@ feat_mutation <- function(rate,
                           tstv_ratio = NA,
                           gtr_rates = NA) {
 
-  Feature_mutation$new(rate, model, base_frequencies, tstv_ratio, gtr_rates)
+  mutation_class$new(rate, model, base_frequencies, tstv_ratio, gtr_rates)
 }
 
 #-------------------------------------------------------------------
@@ -143,26 +143,26 @@ feat_mutation <- function(rate,
 #                    group = group)
 # }
 
-is_feat_mutation <- function(feat) any("Feature_mutation" == class(feat))
+is_feat_mutation <- function(feat) any("mutation" == class(feat))
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_mutation <- function(feature, model) {
+conv_to_ms_arg.mutation <- function(feature, model) {
   if (feature$get_model() != "IFS") stop("Unsupported mutation model")
   paste0("-t', par(", feature$get_rate(), "), '")
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.Feature_mutation <- conv_to_ms_arg.Feature_mutation
+conv_to_msms_arg.mutation <- conv_to_ms_arg.mutation
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.Feature_mutation <- conv_to_ms_arg.Feature_mutation
+conv_to_scrm_arg.mutation <- conv_to_ms_arg.mutation
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.Feature_mutation <- function(feature, model) {
+conv_to_seqgen_arg.mutation <- function(feature, model) {
   if (feature$get_model() == "GTR") {
     rates <- paste("-r", paste(feature$get_gtr_rates(), collapse = " "))
   } else {

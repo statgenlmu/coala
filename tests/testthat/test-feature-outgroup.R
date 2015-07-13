@@ -1,12 +1,12 @@
-context('Feature Outgroup')
+context("Feature Outgroup")
 
-test_that('Creation of outgroup feature works', {
+test_that("Creation of outgroup feature works", {
   expect_equal(feat_outgroup(1)$get_population(), 1)
   expect_equal(feat_outgroup(2)$get_population(), 2)
 })
 
 
-test_that('Outgroup setting and getting works', {
+test_that("Outgroup setting and getting works", {
   model <- coal_model(1:4 * 2, 100)
   expect_error(get_outgroup(model))
 

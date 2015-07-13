@@ -1,6 +1,6 @@
-context('Feature Recombination')
+context("Feature Recombination")
 
-test_that('Creation of growth features works', {
+test_that("Creation of growth features works", {
   expect_equal(feat_recombination(2)$get_rate(), "par(2)")
 })
 

@@ -1,4 +1,4 @@
-Feature_selection <- R6Class("Feature_selection", inherit = Feature,
+selection_class <- R6Class("selection", inherit = feature_class,
   private = list(strength_AA = NA, strength_Aa = NA, additive = FALSE),
   public = list(
     initialize = function(strength_AA, strength_Aa, population, time,
@@ -52,27 +52,28 @@ Feature_selection <- R6Class("Feature_selection", inherit = Feature,
 feat_selection <- function(strength_AA, strength_Aa, strength_A,
                            population = 1, time) {
   if (!missing(strength_A)) {
-    return(Feature_selection$new(strength_A,
-                                 population = population,
-                                 time = time,
-                                 additive = TRUE))
+    return(selection_class$new(strength_A,
+                               population = population,
+                               time = time,
+                               additive = TRUE))
   }
-  Feature_selection$new(strength_AA, strength_Aa, population, time)
+  selection_class$new(strength_AA, strength_Aa, population, time)
 }
+
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.Feature_selection <- function(feature, model) {
+conv_to_ms_arg.selection <- function(feature, model) {
   stop("selection is not supported", call. = FALSE)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.Feature_selection <- conv_to_ms_arg.Feature_selection
+conv_to_scrm_arg.selection <- conv_to_ms_arg.selection
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.Feature_selection <- function(feature, model) {
+conv_to_msms_arg.selection <- function(feature, model) {
   n_pop <- length(get_populations(model))
   start_freq <- rep(0, n_pop)
   start_freq[feature$get_population()] <- 0.0005
@@ -90,4 +91,4 @@ conv_to_msms_arg.Feature_selection <- function(feature, model) {
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.Feature_selection <- ignore_par
+conv_to_seqgen_arg.selection <- ignore_par

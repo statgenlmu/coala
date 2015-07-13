@@ -4,7 +4,7 @@ seg_sites <- matrix(c(1, 0, 0, 0, 1,
                       1, 1, 0, 1, 0,
                       1, 0, 0, 1, 1,
                       1, 0, 0, 1, 0), 4, 5, byrow = TRUE)
-attr(seg_sites, 'positions') <- c(0.1, 0.2, 0.5, 0.7, 0.9)
+attr(seg_sites, "positions") <- c(0.1, 0.2, 0.5, 0.7, 0.9)
 model <- coal_model(4, 1, 337)
 pos <- get_snp_positions(list(seg_sites), model, relative = FALSE)[[1]]
 
@@ -41,20 +41,20 @@ test_that("selection of snps works", {
 })
 
 
-test_that('calculation of ihh works', {
+test_that("calculation of ihh works", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh()
   ihh <- stat_ihh$calculate(list(seg_sites), NULL, NULL, model)
-  expect_that(ihh, is_a('list'))
+  expect_that(ihh, is_a("list"))
   expect_equal(length(ihh), 1)
-  expect_that(ihh[[1]], is_a('matrix'))
+  expect_that(ihh[[1]], is_a("matrix"))
   expect_equal(dim(ihh[[1]]), c(5, 3))
 
   stat_ihh <- sumstat_ihh(position = 0.5)
   ihh2 <- stat_ihh$calculate(list(seg_sites), NULL, NULL, model)
-  expect_that(ihh2, is_a('list'))
+  expect_that(ihh2, is_a("list"))
   expect_equal(length(ihh2), 1)
-  expect_that(ihh2[[1]], is_a('matrix'))
+  expect_that(ihh2[[1]], is_a("matrix"))
   expect_equal(dim(ihh2[[1]]), c(1, 3))
   expect_equivalent(ihh[[1]][3, , drop = FALSE], ihh2[[1]])
   expect_equal(rownames(ihh), rownames(ihh2))
@@ -62,20 +62,20 @@ test_that('calculation of ihh works', {
   model <- coal_model(4, 3, 337)
   ihh2 <- stat_ihh$calculate(list(seg_sites, seg_sites, seg_sites),
                              NULL, NULL, model)
-  expect_that(ihh2, is_a('list'))
+  expect_that(ihh2, is_a("list"))
   expect_equal(length(ihh2), 3)
   expect_equal(ihh2[[1]], ihh2[[2]])
   expect_equal(ihh2[[1]], ihh2[[3]])
 })
 
 
-test_that('ihh works with trios', {
+test_that("ihh works with trios", {
   skip_if_not_installed("rehh")
   model <- model_trios()
   stats <- simulate(model)
   ihh <- sumstat_ihh(population = 1)
   stat <- ihh$calculate(stats$seg_sites, NULL, NULL, model)
-  expect_that(stat, is_a('list'))
+  expect_that(stat, is_a("list"))
   expect_equal(length(stat), 1)
 })
 

@@ -47,7 +47,7 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
 
       sim_number <- sum(sapply(sim_cmds, nrow))
       if (requires_files(model)) {
-        files <- sapply(1:sim_number, function(x) tempfile('scrm'))
+        files <- sapply(1:sim_number, function(x) tempfile("scrm"))
       } else {
         files <- rep("", sim_number)
       }
@@ -74,7 +74,7 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
       }
 
       seg_sites <- lapply(seg_sites, function(x) {
-        attr(x, 'positions') <- as.numeric(colnames(x))
+        attr(x, "positions") <- as.numeric(colnames(x))
         x
       })
 

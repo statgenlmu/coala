@@ -12,7 +12,7 @@ search_executable(name, envir_var = NULL)
 \item{envir_var}{the name of the environment variable to use}
 }
 \value{
-The complete path of the executable is found, or 'NULL' if not.
+The complete path of the executable is found, or "NULL" if not.
 }
 \description{
 This function tries to find a binary of a given name by looking
