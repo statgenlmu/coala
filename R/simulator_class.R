@@ -1,5 +1,5 @@
 #' @importFrom R6 R6Class
-simulator_class <- R6Class("Simulator",
+simulator_class <- R6Class("simulator",
   private = list(
     name = "TEMPLATE",
     priority = 50
@@ -16,7 +16,7 @@ simulator_class <- R6Class("Simulator",
   )
 )
 
-is_simulator <- function(simulator) "Simulator" %in% class(simulator)
+is_simulator <- function(simulator) inherits(simulator, "simulator")
 
 
 # Keep a user modifiable list of available simulation programs in a private

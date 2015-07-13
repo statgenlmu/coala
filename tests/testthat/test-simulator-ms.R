@@ -81,7 +81,7 @@ positions: 0.3718 0.8443
 
 test_that("the ms sim program exists", {
   if (!has_ms()) skip("ms not installed")
-  expect_that(get_simulator("ms"), is_a("Simulator"))
+  expect_that(get_simulator("ms"), is_a("simulator"))
 })
 
 
