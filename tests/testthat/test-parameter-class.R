@@ -139,22 +139,22 @@ test_that("preparing parameters works", {
   model <- coal_model(5) + par_named("x")
   expect_equal(prepare_pars(1.25, model), c(x = 1.25))
 
-  model <- coal_model(5, 1) + par_prior("r", rbinom(1, 3, .5))
+  model <- coal_model(5, 1) + par_prior("r", stats::rbinom(1, 3, .5))
   expect_error(prepare_pars(c("1", "2"), model))
   pars <- prepare_pars(numeric(), model)
   expect_equal(names(pars), "r")
   expect_true(all(pars %in% 0:3))
 
   model <- coal_model(5, 1) +
-    par_prior("m", rbinom(1, 3, .5)) +
-    par_prior("r", rbinom(1, 3, .5))
+    par_prior("m", stats::rbinom(1, 3, .5)) +
+    par_prior("r", stats::rbinom(1, 3, .5))
   pars <- prepare_pars(numeric(), model)
   expect_equal(names(pars), c("m", "r"))
   expect_true(all(pars %in% 0:3))
 
   model <- coal_model(5, 1) +
     par_named("m") +
-    par_prior("r", rbinom(1, 3, .5))
+    par_prior("r", stats::rbinom(1, 3, .5))
   pars <- prepare_pars(1, model)
   expect_equal(names(pars), c("m", "r"))
   expect_true(all(pars %in% 0:3))

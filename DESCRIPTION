@@ -1,7 +1,7 @@
 Package: coala
-Version: 0.0.9909
-Date: 2015-07-13
-License: GPL (>= 3)
+Version: 0.1.0
+Date: 2015-07-14
+License: MIT + file LICENSE
 Title: A Framework for Coalescent Simulation
 Authors@R: c(
     person('Paul', 'Staab', , 'develop@paulstaab.de', role=c('aut', 'cre', 'cph')),
@@ -9,13 +9,13 @@ Authors@R: c(
     )
 BugReports: https://github.com/statgenlmu/coala/issues
 URL: https://github.com/statgenlmu/coala
-Description: Coalescent simulation allows to rapidly simulate biological
+Description: Coalescent simulations allow to rapidly simulate biological
     sequences evolving according to a given model of evolution.
-    Using this package, you can specify evolutionary models in R,
+    Using this package, you can specify such models,
     transparently call a suitable coalescent simulator, parse the results
     and calculate additional summary statistics conveniently from within 'R'.
     It supports the simulator 'scrm' by default, and can optionally
-    call the programs 'ms' and 'msms' if installed on the system.
+    call the programs 'ms' and 'msms'.
     It also supports finite-sites mutation models by combining the
     simulators with 'seq-gen'.
 Depends:

@@ -11,3 +11,4 @@
 ^msms.jar$
 ^vignettes/abc_cache$
 ^vignettes/rsconnect$
+^cran-comments.md$

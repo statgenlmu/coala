@@ -10,7 +10,7 @@ vignette: >
 ---
 
 Coala can call the coalescent simulators _ms_ [1], _msms_ [2] and _scrm_ [3] 
-and use _seq-gen_ [4] for finite sites simulations. 
+and can use _seq-gen_ [4] for finite sites simulations.
 
 
 # Installation

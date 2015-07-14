@@ -28,7 +28,7 @@ test_that("model without ranged parameters can be simualted", {
 test_that("models with priors can be simulated", {
   model <- coal_model(5, 1) +
     feat_mutation(5) +
-    feat_recombination(par_prior("r", rbinom(1, 3, .5))) +
+    feat_recombination(par_prior("r", stats::rbinom(1, 3, .5))) +
     sumstat_sfs("sfs")
   stats <- simulate(model)
   expect_equal(names(stats$pars), "r")
