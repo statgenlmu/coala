@@ -9,15 +9,13 @@ Authors@R: c(
     )
 BugReports: https://github.com/statgenlmu/coala/issues
 URL: https://github.com/statgenlmu/coala
-Description: Coalescent simulations allow to rapidly simulate biological
-    sequences evolving according to a given model of evolution.
-    Using this package, you can specify such models,
-    transparently call a suitable coalescent simulator, parse the results
-    and calculate additional summary statistics conveniently from within 'R'.
-    It supports the simulator 'scrm' by default, and can optionally
-    call the programs 'ms' and 'msms'.
-    It also supports finite-sites mutation models by combining the
-    simulators with 'seq-gen'.
+Description: Coalescent simulators can rapidly simulate biological sequences
+    evolving according to a given model of evolution.
+    This package allows to specify such models, transparently calls a suitable
+    simulator, parses the results and calculates additional summary statistics.
+    It supports the simulators 'ms', 'msms' and 'scrm' and can simulate
+    finite-sites mutation models by combining the simulators with the program
+    'seq-gen'.
 Depends:
     R (>= 3.1.0)
 Imports:
@@ -32,6 +30,7 @@ Imports:
 Suggests:
     abc (>= 2.0),
     knitr,
+    rmarkdown,
     testthat (>= 0.10.0)
 LinkingTo: Rcpp, RcppArmadillo (>= 0.3.810.0)
 VignetteBuilder: knitr
