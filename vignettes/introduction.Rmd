@@ -9,12 +9,12 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-Coalescent simulation referrers to the idea of simulating the evolution of 
+Coalescent simulation refers to the idea of simulating the evolution of 
 biological sequences like DNA by tracing their ancestry back in time. The
 `coala` package is an interface for calling a number of commonly used
 coalescent simulators from R. It should be able to use the simulator
 `scrm` out of the box. Other simulators need to be installed separately
-and must explicitely be activated. This is described in the `installation`
+and must explicitly be activated. This is described in the `installation`
 vignette:
 
 ```{r installation, eval=FALSE}
@@ -34,7 +34,8 @@ model <- coal_model(sample_size = 3, loci_number = 1)
 ```
 
 This creates a basic model with one population of constant size.
-Simulated is one genetic locus for 3 haplotypes sampled from the population. 
+One genetic locus for three haplotypes is sampled from
+the population. 
 
 Printing the model gives a short summary of this content:
 ```{r print_model}
@@ -63,11 +64,11 @@ model <- model + feat_mutation(rate = 1, model = "IFS")
 model
 ```
 
-Now, mutation occur with rate 1 and according to an infinite-sites mutation 
+Now, mutations occur with rate 1 and according to an infinite-sites mutation 
 model (IFS). Details on both rate and mutation model are given the help
 page of the feature (`?feat_mutation`). 
 
-coala currently support the features
+Coala currently support the features
 
 ```{r echo=FALSE}
 funcs <- ls("package:coala")
@@ -89,11 +90,11 @@ model <- coal_model(sample_size = c(5, 2, 0), loci_number = 1) +
   feat_pop_merge(0.8, 2, 1)
 ```
 
-create a model of three populations, which a symmetric migration rate of `0.5`
+create a model of three populations, with a symmetric migration rate of `0.5`
 between them. View backwards in time, population 3 merges into population 2
 `0.5` coalescent time units in the past and population 2 into population 1
 `0.3` time units further into the past. Looking forwards in time, this 
-repesents two speciation events with migration going on afterwards. At time `0`
+represents two speciation events with migration going on afterwards. At time `0`
 five haploids of population 1 and two ones of population 2 are sampled. Please
 note that sample sizes for all populations must be given, even if no haploid
 is sampled from a population, as it is the case for population 3 here.
@@ -164,8 +165,8 @@ model <- model + locus_single(500)
 model
 ```
 
-Now you model consists of two loci, the first with length 1000, the second with
-500. Simulation now produces a seg. sites list with two entries corresponding 
+Now the model consists of two loci, the first with length 1000, the second with
+500. Simulation now produces a segregating sites list with two entries corresponding 
 to the loci:
 
 ```{r}
@@ -195,7 +196,7 @@ each simulation.
 
 ### Named Parameters
 Named parameters values can be specified in the simulation command. If we want
-to simulate a model for different values of the mutation rate, when can use
+to simulate a model for different values of the mutation rate, we can use
 a named parameter:
 
 ```{r}
@@ -238,7 +239,7 @@ model <- coal_model(5, 1) +
   sumstat_seg_sites()
 ```
 
-sets a possible range from _0.1_ to _5_ for the mutation rate. The acctual
+sets a possible range from _0.1_ to _5_ for the mutation rate. The actual
 rate is given in `simulate` just as with named parameters.
 
 
