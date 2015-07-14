@@ -11,18 +11,3 @@ Please consider this package for publication on CRAN.
 There were no ERRORs or WARNINGs. 
 
 There were 2 NOTEs:
-
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: 'Paul Staab <develop@paulstaab.de>'
-
-License components with restrictions and base license permitting such:
-  MIT + file LICENSE
-File 'LICENSE':
-  YEAR: 2015
-  COPYRIGHT HOLDER: Paul Staab
-  
-  
-* checking package dependencies ... NOTE
-  No repository set, so cyclic dependency check skipped
-
-  Seen only on win-builder.
