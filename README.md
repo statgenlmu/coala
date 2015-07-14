@@ -29,8 +29,8 @@ The package can be installed from CRAN using
 install.packages("coala")
 ```
 
-If you want to use the simulaton programs `ms`, `msms` or `seqgen`, 
-they need to be installed separately. This is descriped in the 
+If you want to use the simulation programs `ms`, `msms` or `seqgen`, 
+they need to be installed separately. This is described in the 
 ["Using External Simulators" vignette](http://rpubs.com/paulstaab/coala-installation).
 
 
@@ -53,8 +53,8 @@ If you encounter problems when using _coala_, please
 Supported Simulators
 --------------------
 The package supports the coalescent simulators _ms_, _scrm_ and _msms_.
-All simulators can be combined with _seq-gen_ to simulate finite sites m
-utation models. The programs _ms_, _msms_ and _seq-gen_ must be installed 
+All simulators can be combined with _seq-gen_ to simulate finite sites 
+mutation models. The programs _ms_, _msms_ and _seq-gen_ must be installed 
 manually on the system, while the R version of _scrm_ is used automatically.
 
 
