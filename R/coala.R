@@ -1,8 +1,7 @@
 #' A Framework for Coalescent Simulation in R
 #'
 #' This package allows to specify and simulate coalescent models from
-#' within R. The `introduction` vignettes is a good place to start if
-#' you are interested in using it.
+#' within R. The `introduction` vignettes is a good place to start.
 #'
 #' @author
 #' Paul R. Staab \email{develop (at) paulstaab.de}
