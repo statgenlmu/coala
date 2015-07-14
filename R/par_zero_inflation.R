@@ -4,6 +4,7 @@ zero_inflation_par_class <- R6Class("zero_inflation_par",
   private = list(func = "zero_inflate")
 )
 
+#' @importFrom stats rbinom
 zero_inflate <- function(x, prob) ifelse(rbinom(1, 1, prob), 0, x)
 
 #' Zero inflation for Parameters

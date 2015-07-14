@@ -27,6 +27,7 @@ variation_par_class <- R6Class("variation_par", inherit = parameter_class,
   )
 )
 
+#' @importFrom stats rgamma
 variation <- function(mean, variance) {
   rgamma(1, mean ^ 2 / variance, mean / variance)
 }
