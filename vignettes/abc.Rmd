@@ -1,10 +1,10 @@
 ---
-title: "Using Coala For Approximate Bayesian Computation"
+title: "Using Coala for Approximate Bayesian Computation"
 author: "Paul Staab"
 date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using coala For ABC}
+  %\VignetteIndexEntry{Using coala for ABC}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
