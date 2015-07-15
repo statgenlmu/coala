@@ -1,8 +1,10 @@
-coala 0.1.0.9000
+coala 0.1.1
 ----------------
 
-* Updated README
-* Fixed various typos
+* Fix a memory corruption that only occured in tests (#90)
+* Update `README.md`
+* Correct various typos
+
 
 
 coala 0.1.0
