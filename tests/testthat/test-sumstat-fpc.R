@@ -97,8 +97,8 @@ test_that("calc_four_gamete_stat works", {
 
   # Not all individuals
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:2, locus_length)
-  expect_equal(fpc_violations[4, ], c(mid_near = NaN, mid_far = NaN, outer = NaN,
-                                      between = NaN, mid = NaN,
+  expect_equal(fpc_violations[4, ], c(mid_near = NaN, mid_far = NaN,
+                                      outer = NaN, between = NaN, mid = NaN,
                                       perc_polym = 0))
 
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:4, locus_length)
