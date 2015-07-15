@@ -89,8 +89,11 @@ test_that("parse_sg_output works with a single file", {
   expect_equal(seg_sites[[2]], seg_sites_o2)
 
   # With trios
+  expect_error(parse_sg_output(list(c(seqgen_file, seqgen_file, seqgen_file)),
+                               11, matrix(10, 2, 5, byrow = TRUE), 2))
+
   seg_sites <- parse_sg_output(list(c(seqgen_file, seqgen_file, seqgen_file)),
-                               11, matrix(10, 2, 5, byrow = TRUE), 2)
+                               11, matrix(10, 2, 6, byrow = TRUE), 2)
   expect_equal(seg_sites[[1]][, 1:7], seg_sites_1[, ])
   expect_equal(seg_sites[[1]][, 8:14], seg_sites_1[, ])
   expect_equal(seg_sites[[1]][, 15:21], seg_sites_1[, ])

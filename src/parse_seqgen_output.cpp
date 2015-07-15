@@ -155,6 +155,10 @@ List parse_sg_output(const List file_names,
     stop("Finite sites model need an outgroup to calculate segregating sites.");
   }
 
+  if (sequence_length.ncol() != 6) {
+    stop("Locus length matrix must have exactly 6 columns.");
+  }
+
   std::string line_l, line_m, line_r;
 
   List seg_sites(loci_number);
