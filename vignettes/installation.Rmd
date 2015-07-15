@@ -4,20 +4,20 @@ author: "Paul Staab"
 date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{How to use ms, msms and seqgen}
+  %\VignetteIndexEntry{Installing ms, msms and seqgen}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
 
-Coala can call the coalescent simulators _ms_ [1], _msms_ [2] and _scrm_ [3] 
-and can use _seq-gen_ [4] for finite sites simulations.
+Coala can call the coalescent simulators _ms_[1], _msms_[2] and _scrm_[3] 
+and can use _seq-gen_[4] for finite sites simulations.
+The R version of _scrm_ should get installed automatically as a dependeny of 
+coala. For the other programs, you need to have an executable binary available
+on your system.
 
 
 # Installation
-
-The R version of _scrm_ should get installed automatically as a dependeny of 
-coala. For the other programs, you need to have an executable binary available
-on your system. Short instructions on obtaining and compiling the programs are 
+Short instructions on obtaining and compiling the programs are 
 given in the help pages of `activate_ms`, `activate_msms` and `activate_seqgen`. 
 
 
