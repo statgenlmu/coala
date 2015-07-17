@@ -1,7 +1,12 @@
-coala 0.1.1
+coala 0.1.1.9000
 ----------------
 
-* Fix a memory corruption that only occured in tests (#90).
+
+
+coala 0.1.1
+-----------
+
+* Fix a memory corruption that occured only in tests (#90).
 * Update `README.md`.
 * Correct various typos.
 
