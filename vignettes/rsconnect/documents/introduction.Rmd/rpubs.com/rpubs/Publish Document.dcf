@@ -3,6 +3,5 @@ account: rpubs
 server: rpubs.com
 bundleId:
         https://api.rpubs.com/api/v1/document/89494/2e2530d765cb4bcbad8389c32491f031
-url:
-        http://rpubs.com/publish/claim/89494/3e0dec3956f141d08bcf59389b58b0e0
-when: 1434977966.38577
+url: http://rpubs.com/paulstaab/89494
+when: 1437120917.84023
