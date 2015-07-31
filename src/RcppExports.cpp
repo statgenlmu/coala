@@ -96,15 +96,16 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// calc_omegaprime
-NumericVector calc_omegaprime(List seg_sites, NumericVector individuals);
-RcppExport SEXP coala_calc_omegaprime(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
+// calc_mcmf
+NumericVector calc_mcmf(const List seg_sites, const NumericVector individuals, const bool has_trios);
+RcppExport SEXP coala_calc_mcmf(SEXP seg_sitesSEXP, SEXP individualsSEXP, SEXP has_triosSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< List >::type seg_sites(seg_sitesSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type individuals(individualsSEXP);
-    __result = Rcpp::wrap(calc_omegaprime(seg_sites, individuals));
+    Rcpp::traits::input_parameter< const List >::type seg_sites(seg_sitesSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type individuals(individualsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type has_trios(has_triosSEXP);
+    __result = Rcpp::wrap(calc_mcmf(seg_sites, individuals, has_trios));
     return __result;
 END_RCPP
 }

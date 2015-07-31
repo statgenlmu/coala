@@ -37,8 +37,8 @@ calc_nucleotide_div <- function(seg_sites, individuals) {
     .Call('coala_calc_nucleotide_div', PACKAGE = 'coala', seg_sites, individuals)
 }
 
-calc_omegaprime <- function(seg_sites, individuals) {
-    .Call('coala_calc_omegaprime', PACKAGE = 'coala', seg_sites, individuals)
+calc_mcmf <- function(seg_sites, individuals, has_trios = TRUE) {
+    .Call('coala_calc_mcmf', PACKAGE = 'coala', seg_sites, individuals, has_trios)
 }
 
 unphase_segsites <- function(seg_sites, ploidy, samples_per_ind) {
