@@ -14,7 +14,7 @@ void maxsplit(const NumericMatrix ss,
 
   std::map<unsigned int, unsigned int> m;
   unsigned int key;
-  int max_key_value = std::pow(2, individuals.size());
+  unsigned int max_key_value = std::pow(2, individuals.size());
 
   for (int snp = 0; snp < ss.ncol(); ++snp) {
     if (trio_locus_vec[snp] != trio_locus) continue;

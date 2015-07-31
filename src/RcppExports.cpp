@@ -84,18 +84,6 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// calc_nucleotide_div
-NumericVector calc_nucleotide_div(List seg_sites, const NumericVector individuals);
-RcppExport SEXP coala_calc_nucleotide_div(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< List >::type seg_sites(seg_sitesSEXP);
-    Rcpp::traits::input_parameter< const NumericVector >::type individuals(individualsSEXP);
-    __result = Rcpp::wrap(calc_nucleotide_div(seg_sites, individuals));
-    return __result;
-END_RCPP
-}
 // calc_mcmf
 NumericVector calc_mcmf(const List seg_sites, const NumericVector individuals, const bool has_trios);
 RcppExport SEXP coala_calc_mcmf(SEXP seg_sitesSEXP, SEXP individualsSEXP, SEXP has_triosSEXP) {
@@ -106,6 +94,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericVector >::type individuals(individualsSEXP);
     Rcpp::traits::input_parameter< const bool >::type has_trios(has_triosSEXP);
     __result = Rcpp::wrap(calc_mcmf(seg_sites, individuals, has_trios));
+    return __result;
+END_RCPP
+}
+// calc_nucleotide_div
+NumericVector calc_nucleotide_div(List seg_sites, const NumericVector individuals);
+RcppExport SEXP coala_calc_nucleotide_div(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< List >::type seg_sites(seg_sitesSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type individuals(individualsSEXP);
+    __result = Rcpp::wrap(calc_nucleotide_div(seg_sites, individuals));
     return __result;
 END_RCPP
 }
