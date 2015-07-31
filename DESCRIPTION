@@ -1,6 +1,6 @@
 Package: coala
 Version: 0.1.1.9000
-Date: 2015-07-17
+Date: 2015-07-31
 License: MIT + file LICENSE
 Title: A Framework for Coalescent Simulation
 Authors@R: c(
@@ -77,9 +77,9 @@ Collate:
     'sumstat_four_gamete.R'
     'sumstat_ihh.R'
     'sumstat_jsfs.R'
+    'sumstat_mcmf.R'
     'sumstat_nsl.R'
     'sumstat_nucleotide_div.R'
-    'sumstat_omegaprime.R'
     'sumstat_seg_sites.R'
     'sumstat_sfs.R'
     'sumstat_tajimas_d.R'
