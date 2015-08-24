@@ -1,3 +1,12 @@
+coala 0.1.1.9002
+----------------
+
+* Fixes buggy iHS calculation when `max_snps` and `position` was used
+  simultainously. The argument `max_snps` is now ignored if a position
+  is given (#98).
+
+
+
 coala 0.1.1.9001
 ----------------
 

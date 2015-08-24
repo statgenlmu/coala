@@ -45,11 +45,11 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
           assert_that(length(snps) == 1)
           ihh <- matrix(0, 1, 3)
           colnames(ihh) <- c("IHHa", "IHHd", "IES")
-          ihh[1, 1:2] <- calc_ehh(rehh_data, mrk = snps, plotehh = FALSE)$ihh #nolint
-          ihh[1, 3] <- calc_ehhs(rehh_data, mrk = snps, plotehhs = FALSE)$ies #nolint
+          ihh[1, 1:2] <- calc_ehh(rehh_data, mrk = snps, plotehh = FALSE)$ihh
+          ihh[1, 3] <- calc_ehhs(rehh_data, mrk = snps, plotehhs = FALSE)$ies
           return(ihh)
         }
-        rehh::scan_hh(rehh_data)[ , -(1:3), drop = FALSE] #nolint
+        rehh::scan_hh(rehh_data)[ , -(1:3), drop = FALSE]
       })
     },
     create_rehh_data = function(seg_sites, pos, ind) {
@@ -66,7 +66,9 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
     },
     create_snp_mask = function(seg_sites) {
       n_snps <- ncol(seg_sites)
-      if (n_snps < private$max_snps) return(rep(TRUE, n_snps))
+      if (n_snps < private$max_snps || !is.na(private$position)) {
+        return(rep(TRUE, n_snps))
+      }
       sample.int(n_snps, private$max_snps, replace = FALSE)
     }
   )
@@ -94,8 +96,9 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #'   are used.
 #' @param max_snps The maximal number of SNPs per locus that are used for the
 #'   calculation. If a locus has more SNPs than this number, only a
-#'   evenly distributed subset of this size will be used for calculating iHS
-#'   to increase performance. Set to \code{Inf} to use all SNPs.
+#'   random subset will be used for calculating iHS to increase performance.
+#'   Set to \code{Inf} to use all SNPs. When \code{position} is given,
+#'   this argument is ignored and all SNPs are used.
 #' @return When added to a model, the statistic returns a matrix for each locus.
 #'   The columns of the values state the values for integrated EHH for the
 #'   ancestral allele (IHHa), integrated EHH for the derived allele (IHHd) and
