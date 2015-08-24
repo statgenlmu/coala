@@ -35,17 +35,22 @@ get_simulator <- function(name) {
 
 fill_cmd_template <- function(template, model, parameters,
                               locus_group, eval_pars = TRUE) {
+
   locus_length <- get_locus_length(model, group = locus_group)
+  total_locus_number <- get_locus_number(model, locus_group, TRUE)
 
   if (has_variation(model)) {
-    locus_number <- rep(1, get_locus_number(model, locus_group, TRUE))
+    locus_number <- rep(1, total_locus_number)
   } else {
-    locus_number <- get_locus_number(model, locus_group, TRUE)
+    locus_number <- total_locus_number
   }
+  locus_id <- seq(along = locus_number)
 
-  args <- sapply(locus_number, function(ln) {
+  args <- sapply(locus_id, function(l_id) {
     tmp_env <- create_par_env(model, parameters,
                               locus_length = locus_length,
+                              locus_id = l_id,
+                              locus_number = total_locus_number,
                               for_cmd = !eval_pars)
 
     paste(eval(parse(text = template), envir = tmp_env), collapse = " ")

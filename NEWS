@@ -1,16 +1,25 @@
+coala 0.1.1.9001
+----------------
+
+* Adds optional support for parameter zero inflation for a deterministic
+  fraction of loci instead of a random number. Can be used by setting
+  `random = FALSE` in `par_zero_inflation` (#97).
+
+
+
 coala 0.1.1.9000
 ----------------
 
-* Add MCMF summary statistic (#94).
+* Adds the MCMF summary statistic (#94).
 
 
 
 coala 0.1.1
 -----------
 
-* Fix a memory corruption that occured only in tests (#90).
-* Update `README.md`.
-* Correct various typos.
+* Fixes a memory corruption that occured only in tests (#90).
+* Updates `README.md`.
+* Corrects various typos.
 
 
 
