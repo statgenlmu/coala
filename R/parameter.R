@@ -180,6 +180,9 @@ create_par_env <- function(model, parameters, ..., for_cmd = FALSE) {
     par_env[[names(additional_pars)[i]]] <- additional_pars[[i]]
   }
 
+  par_env[["zero_frac"]] <- create_zero_frac_func(additional_pars$locus_id,
+                                                  additional_pars$locus_number)
+
   par_env
 }
 

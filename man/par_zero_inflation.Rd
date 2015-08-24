@@ -4,13 +4,18 @@
 \alias{par_zero_inflation}
 \title{Zero inflation for Parameters}
 \usage{
-par_zero_inflation(par, prob)
+par_zero_inflation(par, prob, random = TRUE)
 }
 \arguments{
 \item{par}{A parameter whose value will be set variable.}
 
 \item{prob}{The probability that the parameters value will be set to `0`
-for each locus.}
+for each locus if \code{random} is \code{TRUE}. Otherwise, it's the
+fixed fraction of loci which will have a parameter value of `0`.}
+
+\item{random}{Whether the number of loci which are simulated with a value of
+`0` should be random (\code{TRUE}) or a fixed fraction (\code{FALSE}). See
+\code{prob} for details.}
 }
 \description{
 This adds a zero inflation to the distribution of a parameter for the
