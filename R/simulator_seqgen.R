@@ -107,7 +107,10 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
       assert_that(is.numeric(priority) && length(priority) == 1)
       private$priority <- priority
     },
-    call = function(args) system2(private$binary, args, stdout = TRUE),
+    call = function(args) {
+      suppressWarnings(results <- system2(private$binary, args, stdout = TRUE))
+      results
+    },
     simulate = function(model, parameters) {
       # Simulate the ancestral trees
       tree_model <- generate_tree_model(model)
