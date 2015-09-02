@@ -9,8 +9,8 @@ parse_ms_output <- function(file_names, sample_size, loci_number) {
     .Call('coala_parse_ms_output', PACKAGE = 'coala', file_names, sample_size, loci_number)
 }
 
-parse_sg_output <- function(file_names, sample_size, sequence_length, loci_number, outgroup_size = 1L, calc_seg_sites = TRUE) {
-    .Call('coala_parse_sg_output', PACKAGE = 'coala', file_names, sample_size, sequence_length, loci_number, outgroup_size, calc_seg_sites)
+parse_seqgen_output <- function(output, individuals, locus_length, locus_number, outgroup_size, calc_segsites = TRUE) {
+    .Call('coala_parse_seqgen_output', PACKAGE = 'coala', output, individuals, locus_length, locus_number, outgroup_size, calc_segsites)
 }
 
 generate_trio_trees <- function(trees, llm) {

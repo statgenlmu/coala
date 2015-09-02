@@ -8,7 +8,7 @@ test_that("Creation of outgroup feature works", {
 
 test_that("Outgroup setting and getting works", {
   model <- coal_model(1:4 * 2, 100)
-  expect_error(get_outgroup(model))
+  expect_equal(get_outgroup(model), NA)
 
   for (i in 1:4) {
     expect_equal(get_outgroup(model + feat_outgroup(i)), i)
