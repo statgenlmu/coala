@@ -34,7 +34,7 @@ is_feat_outgroup <- function(feat) inherits(feat, "outgroup")
 #' @export
 get_outgroup <- function(model) {
   mask <- vapply(model$features, is_feat_outgroup, logical(1))
-  if (sum(mask) != 1) stop("the model has no or multiple outgroups")
+  if (sum(mask) != 1) return(NA)
   model$features[mask][[1]]$get_population()
 }
 
@@ -42,8 +42,9 @@ get_outgroup <- function(model) {
 #' @describeIn get_features Returns the number of samples in the outgroup
 #' @export
 get_outgroup_size <- function(model, for_sim = FALSE) {
-  outgroup_size <- get_sample_size(model, for_sim)[get_outgroup(model)]
-  if (length(outgroup_size) == 0) outgroup_size <- 0
+  outgroup <- get_outgroup(model)
+  if (is.na(outgroup)) return(0)
+  outgroup_size <- get_sample_size(model, for_sim)[outgroup]
   outgroup_size
 }
 

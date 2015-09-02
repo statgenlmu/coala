@@ -1,3 +1,11 @@
+coala 0.1.1.9003
+----------------
+
+* Now writes seq-gen output into memory and not in files before it is parsed.
+* Minor change: `get_outgroup` now returns `NA` if the model has no outgroup
+  rather than throwing an error.
+
+
 coala 0.1.1.9002
 ----------------
 

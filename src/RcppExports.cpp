@@ -30,19 +30,19 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// parse_sg_output
-List parse_sg_output(const List file_names, const int sample_size, const NumericMatrix sequence_length, const int loci_number, const int outgroup_size, const bool calc_seg_sites);
-RcppExport SEXP coala_parse_sg_output(SEXP file_namesSEXP, SEXP sample_sizeSEXP, SEXP sequence_lengthSEXP, SEXP loci_numberSEXP, SEXP outgroup_sizeSEXP, SEXP calc_seg_sitesSEXP) {
+// parse_seqgen_output
+List parse_seqgen_output(CharacterVector output, const int individuals, const int locus_length, const int locus_number, const int outgroup_size, const bool calc_segsites);
+RcppExport SEXP coala_parse_seqgen_output(SEXP outputSEXP, SEXP individualsSEXP, SEXP locus_lengthSEXP, SEXP locus_numberSEXP, SEXP outgroup_sizeSEXP, SEXP calc_segsitesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const List >::type file_names(file_namesSEXP);
-    Rcpp::traits::input_parameter< const int >::type sample_size(sample_sizeSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix >::type sequence_length(sequence_lengthSEXP);
-    Rcpp::traits::input_parameter< const int >::type loci_number(loci_numberSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type output(outputSEXP);
+    Rcpp::traits::input_parameter< const int >::type individuals(individualsSEXP);
+    Rcpp::traits::input_parameter< const int >::type locus_length(locus_lengthSEXP);
+    Rcpp::traits::input_parameter< const int >::type locus_number(locus_numberSEXP);
     Rcpp::traits::input_parameter< const int >::type outgroup_size(outgroup_sizeSEXP);
-    Rcpp::traits::input_parameter< const bool >::type calc_seg_sites(calc_seg_sitesSEXP);
-    __result = Rcpp::wrap(parse_sg_output(file_names, sample_size, sequence_length, loci_number, outgroup_size, calc_seg_sites));
+    Rcpp::traits::input_parameter< const bool >::type calc_segsites(calc_segsitesSEXP);
+    __result = Rcpp::wrap(parse_seqgen_output(output, individuals, locus_length, locus_number, outgroup_size, calc_segsites));
     return __result;
 END_RCPP
 }
