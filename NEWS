@@ -1,3 +1,10 @@
+coala 0.1.1.9004
+----------------
+
+* Fix: Remove SNPs that were not polymorphic in the given population before
+  calulating EHH based statistics.
+
+
 coala 0.1.1.9003
 ----------------
 
