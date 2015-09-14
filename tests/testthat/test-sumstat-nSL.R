@@ -15,7 +15,7 @@ test_that("calculation of nSL works", {
   expect_that(nsl, is_a("list"))
   expect_equal(length(nsl), 1)
   expect_that(nsl[[1]], is_a("numeric"))
-  expect_equal(length(nsl[[1]]), 5)
+  expect_equal(length(nsl[[1]]), 3)
 
   stat_nsl <- sumstat_nSL(position = 0.5) #nolint
   nsl2 <- stat_nsl$calculate(list(seg_sites), NULL, NULL, model)

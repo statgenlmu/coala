@@ -54,7 +54,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
     },
     create_rehh_data = function(seg_sites, pos, ind) {
       assert_that(is.matrix(seg_sites))
-      snp_mask <- self$create_snp_mask(seg_sites)
+      snp_mask <- self$create_snp_mask(seg_sites, ind)
       rehh_data <- new("haplohh")
       rehh_data@haplo <- seg_sites[ind, snp_mask, drop = FALSE] + 1
       rehh_data@position <- pos[snp_mask]
@@ -64,12 +64,15 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
       rehh_data@nsnp <- length(rehh_data@position)
       rehh_data
     },
-    create_snp_mask = function(seg_sites) {
-      n_snps <- ncol(seg_sites)
+    create_snp_mask = function(seg_sites, ind) {
+      polym_in_sample <- apply(seg_sites[ind, , drop = FALSE], 2, function(x) {
+        any(0 == x) & any(1 == x)
+      })
+      n_snps <- sum(polym_in_sample)
       if (n_snps < private$max_snps || !is.na(private$position)) {
-        return(rep(TRUE, n_snps))
+        return(polym_in_sample)
       }
-      sample.int(n_snps, private$max_snps, replace = FALSE)
+      sample(which(polym_in_sample), private$max_snps, replace = FALSE)
     }
   )
 )

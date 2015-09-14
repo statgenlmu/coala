@@ -13,17 +13,29 @@ test_that("generation of rehh data works", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh(population = 1)
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
-  expect_equivalent(rehh_data@haplo, seg_sites + 1)
-  expect_equal(rehh_data@position, pos)
-  expect_equal(rehh_data@snp.name, as.character(1:5))
+  expect_equivalent(rehh_data@haplo, seg_sites[,-c(1, 3)] + 1)
+  expect_equal(rehh_data@position, pos[-c(1, 3)])
+  expect_equal(rehh_data@snp.name, as.character(1:3))
   expect_equal(rehh_data@nhap, 4)
-  expect_equal(rehh_data@nsnp, 5)
+  expect_equal(rehh_data@nsnp, 3)
 
   rehh_data <- stat_ihh$create_rehh_data(matrix(0, 4, 0), numeric(), 1:4)
   expect_equal(rehh_data@haplo, matrix(0, 4, 0))
 
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, numeric())
-  expect_equal(rehh_data@haplo, matrix(0, 0, 5))
+  expect_equal(rehh_data@haplo, matrix(0, 0, 0))
+})
+
+
+test_that("SNPs not segregating in individuals are removed from rehh_data", {
+  skip_if_not_installed("rehh")
+  stat_ihh <- sumstat_ihh(population = 1)
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:2)
+  expect_equivalent(rehh_data@haplo, seg_sites[1:2, c(2, 4, 5)] + 1)
+  expect_equal(rehh_data@position, pos[c(2, 4, 5)])
+  expect_equal(rehh_data@snp.name, as.character(1:3))
+  expect_equal(rehh_data@nhap, 2)
+  expect_equal(rehh_data@nsnp, 3)
 })
 
 
@@ -38,14 +50,20 @@ test_that("selection of snps works", {
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
   expect_equal(dim(rehh_data@haplo), c(4, 3))
   expect_equal(rehh_data@nsnp, 3)
+
+  stat_ihh <- sumstat_ihh(population = 1, max_snps = 2)
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:2)
+  expect_equal(dim(rehh_data@haplo), c(2, 2))
+  expect_equal(rehh_data@nsnp, 2)
+  expect_equal(rehh_data@nhap, 2)
 })
 
 
 test_that("all snps are used if a position is given", {
   stat_ihh <- sumstat_ihh(population = 1, max_snps = 2, position = .5)
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
-  expect_equal(dim(rehh_data@haplo), c(4, 5))
-  expect_equal(rehh_data@nsnp, 5)
+  expect_equal(dim(rehh_data@haplo), c(4, 3))
+  expect_equal(rehh_data@nsnp, 3)
   expect_equal(rehh_data@nhap, 4)
 })
 
@@ -57,7 +75,7 @@ test_that("calculation of ihh works", {
   expect_that(ihh, is_a("list"))
   expect_equal(length(ihh), 1)
   expect_that(ihh[[1]], is_a("matrix"))
-  expect_equal(dim(ihh[[1]]), c(5, 3))
+  expect_equal(dim(ihh[[1]]), c(3, 3))
 
   stat_ihh <- sumstat_ihh(position = 0.5)
   ihh2 <- stat_ihh$calculate(list(seg_sites), NULL, NULL, model)
