@@ -24,6 +24,10 @@ test_that("generation of rehh data works", {
 
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, numeric())
   expect_equal(rehh_data@haplo, matrix(0, 0, 0))
+
+  seg_sites <- matrix(1, 4, 5)
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
+  expect_equal(rehh_data@haplo, matrix(0, 4, 0))
 })
 
 
@@ -118,6 +122,11 @@ test_that("ihh works with empty segsites", {
 
   seg_sites <- list(matrix(0, 0, 0))
   attr(seg_sites[[1]], "positions") <- numeric(0)
+  stat <- ihh$calculate(seg_sites, NULL, NULL, model)
+  expect_equal(dim(stat[[1]]), c(0, 3))
+
+  seg_sites <- list(matrix(1, 5, 10))
+  attr(seg_sites[[1]], "positions") <- 1:10 / 11
   stat <- ihh$calculate(seg_sites, NULL, NULL, model)
   expect_equal(dim(stat[[1]]), c(0, 3))
 })

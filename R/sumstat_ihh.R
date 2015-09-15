@@ -34,13 +34,14 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
       ind <- get_population_indiviuals(model, private$population)
       lapply(1:length(seg_sites), function(locus) {
         assert_that(is.matrix(seg_sites[[locus]]))
-        if (ncol(seg_sites[[locus]]) == 0) {
-          return(private$empty_matrix)
-        }
+        if (ncol(seg_sites[[locus]]) == 0) return(private$empty_matrix)
+
         snps <- private$get_snp(pos[[locus]], locus, model)
         rehh_data <- self$create_rehh_data(seg_sites[[locus]],
                                            pos[[locus]],
                                            ind)
+        if (rehh_data@nsnp == 0) return(private$empty_matrix)
+
         if (!is.na(private$position)) {
           assert_that(length(snps) == 1)
           ihh <- matrix(0, 1, 3)
