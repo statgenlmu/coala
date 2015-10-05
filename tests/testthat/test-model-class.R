@@ -151,10 +151,19 @@ test_that("get population individuals works", {
   expect_error(get_population_indiviuals(model_theta_tau(), 3))
   expect_error(get_population_indiviuals(model_theta_tau(), "al"))
 
+  # With an outgroup
+  expect_equal(get_population_indiviuals(model_hky(), "all"), 1:6)
   expect_equal(get_population_indiviuals(model_hky(), 1), 1:3)
   expect_equal(get_population_indiviuals(model_hky(), 2), 4:6)
-  expect_equal(get_population_indiviuals(model_hky(), 3), 7)
+  expect_error(get_population_indiviuals(model_hky(), 3))
+
+  model <- coal_model(1:3) + feat_outgroup(2)
+  expect_equal(get_population_indiviuals(model, "all"), 1:4)
+  expect_equal(get_population_indiviuals(model, 1), 1)
+  expect_error(get_population_indiviuals(model, 2))
+  expect_equal(get_population_indiviuals(model, 3), 2:4)
 })
+
 
 
 test_that("getting the ploidy and individuals works", {

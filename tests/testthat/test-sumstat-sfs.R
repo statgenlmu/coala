@@ -48,3 +48,23 @@ test_that("calculation of sfs works with trios", {
   stat_sfs_all <- sumstat_sfs(population = "all")
   expect_equal(stat_sfs_all$calculate(seg.sites, NULL, NULL, model), c(1, 0, 1))
 })
+
+
+test_that("SFS is calculate with an outgroup present", {
+  model <- coal_model(c(2, 1, 1), 1) + feat_outgroup(3)
+  stat <- sumstat_sfs("sfs", "all")
+
+  seg_sites <- list(matrix(c(1, 0, 0, 0,
+                             1, 1, 0, 1,
+                             1, 0, 0, 1), 3, 4, byrow = TRUE))
+  expect_equal(stat$calculate(seg_sites, NULL, NULL, model), c(1, 1))
+
+  stat <- sumstat_sfs("jsfs", 3)
+  expect_error(stat$calculate(seg_sites, NULL, NULL, model))
+
+  model <- coal_model(c(2, 1, 1), 1) + feat_outgroup(2)
+  expect_equal(sumstat_sfs("jsfs", 1)$calculate(seg_sites, NULL, NULL, model),
+               2)
+  expect_equal(sumstat_sfs("jsfs", 3)$calculate(seg_sites, NULL, NULL, model),
+               numeric(0))
+})

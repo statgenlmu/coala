@@ -1,3 +1,9 @@
+coala 0.1.1.9006
+----------------
+
+* Fix site frequency calculation when an outgroup is present (#96)
+
+
 coala 0.1.1.9005
 ----------------
 
@@ -8,7 +14,7 @@ coala 0.1.1.9004
 ----------------
 
 * Fix: Remove SNPs that were not polymorphic in the given population before
-  calulating EHH based statistics.
+  calculating EHH based statistics.
 
 
 coala 0.1.1.9003
@@ -23,7 +29,7 @@ coala 0.1.1.9002
 ----------------
 
 * Fixes buggy iHS calculation when `max_snps` and `position` was used
-  simultainously. The argument `max_snps` is now ignored if a position
+  simultaneously. The argument `max_snps` is now ignored if a position
   is given (#98).
 
 
