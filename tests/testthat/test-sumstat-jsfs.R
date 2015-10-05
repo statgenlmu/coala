@@ -84,8 +84,8 @@ test_that("calc_jsfs works with trios", {
 
 
 test_that("JSFS sumstat works", {
-  stat <- sumstat_jsfs("jsfs_test", c(1,2))
-  model <- coal_model(c(2,2), 1)
+  stat <- sumstat_jsfs("jsfs_test", c(1, 2))
+  model <- coal_model(c(2, 2), 1)
 
   seg_sites <- list(matrix(c(1, 0, 0, 0,
                              1, 1, 0, 1,
@@ -98,4 +98,27 @@ test_that("JSFS sumstat works", {
                matrix(c(1, 0, 0,
                         1, 0, 1,
                         0, 0, 1), 3, 3, byrow = TRUE))
+})
+
+
+test_that("JSFS is caluculated with an outgroup present", {
+  stat <- sumstat_jsfs("jsfs", c(1, 2))
+  model <- coal_model(c(2, 1, 1), 1) + feat_outgroup(3)
+  seg_sites <- list(matrix(c(1, 0, 0, 0,
+                             1, 1, 0, 1,
+                             1, 0, 0, 1), 4, 4, byrow = TRUE))
+
+  expect_equal(stat$calculate(seg_sites, NULL, NULL, model),
+               matrix(c(1, 0,
+                        1, 1,
+                        0, 1), 3, 2, byrow = TRUE))
+
+  model <- coal_model(c(2, 1, 1), 1) + feat_outgroup(2)
+  expect_error(stat$calculate(seg_sites, NULL, NULL, model))
+
+  stat <- sumstat_jsfs("jsfs", c(1, 3))
+  expect_equal(stat$calculate(seg_sites, NULL, NULL, model),
+               matrix(c(1, 0,
+                        1, 1,
+                        0, 1), 3, 2, byrow = TRUE))
 })

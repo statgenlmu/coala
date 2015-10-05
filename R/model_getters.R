@@ -128,15 +128,26 @@ get_locus_number <- function(model, group = NA, ignore_variation = FALSE) {
 
 
 #' @describeIn get_features Returns the index of the individuals of one
-#'   population
+#'   population. Ignores outgroups, so that it can be used for indexing
+#'   segregating sites.
 #' @param zero_indexed If true, the names of the populations are started from
 #'   0 instead of from 1.
+#' @param allow_outgroup If set to false, an error is thrown if \code{pop} is
+#'   marked as outgroup.
 #' @export
-get_population_indiviuals <- function(model, pop, zero_indexed = FALSE) {
-  if (pop == "all") return(1:sum(get_sample_size(model)))
+get_population_indiviuals <- function(model, pop,
+                                      zero_indexed = FALSE) {
+  sample_size <- get_sample_size(model)
+  outgroup <- get_outgroup(model)
+
+  if (!is.na(outgroup)) {
+    if (pop == outgroup) stop("Calculating summary statistics for the outgroup")
+    sample_size[outgroup] <- 0
+  }
+
+  if (pop == "all") return(1:sum(sample_size))
 
   if (!pop %in% get_populations(model)) stop("Invalid population")
-  sample_size <- get_sample_size(model)
   from <- cumsum(c(0, sample_size)) + 1
   to <- cumsum(sample_size)
   from[pop]:to[pop]
