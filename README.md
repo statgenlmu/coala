@@ -9,7 +9,7 @@ coala
 Coala is an R package that allows to simulate biological sequences according
 to a given model of evolution.  It can call a number of efficient 
 simulators based on
-[Coalescent Theory](https://en.wikipedia.org/wiki/Coalescent_theory). 
+[coalescent theory](https://en.wikipedia.org/wiki/Coalescent_theory). 
 All simulators can be combined with the program _seq-gen_ to simulate finite 
 site mutation models. 
 Coala also directly imports the simulation results into `R`, and allows to
@@ -31,14 +31,15 @@ install.packages("coala")
 
 If you want to use the simulation programs `ms`, `msms` or `seqgen`, 
 they need to be installed separately. This is described in the 
-["Using External Simulators" vignette](http://rpubs.com/paulstaab/coala-installation).
+["Using External Simulators" vignette](https://cran.r-project.org/web/packages/coala/vignettes/installation.html).
 
 
 Usage
 -----
-Coala comes with a [vignette](http://rpubs.com/paulstaab/coala-introduction)
+Coala comes with a
+[vignette](https://cran.r-project.org/web/packages/coala/vignettes/introduction.html)
 that explains the packages concepts and is a good place to start.
-The [ABC vignette](http://rpubs.com/paulstaab/coala-abc) gives an example
+The [ABC vignette](https://cran.r-project.org/web/packages/coala/vignettes/abc.html) gives an example
 on how coala can be used to conduct the simulations for an Approximate Bayesian
 Computation analysis.
 

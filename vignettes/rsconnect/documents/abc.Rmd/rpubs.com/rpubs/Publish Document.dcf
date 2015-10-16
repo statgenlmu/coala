@@ -1,7 +1,0 @@
-name: Publish Document
-account: rpubs
-server: rpubs.com
-bundleId:
-        https://api.rpubs.com/api/v1/document/92800/b84f8c8faa7d401bbd60e2f5ddbfbbe0
-url: http://rpubs.com/paulstaab/92800/edit
-when: 1437120850.48678
