@@ -1,7 +1,0 @@
-name: Publish Document
-account: rpubs
-server: rpubs.com
-bundleId:
-        https://api.rpubs.com/api/v1/document/89494/2e2530d765cb4bcbad8389c32491f031
-url: http://rpubs.com/paulstaab/89494
-when: 1437120917.84023
