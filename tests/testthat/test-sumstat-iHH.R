@@ -2,22 +2,38 @@ context("SumStat iHS")
 
 seg_sites <- matrix(c(1, 0, 0, 0, 1,
                       1, 1, 0, 1, 0,
-                      1, 0, 0, 1, 1,
-                      1, 0, 0, 1, 0), 4, 5, byrow = TRUE)
+                      1, 0, 1, 1, 1,
+                      0, 0, 0, 1, 0), 4, 5, byrow = TRUE)
 attr(seg_sites, "positions") <- c(0.1, 0.2, 0.5, 0.7, 0.9)
 model <- coal_model(4, 1, 337)
 pos <- get_snp_positions(list(seg_sites), model, relative = FALSE)[[1]]
+
+
+test_that("snp masks are generated corretly", {
+  skip_if_not_installed("rehh")
+
+  stat_ihh <- sumstat_ihh(population = 1)
+  expect_equal(stat_ihh$create_snp_mask(seg_sites, 1:4), rep(TRUE, 5))
+  expect_equal(stat_ihh$create_snp_mask(seg_sites, 1:2),
+               c(FALSE, TRUE, FALSE, TRUE, TRUE))
+
+  stat_ihh <- sumstat_ihh(population = 1, max_snps = 2)
+  snp_mask <- stat_ihh$create_snp_mask(seg_sites, 1:2)
+  expect_true(all(snp_mask %in% c(2, 4, 5)))
+  expect_true(all(snp_mask %in% c(2, 4, 5)))
+  expect_equal(length(snp_mask), 2)
+})
 
 
 test_that("generation of rehh data works", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh(population = 1)
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
-  expect_equivalent(rehh_data@haplo, seg_sites[,-c(1, 3)] + 1)
-  expect_equal(rehh_data@position, pos[-c(1, 3)])
-  expect_equal(rehh_data@snp.name, as.character(1:3))
+  expect_equivalent(rehh_data@haplo, seg_sites + 1)
+  expect_equal(rehh_data@position, pos)
+  expect_equal(rehh_data@snp.name, as.character(1:5))
   expect_equal(rehh_data@nhap, 4)
-  expect_equal(rehh_data@nsnp, 3)
+  expect_equal(rehh_data@nsnp, 5)
 
   rehh_data <- stat_ihh$create_rehh_data(matrix(0, 4, 0), numeric(), 1:4)
   expect_equal(rehh_data@haplo, matrix(0, 4, 0))
@@ -70,24 +86,7 @@ test_that("calculation of ihh works", {
   expect_that(ihh, is_a("list"))
   expect_equal(length(ihh), 1)
   expect_that(ihh[[1]], is_a("matrix"))
-  expect_equal(dim(ihh[[1]]), c(3, 4))
-
-  stat_ihh <- sumstat_ihh(position = 0.5)
-  ihh2 <- stat_ihh$calculate(list(seg_sites), NULL, NULL, model)
-  expect_that(ihh2, is_a("list"))
-  expect_equal(length(ihh2), 1)
-  expect_that(ihh2[[1]], is_a("matrix"))
-  expect_equal(dim(ihh2[[1]]), c(1, 4))
-  expect_equivalent(ihh[[1]][3, , drop = FALSE], ihh2[[1]])
-  expect_equal(rownames(ihh), rownames(ihh2))
-
-  model <- coal_model(4, 3, 337)
-  ihh2 <- stat_ihh$calculate(list(seg_sites, seg_sites, seg_sites),
-                             NULL, NULL, model)
-  expect_that(ihh2, is_a("list"))
-  expect_equal(length(ihh2), 3)
-  expect_equal(ihh2[[1]], ihh2[[2]])
-  expect_equal(ihh2[[1]], ihh2[[3]])
+  expect_equal(dim(ihh[[1]]), c(5, 4))
 })
 
 
@@ -103,14 +102,6 @@ test_that("calculation of ihs works", {
   expect_equal(length(ihh), 2)
   expect_that(ihh[[1]], is_a("matrix"))
   expect_equal(ncol(ihh[[1]]), 5)
-
-  stat_ihh <- sumstat_ihh(position = 0.5, calc_ihs = TRUE)
-  ihh2 <- stat_ihh$calculate(seg_sites, NULL, NULL, model)
-  expect_that(ihh2, is_a("list"))
-  expect_equal(length(ihh2), 2)
-  expect_that(ihh2[[1]], is_a("matrix"))
-  expect_equal(dim(ihh2[[1]]), c(1, 5))
-  expect_equal(rownames(ihh), rownames(ihh2))
 })
 
 

@@ -5,19 +5,13 @@
 stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
   private = list(
     req_segsites = TRUE,
-    position = NA,
     population = NULL,
     max_snps = Inf,
     use_ihs = FALSE,
-    empty_matrix = NULL,
-    get_snp = function(positions, locus, model) {
-      if (is.na(private$position)) return(seq(along = positions))
-      pos <- conv_middle_to_trio_pos(private$position, model, locus,
-                                     relative_out = FALSE)
-      which.min(abs(pos - positions))
-    }),
+    empty_matrix = NULL
+  ),
   public = list(
-    initialize = function(name, population, position, max_snps, calc_ihs) {
+    initialize = function(name, population, max_snps, calc_ihs) {
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
       assert_that(is.numeric(max_snps))
@@ -25,7 +19,6 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
       assert_that(is.logical(calc_ihs))
       assert_that(length(calc_ihs) == 1)
       private$population <- population
-      private$position <- position
       private$max_snps <- max_snps
       private$use_ihs <- calc_ihs
       if (calc_ihs) {
@@ -47,7 +40,6 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
         assert_that(is.matrix(seg_sites[[locus]]))
         if (ncol(seg_sites[[locus]]) == 0) return(private$empty_matrix)
 
-        snps <- private$get_snp(pos[[locus]], locus, model)
         rehh_data <- self$create_rehh_data(seg_sites[[locus]],
                                            pos[[locus]],
                                            ind)
@@ -68,11 +60,6 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
             ihs <- suppressWarnings(ihh2ihs(ihh, freqbin))
             ihh <- cbind(ihh, iHS = ihs$res.ihs[ , "iHS", drop = FALSE])
           }
-        }
-
-        if (!is.na(private$position)) {
-          assert_that(length(snps) == 1)
-          ihh <- ihh[snps, , drop = FALSE]
         }
 
         ihh[ , -c(1, 3), drop = FALSE]
@@ -136,7 +123,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #'   for the SNP nearest to the selected position. Each SNP is represented by
 #'   a row, sorted by position on the locus.
 #' @export
-sumstat_ihh <- function(name = "ihh", position = NA, population = 1,
+sumstat_ihh <- function(name = "ihh", population = 1,
                         max_snps = 1000, calc_ihs = FALSE) {
-  stat_ihh_class$new(name, population, position, max_snps, calc_ihs)
+  stat_ihh_class$new(name, population, max_snps, calc_ihs)
 }
