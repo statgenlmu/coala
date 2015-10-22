@@ -110,7 +110,8 @@ test_that("calculation of ihs works", {
   expect_that(ihh2[[1]], is_a("matrix"))
   expect_equal(dim(ihh2[[1]]), c(1, 4))
   expect_equal(rownames(ihh), rownames(ihh2))
-}
+})
+
 
 test_that("ihh works with trios", {
   skip_if_not_installed("rehh")

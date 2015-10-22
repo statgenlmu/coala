@@ -1,6 +1,6 @@
 #' @importFrom R6 R6Class
 #' @importClassesFrom rehh haplohh
-#' @importFrom rehh calc_ehh calc_ehhs
+#' @importFrom rehh calc_ehh calc_ehhs ihh2ihs
 #' @importFrom methods new checkAtAssignment
 stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
   private = list(
