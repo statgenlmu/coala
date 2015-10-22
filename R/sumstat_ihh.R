@@ -50,16 +50,18 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
         n_snps <- nrow(ihh)
         if (n_snps < 5) {
           # Standardization of iHS requires a few SNPs
-          ihh <- cbind(ihh, iHS = rep(NA, n_snps))
+          return(list(ihh = ihh,
+                      iHS = data.frame(ihh[ , 1:2], iHS = rep(NA, n_snps))))
         } else {
           if ((n_snps < 50)) freqbin <- 0.90
           else if ((n_snps < 100)) freqbin <- 0.45
           else if ((n_snps < 200)) freqbin <- 0.225
           else if ((n_snps < 400)) freqbin <- 0.1
           else freqbin <- 0.05
-          ihs <- suppressWarnings(ihh2ihs(ihh, freqbin))
-          assert_that(nrow(ihs$res.ihs) == n_snps)
-          ihh <- cbind(ihh, iHS = ihs$res.ihs[ , "iHS"])
+          ihs <- suppressWarnings(
+            data.frame(ihh2ihs(ihh, freqbin)$res.ihs[ , -4])
+          )
+          return(list(ihh = ihh, iHS = ihs))
         }
       }
 
@@ -91,8 +93,8 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 
 #' Integrated Extended Haplotype Homozygosity
 #'
-#' This summary statistic calculates a modified version of the iHH,
-#' iES and optionally iHS statistics introduced by
+#' This summary statistic calculates a the iHH, iES and optionally iHS
+#' statistics.
 #'
 #' Coala relies on \code{\link[rehh]{scan_hh}} from package \pkg{rehh} to
 #' calculate this statistic. Please refer
@@ -116,17 +118,21 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #'   be used to increase performance. Set to \code{Inf} to use all SNPs.
 #' @param calc_ihs If set to \code{TRUE}, additionally standardized iHS is
 #'   calculated.
-#' @return When added to a model, the statistic returns the calculated values
-#'   as a data.frame. The rows are SNPs and the colums present the following
+#' @return When added to a model, the iHH statistics are calculated after
+#'   simulation. If \code{calc_ihs = FALSE}, a data.frame with values for
+#'   IHH and IES is returned. Otherwise, a list of two data.frame are returned,
+#'   one for IHH and IES values and the other one for IHS values.
+#'
+#'   In all `data.frames` rows are SNPs and the colums present the following
 #'   values for each SNP:
 #'   \itemize{
 #'    \item{CHR: The SNP's locus}
 #'    \item{Positions: The SNP's absolute position on its locus}
 #'    \item{FREQ_a: The SNP's absolute position on its locus}
 #'    \item{IHHa: integrated EHH for the ancestral allele}
-#'    \item{HHd: integrated EHH for the derived allele}
+#'    \item{IHHd: integrated EHH for the derived allele}
 #'    \item{IES: integrated EHHS}
-#'    \item{iHS: iHS, normalized over all loci. Only if \code{calc_ihs = TRUE})}
+#'    \item{iHS: iHS, normalized over all loci.}
 #'   }
 #' @export
 #' @author Paul Staab

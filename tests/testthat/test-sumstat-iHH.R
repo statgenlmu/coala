@@ -102,17 +102,21 @@ test_that("calculation of ihs works", {
 
   stat_ihh <- sumstat_ihh(calc_ihs = TRUE)
   ihh <- stat_ihh$calculate(list(seg_sites), NULL, NULL, model)
-  expect_that(ihh, is_a("data.frame"))
-  expect_equal(dim(ihh), c(5, 7))
-  expect_equal(ihh$CHR, rep(1, 5))
-  expect_equal(ihh$POSITION, pos)
+  expect_that(ihh, is_a("list"))
+  expect_that(ihh[[1]], is_a("data.frame"))
+  expect_that(ihh[[2]], is_a("data.frame"))
+  expect_equal(dim(ihh[[1]]), c(5, 6))
+  expect_equal(ncol(ihh[[2]]), 3)
 
-  model2 <- coal_model(10, 5, 1000) + feat_mutation(10) + sumstat_seg_sites()
+  model2 <- coal_model(50, 2, 1000) + feat_mutation(10) + sumstat_seg_sites()
   seg_sites2 <- simulate(model2)$seg_sites
 
+  stat_ihh <- sumstat_ihh(calc_ihs = TRUE)
   ihh <- stat_ihh$calculate(seg_sites2, NULL, NULL, model2)
-  expect_that(ihh, is_a("data.frame"))
-  expect_true(all(ihh$CHR %in% 1:5))
+  expect_that(ihh, is_a("list"))
+  expect_that(ihh[[1]], is_a("data.frame"))
+  expect_that(ihh[[2]], is_a("data.frame"))
+  expect_true(all(ihh$CHR %in% 1:2))
 })
 
 
@@ -125,8 +129,11 @@ test_that("calculation of iHS works with few SNPS", {
 
   stat_ihh <- sumstat_ihh(calc_ihs = TRUE)
   ihh <- stat_ihh$calculate(list(seg_sites2), NULL, NULL, model2)
-  expect_equal(dim(ihh), c(1, 7))
-  expect_true(is.na(ihh[1, 7]))
+  expect_that(ihh, is_a("list"))
+  expect_that(ihh[[1]], is_a("data.frame"))
+  expect_that(ihh[[2]], is_a("data.frame"))
+  expect_equal(dim(ihh[[2]]), c(1, 3))
+  expect_true(is.na(ihh[[2]][1, 3]))
 })
 
 
@@ -165,6 +172,7 @@ test_that("ihh works with empty segsites", {
 
   ihh <- sumstat_ihh(population = 1, calc_ihs = TRUE)
   stat <- ihh$calculate(seg_sites, NULL, NULL, model)
-  expect_that(stat, is_a("data.frame"))
-  expect_equal(dim(stat), c(0, 7))
+  expect_that(stat, is_a("list"))
+  expect_that(stat[[1]], is_a("data.frame"))
+  expect_that(stat[[2]], is_a("data.frame"))
 })

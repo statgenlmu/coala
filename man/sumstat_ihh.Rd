@@ -22,22 +22,26 @@ be used to increase performance. Set to \code{Inf} to use all SNPs.}
 calculated.}
 }
 \value{
-When added to a model, the statistic returns the calculated values
-  as a data.frame. The rows are SNPs and the colums present the following
+When added to a model, the iHH statistics are calculated after
+  simulation. If \code{calc_ihs = FALSE}, a data.frame with values for
+  IHH and IES is returned. Otherwise, a list of two data.frame are returned,
+  one for IHH and IES values and the other one for IHS values.
+
+  In all `data.frames` rows are SNPs and the colums present the following
   values for each SNP:
   \itemize{
    \item{CHR: The SNP's locus}
    \item{Positions: The SNP's absolute position on its locus}
    \item{FREQ_a: The SNP's absolute position on its locus}
    \item{IHHa: integrated EHH for the ancestral allele}
-   \item{HHd: integrated EHH for the derived allele}
+   \item{IHHd: integrated EHH for the derived allele}
    \item{IES: integrated EHHS}
-   \item{iHS: iHS, normalized over all loci. Only if \code{calc_ihs = TRUE})}
+   \item{iHS: iHS, normalized over all loci.}
   }
 }
 \description{
-This summary statistic calculates a modified version of the iHH,
-iES and optionally iHS statistics introduced by
+This summary statistic calculates a the iHH, iES and optionally iHS
+statistics.
 }
 \details{
 Coala relies on \code{\link[rehh]{scan_hh}} from package \pkg{rehh} to
