@@ -24,8 +24,7 @@ are used.}
 \item{max_snps}{The maximal number of SNPs per locus that are used for the
 calculation. If a locus has more SNPs than this number, only a
 random subset will be used for calculating iHS to increase performance.
-Set to \code{Inf} to use all SNPs. When \code{position} is given,
-this argument is ignored and all SNPs are used.}
+Set to \code{Inf} to use all SNPs.}
 }
 \value{
 When added to a model, the statistic returns a vector for each locus,

@@ -5,7 +5,7 @@
 \title{Integrated Extended Haplotype Homozygosity}
 \usage{
 sumstat_ihh(name = "ihh", position = NA, population = 1,
-  max_snps = 1000)
+  max_snps = 1000, calc_ihs = FALSE)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -24,20 +24,23 @@ are used.}
 \item{max_snps}{The maximal number of SNPs per locus that are used for the
 calculation. If a locus has more SNPs than this number, only a
 random subset will be used for calculating iHS to increase performance.
-Set to \code{Inf} to use all SNPs. When \code{position} is given,
-this argument is ignored and all SNPs are used.}
+Set to \code{Inf} to use all SNPs.}
+
+\item{calc_ihs}{If set to \code{TRUE}, additionally standardized iHS is
+calculated.}
 }
 \value{
 When added to a model, the statistic returns a matrix for each locus.
-  The columns of the values state the values for integrated EHH for the
-  ancestral allele (IHHa), integrated EHH for the derived allele (IHHd) and
-  integrated EHHS (IES), either for all SNPs when no position is given or
+  The columns of the values contain the values for integrated EHH for the
+  ancestral allele (IHHa), integrated EHH for the derived allele (IHHd),
+  integrated EHHS (IES) and iHS (only if \code{calc_ihs = TRUE}),
+  either for all SNPs when no position is given or
   for the SNP nearest to the selected position. Each SNP is represented by
   a row, sorted by position on the locus.
 }
 \description{
-This summary statistic calculates a modified version of the iHH
-and iES statistics introduced by
+This summary statistic calculates a modified version of the iHH,
+iES and optionally iHS statistics introduced by
 }
 \details{
 Voight et al., A map of recent positive selection in the human genome.

@@ -8,6 +8,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
     position = NA,
     population = NULL,
     max_snps = Inf,
+    use_ihs = FALSE,
     empty_matrix = matrix(0, 0, 3,
                           dimnames = list(NULL, c("IHHa", "IHHd", "IES"))),
     get_snp = function(positions, locus, model) {
@@ -17,14 +18,17 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
       which.min(abs(pos - positions))
     }),
   public = list(
-    initialize = function(name, population, position, max_snps) {
+    initialize = function(name, population, position, max_snps, calc_ihs) {
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
       assert_that(is.numeric(max_snps))
       assert_that(length(max_snps) == 1)
+      assert_that(is.logical(calc_ihs))
+      assert_that(length(calc_ihs) == 1)
       private$population <- population
       private$position <- position
       private$max_snps <- max_snps
+      private$use_ihs <- calc_ihs
       super$initialize(name)
     },
     calculate = function(seg_sites, trees, files, model) {
@@ -42,15 +46,24 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
                                            ind)
         if (rehh_data@nsnp == 0) return(private$empty_matrix)
 
+        ihh <- rehh::scan_hh(rehh_data)
+
+        if (private$use_ihs) {
+          if ((rehh_data@nsnp < 50)) freqbin <- 0.90
+          else if ((rehh_data@nsnp < 100)) freqbin <- 0.45
+          else if ((rehh_data@nsnp < 200)) freqbin <- 0.225
+          else if ((rehh_data@nsnp < 400)) freqbin <- 0.1
+          else freqbin <- 0.05
+          ihs <- suppressWarnings(ihh2ihs(ihh, freqbin))
+          ihh <- cbind(ihh, iHS = ihs$res.ihs[ , "iHS"])
+        }
+
         if (!is.na(private$position)) {
           assert_that(length(snps) == 1)
-          ihh <- matrix(0, 1, 3)
-          colnames(ihh) <- c("IHHa", "IHHd", "IES")
-          ihh[1, 1:2] <- calc_ehh(rehh_data, mrk = snps, plotehh = FALSE)$ihh
-          ihh[1, 3] <- calc_ehhs(rehh_data, mrk = snps, plotehhs = FALSE)$ies
-          return(ihh)
+          ihh <- ihh[snps, , drop = FALSE]
         }
-        rehh::scan_hh(rehh_data)[ , -(1:3), drop = FALSE]
+
+        ihh[ , -(1:3), drop = FALSE]
       })
     },
     create_rehh_data = function(seg_sites, pos, ind) {
@@ -70,9 +83,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
         any(0 == x) & any(1 == x)
       })
       n_snps <- sum(polym_in_sample)
-      if (n_snps < private$max_snps || !is.na(private$position)) {
-        return(polym_in_sample)
-      }
+      if (n_snps < private$max_snps) return(polym_in_sample)
       sample(which(polym_in_sample), private$max_snps, replace = FALSE)
     }
   )
@@ -81,8 +92,8 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 
 #' Integrated Extended Haplotype Homozygosity
 #'
-#' This summary statistic calculates a modified version of the iHH
-#' and iES statistics introduced by
+#' This summary statistic calculates a modified version of the iHH,
+#' iES and optionally iHS statistics introduced by
 #'
 #'  Voight et al., A map of recent positive selection in the human genome.
 #'  PLoS Biol, 4(3):e72, Mar 2006
@@ -101,16 +112,18 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #' @param max_snps The maximal number of SNPs per locus that are used for the
 #'   calculation. If a locus has more SNPs than this number, only a
 #'   random subset will be used for calculating iHS to increase performance.
-#'   Set to \code{Inf} to use all SNPs. When \code{position} is given,
-#'   this argument is ignored and all SNPs are used.
+#'   Set to \code{Inf} to use all SNPs.
+#' @param calc_ihs If set to \code{TRUE}, additionally standardized iHS is
+#'   calculated.
 #' @return When added to a model, the statistic returns a matrix for each locus.
-#'   The columns of the values state the values for integrated EHH for the
-#'   ancestral allele (IHHa), integrated EHH for the derived allele (IHHd) and
-#'   integrated EHHS (IES), either for all SNPs when no position is given or
+#'   The columns of the values contain the values for integrated EHH for the
+#'   ancestral allele (IHHa), integrated EHH for the derived allele (IHHd),
+#'   integrated EHHS (IES) and iHS (only if \code{calc_ihs = TRUE}),
+#'   either for all SNPs when no position is given or
 #'   for the SNP nearest to the selected position. Each SNP is represented by
 #'   a row, sorted by position on the locus.
 #' @export
 sumstat_ihh <- function(name = "ihh", position = NA, population = 1,
-                        max_snps = 1000) {
-  stat_ihh_class$new(name, population, position, max_snps)
+                        max_snps = 1000, calc_ihs = FALSE) {
+  stat_ihh_class$new(name, population, position, max_snps, calc_ihs)
 }

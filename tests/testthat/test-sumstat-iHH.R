@@ -63,15 +63,6 @@ test_that("selection of snps works", {
 })
 
 
-test_that("all snps are used if a position is given", {
-  stat_ihh <- sumstat_ihh(population = 1, max_snps = 2, position = .5)
-  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
-  expect_equal(dim(rehh_data@haplo), c(4, 3))
-  expect_equal(rehh_data@nsnp, 3)
-  expect_equal(rehh_data@nhap, 4)
-})
-
-
 test_that("calculation of ihh works", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh()
@@ -99,6 +90,27 @@ test_that("calculation of ihh works", {
   expect_equal(ihh2[[1]], ihh2[[3]])
 })
 
+
+test_that("calculation of ihs works", {
+  model <- coal_model(10, 2, 1000) + feat_mutation(10) + sumstat_seg_sites()
+  seg_sites <- simulate(model)$seg_sites
+
+  skip_if_not_installed("rehh")
+  stat_ihh <- sumstat_ihh(calc_ihs = TRUE)
+  ihh <- stat_ihh$calculate(seg_sites, NULL, NULL, model)
+  expect_that(ihh, is_a("list"))
+  expect_equal(length(ihh), 2)
+  expect_that(ihh[[1]], is_a("matrix"))
+  expect_equal(ncol(ihh[[1]]), 4)
+
+  stat_ihh <- sumstat_ihh(position = 0.5, calc_ihs = TRUE)
+  ihh2 <- stat_ihh$calculate(seg_sites, NULL, NULL, model)
+  expect_that(ihh2, is_a("list"))
+  expect_equal(length(ihh2), 2)
+  expect_that(ihh2[[1]], is_a("matrix"))
+  expect_equal(dim(ihh2[[1]]), c(1, 4))
+  expect_equal(rownames(ihh), rownames(ihh2))
+}
 
 test_that("ihh works with trios", {
   skip_if_not_installed("rehh")
