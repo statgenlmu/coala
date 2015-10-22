@@ -9,8 +9,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
     population = NULL,
     max_snps = Inf,
     use_ihs = FALSE,
-    empty_matrix = matrix(0, 0, 3,
-                          dimnames = list(NULL, c("IHHa", "IHHd", "IES"))),
+    empty_matrix = NULL,
     get_snp = function(positions, locus, model) {
       if (is.na(private$position)) return(seq(along = positions))
       pos <- conv_middle_to_trio_pos(private$position, model, locus,
@@ -29,6 +28,14 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
       private$position <- position
       private$max_snps <- max_snps
       private$use_ihs <- calc_ihs
+      if (calc_ihs) {
+        private$empty_matrix <-
+          matrix(0, 0, 4, dimnames =
+                   list(NULL, c("IHHa", "IHHd", "IES", "iHS")))
+      } else {
+        private$empty_matrix <-
+          matrix(0, 0, 3, dimnames = list(NULL, c("IHHa", "IHHd", "IES")))
+      }
       super$initialize(name)
     },
     calculate = function(seg_sites, trees, files, model) {
