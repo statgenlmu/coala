@@ -6,6 +6,7 @@ coala 0.1.1.9007
 * Additionally return the positions of the SNP for which ihh based statistics
   are calculated.
 * Remove position argument from ihh statistic
+* Changed `sumstat_ihh` to return a `data.frame` instead of a list
 
 
 coala 0.1.1.9006

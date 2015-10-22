@@ -83,39 +83,50 @@ test_that("calculation of ihh works", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh()
   ihh <- stat_ihh$calculate(list(seg_sites), NULL, NULL, model)
-  expect_that(ihh, is_a("list"))
-  expect_equal(length(ihh), 1)
-  expect_that(ihh[[1]], is_a("matrix"))
-  expect_equal(dim(ihh[[1]]), c(5, 4))
+  expect_that(ihh, is_a("data.frame"))
+  expect_equal(dim(ihh), c(5, 6))
+  expect_equal(ihh$CHR, rep(1, 5))
+  expect_equal(ihh$POSITION, pos)
+
+  ihh <- stat_ihh$calculate(list(seg_sites, seg_sites), NULL, NULL,
+                            coal_model(4, 2, 337))
+  expect_that(ihh, is_a("data.frame"))
+  expect_equal(dim(ihh), c(10, 6))
+  expect_equal(ihh$CHR, rep(1:2, each = 5))
+  expect_equal(ihh$POSITION, c(pos, pos))
 })
 
 
 test_that("calculation of ihs works", {
   skip_if_not_installed("rehh")
 
-  model <- coal_model(10, 2, 1000) + feat_mutation(10) + sumstat_seg_sites()
-  seg_sites <- simulate(model)$seg_sites
-
   stat_ihh <- sumstat_ihh(calc_ihs = TRUE)
-  ihh <- stat_ihh$calculate(seg_sites, NULL, NULL, model)
-  expect_that(ihh, is_a("list"))
-  expect_equal(length(ihh), 2)
-  expect_that(ihh[[1]], is_a("matrix"))
-  expect_equal(ncol(ihh[[1]]), 5)
+  ihh <- stat_ihh$calculate(list(seg_sites), NULL, NULL, model)
+  expect_that(ihh, is_a("data.frame"))
+  expect_equal(dim(ihh), c(5, 7))
+  expect_equal(ihh$CHR, rep(1, 5))
+  expect_equal(ihh$POSITION, pos)
+
+  model2 <- coal_model(10, 5, 1000) + feat_mutation(10) + sumstat_seg_sites()
+  seg_sites2 <- simulate(model2)$seg_sites
+
+  ihh <- stat_ihh$calculate(seg_sites2, NULL, NULL, model2)
+  expect_that(ihh, is_a("data.frame"))
+  expect_true(all(ihh$CHR %in% 1:5))
 })
 
 
 test_that("calculation of iHS works with few SNPS", {
   skip_if_not_installed("rehh")
 
-  seg_sites <- matrix(c(1, 0, 1, 0), 4, 1)
-  attr(seg_sites, "positions") <- 0.5
-  model <- coal_model(4, 1, 337)
+  seg_sites2 <- matrix(c(1, 0, 1, 0), 4, 1)
+  attr(seg_sites2, "positions") <- 0.5
+  model2 <- coal_model(4, 1, 337)
 
   stat_ihh <- sumstat_ihh(calc_ihs = TRUE)
-  ihh <- stat_ihh$calculate(list(seg_sites), NULL, NULL, model)
-  expect_equal(dim(ihh[[1]]), c(1, 5))
-  expect_true(is.na(ihh[[1]][1, 5]))
+  ihh <- stat_ihh$calculate(list(seg_sites2), NULL, NULL, model2)
+  expect_equal(dim(ihh), c(1, 7))
+  expect_true(is.na(ihh[1, 7]))
 })
 
 
@@ -125,27 +136,35 @@ test_that("ihh works with trios", {
   stats <- simulate(model)
   ihh <- sumstat_ihh(population = 1)
   stat <- ihh$calculate(stats$seg_sites, NULL, NULL, model)
-  expect_that(stat, is_a("list"))
-  expect_equal(length(stat), 1)
+  expect_that(stat, is_a("data.frame"))
 })
 
 
 test_that("ihh works with empty segsites", {
   skip_if_not_installed("rehh")
   model <- model_trios()
-  seg_sites <- list(matrix(0, 5, 0))
+  seg_sites <- list(seg_sites, matrix(0, 5, 0))
+  attr(seg_sites[[2]], "positions") <- numeric(0)
   ihh <- sumstat_ihh(population = 1)
-  attr(seg_sites[[1]], "positions") <- numeric(0)
-  stat <- ihh$calculate(seg_sites, NULL, NULL, model)
-  expect_equal(dim(stat[[1]]), c(0, 3))
+
+  stat <- ihh$calculate(seg_sites, NULL, NULL, coal_model(4, 2, 337))
+  expect_that(stat, is_a("data.frame"))
+  expect_equal(dim(stat), c(5, 6))
 
   seg_sites <- list(matrix(0, 0, 0))
   attr(seg_sites[[1]], "positions") <- numeric(0)
   stat <- ihh$calculate(seg_sites, NULL, NULL, model)
-  expect_equal(dim(stat[[1]]), c(0, 3))
+  expect_that(stat, is_a("data.frame"))
+  expect_equal(dim(stat), c(0, 6))
 
   seg_sites <- list(matrix(1, 5, 10))
   attr(seg_sites[[1]], "positions") <- 1:10 / 11
   stat <- ihh$calculate(seg_sites, NULL, NULL, model)
-  expect_equal(dim(stat[[1]]), c(0, 3))
+  expect_that(stat, is_a("data.frame"))
+  expect_equal(dim(stat), c(0, 6))
+
+  ihh <- sumstat_ihh(population = 1, calc_ihs = TRUE)
+  stat <- ihh$calculate(seg_sites, NULL, NULL, model)
+  expect_that(stat, is_a("data.frame"))
+  expect_equal(dim(stat), c(0, 7))
 })

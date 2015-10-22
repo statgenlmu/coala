@@ -4,51 +4,60 @@
 \alias{sumstat_ihh}
 \title{Integrated Extended Haplotype Homozygosity}
 \usage{
-sumstat_ihh(name = "ihh", position = NA, population = 1,
-  max_snps = 1000, calc_ihs = FALSE)
+sumstat_ihh(name = "ihh", population = 1, max_snps = 1000,
+  calc_ihs = FALSE)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
 the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
-\item{position}{A position relative to the locus extent, e.g. 0.5 for the
-middle of the locus. If provided, the statistic will be calculate
-for the SNP closest to the given position.
-Otherwise, it will be calculated for all SNPs.
-The position is relative to the middle locus" extend if trios
-are used.}
-
 \item{population}{The population for which the statistic is calculated.}
 
 \item{max_snps}{The maximal number of SNPs per locus that are used for the
-calculation. If a locus has more SNPs than this number, only a
-random subset will be used for calculating iHS to increase performance.
-Set to \code{Inf} to use all SNPs.}
+calculation. If a locus has more SNPs, only a random subset of them will
+be used to increase performance. Set to \code{Inf} to use all SNPs.}
 
 \item{calc_ihs}{If set to \code{TRUE}, additionally standardized iHS is
 calculated.}
 }
 \value{
-When added to a model, the statistic returns a matrix for each locus.
-  The columns contain the abosulute position of the SNP
-  (POSITION) and the values for integrated EHH for the
-  ancestral allele (IHHa), integrated EHH for the derived allele (IHHd),
-  integrated EHHS (IES) and iHS (only if \code{calc_ihs = TRUE}),
-  either for all SNPs when no position is given or
-  for the SNP nearest to the selected position. Each SNP is represented by
-  a row, sorted by position on the locus.
+When added to a model, the statistic returns the calculated values
+  as a data.frame. The rows are SNPs and the colums present the following
+  values for each SNP:
+  \itemize{
+   \item{CHR: }{The SNP's locus}
+   \item{Positions: }{The SNP's absolute position on its locus}
+   \item{FREQ_a: }{The SNP's absolute position on its locus}
+   \item{IHHa: }{integrated EHH for the ancestral allele}
+   \item{HHd: }{integrated EHH for the derived allele}
+   \item{IES: }{integrated EHHS}
+   \item{iHS: }{iHS, normalized over all loci. Only if \code{calc_ihs = TRUE})}
+  }
 }
 \description{
 This summary statistic calculates a modified version of the iHH,
 iES and optionally iHS statistics introduced by
 }
 \details{
-Voight et al., A map of recent positive selection in the human genome.
- PLoS Biol, 4(3):e72, Mar 2006
-
 Coala relies on \code{\link[rehh]{scan_hh}} from package \pkg{rehh} to
 calculate this statistic. Please refer
 to their documentation for detailed information on the implementation.
+Please cite the corresponding publication (see below) if you use the
+statistic for a publication.
+}
+\section{References}{
+
+\itemize{
+ \item{Mathieu Gautier and Renaud Vitalis, rehh: an R package to detect
+      footprints of selection in genome-wide SNP data from
+      haplotype structure. Bioinformatics (2012) 28 (8): 1176-1177
+      first published online March 7, 2012 doi:10.1093/bioinformatics/bts115}
+ \item{Voight et al., A map of recent positive selection in the human
+                       genome. PLoS Biol, 4(3):e72, Mar 2006.}
+ }
+}
+\author{
+Paul Staab
 }
 
