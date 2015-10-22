@@ -60,9 +60,6 @@ This does not affect non-trio loci.}
 
 \item{zero_indexed}{If true, the names of the populations are started from
 0 instead of from 1.}
-
-\item{allow_outgroup}{If set to false, an error is thrown if \code{pop} is
-marked as outgroup.}
 }
 \description{
 Getters for coalescent models

@@ -132,8 +132,6 @@ get_locus_number <- function(model, group = NA, ignore_variation = FALSE) {
 #'   segregating sites.
 #' @param zero_indexed If true, the names of the populations are started from
 #'   0 instead of from 1.
-#' @param allow_outgroup If set to false, an error is thrown if \code{pop} is
-#'   marked as outgroup.
 #' @export
 get_population_indiviuals <- function(model, pop,
                                       zero_indexed = FALSE) {

@@ -14,7 +14,7 @@ coala 0.1.1.9006
 coala 0.1.1.9005
 ----------------
 
-* Fix: Error in iHS calculation when all SNPs are removed.
+* Fix: Error in iES calculation when all SNPs are removed.
 
 
 coala 0.1.1.9004
@@ -35,7 +35,7 @@ coala 0.1.1.9003
 coala 0.1.1.9002
 ----------------
 
-* Fixes buggy iHS calculation when `max_snps` and `position` was used
+* Fixes buggy iES calculation when `max_snps` and `position` was used
   simultaneously. The argument `max_snps` is now ignored if a position
   is given (#98).
 
