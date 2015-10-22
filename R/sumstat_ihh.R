@@ -49,13 +49,18 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
         ihh <- rehh::scan_hh(rehh_data)
 
         if (private$use_ihs) {
-          if ((rehh_data@nsnp < 50)) freqbin <- 0.90
-          else if ((rehh_data@nsnp < 100)) freqbin <- 0.45
-          else if ((rehh_data@nsnp < 200)) freqbin <- 0.225
-          else if ((rehh_data@nsnp < 400)) freqbin <- 0.1
-          else freqbin <- 0.05
-          ihs <- suppressWarnings(ihh2ihs(ihh, freqbin))
-          ihh <- cbind(ihh, iHS = ihs$res.ihs[ , "iHS"])
+          if (rehh_data@nsnp < 5) {
+            # Standardization of iHS requires a few SNPs
+            ihh <- cbind(ihh, iHS = NA)
+          } else {
+            if ((rehh_data@nsnp < 50)) freqbin <- 0.90
+            else if ((rehh_data@nsnp < 100)) freqbin <- 0.45
+            else if ((rehh_data@nsnp < 200)) freqbin <- 0.225
+            else if ((rehh_data@nsnp < 400)) freqbin <- 0.1
+            else freqbin <- 0.05
+            ihs <- suppressWarnings(ihh2ihs(ihh, freqbin))
+            ihh <- cbind(ihh, iHS = ihs$res.ihs[ , "iHS"])
+          }
         }
 
         if (!is.na(private$position)) {

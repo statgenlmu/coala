@@ -92,10 +92,11 @@ test_that("calculation of ihh works", {
 
 
 test_that("calculation of ihs works", {
+  skip_if_not_installed("rehh")
+
   model <- coal_model(10, 2, 1000) + feat_mutation(10) + sumstat_seg_sites()
   seg_sites <- simulate(model)$seg_sites
 
-  skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh(calc_ihs = TRUE)
   ihh <- stat_ihh$calculate(seg_sites, NULL, NULL, model)
   expect_that(ihh, is_a("list"))
@@ -110,6 +111,20 @@ test_that("calculation of ihs works", {
   expect_that(ihh2[[1]], is_a("matrix"))
   expect_equal(dim(ihh2[[1]]), c(1, 5))
   expect_equal(rownames(ihh), rownames(ihh2))
+})
+
+
+test_that("calculation of iHS works with few SNPS", {
+  skip_if_not_installed("rehh")
+
+  seg_sites <- matrix(c(1, 0, 1, 0), 4, 1)
+  attr(seg_sites, "positions") <- 0.5
+  model <- coal_model(4, 1, 337)
+
+  stat_ihh <- sumstat_ihh(calc_ihs = TRUE)
+  ihh <- stat_ihh$calculate(list(seg_sites), NULL, NULL, model)
+  expect_equal(dim(ihh[[1]]), c(1, 5))
+  expect_true(is.na(ihh[[1]][1, 5]))
 })
 
 
