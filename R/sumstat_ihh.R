@@ -66,7 +66,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
             else if ((rehh_data@nsnp < 400)) freqbin <- 0.1
             else freqbin <- 0.05
             ihs <- suppressWarnings(ihh2ihs(ihh, freqbin))
-            ihh <- cbind(ihh, iHS = ihs$res.ihs[ , "iHS"])
+            ihh <- cbind(ihh, iHS = ihs$res.ihs[ , "iHS", drop = FALSE])
           }
         }
 
