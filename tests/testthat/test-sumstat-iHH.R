@@ -70,14 +70,14 @@ test_that("calculation of ihh works", {
   expect_that(ihh, is_a("list"))
   expect_equal(length(ihh), 1)
   expect_that(ihh[[1]], is_a("matrix"))
-  expect_equal(dim(ihh[[1]]), c(3, 3))
+  expect_equal(dim(ihh[[1]]), c(3, 4))
 
   stat_ihh <- sumstat_ihh(position = 0.5)
   ihh2 <- stat_ihh$calculate(list(seg_sites), NULL, NULL, model)
   expect_that(ihh2, is_a("list"))
   expect_equal(length(ihh2), 1)
   expect_that(ihh2[[1]], is_a("matrix"))
-  expect_equal(dim(ihh2[[1]]), c(1, 3))
+  expect_equal(dim(ihh2[[1]]), c(1, 4))
   expect_equivalent(ihh[[1]][3, , drop = FALSE], ihh2[[1]])
   expect_equal(rownames(ihh), rownames(ihh2))
 
@@ -101,14 +101,14 @@ test_that("calculation of ihs works", {
   expect_that(ihh, is_a("list"))
   expect_equal(length(ihh), 2)
   expect_that(ihh[[1]], is_a("matrix"))
-  expect_equal(ncol(ihh[[1]]), 4)
+  expect_equal(ncol(ihh[[1]]), 5)
 
   stat_ihh <- sumstat_ihh(position = 0.5, calc_ihs = TRUE)
   ihh2 <- stat_ihh$calculate(seg_sites, NULL, NULL, model)
   expect_that(ihh2, is_a("list"))
   expect_equal(length(ihh2), 2)
   expect_that(ihh2[[1]], is_a("matrix"))
-  expect_equal(dim(ihh2[[1]]), c(1, 4))
+  expect_equal(dim(ihh2[[1]]), c(1, 5))
   expect_equal(rownames(ihh), rownames(ihh2))
 })
 

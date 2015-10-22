@@ -63,7 +63,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
           ihh <- ihh[snps, , drop = FALSE]
         }
 
-        ihh[ , -(1:3), drop = FALSE]
+        ihh[ , -c(1, 3), drop = FALSE]
       })
     },
     create_rehh_data = function(seg_sites, pos, ind) {
@@ -116,7 +116,8 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #' @param calc_ihs If set to \code{TRUE}, additionally standardized iHS is
 #'   calculated.
 #' @return When added to a model, the statistic returns a matrix for each locus.
-#'   The columns of the values contain the values for integrated EHH for the
+#'   The columns contain the abosulute position of the SNP
+#'   (POSITION) and the values for integrated EHH for the
 #'   ancestral allele (IHHa), integrated EHH for the derived allele (IHHd),
 #'   integrated EHHS (IES) and iHS (only if \code{calc_ihs = TRUE}),
 #'   either for all SNPs when no position is given or
