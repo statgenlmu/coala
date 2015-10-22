@@ -120,13 +120,13 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #'   as a data.frame. The rows are SNPs and the colums present the following
 #'   values for each SNP:
 #'   \itemize{
-#'    \item{CHR: }{The SNP's locus}
-#'    \item{Positions: }{The SNP's absolute position on its locus}
-#'    \item{FREQ_a: }{The SNP's absolute position on its locus}
-#'    \item{IHHa: }{integrated EHH for the ancestral allele}
-#'    \item{HHd: }{integrated EHH for the derived allele}
-#'    \item{IES: }{integrated EHHS}
-#'    \item{iHS: }{iHS, normalized over all loci. Only if \code{calc_ihs = TRUE})}
+#'    \item{CHR: The SNP's locus}
+#'    \item{Positions: The SNP's absolute position on its locus}
+#'    \item{FREQ_a: The SNP's absolute position on its locus}
+#'    \item{IHHa: integrated EHH for the ancestral allele}
+#'    \item{HHd: integrated EHH for the derived allele}
+#'    \item{IES: integrated EHHS}
+#'    \item{iHS: iHS, normalized over all loci. Only if \code{calc_ihs = TRUE})}
 #'   }
 #' @export
 #' @author Paul Staab
