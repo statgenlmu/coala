@@ -88,7 +88,8 @@ information about the loci in the model.
 \item \code{get_locus_number}: Returns the number of loci in a locus group
 
 \item \code{get_population_indiviuals}: Returns the index of the individuals of one
-population
+population. Ignores outgroups, so that it can be used for indexing
+segregating sites.
 
 \item \code{get_summary_statistics}: Returns the summary statistics in the model
 }}
