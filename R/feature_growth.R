@@ -25,14 +25,15 @@ growth_class <- R6Class("growth", inherit = feature_class,
 #' then use the \code{\link{feat_size_change}} function.
 #'
 #' @param rate A \code{\link{parameter}} stating the rate of the change.
-#' @param population The population which starts to grow or decline.
-#' @param time The time at which the population starts to grow or decline.
+#' @param population The population which growths/declines. Can be
+#'          "all" for all populations, or the number of one population.
+#' @param time The time at which the growth starts.
 #' @return    The demographic model with a size change.
 #' @export
 #' @examples
 #' model <- coal_model(c(20,37), 88) +
 #'   feat_growth(par_range('alpha', 0.1, 2), population=2, time="0")
-feat_growth <- function(rate, population, time="0") {
+feat_growth <- function(rate, population = "all", time="0") {
   growth_class$new(rate, population, time)
 }
 

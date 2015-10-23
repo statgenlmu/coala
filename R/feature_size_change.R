@@ -23,23 +23,38 @@ size_change_class <- R6Class("size_change", inherit = feature_class,
 #'
 #' @param new_size A \code{\link{parameter}} giving the new size of the
 #'   population, as a factor of N0.
-#' @param population The number of the population whose size is changed.
-#' @param time The time point at which the size changes.
+#' @param population The number of the population whichs size changes.
+#'          Can also be set to "all". Then the size changes applies to all
+#'          populations.
+#' @param time The time at which the populations size is changed.
 #' @return A feature which can be added to a model.
 #' @export
 #' @examples
 #' # A model with one smaller population
 #' model <- coal_model(c(20,37), 88) +
 #'   feat_size_change(.1, 2, time="1")
-feat_size_change <- function(new_size, population, time="0") {
+feat_size_change <- function(new_size, population = 1, time = "0") {
   size_change_class$new(new_size, population, time)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
 conv_to_ms_arg.size_change <- function(feature, model) {
-  paste0("-en', ", feature$get_time(), ", ",
-         feature$get_population(), ", ",
+  all_pops <- feature$get_population() == "all" ||
+    (feature$get_population() == 1 && length(get_populations(model)) == 1)
+  present <- feature$get_time() == "par(0)"
+
+  if (present) {
+    if (all_pops) cmd <- "-N"
+    else cmd <- "-n"
+  } else {
+    if (all_pops) cmd <- "-eN"
+    else cmd <- "-en"
+  }
+
+  paste0(cmd, "', ",
+         ifelse(present, "", paste(feature$get_time(), ", ")),
+         ifelse(all_pops, "", paste(feature$get_population(), ", ")),
          feature$get_rate(), ", '")
 }
 

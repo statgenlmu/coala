@@ -1,3 +1,9 @@
+coala 0.1.1.9008
+----------------
+
+* Fixes simulation of sizes changes in one populations models with msms (#105).
+
+
 coala 0.1.1.9007
 ----------------
 

@@ -6,8 +6,9 @@ feature_class <- R6Class("feature",
     time = NULL,
     rate = NA,
     set_population = function(population, expected_length = 1) {
-      assert_that(is.numeric(population))
-      assert_that(length(population) == expected_length)
+      assert_that(identical(population, "all") || is.numeric(population))
+      assert_that(identical(population, "all") ||
+                    length(population) == expected_length)
       private$population <- population
     },
     add_parameter = function(parameter, required = TRUE, add_par = TRUE) {
