@@ -1,3 +1,9 @@
+coala 0.1.1.9009
+----------------
+
+* Add support for simulating a fixed number of mutations with ms and msms (#19).
+
+
 coala 0.1.1.9008
 ----------------
 

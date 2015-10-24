@@ -5,7 +5,7 @@
 \title{Feature: Mutation}
 \usage{
 feat_mutation(rate, model = "IFS", base_frequencies = NA, tstv_ratio = NA,
-  gtr_rates = NA)
+  gtr_rates = NA, fixed_number = FALSE)
 }
 \arguments{
 \item{rate}{A \code{\link{parameter}} defining the mutation rate.}
@@ -24,6 +24,10 @@ muation model.}
 \item{gtr_rates}{The rates for the six amino acid substitutions used in the
 'GTR' model. Must be a numeric vector of length six.
 Order: A<->C, A<->G, A<->T, C<->G, C<->T, G<->T.}
+
+\item{fixed_number}{If set to \code{TRUE}, the number of mutations on each
+locus will always be exactly equal to the rate, rather than happening with
+a rate along the ancestral tree.}
 }
 \value{
 The feature, which can be added to a model using `+`.
