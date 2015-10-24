@@ -5,15 +5,17 @@
 \title{Adds an instantaneous change of the population size of one
 population to a model.}
 \usage{
-feat_size_change(new_size, population, time = "0")
+feat_size_change(new_size, population = 1, time = "0")
 }
 \arguments{
 \item{new_size}{A \code{\link{parameter}} giving the new size of the
 population, as a factor of N0.}
 
-\item{population}{The number of the population whose size is changed.}
+\item{population}{The number of the population whichs size changes.
+Can also be set to "all". Then the size changes applies to all
+populations.}
 
-\item{time}{The time point at which the size changes.}
+\item{time}{The time at which the populations size is changed.}
 }
 \value{
 A feature which can be added to a model.

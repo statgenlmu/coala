@@ -2,18 +2,23 @@
 mutation_class <- R6Class("mutation", inherit = feature_class,
   private = list(
     model = NA,
+    fixed = FALSE,
     base_frequencies = NA,
     tstv_ratio = NA,
     gtr_rates = NA
   ),
   public = list(
     initialize = function(rate, model, base_frequencies,
-                          tstv_ratio, gtr_rates) {
+                          tstv_ratio, gtr_rates, fixed) {
       private$rate <- private$add_parameter(rate, add_par = FALSE)
 
       assert_that(length(model) == 1)
       assert_that(any(model == c("IFS", "HKY", "GTR")))
       private$model <- model
+
+      assert_that(length(fixed) == 1)
+      assert_that(is.logical(fixed))
+      private$fixed <- fixed
 
       if (model == "HKY") {
         if (is.na(tstv_ratio)) {
@@ -47,6 +52,7 @@ mutation_class <- R6Class("mutation", inherit = feature_class,
     get_base_frequencies = function() private$base_frequencies,
     get_tstv_ratio = function() private$tstv_ratio,
     get_gtr_rates = function() private$gtr_rates,
+    get_fixed = function() private$fixed,
     print = function() {
       cat("Mutations with rate", print_par(private$rate),
           "following a", private$model, "mutation model\n")
@@ -63,6 +69,9 @@ mutation_class <- R6Class("mutation", inherit = feature_class,
 #' time of sampling and mu is the neutral mutation rate for an entire locus.
 #'
 #' @param rate A \code{\link{parameter}} defining the mutation rate.
+#' @param fixed_number If set to \code{TRUE}, the number of mutations on each
+#'   locus will always be exactly equal to the rate, rather than happening with
+#'   a rate along the ancestral tree.
 #' @param model The mutation model you want to use.
 #'   Can be either 'IFS' (default), 'HKY' or 'GTR'. Refer to the mutation model
 #'   section for detailed information.
@@ -99,9 +108,11 @@ feat_mutation <- function(rate,
                           model = "IFS",
                           base_frequencies = NA,
                           tstv_ratio = NA,
-                          gtr_rates = NA) {
+                          gtr_rates = NA,
+                          fixed_number = FALSE) {
 
-  mutation_class$new(rate, model, base_frequencies, tstv_ratio, gtr_rates)
+  mutation_class$new(rate, model, base_frequencies,
+                     tstv_ratio, gtr_rates, fixed_number)
 }
 
 #-------------------------------------------------------------------
@@ -149,7 +160,11 @@ is_feat_mutation <- function(feat) any("mutation" == class(feat))
 #' @export
 conv_to_ms_arg.mutation <- function(feature, model) {
   if (feature$get_model() != "IFS") stop("Unsupported mutation model")
-  paste0("-t', par(", feature$get_rate(), "), '")
+  if (feature$get_fixed()) {
+    paste0("-s', par(", feature$get_rate(), "), '")
+  } else {
+    paste0("-t', par(", feature$get_rate(), "), '")
+  }
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
@@ -158,11 +173,22 @@ conv_to_msms_arg.mutation <- conv_to_ms_arg.mutation
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.mutation <- conv_to_ms_arg.mutation
+conv_to_scrm_arg.mutation <- function(feature, model) {
+  if (feature$get_fixed()) {
+    stop("scrm does not support simulating a fixed number of mutations")
+  }
+  conv_to_ms_arg.mutation(feature, model)
+}
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
 conv_to_seqgen_arg.mutation <- function(feature, model) {
+  if (feature$get_model() == "IFS") {
+    stop("seq-gen can not simulate an IFS model")
+  }
+  if (feature$get_fixed()) {
+    stop("seq-gen can not simulate a fixed number of mutations")
+  }
   if (feature$get_model() == "GTR") {
     rates <- paste("-r", paste(feature$get_gtr_rates(), collapse = " "))
   } else {

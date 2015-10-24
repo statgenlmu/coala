@@ -52,3 +52,35 @@ test_that("Parsing mutation to seqgen args works", {
   model <- coal_model(10, 1) + feat_mutation(5, model = "GTR", gtr_rates = 1:6)
   sg$get_cmd(model)
 })
+
+
+test_that("using a fixed number of mutations works with ms", {
+  if (!has_ms()) skip("ms not installed")
+  model <- coal_model(5, 1) +
+    feat_mutation(5, fixed_number = TRUE) +
+    sumstat_sfs()
+  expect_equal(get_simulator("ms")$get_cmd(model), "ms 5 1 -s 5 ")
+})
+
+
+test_that("using a fixed number of mutations works with msms", {
+  if (!has_msms()) skip("msms not installed")
+  model <- coal_model(5, 1) +
+    feat_mutation(5, fixed_number = TRUE) +
+    sumstat_sfs()
+  expect_equal(get_simulator("msms")$get_cmd(model), "msms 5 1 -s 5 ")
+})
+
+
+test_that("scrm rejects models with a fixed number of mutations", {
+  expect_error(get_simulator("scrm")$get_cmd(model))
+})
+
+
+test_that("seq-gen rejects models with a fixed number of mutations", {
+  if (!has_seqgen()) skip("seqgen not installed")
+  model <- coal_model(5, 1) +
+    feat_mutation(5, fixed_number = TRUE, model = "GTR", gtr_rates = 1:6) +
+    sumstat_sfs()
+  expect_error(get_simulator("seqgen")$get_cmd(model))
+})

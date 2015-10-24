@@ -5,14 +5,15 @@
 \title{Adds an exponential growth or decline of the size of one
 population to a model.}
 \usage{
-feat_growth(rate, population, time = "0")
+feat_growth(rate, population = "all", time = "0")
 }
 \arguments{
 \item{rate}{A \code{\link{parameter}} stating the rate of the change.}
 
-\item{population}{The population which starts to grow or decline.}
+\item{population}{The population which growths/declines. Can be
+"all" for all populations, or the number of one population.}
 
-\item{time}{The time at which the population starts to grow or decline.}
+\item{time}{The time at which the growth starts.}
 }
 \value{
 The demographic model with a size change.
