@@ -15,7 +15,13 @@ search_executable <- function(name, envir_var = NULL) {
 
   if (!is.null(envir_var)) {
     exe_path <- Sys.getenv(envir_var)
-    if (exe_path != "" && file.exists(exe_path)) return(exe_path)
+    if (exe_path != "") {
+      if (!file.exists(exe_path)) {
+        warning("Can not find ", name, " executable at '", exe_path, "'")
+      } else {
+        return(exe_path)
+      }
+    }
   }
 
   # Try to find it in the PATH folders and the Working directory
