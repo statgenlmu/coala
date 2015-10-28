@@ -63,11 +63,12 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
     },
     parse_report = function(dir, n_grid, start_locus) {
       readLines(file.path(dir, "OmegaPlus_Report.op"))
-      values <- read.delim(file.path(dir, "OmegaPlus_Report.op"), header = FALSE,
-                           comment.char = "/")
+      values <- read.delim(file.path(dir, "OmegaPlus_Report.op"),
+                           header = FALSE, comment.char = "/")
       colnames(values) <- c("pos", "omega")
       assert_that(nrow(values) %% n_grid == 0)
-      data.frame(locus = rep(start_locus:(nrow(values) / n_grid), each = n_grid),
+      data.frame(locus = rep(start_locus:(nrow(values) / n_grid),
+                             each = n_grid),
                  values)
     },
     get_grid = function() private$grid,
@@ -76,12 +77,22 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
   )
 )
 
-#' Returns the Segregation Sites Statistics from simulations
+
+#' Calculates the Omega Statistic from Simulations
 #'
 #' @inheritParams sumstat_four_gamete
+#' @param min_win The minimum distance from the grid point that a SNP must have
+#'   to be included in the calculation of omega.
+#' @param max_win The maximum distance from the grid point that a SNP must have
+#'   to be included in the calculation of omega.
+#' @param grid The number of points for which omega is calculated on each
+#'   locus. Should be significantly lower than the locus length.
+#' @param binary The path of the binary for OmegaPlus. If set to "automatic",
+#'   coala will try to find a binary called "OmegaPlus" using the PATH
+#'   environment variable.
 #' @export
 sumstat_omega <- function(name = "omega", min_win = 100, max_win = 1000,
-                              grid = 10000, binary = "automatic") {
+                          grid = 1000, binary = "automatic") {
   stat_omega_class$new(name, min_win, max_win, grid, binary)
 }
 
