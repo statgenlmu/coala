@@ -1,5 +1,5 @@
 #' @importFrom assertthat is.number
-stat_omegaplus_class <- R6Class("stat_omegaplus", inherit = sumstat_class,
+stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
   private = list(
     req_files = TRUE,
     binary = NULL,
@@ -75,11 +75,11 @@ stat_omegaplus_class <- R6Class("stat_omegaplus", inherit = sumstat_class,
 #'
 #' @inheritParams sumstat_four_gamete
 #' @export
-sumstat_omegaplus <- function(name = "omegaplus", min_win = 100, max_win = 1000,
+sumstat_omega <- function(name = "omega", min_win = 100, max_win = 1000,
                               grid = 10000, binary = "automatic") {
-  stat_omegaplus_class$new(name, min_win, max_win, grid, binary)
+  stat_omega_class$new(name, min_win, max_win, grid, binary)
 }
 
-has_omegaplus <- function() {
+has_omega <- function() {
   !is.null(search_executable("OmegaPlus", envir_var = "OMEGAPLUS"))
 }

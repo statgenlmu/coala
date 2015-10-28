@@ -1,15 +1,15 @@
-context("SumStat OmegaPlus")
+context("SumStat Omega")
 
-test_that("Initialization of OmegaPlus works", {
-  if (!has_omegaplus()) skip("OmegaPlus not found")
-  op <- sumstat_omegaplus(name = "op", min_win = 12, max_win = 112, grid = 15)
+test_that("Initialization of Omega works", {
+  if (!has_omega()) skip("OmegaPlus not found")
+  op <- sumstat_omega(name = "op", min_win = 12, max_win = 112, grid = 15)
   expect_true(is.sum_stat(op))
   expect_equal(op$get_name(), "op")
   expect_equal(op$get_min_win(), 12)
   expect_equal(op$get_max_win(), 112)
   expect_equal(op$get_grid(), 15)
 
-  expect_error(sumstat_omegaplus(binary = tempfile("op")))
+  expect_error(sumstat_omega(binary = tempfile("op")))
 })
 
 
@@ -28,7 +28,7 @@ test_that("report files are parsed correctly", {
 3.45	0.060000
 ", file = file.path(tmp_dir, "OmegaPlus_Report.op"))
 
-  op <- sumstat_omegaplus(name = "op", min_win = 12, max_win = 112, grid = 5)
+  op <- sumstat_omega(name = "op", min_win = 12, max_win = 112, grid = 5)
   expect_equal(op$parse_report(tmp_dir, n_grid = 3, start_locus = 1),
                data.frame(locus = c(1, 1, 1, 2, 2, 2),
                           pos = c(1.11, 2.22, 3.33, 1.23, 2.34, 3.45),
@@ -40,7 +40,7 @@ test_that("report files are parsed correctly", {
 test_that("OmegaPrime can be calculate", {
   model <- coal_model(10, 2) +
     feat_mutation(5) +
-    sumstat_omegaplus("op", grid = 10)
+    sumstat_omega("op", grid = 10)
   stat <- simulate(model)
 })
 
@@ -48,7 +48,7 @@ test_that("OmegaPrime can be calculate", {
 test_that("OmegaPrime works if there are few SNPs", {
   model <- coal_model(10, 2, 100) +
     feat_mutation(5) +
-    sumstat_omegaplus("op", grid = 1000)
+    sumstat_omega("op", grid = 1000)
   stat <- simulate(model)
 })
 
@@ -56,7 +56,7 @@ test_that("OmegaPrime works if there are few SNPs", {
 test_that("OmegaPrime rejects trio loci", {
   model <- coal_model(10) +
     feat_mutation(5) +
-    sumstat_omegaplus("op") +
+    sumstat_omega("op") +
     locus_trio(number = 2)
   expect_error(simulate(model))
 })

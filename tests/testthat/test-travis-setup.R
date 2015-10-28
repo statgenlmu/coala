@@ -22,5 +22,5 @@ test_that("seqgen is available on travis", {
 
 test_that("OmegaPlus is available on travis", {
   if (!on_travis) skip("Not on Travis-CI")
-  expect_true(has_omegaplus())
+  expect_true(has_omega())
 })
