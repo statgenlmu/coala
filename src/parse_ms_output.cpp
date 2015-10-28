@@ -7,12 +7,12 @@ using namespace Rcpp;
 // NumericVector
 // [[Rcpp::export]]
 NumericVector parse_ms_positions(const std::string line) {
-  std::stringstream stream(line);
-  std::vector<double> data;
-
-  if (line.substr(0, 11) != "positions: ") {
+  if (line.size() < 11 || line.substr(0, 11) != "positions: ") {
     stop("Failed to read positions from ms' output");
   }
+
+  std::stringstream stream(line);
+  std::vector<double> data;
 
   // Remove the 'positions: ' at the line's beginning
   stream.ignore(11);

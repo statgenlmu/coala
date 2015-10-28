@@ -79,7 +79,7 @@ Collate:
     'sumstat_jsfs.R'
     'sumstat_mcmf.R'
     'sumstat_nucleotide_div.R'
-    'sumstat_omegaplus.R'
+    'sumstat_omega.R'
     'sumstat_seg_sites.R'
     'sumstat_sfs.R'
     'sumstat_tajimas_d.R'

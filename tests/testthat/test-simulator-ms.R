@@ -2,12 +2,11 @@ context("Simulator ms")
 
 
 test_that("parsing positions works", {
-  positions <- rep(0, 10)
-  positions <- parse_ms_positions("positions: 0.0010 0.0474 0.3171")
-  expect_equal(positions, c(0.001, 0.0474, 0.3171))
+  expect_equal(parse_ms_positions("positions: 0.0010 0.0474 0.3171"),
+               c(0.001, 0.0474, 0.3171))
+  expect_equal(parse_ms_positions("positions: 0.1 0.2 0.3 0.4 0.5"), 1:5/10)
+  expect_equal(parse_ms_positions("positions: 0.1"), 0.1)
 
-  expect_equal(length(parse_ms_positions("positions: 0.1 0.2 0.3 0.4 0.5")), 5)
-  expect_equal(length(parse_ms_positions("positions: 0.1")), 1)
   expect_error(parse_ms_positions("0.1 0.2 0.3"))
   expect_error(parse_ms_positions(" "))
   expect_error(parse_ms_positions("segsites: 0"))
