@@ -65,8 +65,8 @@ NumericMatrix calc_four_gamete_stat(const List seg_sites_list,
 
     // Get the locus
     seg_sites = as<NumericMatrix>(seg_sites_list[locus]);
-    positions = getPositions(seg_sites);
-    trio_locus = getTrioLocus(seg_sites);
+    positions = coala::getPositions(seg_sites);
+    trio_locus = coala::getTrioLocus(seg_sites);
 
     // Filter SNPs which are non-polymorpic or singletons in the population
     n_snps = seg_sites.ncol();

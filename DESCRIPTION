@@ -66,6 +66,7 @@ Collate:
     'parameter_variation.R'
     'sample_seed.R'
     'search_executable.R'
+    'segsites.R'
     'simulator_class.R'
     'simulator_ms.R'
     'simulator_msms.R'

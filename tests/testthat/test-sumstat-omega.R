@@ -40,12 +40,15 @@ test_that("report files are parsed correctly", {
 
 test_that("Omega can be calculate", {
   if (!has_omega()) skip("OmegaPlus not found")
-  model <- coal_model(10, 2) +
+  model <- coal_model(10, 2, 1000) +
+    locus_single(2000) +
+    feat_recombination(1) +
     feat_mutation(5) +
     sumstat_omega("op", grid = 10)
   stat <- simulate(model)
   expect_false(is.null(stat$op))
   expect_equal(dim(stat$op), c(20, 3))
+  expect_true(all(1:3 %in% stat$op$locus))
 })
 
 

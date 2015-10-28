@@ -62,9 +62,9 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
       do.call(rbind, op_list)
     },
     parse_report = function(dir, n_grid, start_locus) {
-      readLines(file.path(dir, "OmegaPlus_Report.op"))
-      values <- read.delim(file.path(dir, "OmegaPlus_Report.op"),
-                           header = FALSE, comment.char = "/")
+      op_file <- file.path(dir, "OmegaPlus_Report.op")
+      if (!file.exists(op_file)) stop("Calculation of omega failed.")
+      values <- read.delim(op_file, header = FALSE, comment.char = "/")
       colnames(values) <- c("pos", "omega")
       assert_that(nrow(values) %% n_grid == 0)
       data.frame(locus = rep(start_locus:(nrow(values) / n_grid),

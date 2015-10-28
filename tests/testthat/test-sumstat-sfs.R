@@ -1,11 +1,11 @@
 context("SumStat SFS")
 
 test_that("calculation of the SFS is correct", {
-  seg.sites <- list(matrix(c(1, 0, 0, 0,
-                             1, 1, 0, 1,
-                             0, 0, 1, 1,
-                             1, 1, 0, 1), 4, 4, byrow = TRUE))
-  attr(seg.sites[[1]], "positions") <- c(0.1, 0.2, 0.5, 0.7)
+  seg.sites <- list(create_segsites(matrix(c(1, 0, 0, 0,
+                                             1, 1, 0, 1,
+                                             0, 0, 1, 1,
+                                             1, 1, 0, 1), 4, 4, byrow = TRUE),
+                                    c(0.1, 0.2, 0.5, 0.7)))
 
   model <- coal_model(4, 1)
   stat_sfs_all <- sumstat_sfs(population = "all")
@@ -40,9 +40,9 @@ test_that("calculation of sfs works with trios", {
                  1, 0, 0, 1,
                  1, 0, 0, 1), 4, 4, byrow = TRUE)
 
-  seg.sites <- list(cbind(ss, ss, ss))
-  attr(seg.sites[[1]], "positions") <- rep(c(0.1, 0.2, 0.5, 0.7), 4)
-  attr(seg.sites[[1]], "locus") <- rep(c(-1, 0, 1), each = 4)
+  seg.sites <- list(create_segsites(cbind(ss, ss, ss),
+                                    rep(c(0.1, 0.2, 0.5, 0.7), 3),
+                                    rep(c(-1, 0, 1), each = 4)))
 
   model <- coal_model(4, 1)
   stat_sfs_all <- sumstat_sfs(population = "all")

@@ -58,6 +58,41 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// create_segsites
+NumericMatrix create_segsites(NumericMatrix snps, NumericVector positions, NumericVector trio_locus);
+RcppExport SEXP coala_create_segsites(SEXP snpsSEXP, SEXP positionsSEXP, SEXP trio_locusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type snps(snpsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type positions(positionsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type trio_locus(trio_locusSEXP);
+    __result = Rcpp::wrap(create_segsites(snps, positions, trio_locus));
+    return __result;
+END_RCPP
+}
+// get_positions
+NumericVector get_positions(const NumericMatrix seg_sites);
+RcppExport SEXP coala_get_positions(SEXP seg_sitesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const NumericMatrix >::type seg_sites(seg_sitesSEXP);
+    __result = Rcpp::wrap(get_positions(seg_sites));
+    return __result;
+END_RCPP
+}
+// get_trio_locus
+NumericVector get_trio_locus(const NumericMatrix seg_sites);
+RcppExport SEXP coala_get_trio_locus(SEXP seg_sitesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const NumericMatrix >::type seg_sites(seg_sitesSEXP);
+    __result = Rcpp::wrap(get_trio_locus(seg_sites));
+    return __result;
+END_RCPP
+}
 // calc_four_gamete_stat
 NumericMatrix calc_four_gamete_stat(const List seg_sites_list, const IntegerVector individuals, const NumericMatrix locus_length);
 RcppExport SEXP coala_calc_four_gamete_stat(SEXP seg_sites_listSEXP, SEXP individualsSEXP, SEXP locus_lengthSEXP) {

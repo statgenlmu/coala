@@ -1,5 +1,6 @@
 #include <Rcpp.h>
 #include <fstream>
+#include "seg_sites.h"
 
 using namespace Rcpp;
 
@@ -77,7 +78,6 @@ List parse_ms_output(const List file_names,
             // Parse Seg.Sites
             NumericVector positions = parse_ms_positions(line);
             NumericMatrix ss(individuals, positions.size());
-            ss.attr("positions") = positions;
 
             for (size_t i = 0; i < individuals; ++i) {
               std::getline(output, line);
@@ -86,7 +86,7 @@ List parse_ms_output(const List file_names,
               }
             }
 
-            seg_sites[locus] = ss;
+            seg_sites[locus] = coala::createSegsites(ss, positions);
           }
           std::getline(output, line);
         }

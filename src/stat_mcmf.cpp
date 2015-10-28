@@ -10,7 +10,7 @@ void maxsplit(const NumericMatrix ss,
               int & max_number,
               int & snp_number) {
 
-  NumericVector trio_locus_vec = getTrioLocus(ss);
+  NumericVector trio_locus_vec = coala::getTrioLocus(ss);
 
   std::map<unsigned int, unsigned int> m;
   unsigned int key;
