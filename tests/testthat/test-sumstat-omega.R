@@ -14,6 +14,7 @@ test_that("Initialization of Omega works", {
 
 
 test_that("report files are parsed correctly", {
+  if (!has_omega()) skip("OmegaPlus not found")
   tmp_dir <- tempfile("op_parse_test")
   dir.create(tmp_dir)
 
@@ -38,6 +39,7 @@ test_that("report files are parsed correctly", {
 
 
 test_that("OmegaPrime can be calculate", {
+  if (!has_omega()) skip("OmegaPlus not found")
   model <- coal_model(10, 2) +
     feat_mutation(5) +
     sumstat_omega("op", grid = 10)
@@ -46,6 +48,7 @@ test_that("OmegaPrime can be calculate", {
 
 
 test_that("OmegaPrime works if there are few SNPs", {
+  if (!has_omega()) skip("OmegaPlus not found")
   model <- coal_model(10, 2, 100) +
     feat_mutation(5) +
     sumstat_omega("op", grid = 1000)
@@ -54,6 +57,7 @@ test_that("OmegaPrime works if there are few SNPs", {
 
 
 test_that("OmegaPrime rejects trio loci", {
+  if (!has_omega()) skip("OmegaPlus not found")
   model <- coal_model(10) +
     feat_mutation(5) +
     sumstat_omega("op") +
