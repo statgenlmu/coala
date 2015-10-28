@@ -34,33 +34,42 @@ test_that("report files are parsed correctly", {
                data.frame(locus = c(1, 1, 1, 2, 2, 2),
                           pos = c(1.11, 2.22, 3.33, 1.23, 2.34, 3.45),
                           omega = c(1, .2, .03, 4, .5, .06)))
-  unlink(tmp_dir)
+  unlink(tmp_dir, recursive = TRUE)
 })
 
 
-test_that("OmegaPrime can be calculate", {
+test_that("Omega can be calculate", {
   if (!has_omega()) skip("OmegaPlus not found")
   model <- coal_model(10, 2) +
     feat_mutation(5) +
     sumstat_omega("op", grid = 10)
   stat <- simulate(model)
+  expect_false(is.null(stat$op))
+  expect_equal(dim(stat$op), c(20, 3))
 })
 
 
-test_that("OmegaPrime works if there are few SNPs", {
+test_that("Omega checks that the number of grid points is valid", {
   if (!has_omega()) skip("OmegaPlus not found")
-  model <- coal_model(10, 2, 100) +
-    feat_mutation(5) +
-    sumstat_omega("op", grid = 1000)
-  stat <- simulate(model)
+  expect_error(coal_model(10, 2, 100) +
+                 feat_mutation(5) +
+                 sumstat_omega("op", grid = 1000))
+})
+
+
+test_that("Omega works if there are few SNPs", {
+  if (!has_omega()) skip("OmegaPlus not found")
+  model <- coal_model(10, 2, 1000) +
+    feat_mutation(2, fixed_number = TRUE) +
+    sumstat_omega("op", grid = 10)
+  simulate(model)
 })
 
 
 test_that("OmegaPrime rejects trio loci", {
   if (!has_omega()) skip("OmegaPlus not found")
-  model <- coal_model(10) +
+  expect_error(coal_model(10) +
     feat_mutation(5) +
     sumstat_omega("op") +
-    locus_trio(number = 2)
-  expect_error(simulate(model))
+    locus_trio(number = 2))
 })

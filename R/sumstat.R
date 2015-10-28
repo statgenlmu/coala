@@ -12,6 +12,12 @@ sumstat_class <- R6Class("sumstat",
     calculate = function(seg_sites, trees, files, model) {
       stop("Overwrite this function with the calculation of the statistic.")
     },
+    check = function(model) {
+      # Optional functions that checks if a model is compatible with the stat.
+      # Should throw an informative error if not.
+      # This gets executed before the stat is added to the model.
+      invisible(TRUE)
+    },
     get_name = function() private$name,
     requires_files = function() private$req_files,
     requires_segsites = function() private$req_segsites,
@@ -30,6 +36,8 @@ create_sumstat_container <- function() list()
 
 # Add a summary statistic to a model
 add_to_model.sumstat <- function(sum_stat, model, feat_name) {
+  sum_stat$check(model)
+
   if (sum_stat$get_name() %in% names(model$sum_stats))
     stop("Can not add ", feat_name, " to model: ",
          "There is already a statistic with name ", sum_stat$get_name())

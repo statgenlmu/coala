@@ -1,4 +1,4 @@
-#' @importFrom assertthat is.number
+#' @importFrom assertthat assert_that is.number
 stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
   private = list(
     req_files = TRUE,
@@ -28,11 +28,16 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
       private$binary <- binary
       super$initialize(name)
     },
-    calculate = function(seg_sites, trees, files, model) {
+    check = function(model) {
       if (has_trios(model)) {
         stop("OmegaPlus can not be calculated from locus trios")
       }
-
+      if (any(get_locus_length(model, total = TRUE) < self$get_grid())) {
+        stop("Grid value in stat_omega can not be larger than the locus length")
+      }
+      invisible(TRUE)
+    },
+    calculate = function(seg_sites, trees, files, model) {
       cur_wd <- getwd()
 
       op_list <- lapply(seq(along = files), function(i) {

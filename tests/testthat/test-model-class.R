@@ -84,7 +84,11 @@ test_that("get loci length and number works", {
   expect_equivalent(get_locus_length(model, 24, total = FALSE),
                     c(1, 10, 2, 11, 3))
 
-  expect_error(get_locus_length(model))
+  expect_equal(get_locus_length(model, total = TRUE), c(101, 102, 27))
+  expect_equivalent(get_locus_length(model, total = FALSE),
+                    matrix(c(0, 0, 101, 0, 0,
+                             0, 0, 102, 0, 0,
+                             1, 10, 2, 11, 3), 3, byrow = TRUE))
 })
 
 
