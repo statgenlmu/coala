@@ -108,6 +108,24 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
 
 #' Calculates the Omega Statistic from Simulations
 #'
+#' This summary statistic calculates the omega statistic introduced by
+#' Kim & Nielsen (2004) from the simulated data. The statistic is senistive for
+#' LD patterns that are characteristic for selective sweeps. To calculate
+#' the statistic, coala relies on the command line program
+#' \href{http://sco.h-its.org/exelixis/web/software/omegaplus/index.html}{OmegaPlus},
+#' which needs to be downloaded and compiled manually in order to use the
+#' statistic.
+#'
+#' @references
+#' Linkage disequilibrium as a signature of selective sweeps.
+#' Y. Kim and R. Nielsen (2004). Genetics, 167, 1513-1524.
+#'
+#' OmegaPlus: a scalable tool for rapid detection of selective
+#' sweeps in whole-genome datasets.
+#' N. Alachiotis, A. Stamatakis and P. Pavlidis (2012).
+#' Bioinformatics Vol. 28 no. 17 2012, pages 2274-2275
+#' doi:10.1093/bioinformatics/bts419
+#'
 #' @inheritParams sumstat_four_gamete
 #' @param min_win The minimum distance from the grid point that a SNP must have
 #'   to be included in the calculation of omega.
@@ -118,6 +136,8 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
 #' @param binary The path of the binary for OmegaPlus. If set to "automatic",
 #'   coala will try to find a binary called "OmegaPlus" using the PATH
 #'   environment variable.
+#' @return A data frame consisting of the locus and the genetic position of the
+#'   calculated omega values.
 #' @export
 sumstat_omega <- function(name = "omega", min_win = 100, max_win = 1000,
                           grid = 1000, binary = "automatic") {
