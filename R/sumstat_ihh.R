@@ -71,7 +71,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
       assert_that(is.matrix(seg_sites))
       snp_mask <- self$create_snp_mask(seg_sites, ind)
       rehh_data <- new("haplohh")
-      rehh_data@haplo <- seg_sites[ind, snp_mask, drop = FALSE] + 1
+      rehh_data@haplo <- as.matrix(seg_sites[ind, snp_mask, drop = FALSE]) + 1
       rehh_data@position <- pos[snp_mask]
       rehh_data@snp.name <- as.character(seq(along = rehh_data@position))
       rehh_data@chr.name <- chr_name

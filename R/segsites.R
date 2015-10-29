@@ -12,6 +12,15 @@ print.segsites <- function(x, ...) {
 }
 
 
+as.matrix.segsites <- function(x, ...) {
+  x_class <- attr(x, "class")
+  attr(x, "class") <- x_class[x_class != "segsites"]
+  attr(x, "positions") <- NULL
+  attr(x, "trio_locus") <- NULL
+  x
+}
+
+
 is_segsites <- function(segsites) inherits(segsites, "segsites")
 
 

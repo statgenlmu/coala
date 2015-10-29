@@ -1,10 +1,10 @@
 context("SumStat iHS")
 
-seg_sites <- matrix(c(1, 0, 0, 0, 1,
-                      1, 1, 0, 1, 0,
-                      1, 0, 1, 1, 1,
-                      0, 0, 0, 1, 0), 4, 5, byrow = TRUE)
-attr(seg_sites, "positions") <- c(0.1, 0.2, 0.5, 0.7, 0.9)
+seg_sites <- create_segsites(matrix(c(1, 0, 0, 0, 1,
+                                      1, 1, 0, 1, 0,
+                                      1, 0, 1, 1, 1,
+                                      0, 0, 0, 1, 0), 4, 5, byrow = TRUE),
+                             c(0.1, 0.2, 0.5, 0.7, 0.9))
 model <- coal_model(4, 1, 337)
 pos <- get_snp_positions(list(seg_sites), model, relative = FALSE)[[1]]
 
@@ -29,7 +29,7 @@ test_that("generation of rehh data works", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh(population = 1)
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
-  expect_equivalent(rehh_data@haplo, seg_sites + 1)
+  expect_equivalent(rehh_data@haplo, as.matrix(seg_sites) + 1)
   expect_equal(rehh_data@position, pos)
   expect_equal(rehh_data@snp.name, as.character(1:5))
   expect_equal(rehh_data@nhap, 4)
@@ -51,7 +51,7 @@ test_that("SNPs not segregating in individuals are removed from rehh_data", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh(population = 1)
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:2)
-  expect_equivalent(rehh_data@haplo, seg_sites[1:2, c(2, 4, 5)] + 1)
+  expect_equivalent(rehh_data@haplo, as.matrix(seg_sites[1:2, c(2, 4, 5)]) + 1)
   expect_equal(rehh_data@position, pos[c(2, 4, 5)])
   expect_equal(rehh_data@snp.name, as.character(1:3))
   expect_equal(rehh_data@nhap, 2)

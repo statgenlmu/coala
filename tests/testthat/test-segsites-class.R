@@ -69,3 +69,11 @@ test_that("segsites can be converted to ms-output", {
                          "01010",
                          "01101"))
 })
+
+
+test_that("converting segsites to matrix works", {
+  x <- create_test_segsites()
+  mat <- as.matrix(x)
+  expect_true(is.matrix(mat))
+  expect_false(is_segsites(mat))
+})
