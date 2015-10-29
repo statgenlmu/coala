@@ -6,8 +6,6 @@ env:
     - BOOTSTRAP_LATEX="1"
     - R_BUILD_ARGS=" "
     - R_CHECK_ARGS="--as-cran"
-    - MS="$PWD/ms"
-    - MSMS="$PWD/msms.jar"
 
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
@@ -18,9 +16,11 @@ install:
   - ./travis-tool.sh r_binary_install ape abc RcppArmadillo knitr rmarkdown
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh aptget_install seq-gen pandoc pandoc-citeproc
-  - wget http://pst-public.s3-website.eu-central-1.amazonaws.com/msms.jar
-  - wget http://pst-public.s3-website.eu-central-1.amazonaws.com/ms
-  - chmod +x ms
+  - mkdir ~/bin
+  - wget -P ~/bin/ http://pst-public.s3-website.eu-central-1.amazonaws.com/msms.jar
+  - wget -P ~/bin/ http://pst-public.s3-website.eu-central-1.amazonaws.com/ms
+  - wget -P ~/bin/ http://pst-public.s3-website.eu-central-1.amazonaws.com/OmegaPlus
+  - chmod +x ~/bin/*
 
 script: ./travis-tool.sh run_tests
 

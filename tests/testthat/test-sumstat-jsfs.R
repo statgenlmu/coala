@@ -1,11 +1,12 @@
 context("SumStat JSFS")
 
 test_that("calculation of the JSFS is correct", {
-    seg.sites <- list(matrix(c(1, 0, 0, 0,
-                               1, 1, 0, 1,
-                               1, 0, 0, 1,
-                               1, 0, 0, 1), 4, 4, byrow = TRUE))
-    attr(seg.sites[[1]], "positions") <- c(0.1, 0.2, 0.5, 0.7)
+  seg.sites <- list(create_segsites(matrix(c(1, 0, 0, 0,
+                                             1, 1, 0, 1,
+                                             1, 0, 0, 1,
+                                             1, 0, 0, 1), 4, 4, byrow = TRUE),
+                                    c(0.1, 0.2, 0.5, 0.7)))
+
     jsfs <- calc_jsfs(seg.sites, 1:2, 3:4)
     expect_equal(jsfs, matrix(c(1, 0, 0,
                                 1, 0, 1,
@@ -28,8 +29,11 @@ test_that("calculation of the JSFS is correct", {
     calc_jsfs(seg.sites, numeric(), 1:4)
 
 
-    seg.sites <- list(matrix(c(1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0), 4, 3))
-    attr(seg.sites[[1]], "positions") <- c(0.1, 0.5, 0.7)
+    seg.sites <- list(create_segsites(matrix(c(1, 1, 1, 1,
+                                               0, 0, 1, 1,
+                                               1, 1, 0, 0), 4, 3),
+                                      c(0.1, 0.5, 0.7)))
+
     jsfs <- calc_jsfs(seg.sites, 1:2, 3:4)
     expect_true(is.matrix(jsfs))
     expect_equal(dim(jsfs), c(3, 3))
@@ -38,8 +42,11 @@ test_that("calculation of the JSFS is correct", {
     expect_equal(jsfs[1, 3], 1)
     expect_equal(jsfs[3, 1], 1)
 
-    seg.sites[[2]] <- matrix(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),  4, 3)
-    attr(seg.sites[[2]], "positions") <- c(0.1, 0.5, 0.7)
+
+    seg.sites[[2]] <- create_segsites(matrix(c(1, 1, 1, 1,
+                                               1, 1, 1, 1,
+                                               1, 1, 1, 1),  4, 3),
+                                      c(0.1, 0.5, 0.7))
     jsfs <- calc_jsfs(seg.sites, 1:2, 3:4)
     expect_true(is.matrix(jsfs))
     expect_equal(dim(jsfs), c(3, 3))
@@ -48,8 +55,8 @@ test_that("calculation of the JSFS is correct", {
     expect_equal(jsfs[1, 3], 1)
     expect_equal(jsfs[3, 1], 1)
 
-    seg.sites[[3]] <- matrix(numeric(), 4, 0)
-    attr(seg.sites[[3]], "positions") <- c(0.1, 0.5, 0.7)
+
+    seg.sites[[3]] <- create_segsites(matrix(numeric(), 4, 0), numeric(0))
     jsfs <- calc_jsfs(seg.sites, 1:2, 3:4)
     expect_true(is.matrix(jsfs))
     expect_equal(dim(jsfs), c(3, 3))
@@ -57,12 +64,6 @@ test_that("calculation of the JSFS is correct", {
     expect_equal(jsfs[3, 3], 4)
     expect_equal(jsfs[1, 3], 1)
     expect_equal(jsfs[3, 1], 1)
-
-    # No SNPs edgecase
-    jsfs <- calc_jsfs(list(matrix(0, 4, 0)), 1:2, 3:4)
-    expect_equal(jsfs, matrix(0, 3, 3))
-    jsfs <- calc_jsfs(list(matrix(0, 0, 0)), 1:2, 3:4)
-    expect_equal(jsfs, matrix(0, 3, 3))
 })
 
 
@@ -72,9 +73,9 @@ test_that("calc_jsfs works with trios", {
                  1, 0, 0, 1,
                  1, 0, 0, 1), 4, 4, byrow = TRUE)
 
-  seg.sites <- list(cbind(ss, ss, ss))
-  attr(seg.sites[[1]], "positions") <- rep(c(0.1, 0.2, 0.5, 0.7), 4)
-  attr(seg.sites[[1]], "locus") <- rep(c(-1, 0, 1), each = 4)
+  seg.sites <- list(create_segsites(cbind(ss, ss, ss),
+                                    rep(c(0.1, 0.2, 0.5, 0.7), 3),
+                                    rep(c(-1, 0, 1), each = 4)))
 
   jsfs <- calc_jsfs(seg.sites, 1:2, 3:4)
   expect_equal(jsfs, matrix(c(1, 0, 0,

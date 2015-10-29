@@ -1,6 +1,12 @@
 coala 0.1.1.9009
 ----------------
 
+* Add support for the omega statistic using OmegaPlus (#109).
+
+
+coala 0.1.1.9009
+----------------
+
 * Add support for simulating a fixed number of mutations with ms and msms (#19).
 
 

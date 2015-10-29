@@ -17,6 +17,18 @@ generate_trio_trees <- function(trees, llm) {
     .Call('coala_generate_trio_trees', PACKAGE = 'coala', trees, llm)
 }
 
+create_segsites <- function(snps, positions = numeric(0), trio_locus = numeric(0)) {
+    .Call('coala_create_segsites', PACKAGE = 'coala', snps, positions, trio_locus)
+}
+
+get_positions <- function(seg_sites) {
+    .Call('coala_get_positions', PACKAGE = 'coala', seg_sites)
+}
+
+get_trio_locus <- function(seg_sites) {
+    .Call('coala_get_trio_locus', PACKAGE = 'coala', seg_sites)
+}
+
 calc_four_gamete_stat <- function(seg_sites_list, individuals, locus_length) {
     .Call('coala_calc_four_gamete_stat', PACKAGE = 'coala', seg_sites_list, individuals, locus_length)
 }

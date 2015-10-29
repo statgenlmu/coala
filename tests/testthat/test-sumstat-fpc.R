@@ -2,13 +2,12 @@ context("SumStat FourGamete")
 
 
 test_that("calc_four_gamete_stat works", {
-  seg_sites <- list(matrix(c(1, 1, 0, 0, 0,
-                             1, 0, 1, 0, 1,
-                             1, 1, 0, 1, 0,
-                             0, 1, 1, 0, 1,
-                             0, 0, 0, 0, 1), 5))
-
-  attr(seg_sites[[1]], "positions") <- c(0.1, 0.12, 0.5, 0.51, 0.61)
+  seg_sites <- list(create_segsites(matrix(c(1, 1, 0, 0, 0,
+                                             1, 0, 1, 0, 1,
+                                             1, 1, 0, 1, 0,
+                                             0, 1, 1, 0, 1,
+                                             0, 0, 0, 0, 1), 5),
+                                    c(0.1, 0.12, 0.5, 0.51, 0.61)))
   locus_length <- matrix(c(0, 0, 100, 0, 0, 1), 1, 6)
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[1, ], c(mid_near = .5, mid_far = .5, outer = NaN,
@@ -50,8 +49,7 @@ test_that("calc_four_gamete_stat works", {
                                       perc_polym = 0.10))
 
 
-  seg_sites[[3]] <- matrix(0, 5, 0)
-  attr(seg_sites[[3]], "positions") <- numeric(0)
+  seg_sites[[3]] <- create_segsites(matrix(0, 5, 0), numeric(0))
   locus_length <- rbind(locus_length, c(0, 0, 50, 0, 0, 1))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[3, ], c(mid_near = NaN, mid_far = NaN,
@@ -60,37 +58,41 @@ test_that("calc_four_gamete_stat works", {
 
 
   # With locus-trios
-  seg_sites[[4]] <- matrix(c(1, 1, 0, 0, 0,
-                             1, 0, 1, 0, 1,
-                             1, 1, 1, 1, 0,
-                             0, 1, 1, 0, 1,
-                             0, 0, 0, 0, 1), 5)
-  attr(seg_sites[[4]], "positions") <- c(0.15, 0.55, 0.05, 0.08, 0.30)
-  attr(seg_sites[[4]], "locus") <- c(-1, -1, 0, 0, 0)
+  seg_sites[[4]] <- create_segsites(matrix(c(1, 1, 0, 0, 0,
+                                             1, 0, 1, 0, 1,
+                                             1, 1, 1, 1, 0,
+                                             0, 1, 1, 0, 1,
+                                             0, 0, 0, 0, 1), 5),
+                                    c(0.15, 0.55, 0.05, 0.08, 0.30),
+                                    c(-1, -1, 0, 0, 0))
   locus_length <- rbind(locus_length, c(10, 5, 6, 5, 10, 1))
 
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[4, ], c(mid_near = NaN, mid_far = NaN, outer = 1,
                                       between = 1, mid = NaN, perc_polym = 0.5))
 
-  attr(seg_sites[[4]], "locus") <- c(0, 0, 1, 1, 1)
+  seg_sites[[4]] <- create_segsites(seg_sites[[4]],
+                                    trio_locus = c(0, 0, 1, 1, 1))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[4, ], c(mid_near = NaN, mid_far = 1, outer = NaN,
                                       between = 1, mid = 1, perc_polym = 1 / 3))
 
-  attr(seg_sites[[4]], "locus") <- c(-1, -1, 0, 0, 1)
+  seg_sites[[4]] <- create_segsites(seg_sites[[4]],
+                                    trio_locus = c(-1, -1, 0, 0, 1))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[4, ], c(mid_near = NaN, mid_far = NaN, outer = 1,
                                       between = 1, mid = NaN,
                                       perc_polym = 1 / 3))
 
-  attr(seg_sites[[4]], "locus") <- c(-1, -1, 0, 1, 1)
+  seg_sites[[4]] <- create_segsites(seg_sites[[4]],
+                                    trio_locus = c(-1, -1, 0, 1, 1))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[4, ], c(mid_near = NaN, mid_far = NaN, outer = 1,
                                       between = NaN, mid = NaN,
                                       perc_polym = 1 / 6))
 
-  attr(seg_sites[[4]], "locus") <- c(-1, -1, -1, 1, 1)
+  seg_sites[[4]] <- create_segsites(seg_sites[[4]],
+                                    trio_locus = c(-1, -1, -1, 1, 1))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[4, ], c(mid_near = NaN, mid_far = NaN, outer = 1,
                                       between = NaN, mid = NaN, perc_polym = 0))

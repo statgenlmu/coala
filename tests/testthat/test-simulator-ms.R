@@ -2,12 +2,11 @@ context("Simulator ms")
 
 
 test_that("parsing positions works", {
-  positions <- rep(0, 10)
-  positions <- parse_ms_positions("positions: 0.0010 0.0474 0.3171")
-  expect_equal(positions, c(0.001, 0.0474, 0.3171))
+  expect_equal(parse_ms_positions("positions: 0.0010 0.0474 0.3171"),
+               c(0.001, 0.0474, 0.3171))
+  expect_equal(parse_ms_positions("positions: 0.1 0.2 0.3 0.4 0.5"), 1:5/10)
+  expect_equal(parse_ms_positions("positions: 0.1"), 0.1)
 
-  expect_equal(length(parse_ms_positions("positions: 0.1 0.2 0.3 0.4 0.5")), 5)
-  expect_equal(length(parse_ms_positions("positions: 0.1")), 1)
   expect_error(parse_ms_positions("0.1 0.2 0.3"))
   expect_error(parse_ms_positions(" "))
   expect_error(parse_ms_positions("segsites: 0"))
@@ -43,10 +42,13 @@ positions: 0.3718 0.8443
 
   output <- parse_ms_output(list(sim_output), 3, 2)
 
-  ss1 <- matrix(c(0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0), 3, 5)
-  attr(ss1, "positions") <- c(0.2046, 0.2234, 0.2904, 0.6209, 0.9527)
-  ss2 <- matrix(c(0, 0, 1, 1, 1, 0), 3, 2)
-  attr(ss2, "positions") <- c(0.3718, 0.8443)
+
+  ss1 <- create_segsites(matrix(c(0, 1, 1, 0, 0,
+                                  1, 0, 0, 1, 1,
+                                  0, 1, 1, 0, 0), 3, 5, TRUE),
+                         c(0.2046, 0.2234, 0.2904, 0.6209, 0.9527))
+
+  ss2 <- create_segsites(matrix(c(0, 0, 1, 1, 1, 0), 3, 2), c(0.3718, 0.8443))
 
   trees1 <- c("[2](2:0.865,(1:0.015,3:0.015):0.850);",
               "[3](2:0.865,(1:0.015,3:0.015):0.850);",

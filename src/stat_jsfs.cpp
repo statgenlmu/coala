@@ -34,7 +34,7 @@ NumericMatrix calc_jsfs(const List seg_sites,
 
     if (ncol == 0) continue;
     if (nrow < nrows_required) stop("Seg. Sites has too few rows.");
-    trio_locus = getTrioLocus(ss);
+    trio_locus = coala::getTrioLocus(ss);
 
     for (size_t j = 0; j < ncol; ++j) {
       if (trio_locus(j) != 0) continue; // Only calculate for middle locus

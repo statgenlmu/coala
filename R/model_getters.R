@@ -54,9 +54,11 @@ get_parameter <- function(model) {
 #'
 #' @describeIn get_features Returns the length of the loci in a locus group
 #' @export
-get_locus_length <- function(model, locus=NULL, group=NULL, total=TRUE) {
-  assert_that(!(is.null(locus) & is.null(group)))
+get_locus_length <- function(model, locus = NULL, group = NULL, total = TRUE) {
   llm <- get_locus_length_matrix(model)
+  if (is.null(locus) & is.null(group)) {
+    group <- 1:nrow(llm)
+  }
 
   # Group and locus are identical for ilv models
   if (!is.null(group) && has_variation(model)) {
@@ -68,10 +70,9 @@ get_locus_length <- function(model, locus=NULL, group=NULL, total=TRUE) {
     group <- get_locus_group(model, locus)
   }
 
-  ll <- llm[group, 1:5]
-  if (total) return(sum(ll))
-  if (sum(ll[-3]) == 0) return(ll[3])
-  ll
+  if (total) return(rowSums(llm[group, 1:5, drop = FALSE]))
+  if (sum(llm[group , c(1:2, 4:5)]) == 0) return(llm[group , 3])
+  llm[group, 1:5]
 }
 
 

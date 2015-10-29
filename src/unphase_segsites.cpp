@@ -21,8 +21,8 @@ List unphase_segsites(const List seg_sites,
     source = as<NumericMatrix>(seg_sites[locus]);
     size_t n_snps = source.ncol();
     target = NumericMatrix(target_rows, n_snps);
-    NumericVector positions = getPositions(source);
-    NumericVector trio_locus = getTrioLocus(source);
+    NumericVector positions = coala::getPositions(source);
+    NumericVector trio_locus = coala::getTrioLocus(source);
 
     // Sample pseudo chromosomes
     for (size_t ind = 0; ind < individuals; ++ind) {
