@@ -4,7 +4,7 @@ print.segsites <- function(x, ...) {
 }
 
 
-"[.segsites" <- function(x, chrs, snps) {
+"[.segsites" <- function(x, chrs, snps, drop = FALSE) {
   class(x) <- "matrix"
   create_segsites(snps = x[chrs, select = snps, drop = FALSE],
                   positions = get_positions(x)[snps],
