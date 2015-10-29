@@ -22,18 +22,13 @@ test_that("report files are parsed correctly", {
 1.11	1.000000
 2.22	0.200000
 3.33	0.030000
-
-//2
-1.23	4.000000
-2.34	0.500000
-3.45	0.060000
-", file = file.path(tmp_dir, "OmegaPlus_Report.op"))
+", file = file.path(tmp_dir, "OmegaPlus_Report.1"))
 
   op <- sumstat_omega(name = "op", min_win = 12, max_win = 112, grid = 5)
-  expect_equal(op$parse_report(tmp_dir, n_grid = 3, start_locus = 1),
-               data.frame(locus = c(1, 1, 1, 2, 2, 2),
-                          pos = c(1.11, 2.22, 3.33, 1.23, 2.34, 3.45),
-                          omega = c(1, .2, .03, 4, .5, .06)))
+  expect_equal(op$parse_report(tmp_dir, n_grid = 3, locus = 1),
+               data.frame(locus = c(1, 1, 1),
+                          pos = c(1.11, 2.22, 3.33),
+                          omega = c(1, .2, .03)))
   unlink(tmp_dir, recursive = TRUE)
 })
 
@@ -47,7 +42,7 @@ test_that("Omega can be calculate", {
     sumstat_omega("op", grid = 10)
   stat <- simulate(model)
   expect_false(is.null(stat$op))
-  expect_equal(dim(stat$op), c(20, 3))
+  expect_equal(ncol(stat$op), 3)
   expect_true(all(1:3 %in% stat$op$locus))
 })
 
@@ -63,8 +58,22 @@ test_that("Omega checks that the number of grid points is valid", {
 test_that("Omega works if there are few SNPs", {
   if (!has_omega()) skip("OmegaPlus not found")
   model <- coal_model(10, 2, 1000) +
+    feat_mutation(1, fixed_number = TRUE) +
+    sumstat_omega("op", grid = 10)
+  expect_equal(dim(simulate(model)$op), c(2, 3))
+
+  model <- coal_model(10, 1, 1000) +
     feat_mutation(2, fixed_number = TRUE) +
     sumstat_omega("op", grid = 10)
+  expect_equal(dim(simulate(model)$op), c(1, 3))
+})
+
+
+test_that("Omega works if grid is too large", {
+  if (!has_omega()) skip("OmegaPlus not found")
+  model <- coal_model(10, 1, 100) +
+    feat_mutation(10, fixed_number = TRUE) +
+    sumstat_omega("op", grid = 100)
   simulate(model)
 })
 

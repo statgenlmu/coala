@@ -58,3 +58,14 @@ test_that("subsetting of segsites works", {
   expect_equal(dim(segsites[1:2 , ]), c(2, 3))
   expect_equal(dim(segsites[-2 , 1:3]), c(2, 2))
 })
+
+
+test_that("segsites can be converted to ms-output", {
+  segsites <- create_test_segsites()
+  output <- conv_to_ms_output(segsites)
+  expect_equal(output, c("segsites: 5",
+                         "positions: 0.10 0.20 0.50 0.70 0.75",
+                         "11011",
+                         "01010",
+                         "01101"))
+})

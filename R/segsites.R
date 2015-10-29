@@ -21,3 +21,12 @@ create_test_segsites <- function() {
                             0, 1, 1, 0, 1), 3, 5, byrow = TRUE)),
                   c(.1, .2, .5, .7, .75))
 }
+
+
+conv_to_ms_output <- function(segsites) {
+  c(paste("segsites:", ncol(segsites)),
+    paste("positions:", paste(format(get_positions(segsites),
+                                     scientific = FALSE),
+                              collapse = " ")),
+    apply(segsites, 1, paste, collapse = ""))
+}

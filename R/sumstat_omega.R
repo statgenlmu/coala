@@ -1,11 +1,14 @@
 #' @importFrom assertthat assert_that is.number
 stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
   private = list(
-    req_files = TRUE,
+    req_segsites = TRUE,
     binary = NULL,
     min_win = NULL,
     max_win = NULL,
-    grid = NULL
+    grid = NULL,
+    create_empty_result = function(locus, locus_length) {
+      data.frame(locus = locus, pos = locus_length / 2, omega = 0)
+    }
   ),
   public = list(
     initialize = function(name, min_win, max_win, grid, binary) {
@@ -40,36 +43,61 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
     calculate = function(seg_sites, trees, files, model) {
       cur_wd <- getwd()
 
-      op_list <- lapply(seq(along = files), function(i) {
-        tmp_dir <- tempfile("omegaprime")
-        dir.create(tmp_dir)
-        setwd(tmp_dir)
+      tmp_dir <- tempfile("omegaprime")
+      dir.create(tmp_dir)
+      setwd(tmp_dir)
+      grid <- self$get_grid()
+
+      op_list <- lapply(seq(along = seg_sites), function(i) {
+        locus_length <- get_locus_length(model, locus = i)
+
+        # Return 0 if there are few SNPs
+        if (ncol(seg_sites[[i]]) <= 2) {
+          return(private$create_empty_result(i, locus_length))
+        }
+
+        # Adjust number of grid points if needed
+        pos_rel <- get_positions(seg_sites[[i]])
+        max_grid <- floor(diff(pos_rel[c(1, length(pos_rel))] * locus_length))
+        if (grid > max_grid) grid <- max_grid - 2
+        if (grid < 1) return(private$create_empty_result(i, locus_length))
+
+        # Create an input file
+        tmp_file <- tempfile("omega")
+        cat(c("ms 10 1 -t 5",
+              "3579 27011 59243",
+              "",
+              "//",
+              conv_to_ms_output(seg_sites[[i]])),
+              "", sep = "\n", file = tmp_file)
+
+        # Execute OmegaPlus
         system2(private$binary,
-                args = c("-name op",
+                args = c("-name", i,
                          "-minwin", self$get_min_win(),
                          "-maxwin", self$get_max_win(),
-                         "-grid", self$get_grid(),
-                         "-length", get_locus_length(model, group = i),
-                         "-input", files[i]),
+                         "-grid", grid,
+                         "-length", locus_length,
+                         "-input", tmp_file),
                 stdout = TRUE)
-        op <- self$parse_report(tmp_dir, self$get_grid(), 1)
-        unlink(tmp_dir, recursive = TRUE)
-        op
+        unlink(tmp_file)
+
+        # Parse the results
+        self$parse_report(tmp_dir, grid, i)
       })
 
+      unlink(tmp_dir, recursive = TRUE)
       setwd(cur_wd)
 
       do.call(rbind, op_list)
     },
-    parse_report = function(dir, n_grid, start_locus) {
-      op_file <- file.path(dir, "OmegaPlus_Report.op")
+    parse_report = function(dir, n_grid, locus) {
+      op_file <- file.path(dir, paste0("OmegaPlus_Report.", locus))
       if (!file.exists(op_file)) stop("Calculation of omega failed.")
       values <- read.delim(op_file, header = FALSE, comment.char = "/")
       colnames(values) <- c("pos", "omega")
       assert_that(nrow(values) %% n_grid == 0)
-      data.frame(locus = rep(start_locus:(nrow(values) / n_grid),
-                             each = n_grid),
-                 values)
+      data.frame(locus = locus, values)
     },
     get_grid = function() private$grid,
     get_min_win = function() private$min_win,
