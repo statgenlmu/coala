@@ -97,6 +97,8 @@ calc_sumstats <- function(seg_sites, trees, files, model,
                                     get_ploidy(model),
                                     get_samples_per_ind(model))
     }
+
+    assert_that(all(vapply(seg_sites, is_segsites, logical(1))))
   }
 
   for (stat in model$sum_stats) {

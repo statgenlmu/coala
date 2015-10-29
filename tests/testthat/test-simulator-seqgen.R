@@ -59,32 +59,32 @@ test_that("it parses seqgen output", {
                                    locus_number = 2, outgroup_size = 1,
                                    calc_segsites = TRUE)
 
-  seg_sites_1 <- matrix(c(1, 1, 1, 1, 1, 1, 1,
-                          1, 1, 1, 1, 1, 1, 0,
-                          1, 0, 1, 1, 1, 1, 1,
-                          1, 1, 1, 1, 1, 1, 1,
-                          1, 1, 1, 0, 0, 1, 1,
-                          1, 1, 1, 0, 0, 0, 0,
-                          1, 1, 1, 0, 0, 1, 1,
-                          1, 1, 1, 0, 0, 0, 0,
-                          1, 1, 0, 0, 0, 1, 1,
-                          0, 1, 1, 0, 1, 0, 1),
-                        10, 7, byrow = TRUE)
-  attr(seg_sites_1, "positions") <- c(2, 4:9) / 9
+  seg_sites_1 <- create_segsites(matrix(c(1, 1, 1, 1, 1, 1, 1,
+                                          1, 1, 1, 1, 1, 1, 0,
+                                          1, 0, 1, 1, 1, 1, 1,
+                                          1, 1, 1, 1, 1, 1, 1,
+                                          1, 1, 1, 0, 0, 1, 1,
+                                          1, 1, 1, 0, 0, 0, 0,
+                                          1, 1, 1, 0, 0, 1, 1,
+                                          1, 1, 1, 0, 0, 0, 0,
+                                          1, 1, 0, 0, 0, 1, 1,
+                                          0, 1, 1, 0, 1, 0, 1),
+                                        10, 7, byrow = TRUE),
+                                 c(2, 4:9) / 9)
   expect_equal(seg_sites[[1]], seg_sites_1)
 
-  seg_sites_2 <- matrix(c(1, 1, 1, 1, 1,
-                          0, 0, 0, 1, 1,
-                          1, 1, 0, 1, 1,
-                          1, 0, 0, 1, 1,
-                          0, 1, 1, 1, 0,
-                          0, 1, 1, 1, 1,
-                          0, 1, 1, 1, 0,
-                          0, 1, 1, 0, 1,
-                          1, 1, 1, 1, 1,
-                          0, 1, 1, 1, 0),
-                        10, 5, byrow = TRUE)
-  attr(seg_sites_2, "positions") <- c(1, 2, 3, 8, 9) / 9
+  seg_sites_2 <- create_segsites(matrix(c(1, 1, 1, 1, 1,
+                                          0, 0, 0, 1, 1,
+                                          1, 1, 0, 1, 1,
+                                          1, 0, 0, 1, 1,
+                                          0, 1, 1, 1, 0,
+                                          0, 1, 1, 1, 1,
+                                          0, 1, 1, 1, 0,
+                                          0, 1, 1, 0, 1,
+                                          1, 1, 1, 1, 1,
+                                          0, 1, 1, 1, 0),
+                                        10, 5, byrow = TRUE),
+                                 c(1, 2, 3, 8, 9) / 9)
   expect_equal(seg_sites[[2]], seg_sites_2)
 
 
@@ -94,12 +94,10 @@ test_that("it parses seqgen output", {
                                    calc_segsites = TRUE)
 
   seg_sites_o1 <- seg_sites_1[1:8, 4, drop = FALSE]
-  attr(seg_sites_o1, "positions") <- attr(seg_sites_1, "positions")[4]
-  expect_equal(seg_sites[[1]], seg_sites_o1)
+  expect_equivalent(seg_sites[[1]], seg_sites_o1)
 
   seg_sites_o2 <- seg_sites_1[1:8, c(), drop = FALSE]
-  attr(seg_sites_o2, "positions") <- attr(seg_sites_1, "positions")[c()]
-  expect_equal(seg_sites[[2]], seg_sites_o2)
+  expect_equivalent(seg_sites[[2]], seg_sites_o2)
 
   # Unexpected sequence character
   capture.output({

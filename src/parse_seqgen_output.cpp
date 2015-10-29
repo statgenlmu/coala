@@ -103,8 +103,8 @@ NumericMatrix conv_seq_to_segsites(NumericMatrix sequence,
     }
   }
 
-  seg_sites.attr("positions") = wrap(positions);
-  return seg_sites;
+  return coala::createSegsites(seg_sites, wrap(positions),
+                               NumericVector(0), false);
 }
 
 

@@ -45,7 +45,6 @@ test_that("unphasing works", {
                                              0, 1, 0, 0), 4, 4, byrow = TRUE),
                                     c(0.1, 0.2, 0.5, 0.7))
 
-
   phased <- unphase_segsites(seg_sites, 2, 1)
   expect_that(phased, is_a("list"))
   expect_that(dim(phased[[1]])[1], is_equivalent_to(2))
@@ -75,9 +74,8 @@ test_that("unphasing works", {
   phased <- unphase_segsites(seg_sites, 2, 2)
   expect_that(phased, is_a("list"))
   expect_equal(length(phased), 1)
-  expect_equal(dim(phased[[1]]), c(4, 4))
+  expect_equal(dim(phased[[1]]), c(4, 2))
   expect_equal(colSums(seg_sites[[1]]), colSums(phased[[1]]))
-
 
   seg_sites[[2]] <- seg_sites[[1]]
   phased <- unphase_segsites(seg_sites, 2, 1)

@@ -17,8 +17,8 @@ generate_trio_trees <- function(trees, llm) {
     .Call('coala_generate_trio_trees', PACKAGE = 'coala', trees, llm)
 }
 
-create_segsites <- function(snps, positions = numeric(0), trio_locus = numeric(0)) {
-    .Call('coala_create_segsites', PACKAGE = 'coala', snps, positions, trio_locus)
+create_segsites <- function(snps, positions = numeric(0), trio_locus = numeric(0), check = TRUE) {
+    .Call('coala_create_segsites', PACKAGE = 'coala', snps, positions, trio_locus, check)
 }
 
 get_positions <- function(seg_sites) {

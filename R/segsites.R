@@ -26,7 +26,7 @@ is_segsites <- function(segsites) inherits(segsites, "segsites")
 
 create_test_segsites <- function() {
   create_segsites((matrix(c(1, 1, 0, 1, 1,
-                            0, 1, 0, 1, 0,
+                            0, 0, 0, 1, 0,
                             0, 1, 1, 0, 1), 3, 5, byrow = TRUE)),
                   c(.1, .2, .5, .7, .75))
 }
@@ -38,4 +38,21 @@ conv_to_ms_output <- function(segsites) {
                                      scientific = FALSE),
                               collapse = " ")),
     apply(segsites, 1, paste, collapse = ""))
+}
+
+
+create_trios <- function(left, middle, right) {
+  assert_that(length(left) == length(middle))
+  assert_that(length(left) == length(right))
+
+  lapply(seq(along = left), function(locus) {
+    create_segsites(cbind(left[[locus]], middle[[locus]], right[[locus]]),
+                    c(get_positions(left[[locus]]),
+                      get_positions(middle[[locus]]),
+                      get_positions(right[[locus]])),
+                    c(rep(-1, ncol(left[[locus]])),
+                      rep( 0, ncol(middle[[locus]])),
+                      rep( 1, ncol(right[[locus]]))),
+                    check = FALSE)
+  })
 }

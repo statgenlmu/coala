@@ -13,15 +13,15 @@ test_that("snp masks are generated corretly", {
   skip_if_not_installed("rehh")
 
   stat_ihh <- sumstat_ihh(population = 1)
-  expect_equal(stat_ihh$create_snp_mask(seg_sites, 1:4), rep(TRUE, 5))
-  expect_equal(stat_ihh$create_snp_mask(seg_sites, 1:2),
-               c(FALSE, TRUE, FALSE, TRUE, TRUE))
+  expect_equal(stat_ihh$create_snp_mask(seg_sites), rep(TRUE, 5))
 
   stat_ihh <- sumstat_ihh(population = 1, max_snps = 2)
-  snp_mask <- stat_ihh$create_snp_mask(seg_sites, 1:2)
-  expect_true(all(snp_mask %in% c(2, 4, 5)))
-  expect_true(all(snp_mask %in% c(2, 4, 5)))
-  expect_equal(length(snp_mask), 2)
+  for (i in 1:10) {
+    snp_mask <- stat_ihh$create_snp_mask(seg_sites)
+    expect_true(all(snp_mask %in% 1:5))
+    expect_equal(length(snp_mask), 2)
+    expect_equal(sort(snp_mask), snp_mask)
+  }
 })
 
 
@@ -35,15 +35,12 @@ test_that("generation of rehh data works", {
   expect_equal(rehh_data@nhap, 4)
   expect_equal(rehh_data@nsnp, 5)
 
-  rehh_data <- stat_ihh$create_rehh_data(matrix(0, 4, 0), numeric(), 1:4)
+  rehh_data <- stat_ihh$create_rehh_data(create_segsites(matrix(0, 4, 0)),
+                                                         numeric(), 1:4)
   expect_equal(rehh_data@haplo, matrix(0, 4, 0))
 
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, numeric())
   expect_equal(rehh_data@haplo, matrix(0, 0, 0))
-
-  seg_sites <- matrix(1, 4, 5)
-  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
-  expect_equal(rehh_data@haplo, matrix(0, 4, 0))
 })
 
 

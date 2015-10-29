@@ -6,8 +6,9 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericMatrix create_segsites(NumericMatrix snps,
                               NumericVector positions = NumericVector(0),
-                              NumericVector trio_locus = NumericVector(0)) {
-  return coala::createSegsites(snps, positions, trio_locus);
+                              NumericVector trio_locus = NumericVector(0),
+                              bool check = true) {
+  return coala::createSegsites(snps, positions, trio_locus, check);
 }
 
 
