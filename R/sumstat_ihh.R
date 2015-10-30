@@ -16,7 +16,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
                               IES = numeric())
   ),
   public = list(
-    initialize = function(name, population, max_snps, calc_ihs) {
+    initialize = function(name, population, max_snps, calc_ihs, transformation) {
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
       assert_that(is.numeric(max_snps))
@@ -26,7 +26,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
       private$population <- population
       private$max_snps <- max_snps
       private$use_ihs <- calc_ihs
-      super$initialize(name)
+      super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
       assert_that(is.list(seg_sites))
@@ -137,6 +137,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #' @export
 #' @author Paul Staab
 sumstat_ihh <- function(name = "ihh", population = 1,
-                        max_snps = 1000, calc_ihs = FALSE) {
-  stat_ihh_class$new(name, population, max_snps, calc_ihs)
+                        max_snps = 1000, calc_ihs = FALSE,
+                        transformation = identity) {
+  stat_ihh_class$new(name, population, max_snps, calc_ihs, transformation)
 }

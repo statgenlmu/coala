@@ -5,7 +5,7 @@
 \title{Integrated Extended Haplotype Homozygosity}
 \usage{
 sumstat_ihh(name = "ihh", population = 1, max_snps = 1000,
-  calc_ihs = FALSE)
+  calc_ihs = FALSE, transformation = identity)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -20,6 +20,10 @@ be used to increase performance. Set to \code{Inf} to use all SNPs.}
 
 \item{calc_ihs}{If set to \code{TRUE}, additionally standardized iHS is
 calculated.}
+
+\item{transformation}{An optional function for transforming the results
+of the statistic. If specified, the results of the transformation are
+returned instead of the original values.}
 }
 \value{
 When added to a model, the iHH statistics are calculated after

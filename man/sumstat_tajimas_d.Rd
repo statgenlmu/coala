@@ -4,7 +4,8 @@
 \alias{sumstat_tajimas_d}
 \title{Tajima's D}
 \usage{
-sumstat_tajimas_d(name = "tajimas_d", population = "all")
+sumstat_tajimas_d(name = "tajimas_d", population = "all",
+  transformation = identity)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -12,6 +13,10 @@ the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
 \item{population}{The population for which the statistic is calculated.}
+
+\item{transformation}{An optional function for transforming the results
+of the statistic. If specified, the results of the transformation are
+returned instead of the original values.}
 }
 \value{
 On simulation, this returns a vector with the value of Tajima's D for

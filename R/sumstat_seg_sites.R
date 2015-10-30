@@ -11,8 +11,8 @@ stat_segsites_class <- R6Class("stat_segsites", inherit = sumstat_class,
 #'
 #' @inheritParams sumstat_four_gamete
 #' @export
-sumstat_seg_sites <- function(name = "seg_sites") {
-  stat_segsites_class$new(name) #nolint
+sumstat_seg_sites <- function(name = "seg_sites", transformation = identity) {
+  stat_segsites_class$new(name, transformation)
 }
 
 

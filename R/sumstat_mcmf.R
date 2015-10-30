@@ -5,11 +5,11 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
     req_segsites = TRUE
   ),
   public = list(
-    initialize = function(name, population) {
+    initialize = function(name, population, transformation) {
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
       private$population <- population
-      super$initialize(name)
+      super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
       calc_mcmf(seg_sites,
@@ -26,6 +26,7 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
 #'
 #' @inheritParams sumstat_four_gamete
 #' @export
-sumstat_mcmf  <- function(name = "mcmf", population = 1) {
-  stat_mcmf_class$new(name, population)
+sumstat_mcmf  <- function(name = "mcmf", population = 1,
+                          transformation = identity) {
+  stat_mcmf_class$new(name, population, transformation)
 }

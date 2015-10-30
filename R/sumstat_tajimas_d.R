@@ -5,10 +5,10 @@ stat_tajimas_d_class <- R6Class("stat_tajimas_d", inherit = sumstat_class,
     req_segsites = TRUE
   ),
   public = list(
-    initialize = function(name, population) {
+    initialize = function(name, population, transformation) {
         assert_that(length(population) == 1)
         private$population <- population
-        super$initialize(name)
+        super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
         ind <- get_population_indiviuals(model, private$population)
@@ -46,6 +46,7 @@ stat_tajimas_d_class <- R6Class("stat_tajimas_d", inherit = sumstat_class,
 #' @return On simulation, this returns a vector with the value of Tajima's D for
 #'   each locus.
 #' @export
-sumstat_tajimas_d <- function(name="tajimas_d", population="all") {
-  stat_tajimas_d_class$new(name, population)
+sumstat_tajimas_d <- function(name = "tajimas_d", population = "all",
+                              transformation = identity) {
+  stat_tajimas_d_class$new(name, population, transformation)
 }

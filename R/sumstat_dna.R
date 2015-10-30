@@ -20,6 +20,6 @@ stat_dna_class <- R6Class("dna_stat", inherit = sumstat_class,
 #'
 #' @inheritParams sumstat_four_gamete
 #' @export
-sumstat_dna <- function(name = "dna") {
-  stat_dna_class$new(name) #nolint
+sumstat_dna <- function(name = "dna", transformation = identity) {
+  stat_dna_class$new(name, transformation)
 }

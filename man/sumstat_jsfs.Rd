@@ -4,7 +4,8 @@
 \alias{sumstat_jsfs}
 \title{Calculates the Joint Site Frequency Spectrum from simulations}
 \usage{
-sumstat_jsfs(name = "jsfs", populations = c(1, 2))
+sumstat_jsfs(name = "jsfs", populations = c(1, 2),
+  transformation = identity)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -12,6 +13,10 @@ the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
 \item{populations}{The populations for which the statistic is calculated.}
+
+\item{transformation}{An optional function for transforming the results
+of the statistic. If specified, the results of the transformation are
+returned instead of the original values.}
 }
 \description{
 Calculates the Joint Site Frequency Spectrum from simulations

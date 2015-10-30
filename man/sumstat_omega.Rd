@@ -5,7 +5,7 @@
 \title{Calculates the Omega Statistic from Simulations}
 \usage{
 sumstat_omega(name = "omega", min_win = 100, max_win = 1000,
-  grid = 1000, binary = "automatic")
+  grid = 1000, binary = "automatic", transformation = identity)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -24,6 +24,10 @@ locus. Should be significantly lower than the locus length.}
 \item{binary}{The path of the binary for OmegaPlus. If set to "automatic",
 coala will try to find a binary called "OmegaPlus" using the PATH
 environment variable.}
+
+\item{transformation}{An optional function for transforming the results
+of the statistic. If specified, the results of the transformation are
+returned instead of the original values.}
 }
 \value{
 A data frame consisting of the locus and the genetic position of the

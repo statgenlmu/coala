@@ -12,7 +12,7 @@ stat_trees_class <- R6Class("stat_trees", inherit = sumstat_class,
 #' @export
 #' @inheritParams sumstat_four_gamete
 sumstat_trees <- function(name = "trees") {
-  stat_trees_class$new(name) #nolint
+  stat_trees_class$new(name, identity)
 }
 
 
@@ -41,5 +41,5 @@ stat_sg_trees_class <- R6Class("stat_sg_trees", inherit = sumstat_class,
 
 # Returns ancestral tress as files for seq-gen
 sumstat_sg_trees <- function() {
-  stat_sg_trees_class$new("trees")
+  stat_sg_trees_class$new("trees", identity)
 }

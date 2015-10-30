@@ -111,8 +111,8 @@ test_that("calc_four_gamete_stat works", {
 
 
 test_that("Simulation the statistic works", {
-  model <- model_theta_tau() + sumstat_four_gamete()
-  stats <- simulate(model, pars = c(1, 5))
+  model <- coal_model(5, 1) + feat_mutation(5) + sumstat_four_gamete()
+  stats <- simulate(model)
   expect_that(stats$four_gamete, is_a("matrix"))
   expect_equal(nrow(stats$four_gamete), get_locus_number(model))
 })

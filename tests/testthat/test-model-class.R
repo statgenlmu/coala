@@ -119,26 +119,6 @@ test_that("locus length matrix generations works", {
 })
 
 
-test_that("Adding and Getting inter locus variation works", {
-  skip("Interlocus variation needs to be reworked")
-  expect_false(has_variation(model_theta_tau()))
-
-  #model_tmp <- model_theta_tau() + feat_recombination(5, variance = 3)
-  #expect_true(has_variation(model_tmp))
-})
-
-
-test_that("setTrioMutationsRates works", {
-  warning("test about model with trio mutation rates deactivated")
-#   model <- model.setTrioMutationRates(model_trios, "17", "theta", group=2)
-#   expect_equal(nrow(search_feature(model, "mutation", group=2)), 1)
-#   expect_equal(search_feature(model, "mutation", group=2)$parameter, "17")
-#   expect_equal(nrow(search_feature(model, "mutation_outer", group=2)), 1)
-#   expect_equal(search_feature(model, "mutation_outer", group=2)$parameter,
-#                "theta")
-})
-
-
 test_that("getting the available Populations works", {
   model <- coal_model(10:11, 100)
   expect_equal(get_populations(model), 1:2)
