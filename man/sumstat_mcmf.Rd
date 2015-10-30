@@ -4,7 +4,7 @@
 \alias{sumstat_mcmf}
 \title{The MCMF Summary Statistic}
 \usage{
-sumstat_mcmf(name = "mcmf", population = 1)
+sumstat_mcmf(name = "mcmf", population = 1, transformation = identity)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -12,6 +12,10 @@ the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
 \item{population}{The population for which the statistic is calculated.}
+
+\item{transformation}{An optional function for transforming the results
+of the statistic. If specified, the results of the transformation are
+returned instead of the original values.}
 }
 \description{
 When adding this to a model, the "Most Common Mutation Frequecy" summary

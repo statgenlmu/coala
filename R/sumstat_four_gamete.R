@@ -5,11 +5,11 @@ stat_four_gamete_class <- R6Class("stat_four_gamete", inherit = sumstat_class,
     req_segsites = TRUE
   ),
   public = list(
-    initialize = function(name, population) {
+    initialize = function(name, population, transformation) {
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
       private$population <- population
-      super$initialize(name)
+      super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
       calc_four_gamete_stat(seg_sites,
@@ -54,7 +54,11 @@ stat_four_gamete_class <- R6Class("stat_four_gamete", inherit = sumstat_class,
 #'   the value of the statistics are written to an entry of the returned list
 #'   with this name. Summary statistic names must be unique in a model.
 #' @param population The population for which the statistic is calculated.
+#' @param transformation An optional function for transforming the results
+#'   of the statistic. If specified, the results of the transformation are
+#'   returned instead of the original values.
 #' @export
-sumstat_four_gamete  <- function(name="four_gamete", population=1) {
-  stat_four_gamete_class$new(name, population) #nolint
+sumstat_four_gamete  <- function(name = "four_gamete", population = 1,
+                                 transformation = identity) {
+  stat_four_gamete_class$new(name, population, transformation)
 }

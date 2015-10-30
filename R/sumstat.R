@@ -3,11 +3,17 @@ sumstat_class <- R6Class("sumstat",
     name = NA,
     req_files = FALSE,
     req_trees = FALSE,
-    req_segsites = FALSE
+    req_segsites = FALSE,
+    transformation = NULL
   ),
   public = list(
-    initialize = function(name) {
+    initialize = function(name, transformation) {
+      assert_that(is.character(name))
+      assert_that(length(name) == 1)
       private$name <- name
+
+      assert_that(is.function(transformation))
+      private$transformation <- transformation
     },
     calculate = function(seg_sites, trees, files, model) {
       stop("Overwrite this function with the calculation of the statistic.")
@@ -22,7 +28,8 @@ sumstat_class <- R6Class("sumstat",
     requires_files = function() private$req_files,
     requires_segsites = function() private$req_segsites,
     requires_trees = function() private$req_trees,
-    print = function() cat(class(self)[1], "\n")
+    print = function() cat(class(self)[1], "\n"),
+    transform = function(x) private$transformation(x)
   )
 )
 
@@ -91,8 +98,8 @@ calc_sumstats <- function(seg_sites, trees, files, model,
   }
 
   for (stat in model$sum_stats) {
-    sum_stats[[stat$get_name()]] <- stat$calculate(seg_sites, trees,
-                                                   files, model)
+    sum_stats[[stat$get_name()]] <-
+      stat$transform(stat$calculate(seg_sites, trees, files, model))
   }
 
   sum_stats

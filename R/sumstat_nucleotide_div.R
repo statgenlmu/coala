@@ -5,10 +5,10 @@ stat_pi_class <- R6Class("stat_pi", inherit = sumstat_class,
     req_segsites = TRUE
   ),
   public = list(
-    initialize = function(name, population) {
+    initialize = function(name, population, transformation) {
       assert_that(length(population) == 1)
       private$population <- population
-      super$initialize(name)
+      super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
       ind <- get_population_indiviuals(model, private$population)
@@ -35,6 +35,7 @@ stat_pi_class <- R6Class("stat_pi", inherit = sumstat_class,
 #' @return On simulation, this returns a vector with the value of pi for
 #'   each locus.
 #' @export
-sumstat_nucleotide_div <- function(name="pi", population=1) {
-  stat_pi_class$new(name, population) #nolint
+sumstat_nucleotide_div <- function(name = "pi", population = 1,
+                                   transformation = identity) {
+  stat_pi_class$new(name, population, transformation)
 }

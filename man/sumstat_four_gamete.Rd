@@ -4,7 +4,8 @@
 \alias{sumstat_four_gamete}
 \title{A Summary Statistic based on the Four-Gamete-Condition}
 \usage{
-sumstat_four_gamete(name = "four_gamete", population = 1)
+sumstat_four_gamete(name = "four_gamete", population = 1,
+  transformation = identity)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -12,6 +13,10 @@ the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
 \item{population}{The population for which the statistic is calculated.}
+
+\item{transformation}{An optional function for transforming the results
+of the statistic. If specified, the results of the transformation are
+returned instead of the original values.}
 }
 \description{
 The Four-Gamete-Condition for two SNPs is violated if all four combinations

@@ -7,7 +7,7 @@ stat_file_class <- R6Class("stat_file", inherit = sumstat_class, #nolint
     initialize = function(folder) {
       dir.create(folder, showWarnings = FALSE)
       private$folder <- folder
-      super$initialize("file")
+      super$initialize("file", identity)
     },
     calculate = function(seg_sites, trees, files, model) {
       if (is.list(files)) files <- unlist(files)
@@ -25,5 +25,5 @@ stat_file_class <- R6Class("stat_file", inherit = sumstat_class, #nolint
 #' @param folder The path of a folder where the files will be written.
 #' @export
 sumstat_file <- function(folder) {
-  stat_file_class$new(folder) #nolint
+  stat_file_class$new(folder)
 }

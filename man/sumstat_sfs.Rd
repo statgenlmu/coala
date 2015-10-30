@@ -4,7 +4,7 @@
 \alias{sumstat_sfs}
 \title{Calculates the Site Frequency Spectrum from simulations}
 \usage{
-sumstat_sfs(name = "sfs", population = "all")
+sumstat_sfs(name = "sfs", population = "all", transformation = identity)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -14,6 +14,10 @@ with this name. Summary statistic names must be unique in a model.}
 \item{population}{Either the number of a population for with the SFS is
 calculated, or \code{"all"} to calculate the combined SFS of all
 populations.}
+
+\item{transformation}{An optional function for transforming the results
+of the statistic. If specified, the results of the transformation are
+returned instead of the original values.}
 }
 \description{
 Calculates the Site Frequency Spectrum from simulations

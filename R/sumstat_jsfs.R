@@ -5,11 +5,11 @@ stat_jsfs_class <- R6Class("stat_jsfs", inherit = sumstat_class,
     req_segsites = TRUE
   ),
   public = list(
-    initialize = function(name, populations) {
+    initialize = function(name, populations, transformation) {
       assert_that(is.numeric(populations))
       assert_that(length(populations) == 2)
       private$populations <- populations
-      super$initialize(name)
+      super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
       calc_jsfs(seg_sites,
@@ -24,6 +24,7 @@ stat_jsfs_class <- R6Class("stat_jsfs", inherit = sumstat_class,
 #' @inheritParams sumstat_four_gamete
 #' @param populations The populations for which the statistic is calculated.
 #' @export
-sumstat_jsfs <- function(name="jsfs", populations=c(1,2)) {
-  stat_jsfs_class$new(name, populations) #nolint
+sumstat_jsfs <- function(name = "jsfs", populations = c(1,2),
+                         transformation = identity) {
+  stat_jsfs_class$new(name, populations, transformation)
 }

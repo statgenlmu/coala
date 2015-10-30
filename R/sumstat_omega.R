@@ -11,7 +11,7 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
     }
   ),
   public = list(
-    initialize = function(name, min_win, max_win, grid, binary) {
+    initialize = function(name, min_win, max_win, grid, binary, transformation) {
       assert_that(is.number(min_win))
       private$min_win <- min_win
       assert_that(is.number(max_win))
@@ -29,7 +29,7 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
         assert_that(file.exists(binary))
       }
       private$binary <- binary
-      super$initialize(name)
+      super$initialize(name, transformation)
     },
     check = function(model) {
       if (has_trios(model)) {
@@ -140,8 +140,9 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
 #'   calculated omega values.
 #' @export
 sumstat_omega <- function(name = "omega", min_win = 100, max_win = 1000,
-                          grid = 1000, binary = "automatic") {
-  stat_omega_class$new(name, min_win, max_win, grid, binary)
+                          grid = 1000, binary = "automatic",
+                          transformation = identity) {
+  stat_omega_class$new(name, min_win, max_win, grid, binary, transformation)
 }
 
 has_omega <- function() {

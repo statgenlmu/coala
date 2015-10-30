@@ -1,4 +1,10 @@
-coala 0.1.1.9009
+coala 0.1.1.9011
+----------------
+
+* Add optional in-place transformation of sumstats values.
+
+
+coala 0.1.1.9010
 ----------------
 
 * Add support for the omega statistic using OmegaPlus (#109).

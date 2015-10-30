@@ -35,6 +35,7 @@ test_that("models with priors can be simulated", {
   expect_true(all(stats$pars %in% 0:3))
 })
 
+
 test_that("simulating with more than one repetition works", {
   sim <- simulate(model_theta_tau(), 2, seed = 17, pars = c(1, 5))
   expect_that(sim, is_a("list"))
