@@ -231,7 +231,7 @@ test_that("test.seqgenWithMsms", {
 
   set.seed(4444)
   sum.stats2 <- simulate(m1, pars = c(1, 5))
-  expect_equal(sum.stats2, sum.stats)
+  expect_equal(sum.stats2$jsfs, sum.stats$jsfs)
 
   # With interlocus variation
   m2 <- model_hky() +
@@ -395,4 +395,33 @@ test_that("seqgen works with zero inflation", {
 
   stats <- simulate(model)
   expect_is(stats, "list")
+})
+
+
+test_that("seqgen command are added to the output", {
+  if (!has_seqgen()) skip("seqgen not installed")
+
+  model <- model_hky()
+  output <- get_simulator("seqgen")$simulate(model, c(tau = 1, theta = 5))
+  expect_true(is.list(output$cmds))
+  expect_equal(length(output$cmds), 2)
+  expect_true(grepl("^seq-gen ", output$cmds$seqgen[[1]]))
+
+  model <- model_hky() + locus_single(10)
+  output <- get_simulator("seqgen")$simulate(model, c(tau = 1, theta = 5))
+  expect_true(is.list(output$cmds))
+  expect_equal(length(output$cmds), 2)
+  expect_equal(length(output$cmd$seqgen), 2)
+  expect_equal(length(output$cmd$seqgen[[1]]), 1)
+  expect_equal(length(output$cmd$seqgen[[2]]), 1)
+  expect_true(grepl("^seq-gen ", output$cmds$seqgen[[2]]))
+
+  model <- model_hky() + locus_trio()
+  output <- get_simulator("seqgen")$simulate(model, c(tau = 1, theta = 5))
+  expect_true(is.list(output$cmds))
+  expect_equal(length(output$cmds), 2)
+  expect_equal(length(output$cmd$seqgen), 2)
+  expect_equal(length(output$cmd$seqgen[[1]]), 1)
+  expect_equal(length(output$cmd$seqgen[[2]]), 3)
+  expect_true(all(grepl("^seq-gen ", output$cmds$seqgen[[2]])))
 })

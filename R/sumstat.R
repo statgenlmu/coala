@@ -78,7 +78,9 @@ calc_sumstats <- function(seg_sites, trees, files, model,
   if (missing(pars)) pars <- numeric(0)
   stopifnot(is.model(model))
 
-  if (is.list(cmds)) cmds <- do.call(c, cmds)
+  if (is.list(cmds) && simulator$get_name() != "seqgen") {
+    cmds <- do.call(c, cmds)
+  }
 
   sum_stats <- list(pars = pars,
                     cmds = cmds,
