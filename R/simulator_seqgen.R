@@ -114,11 +114,17 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
     simulate = function(model, parameters) {
       # Simulate the ancestral trees
       tree_model <- generate_tree_model(model)
-      trees <- simulate.coalmodel(tree_model, pars = parameters)$trees
+      tree_sim_data <- simulate.coalmodel(tree_model, pars = parameters)
+      trees <- tree_sim_data$trees
       assert_that(!is.null(trees))
+
+      cmd_store <- new.env()
+      cmd_store$list <- list()
+      length(cmd_store$list) <- length(trees)
 
       # Call seq-gen for each locus group
       seg_sites <- lapply(1:length(trees), function(locus_group) {
+
         seqgen_args <- sg_generate_opts(model, parameters, locus_group,
                                         sample_seed(length(trees[[locus_group]])))
 
@@ -129,12 +135,15 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
                                                          c(1, 3, 5)]
         }
 
+        cmd_store$list[[locus_group]] <- rep(NA, length(seqgen_args))
+
         # Call seq-gen of each trio locus
         group_loci <- lapply(seq(along = seqgen_args), function(trio_locus) {
           seqgen_file <- tempfile("seqgen")
           cmd <- paste(seqgen_args[trio_locus],
                        trees[[locus_group]][trio_locus])
 
+          cmd_store$list[[locus_group]][trio_locus] <- paste("seq-gen", cmd)
           sim_output <- self$call(cmd)
 
           parse_seqgen_output(sim_output,
@@ -164,8 +173,12 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
         seg_sites <- NULL
       }
 
+      # Return the commands
+      cmds <- list(trees = tree_sim_data$cmds,
+                   seqgen = cmd_store$list)
+
       calc_sumstats(seg_sites, NULL, sequences, model,
-                    parameters, NULL, get_simulator("seqgen"))
+                    parameters, cmds, get_simulator("seqgen"))
     },
     get_cmd = function(model) {
       c(trees = get_cmd(generate_tree_model(model)),
