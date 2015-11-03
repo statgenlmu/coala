@@ -123,3 +123,21 @@ test_that("JSFS is caluculated with an outgroup present", {
                         1, 1,
                         0, 1), 3, 2, byrow = TRUE))
 })
+
+
+test_that("Per locus calculation of JSFS works", {
+  seg_sites_list <- list(create_test_segsites(),
+                         create_test_segsites(),
+                         create_test_segsites())
+
+  model <- coal_model(c(2, 1), 3)
+  jsfs <- sumstat_jsfs("jsfs", c(1, 2), per_locus = TRUE)
+  stat <- jsfs$calculate(seg_sites_list, NULL, NULL, model)
+  expect_that(stat, is_a("list"))
+  expect_equal(stat[[1]], stat[[2]])
+  expect_equal(stat[[1]], stat[[3]])
+
+  jsfs_full <- sumstat_jsfs("jsfs", c(1, 2), per_locus = FALSE)
+  expect_equal(3 * stat[[1]],
+               jsfs_full$calculate(seg_sites_list, NULL, NULL, model))
+})

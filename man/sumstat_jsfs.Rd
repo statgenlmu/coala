@@ -4,7 +4,7 @@
 \alias{sumstat_jsfs}
 \title{Calculates the Joint Site Frequency Spectrum from simulations}
 \usage{
-sumstat_jsfs(name = "jsfs", populations = c(1, 2),
+sumstat_jsfs(name = "jsfs", populations = c(1, 2), per_locus = FALSE,
   transformation = identity)
 }
 \arguments{
@@ -13,6 +13,10 @@ the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
 \item{populations}{The populations for which the statistic is calculated.}
+
+\item{per_locus}{If \code{TRUE}, the JSFS is return for each locus instead
+of globally. In this case, the result is a list, where each entry is the
+JSFS for the corresponding locus.}
 
 \item{transformation}{An optional function for transforming the results
 of the statistic. If specified, the results of the transformation are
