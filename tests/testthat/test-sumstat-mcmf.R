@@ -33,9 +33,7 @@ test_that("calculation is correct", {
   expect_equal(calc_mcmf(seg_sites, 2:4), c(c(4 / 9), NA))
   expect_error(calc_mcmf(seg_sites, 1:5))
 
-  seg_sites <- list(create_segsites(matrix(0, 4, 0)))
-  attr(seg_sites[[1]], "locus") <- numeric()
-  attr(seg_sites[[1]], "position") <- numeric()
+  seg_sites <- list(create_segsites(matrix(0, 4, 0), numeric()))
   expect_true(is.na(calc_mcmf(seg_sites, 1:4)))
 })
 

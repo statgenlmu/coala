@@ -59,15 +59,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // create_segsites
-NumericMatrix create_segsites(NumericMatrix snps, NumericVector positions, NumericVector trio_locus);
-RcppExport SEXP coala_create_segsites(SEXP snpsSEXP, SEXP positionsSEXP, SEXP trio_locusSEXP) {
+NumericMatrix create_segsites(NumericMatrix snps, NumericVector positions, NumericVector trio_locus, bool check);
+RcppExport SEXP coala_create_segsites(SEXP snpsSEXP, SEXP positionsSEXP, SEXP trio_locusSEXP, SEXP checkSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< NumericMatrix >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type positions(positionsSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type trio_locus(trio_locusSEXP);
-    __result = Rcpp::wrap(create_segsites(snps, positions, trio_locus));
+    Rcpp::traits::input_parameter< bool >::type check(checkSEXP);
+    __result = Rcpp::wrap(create_segsites(snps, positions, trio_locus, check));
     return __result;
 END_RCPP
 }

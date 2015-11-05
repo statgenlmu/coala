@@ -214,20 +214,3 @@ activate_seqgen <- function(binary, priority = 100) {
   register_simulator(seqgen_class$new(binary, priority))
   invisible(NULL)
 }
-
-
-create_trios <- function(left, middle, right) {
-  assert_that(length(left) == length(middle))
-  assert_that(length(left) == length(right))
-
-  lapply(seq(along = left), function(locus) {
-    seg_sites <- cbind(left[[locus]], middle[[locus]], right[[locus]])
-    attr(seg_sites, "positions") <- c(attr(left[[locus]], "positions"),
-                                      attr(middle[[locus]], "positions"),
-                                      attr(right[[locus]], "positions"))
-    attr(seg_sites, "locus") <- c(rep(-1, ncol(left[[locus]])),
-                                  rep( 0, ncol(middle[[locus]])),
-                                  rep( 1, ncol(right[[locus]])))
-    seg_sites
-  })
-}

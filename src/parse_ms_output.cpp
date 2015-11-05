@@ -69,9 +69,9 @@ List parse_ms_output(const List file_names,
         else if (line.substr(0, 9) == "segsites:") {
           // Rcout << "Parsing Seg. Sites" << std::endl;
           if (line.substr(0, 11) == "segsites: 0") {
-            NumericMatrix ss = NumericMatrix(individuals, 0);
-            ss.attr("positions") = NumericVector(0);
-            seg_sites[locus] = ss;
+            seg_sites[locus] =
+              coala::createSegsites(NumericMatrix(individuals, 0),
+                                    NumericVector(0));
           } else {
             std::getline(output, line);
 
@@ -86,7 +86,8 @@ List parse_ms_output(const List file_names,
               }
             }
 
-            seg_sites[locus] = coala::createSegsites(ss, positions);
+            seg_sites[locus] =
+              coala::createSegsites(ss, positions, NumericVector(0), false);
           }
           std::getline(output, line);
         }

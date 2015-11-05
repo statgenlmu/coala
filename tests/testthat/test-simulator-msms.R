@@ -35,7 +35,7 @@ test_that("msms can simulate seg. sites", {
   expect_equal(stats_1, stats_2)
   expect_that(stats_1$seg_sites, is_a("list"))
   expect_equal(length(stats_1$seg_sites), 2)
-  expect_equal(length(attr(stats_1$seg_sites[[1]], "positions")),
+  expect_equal(length(get_positions(stats_1$seg_sites[[1]])),
                ncol(stats_1$seg_sites[[1]]))
 
   # With recombination
@@ -118,10 +118,10 @@ test_that("simulating unphased data works", {
 test_that("msms can simulate locus trios", {
   if (!has_msms()) skip("msms not installed")
   stat <- get_simulator("msms")$simulate(model_trios())
-  expect_that(attr(stat$seg_sites[[1]], "locus"), is_a("numeric"))
-  expect_true(all(attr(stat$seg_sites[[1]], "locus") %in% -1:1))
-  expect_true(all(attr(stat$seg_sites[[1]], "positions") >= 0))
-  expect_true(all(attr(stat$seg_sites[[1]], "positions") <= 1))
+  expect_that(get_trio_locus(stat$seg_sites[[1]]), is_a("numeric"))
+  expect_true(all(get_trio_locus(stat$seg_sites[[1]]) %in% -1:1))
+  expect_true(all(get_positions(stat$seg_sites[[1]]) >= 0))
+  expect_true(all(get_positions(stat$seg_sites[[1]]) <= 1))
 })
 
 

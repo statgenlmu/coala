@@ -74,8 +74,7 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
       }
 
       seg_sites <- lapply(seg_sites, function(x) {
-        attr(x, "positions") <- as.numeric(colnames(x))
-        x
+        create_segsites(x, as.numeric(colnames(x)))
       })
 
       cmds <- lapply(sim_cmds, function(cmd) {

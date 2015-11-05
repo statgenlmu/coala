@@ -97,7 +97,7 @@ has_trios <- function(model) {
 
 get_snp_positions <- function(seg_sites, model, relative=TRUE) {
   lapply(1:length(seg_sites), function(locus) {
-    pos <- attr(seg_sites[[locus]], "position")
+    pos <- get_positions(seg_sites[[locus]])
     locus_length <- get_locus_length(model, locus, total = FALSE)
 
     # Nothing changes without trios
@@ -107,7 +107,7 @@ get_snp_positions <- function(seg_sites, model, relative=TRUE) {
     }
 
     # Convert if we have trios
-    trio_locus <- attr(seg_sites[[locus]], "locus")
+    trio_locus <- get_trio_locus(seg_sites[[locus]])
     if (is.null(trio_locus)) trio_locus <- 0
     pos[trio_locus == -1] <- pos[trio_locus == -1] * locus_length[1]
     pos[trio_locus == 0] <- pos[trio_locus == 0] * locus_length[3] +
