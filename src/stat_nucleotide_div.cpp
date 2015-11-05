@@ -1,8 +1,9 @@
-#include <Rcpp.h>
+#include "../inst/include/coala.h"
+
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector calc_nucleotide_div(List seg_sites,
+NumericVector calc_nucleotide_div(const coala::SegSites seg_sites,
                                   const NumericVector individuals) {
   size_t n_loci = seg_sites.size();
   NumericVector pi(n_loci);

@@ -9,21 +9,11 @@ test_that("normal initialization of segsites works", {
   expect_equal(dim(segsites), c(3, 3))
   expect_equal(nrow(segsites), 3)
   expect_equal(ncol(segsites), 3)
+  expect_equal(get_positions(segsites), pos)
+  expect_equal(get_trio_locus(segsites), c(0, 0, 0))
 
   expect_error(create_segsites(snps, 1:4/10))
-})
-
-
-test_that("initialization of segsites using attributes works", {
-  snps <- create_segsites(matrix(c(1, 0, 0, 1,
-                                   0, 1, 0, 0,
-                                   1, 0, 1, 0,
-                                   1, 0, 0, 0), 4, 4, byrow = TRUE),
-                          c(0.1, 0.2, 0.5, 0.7),
-                          c(-1, 0, 1, 1))
-  segsites <- create_segsites(snps)
-  expect_equal(get_positions(segsites), c(0.1, 0.2, 0.5, 0.7))
-  expect_equal(get_trio_locus(segsites), c(-1, 0, 1, 1))
+  expect_error(create_segsites(snps, pos, 1:4/10))
 })
 
 

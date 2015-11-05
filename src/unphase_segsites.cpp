@@ -1,24 +1,27 @@
 #include <RcppArmadilloExtensions/sample.h>
-#include "seg_sites.h"
+#include "../inst/include/coala.h"
 
 using namespace Rcpp;
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-List unphase_segsites(const List seg_sites,
+List unphase_segsites(const List seg_sites_list,
                       const long unsigned int ploidy,
                       const long unsigned int samples_per_ind) {
 
-  NumericMatrix target, source = as<NumericMatrix>(seg_sites[0]);
+  if (seg_sites_list.size() == 0) return(List());
+  coala::SegSites segsites = as<coala::SegSites>(seg_sites_list[0]);
+  NumericMatrix target, source = coala::getSNPs(segsites);
   size_t individuals = source.nrow() / ploidy;
-  size_t locus_number = seg_sites.size();
+  size_t locus_number = seg_sites_list.size();
   size_t target_rows = individuals * samples_per_ind;
   IntegerVector idxs, possible_idxs = seq_len(ploidy) - 1;
   List ret(locus_number);
   size_t source_offset, target_offset;
 
   for (size_t locus = 0; locus < locus_number; ++locus) {
-    source = as<NumericMatrix>(seg_sites[locus]);
+    segsites = as<coala::SegSites>(seg_sites_list[locus]);
+    source = coala::getSNPs(segsites);
     size_t n_snps = source.ncol();
     target = NumericMatrix(target_rows, n_snps);
 
@@ -37,8 +40,8 @@ List unphase_segsites(const List seg_sites,
     }
 
     ret[locus] = coala::createSegsites(target,
-                                       coala::getPositions(source),
-                                       coala::getTrioLocus(source),
+                                       coala::getPositions(segsites),
+                                       coala::getTrioLocus(segsites),
                                        ploidy != samples_per_ind);
   }
 

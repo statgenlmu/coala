@@ -1,5 +1,4 @@
-#include <Rcpp.h>
-#include "seg_sites.h"
+#include "../inst/include/coala.h"
 
 using namespace Rcpp;
 
@@ -52,7 +51,8 @@ NumericMatrix calc_four_gamete_stat(const List seg_sites_list,
 
   std::vector<size_t> total_count(4);
   std::vector<bool> combinations(4);
-  NumericMatrix seg_sites;
+  coala::SegSites seg_sites;
+  NumericMatrix snps_matrix;
   NumericVector positions, trio_locus;
   std::vector<size_t> snps;
   snps.reserve(1000);
@@ -64,14 +64,15 @@ NumericMatrix calc_four_gamete_stat(const List seg_sites_list,
     std::fill(total_count.begin(), total_count.end(), 0);
 
     // Get the locus
-    seg_sites = as<NumericMatrix>(seg_sites_list[locus]);
+    seg_sites = as<coala::SegSites>(seg_sites_list[locus]);
+    snps_matrix = coala::getSNPs(seg_sites);
     positions = coala::getPositions(seg_sites);
     trio_locus = coala::getTrioLocus(seg_sites);
 
     // Filter SNPs which are non-polymorpic or singletons in the population
-    n_snps = seg_sites.ncol();
+    n_snps = snps_matrix.ncol();
     for (size_t i = 0; i < n_snps; ++i) {
-      if (!is_singleton(seg_sites, individuals, n_ind, i)) snps.push_back(i);
+      if (!is_singleton(snps_matrix, individuals, n_ind, i)) snps.push_back(i);
     }
     n_snps = snps.size();
 
@@ -96,8 +97,8 @@ NumericMatrix calc_four_gamete_stat(const List seg_sites_list,
 
         // Count combinations
         for (size_t k = 0; k < n_ind; ++k) {
-          combinations[2*seg_sites(individuals[k]-1, idx_i) +
-                         seg_sites(individuals[k]-1, idx_j)] = true;
+          combinations[2 * snps_matrix(individuals[k]-1, idx_i) +
+            snps_matrix(individuals[k]-1, idx_j)] = true;
         }
 
         // If we have all combinations

@@ -1,5 +1,4 @@
-#include <Rcpp.h>
-#include "seg_sites.h"
+#include "../inst/include/coala.h"
 
 using namespace Rcpp;
 
@@ -12,7 +11,7 @@ using namespace Rcpp;
 //' @export
 //' @return The Joint Site Frequency Spectrum, as a matrix.
 // [[Rcpp::export]]
-NumericMatrix calc_jsfs(const List seg_sites,
+NumericMatrix calc_jsfs(const List seg_sites_list,
                         const NumericVector pop1,
                         const NumericVector pop2) {
 
@@ -24,25 +23,27 @@ NumericMatrix calc_jsfs(const List seg_sites,
 
   NumericMatrix jsfs(n_pop1+1, n_pop2+1);
   size_t idx1, idx2, ncol, nrow;
-  NumericMatrix ss;
+  coala::SegSites segsites;
+  NumericMatrix snps;
   NumericVector trio_locus;
 
-  for (int locus = 0; locus < seg_sites.size(); ++locus) {
-    ss = as<NumericMatrix>(seg_sites[locus]);
-    ncol = ss.ncol();
-    nrow = ss.nrow();
+  for (int locus = 0; locus < seg_sites_list.size(); ++locus) {
+    segsites = as<coala::SegSites>(seg_sites_list[locus]);
+    trio_locus = coala::getTrioLocus(segsites);
+    snps = coala::getSNPs(segsites);
+    ncol = snps.ncol();
+    nrow = snps.nrow();
 
     if (ncol == 0) continue;
     if (nrow < nrows_required) stop("Seg. Sites has too few rows.");
-    trio_locus = coala::getTrioLocus(ss);
 
     for (size_t j = 0; j < ncol; ++j) {
       if (trio_locus(j) != 0) continue; // Only calculate for middle locus
 
       idx1 = 0; idx2 = 0;
 
-      for (size_t i = 0; i < n_pop1; ++i) idx1 += ss(pop1[i]-1,j);
-      for (size_t i = 0; i < n_pop2; ++i) idx2 += ss(pop2[i]-1,j);
+      for (size_t i = 0; i < n_pop1; ++i) idx1 += snps(pop1[i]-1,j);
+      for (size_t i = 0; i < n_pop2; ++i) idx2 += snps(pop2[i]-1,j);
 
       //Rcout << "SNP " << j << ": " << idx1 << "-" << idx2 << std::endl;
       ++jsfs(idx1, idx2);

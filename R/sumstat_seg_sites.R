@@ -32,12 +32,11 @@ conv_for_trios <- function(seg_sites, model) {
     pos[middle] <- (pos[middle] - borders[2]) * total_length / locus_length[3]
     pos[right] <- (pos[right] - borders[4]) * total_length / locus_length[5]
 
-    seg_sites[[i]] <- create_segsites(seg_sites[[i]][ , left | middle | right],
-                                      pos[left | middle | right],
-                                      c(rep(-1, sum(left)),
-                                        rep(0, sum(middle)),
-                                        rep(1, sum(right))),
-                                      check = FALSE)
+    seg_sites[[i]] <- set_trio_locus(seg_sites[[i]][ , left | middle | right],
+                                     c(rep(-1, sum(left)),
+                                       rep(0, sum(middle)),
+                                       rep(1, sum(right))))
+
     assert_that(nrow(seg_sites[[i]]) > 0)
   }
   seg_sites

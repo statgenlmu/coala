@@ -1,6 +1,6 @@
-#include <Rcpp.h>
 #include <fstream>
-#include "seg_sites.h"
+#include "../inst/include/coala.h"
+
 
 using namespace Rcpp;
 
