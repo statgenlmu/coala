@@ -1,19 +1,21 @@
 context("SumStat MCMF")
 
-test_that("calculation is correct", {
-  ss <- matrix(c(1, 0, 0, 1,
-                 0, 1, 0, 0,
-                 1, 0, 1, 0,
-                 1, 0, 0, 0), 4, 4, byrow = TRUE)
+ss <- matrix(c(1, 0, 0, 1,
+               0, 1, 0, 0,
+               1, 0, 1, 0,
+               1, 0, 0, 0), 4, 4, byrow = TRUE)
+seg_sites <- list(create_segsites(ss, c(0.1, 0.2, 0.5, 0.7)))
 
-  # No trios
-  seg_sites <- list(create_segsites(ss, c(0.1, 0.2, 0.5, 0.7), rep(0, 4)))
+
+test_that("mcmf is correctly calculation for normal loci", {
   expect_equal(calc_mcmf(seg_sites, 1:4, FALSE), .5)
   expect_equal(calc_mcmf(seg_sites, c(1, 3, 4), FALSE), .5)
   expect_equal(calc_mcmf(seg_sites, 2:4, FALSE), 2/3)
   expect_equal(calc_mcmf(seg_sites, 3:4, FALSE), 1)
+})
 
-  # With trios
+
+test_that("mcmf is correctly calculation for locus trios", {
   seg_sites <- list(create_segsites(cbind(ss, ss, ss),
                                     rep(c(0.1, 0.2, 0.5, 0.7), 3),
                                     rep(c(-1, 0, 1), each = 4)))
@@ -38,29 +40,39 @@ test_that("calculation is correct", {
 })
 
 
+test_that("mcmf is correctly calculation for diplod loci", {
+  expect_equal(calc_mcmf(seg_sites, 1:2, FALSE, ploidy = 2), .75)
+  expect_equal(calc_mcmf(seg_sites, 1, FALSE, ploidy = 2), 1)
+  expect_equal(calc_mcmf(seg_sites, 2, FALSE, ploidy = 2), 1)
+
+  seg_sites[[1]] <- create_segsites(rbind(ss, ss), c(0.1, 0.2, 0.5, 0.7))
+  expect_equal(calc_mcmf(seg_sites, 1:3, FALSE, ploidy = 2), .75)
+  expect_equal(calc_mcmf(seg_sites, 1:4, FALSE, ploidy = 2), .75)
+  expect_error(calc_mcmf(seg_sites, 1:5, FALSE, ploidy = 2))
+  expect_error(calc_mcmf(seg_sites, 1:4, FALSE, ploidy = 3))
+})
+
+
+test_that("mcmf is correctly calculation for trioplod loci", {
+  seg_sites[[1]] <- create_segsites(rbind(ss, ss), c(0.1, 0.2, 0.5, 0.7))
+  expect_equal(calc_mcmf(seg_sites, 1:2, FALSE, ploidy = 3), .75)
+})
+
+
 test_that("initialzation of statistic works", {
-  ss <- matrix(c(1, 0, 0, 1,
-                 1, 1, 0, 0,
-                 1, 0, 1, 0,
-                 1, 0, 0, 0), 4, 4, byrow = TRUE)
+  stat <- sumstat_mcmf(population = 1)
+  expect_equal(stat$calculate(seg_sites, NULL, NULL, coal_model(4)), .5)
 
   seg_sites <- list(create_segsites(cbind(ss, ss, ss),
                                     rep(c(0.1, 0.2, 0.5, 0.7), 3),
                                     rep(c(-1, 0, 1), each = 4)))
-
-  stat <- sumstat_mcmf(population = 1)
-  op <- stat$calculate(seg_sites, NULL, NULL, coal_model(4))
-  expect_that(op, is_a("numeric"))
-  expect_equal(length(op), 1)
-  expect_true(op >= 0 & op <= 1)
+  expect_equal(stat$calculate(seg_sites, NULL, NULL,
+                              coal_model(4) + locus_trio()), 1/3)
 })
 
 
-test_that("simulation of MCMF works", {
-  set.seed(125)
-  model <- model_trios() + sumstat_mcmf(name = "mcmf", population = 1)
-  stats <- simulate(model)
-  expect_that(stats$mcmf, is_a("numeric"))
-  expect_equal(length(stats$mcmf), 1)
-  expect_true(all(stats$mcmf >= 0 & stats$mcmf <= 1))
+test_that("mcmf statistics is correct for diploid models", {
+  stat <- sumstat_mcmf(population = 1)
+  expect_equal(stat$calculate(seg_sites, NULL, NULL,
+                              coal_model(2) + feat_unphased(2, 2)), .75)
 })

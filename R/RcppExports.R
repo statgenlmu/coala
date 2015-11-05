@@ -45,8 +45,8 @@ calc_jsfs <- function(seg_sites, pop1, pop2) {
     .Call('coala_calc_jsfs', PACKAGE = 'coala', seg_sites, pop1, pop2)
 }
 
-calc_mcmf <- function(seg_sites, individuals, has_trios = TRUE) {
-    .Call('coala_calc_mcmf', PACKAGE = 'coala', seg_sites, individuals, has_trios)
+calc_mcmf <- function(seg_sites, individuals, has_trios = TRUE, ploidy = 1L) {
+    .Call('coala_calc_mcmf', PACKAGE = 'coala', seg_sites, individuals, has_trios, ploidy)
 }
 
 calc_nucleotide_div <- function(seg_sites, individuals) {

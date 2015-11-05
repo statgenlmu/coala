@@ -14,7 +14,8 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
     calculate = function(seg_sites, trees, files, model) {
       calc_mcmf(seg_sites,
                 get_population_indiviuals(model, private$population),
-                has_trios(model))
+                has_trios(model),
+                get_ploidy(model))
     }
   )
 )

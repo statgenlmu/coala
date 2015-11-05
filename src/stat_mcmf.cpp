@@ -7,27 +7,56 @@ using namespace Rcpp;
 void maxsplit(const NumericMatrix ss,
               const int trio_locus,
               const NumericVector individuals,
+              const int ploidy,
               int & max_number,
               int & snp_number) {
 
   NumericVector trio_locus_vec = coala::getTrioLocus(ss);
 
   std::map<unsigned int, unsigned int> m;
-  unsigned int key;
-  unsigned int max_key_value = std::pow(2, individuals.size());
+  unsigned int key, ind_nr, genotype;
+  bool switch_snp;
+  bool switch_snp_decided;
+  double half_ploidy = 0.5 * ploidy;
 
   for (int snp = 0; snp < ss.ncol(); ++snp) {
+    Rcout << "SNP" << snp <<  std::endl;
     if (trio_locus_vec[snp] != trio_locus) continue;
 
     // For each SNP, create a binary representation of the SNP...
+    switch_snp = false;
+    switch_snp_decided = false;
     key = 0;
-	  for(int k=1; k < individuals.size(); ++k) {
-	    key *= 2;
-	    key += (ss(individuals[k]-1, snp) != ss(individuals[0]-1, snp));
+	  for (int k = 0; k < individuals.size(); ++k) {
+	    key *= ploidy + 1;
+
+      ind_nr = (individuals[k] - 1) * ploidy;
+      Rcout << "Ind:" << ind_nr;
+	    genotype = 0;
+	    for (int chr = 0; chr < ploidy; ++chr) genotype += ss(ind_nr + chr, snp);
+	    Rcout << " GT:" << genotype;
+
+	    if (!switch_snp_decided) {
+	      if (genotype > half_ploidy) {
+	        switch_snp = true;
+	        switch_snp_decided = true;
+	        Rcout << " switch ";
+	      } else if (genotype < half_ploidy) {
+	        switch_snp_decided = true;
+	        Rcout << " noswitch ";
+	      }
+	    }
+	    if (switch_snp) genotype = ploidy - genotype;
+
+	    Rcout << " SGT:" << genotype;
+	    key += genotype;
+
+	    Rcout << std::endl;
 	  }
+	  Rcout << " KEY:" << key << std::endl;
 
     // Ignore snps that are not segregating in the given individuals
-    if (key == 0 || key == max_key_value) continue;
+    if (key == 0) continue;
 
 	  // and increase the corresponding counter
 	  ++snp_number;
@@ -48,10 +77,12 @@ void maxsplit(const NumericMatrix ss,
 }
 
 
+
 // [[Rcpp::export]]
 NumericVector calc_mcmf(const List seg_sites,
                         const NumericVector individuals,
-                        const bool has_trios = true) {
+                        const bool has_trios = true,
+                        const int ploidy = 1) {
 
   size_t n_loci = seg_sites.size();
   NumericVector mcmf(n_loci);
@@ -61,17 +92,17 @@ NumericVector calc_mcmf(const List seg_sites,
 
   for (size_t locus = 0; locus < n_loci; ++locus) {
     ss = as<NumericMatrix>(seg_sites[locus]);
-    if (max(individuals) > ss.nrow()) stop("Invalid individuals");
+    if (max(individuals) * ploidy > ss.nrow()) stop("Invalid individuals");
 
     max_split = 0;
     snp_number = 0;
 
     if (has_trios) {
-      maxsplit(ss, -1, individuals, max_split, snp_number);
-      maxsplit(ss, 1, individuals, max_split, snp_number);
-      maxsplit(ss, 0, individuals, ignore_result, snp_number);
+      maxsplit(ss, -1, individuals, ploidy, max_split, snp_number);
+      maxsplit(ss, 1, individuals, ploidy, max_split, snp_number);
+      maxsplit(ss, 0, individuals, ploidy, ignore_result, snp_number);
     } else {
-      maxsplit(ss, 0, individuals, max_split, snp_number);
+      maxsplit(ss, 0, individuals, ploidy, max_split, snp_number);
     }
 
     if (snp_number == 0) {
