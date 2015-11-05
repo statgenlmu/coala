@@ -15,6 +15,12 @@ test_that("DNA can be simulated", {
   expect_is(stat$dna[[1]], "matrix")
   expect_is(stat$dna[[2]], "matrix")
 
+  temp_files_before <- list.files(tempdir(), pattern = "^coala-[0-9]+-")
   expect_error(simulate(model + sumstat_sfs() + feat_outgroup(2)))
   expect_error(simulate(model + locus_trio()))
+
+  # Remove tempfiles that may remain because of error exit
+  temp_files_after <- list.files(tempdir(), pattern = "^coala-[0-9]+-")
+  temp_files_diff <- temp_files_after[!temp_files_after %in% temp_files_before]
+  unlink(file.path(tempdir(), temp_files_diff))
 })
