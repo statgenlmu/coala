@@ -1,3 +1,11 @@
+coala 0.1.1.9016
+----------------
+
+* Improved support for polyploid models. The `ploidy` paramater is now
+  provided in the `coal_model` instead of in `feat_unphased`.
+* mcmf is now calculated on unphased genotypes if the data is unphased.
+
+
 coala 0.1.1.9013
 ----------------
 

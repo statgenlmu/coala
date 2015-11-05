@@ -43,7 +43,8 @@ feature_class <- R6Class("feature",
       cat("Feature of type", private$feature_table$type[1], "\n")
     },
     get_call = function() private$call,
-    get_rate = function() private$rate
+    get_rate = function() private$rate,
+    check = function(model) invisible(NULL)
   )
 )
 

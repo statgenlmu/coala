@@ -20,7 +20,6 @@ void maxsplit(const NumericMatrix ss,
   double half_ploidy = 0.5 * ploidy;
 
   for (int snp = 0; snp < ss.ncol(); ++snp) {
-    Rcout << "SNP" << snp <<  std::endl;
     if (trio_locus_vec[snp] != trio_locus) continue;
 
     // For each SNP, create a binary representation of the SNP...
@@ -31,29 +30,21 @@ void maxsplit(const NumericMatrix ss,
 	    key *= ploidy + 1;
 
       ind_nr = (individuals[k] - 1) * ploidy;
-      Rcout << "Ind:" << ind_nr;
 	    genotype = 0;
 	    for (int chr = 0; chr < ploidy; ++chr) genotype += ss(ind_nr + chr, snp);
-	    Rcout << " GT:" << genotype;
 
 	    if (!switch_snp_decided) {
 	      if (genotype > half_ploidy) {
 	        switch_snp = true;
 	        switch_snp_decided = true;
-	        Rcout << " switch ";
 	      } else if (genotype < half_ploidy) {
 	        switch_snp_decided = true;
-	        Rcout << " noswitch ";
 	      }
 	    }
 	    if (switch_snp) genotype = ploidy - genotype;
 
-	    Rcout << " SGT:" << genotype;
 	    key += genotype;
-
-	    Rcout << std::endl;
 	  }
-	  Rcout << " KEY:" << key << std::endl;
 
     // Ignore snps that are not segregating in the given individuals
     if (key == 0) continue;
@@ -109,7 +100,7 @@ NumericVector calc_mcmf(const List seg_sites,
       mcmf[locus] = NA_REAL;
       continue;
     }
-    mcmf[locus] = (double)(max_split) / snp_number;
+    mcmf[locus] = (double)max_split / snp_number;
   }
 
   return(mcmf);

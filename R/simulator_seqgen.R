@@ -111,7 +111,7 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
       suppressWarnings(results <- system2(private$binary, args, stdout = TRUE))
       results
     },
-    simulate = function(model, parameters) {
+    simulate = function(model, parameters = numeric()) {
       # Simulate the ancestral trees
       tree_model <- generate_tree_model(model)
       tree_sim_data <- simulate.coalmodel(tree_model, pars = parameters)

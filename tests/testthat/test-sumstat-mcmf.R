@@ -73,6 +73,8 @@ test_that("initialzation of statistic works", {
 
 test_that("mcmf statistics is correct for diploid models", {
   stat <- sumstat_mcmf(population = 1)
+  model <- coal_model(2, ploidy = 2)
+  expect_equal(stat$calculate(seg_sites, NULL, NULL, model), .5)
   expect_equal(stat$calculate(seg_sites, NULL, NULL,
-                              coal_model(2) + feat_unphased(2, 2)), .75)
+                              model + feat_unphased(2)), .75)
 })

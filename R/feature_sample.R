@@ -1,14 +1,18 @@
 sample_class <- R6Class("sample", inherit = feature_class,
-  private = list(size = NA),
+  private = list(size = NA, ploidy = NA),
   public = list(
-    initialize = function(sizes, time) {
+    initialize = function(sizes, ploidy, time) {
       assert_that(is.numeric(sizes))
       assert_that(length(sizes) >= 1)
       private$size <- sizes
 
+      assert_that(is.number(ploidy))
+      private$ploidy <- ploidy
+
       private$time <- private$add_parameter(time)
     },
     get_sizes = function() private$size,
+    get_ploidy = function() private$ploidy,
     print = function() {
       pop <- seq(along = private$size)[private$size > 0]
       samples <- private$size[private$size > 0]
@@ -18,7 +22,8 @@ sample_class <- R6Class("sample", inherit = feature_class,
         if (i < length(samples) - 1) cat(", ")
         else if (i == length(samples) - 1) cat(" and ")
       }
-      cat(" haploids at time", self$get_time(), "\n")
+      cat(" individuals with ploidy", self$get_ploidy(),
+          "at time", self$get_time(), "\n")
     }
   )
 )
@@ -26,26 +31,32 @@ sample_class <- R6Class("sample", inherit = feature_class,
 
 #' Creates a feature that represents the sampling from one population
 #'
-#' @param sizes The number of individuals that are sampled per population,
+#' @param individuals The number of individuals that are sampled per population,
 #'   given as a numeric vector.
+#' @param ploidy The number of chromosomes that will be simulated per
+#'   individual.
 #' @param time The time at which the sample is taken.
 #' @return The feature, which can be added to a model using `+`.
 ## @export
-feat_sample <- function(sizes, time = "0") {
+feat_sample <- function(individuals, ploidy = 1, time = "0") {
   if (time != "0")
     stop("Samples at time different from 0 at not supported at the moment")
-  sample_class$new(sizes, time)
+  sample_class$new(individuals, ploidy, time)
 }
+
 
 is_feat_sample <- function(feat) any("sample" == class(feat))
 
-#' @describeIn get_features Returns a vector of samples sizes per
-#'   population.
+
+#' @describeIn get_features Returns a vector containing the number of
+#'   haploids sampled per population. This is the default ordering of
+#'   individuals used by coala.
 #' @param for_sim If true, the sample size used internally for the simulation
 #'   will be reported rather than the number of actual samples. The numbers
 #'   can be unequal for the simulation of unphased data.
 #' @export
-get_sample_size <- function(model, for_sim=FALSE) {
+get_sample_size <- function(model, for_sim = FALSE) {
+  assert_that(is.logical(for_sim))
   sample_size <- read_cache(model, paste0("sample_size_", for_sim))
 
   if (is.null(sample_size)) {
@@ -63,6 +74,16 @@ get_sample_size <- function(model, for_sim=FALSE) {
 
   sample_size
 }
+
+
+get_ploidy <- function(model) {
+  mask <- vapply(model$features, is_feat_sample, logical(1))
+  if (!any(mask)) return(1L)
+  if (sum(mask) > 1) stop("multiple sample features are not supported")
+  feat <- model$features[mask][[1]]
+  as.integer(feat$get_ploidy())
+}
+
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
