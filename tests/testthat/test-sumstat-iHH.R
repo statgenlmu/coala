@@ -28,18 +28,17 @@ test_that("snp masks are generated corretly", {
 test_that("generation of rehh data works", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh(population = 1)
-  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, 1:4, model)
   expect_equivalent(rehh_data@haplo, as.matrix(seg_sites) + 1)
   expect_equal(rehh_data@position, pos)
   expect_equal(rehh_data@snp.name, as.character(1:5))
   expect_equal(rehh_data@nhap, 4)
   expect_equal(rehh_data@nsnp, 5)
 
-  rehh_data <- stat_ihh$create_rehh_data(create_segsites(matrix(0, 4, 0)),
-                                                         numeric(), 1:4)
-  expect_equal(rehh_data@haplo, matrix(0, 4, 0))
+  rehh_data <- stat_ihh$create_rehh_data(create_empty_segsites(5), 1:5, model)
+  expect_equal(rehh_data@haplo, matrix(0, 5, 0))
 
-  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, numeric())
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, numeric(), model)
   expect_equal(rehh_data@haplo, matrix(0, 0, 0))
 })
 
@@ -47,7 +46,7 @@ test_that("generation of rehh data works", {
 test_that("SNPs not segregating in individuals are removed from rehh_data", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh(population = 1)
-  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:2)
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, 1:2, model)
   expect_equivalent(rehh_data@haplo, as.matrix(seg_sites[1:2, c(2, 4, 5)]) + 1)
   expect_equal(rehh_data@position, pos[c(2, 4, 5)])
   expect_equal(rehh_data@snp.name, as.character(1:3))
@@ -58,18 +57,18 @@ test_that("SNPs not segregating in individuals are removed from rehh_data", {
 
 test_that("selection of snps works", {
   stat_ihh <- sumstat_ihh(population = 1, max_snps = 2)
-  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, 1:4, model)
   expect_equal(dim(rehh_data@haplo), c(4, 2))
   expect_equal(rehh_data@nsnp, 2)
   expect_equal(rehh_data@nhap, 4)
 
   stat_ihh <- sumstat_ihh(population = 1, max_snps = 3)
-  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:4)
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, 1:4, model)
   expect_equal(dim(rehh_data@haplo), c(4, 3))
   expect_equal(rehh_data@nsnp, 3)
 
   stat_ihh <- sumstat_ihh(population = 1, max_snps = 2)
-  rehh_data <- stat_ihh$create_rehh_data(seg_sites, pos, 1:2)
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, 1:2, model)
   expect_equal(dim(rehh_data@haplo), c(2, 2))
   expect_equal(rehh_data@nsnp, 2)
   expect_equal(rehh_data@nhap, 2)
