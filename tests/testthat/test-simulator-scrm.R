@@ -10,7 +10,7 @@ test_that("scrm can simulate seg. sites", {
   expect_equal(stats_1, stats_2)
   expect_that(stats_1$seg_sites, is_a("list"))
   expect_equal(length(stats_1$seg_sites), 2)
-  expect_equal(length(attr(stats_1$seg_sites[[1]], "positions")),
+  expect_equal(length(get_positions(stats_1$seg_sites[[1]])),
                ncol(stats_1$seg_sites[[1]]))
 })
 

@@ -32,6 +32,11 @@ create_test_segsites <- function() {
 }
 
 
+create_empty_segsites <- function(n_ind = 0) {
+  create_segsites(matrix(0, n_ind, 0), numeric(0))
+}
+
+
 conv_to_ms_output <- function(segsites) {
   c(paste("segsites:", ncol(segsites)),
     paste("positions:", paste(format(get_positions(segsites),

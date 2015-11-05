@@ -97,4 +97,10 @@ test_that("simulating unphased data works", {
   model <- coal_model(5, 1) + feat_unphased(2, 1) + feat_mutation(5) + sumstat_seg_sites()
   data <- simulate(model)
   expect_equal(nrow(data$seg_sites[[1]]), 5)
+
+  seg_sites[[1]] <- create_empty_segsites(4)
+  phased <- unphase_segsites(seg_sites, 2, 1)
+  expect_equivalent(as.matrix(seg_sites[[1]]), matrix(0, 4, 0))
+  expect_equal(get_positions(seg_sites[[1]]), numeric(0))
+  expect_equal(get_trio_locus(seg_sites[[1]]), numeric(0))
 })

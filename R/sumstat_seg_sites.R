@@ -23,21 +23,22 @@ conv_for_trios <- function(seg_sites, model) {
 
     total_length <- sum(locus_length)
     borders <- cumsum(locus_length[1:4] / total_length)
-    pos <- attr(seg_sites[[i]], "positions")
+    pos <- get_positions(seg_sites[[i]])
     left <- pos < borders[1]
     middle <- pos >= borders[2] & pos < borders[3]
     right <- pos >= borders[4]
-    seg_sites[[i]] <- seg_sites[[i]][ , left | middle | right]
-    assert_that(nrow(seg_sites[[i]]) > 0)
 
     pos[left] <- pos[left] * total_length / locus_length[1]
     pos[middle] <- (pos[middle] - borders[2]) * total_length / locus_length[3]
     pos[right] <- (pos[right] - borders[4]) * total_length / locus_length[5]
 
-    attr(seg_sites[[i]], "positions") <- pos[left | middle | right]
-    attr(seg_sites[[i]], "locus") <- c(rep(-1, sum(left)),
-                                       rep(0, sum(middle)),
-                                       rep(1, sum(right)))
+    seg_sites[[i]] <- create_segsites(seg_sites[[i]][ , left | middle | right],
+                                      pos[left | middle | right],
+                                      c(rep(-1, sum(left)),
+                                        rep(0, sum(middle)),
+                                        rep(1, sum(right))),
+                                      check = FALSE)
+    assert_that(nrow(seg_sites[[i]]) > 0)
   }
   seg_sites
 }

@@ -73,9 +73,10 @@ test_that("locus positions are converted correctly", {
                                        relative_out = FALSE,
                                        relative_in = FALSE), 40)
 
-  ss <- matrix(0, 6, 5)
-  attr(ss, "positions") <- c(0.1, 0.5, 0.2, 0.6, 0.5, 1)
-  attr(ss, "locus") <- rep(c(-1, 0, 1), each = 2)
+  ss <- create_segsites(matrix(0, 6, 6),
+                        c(0.1, 0.5, 0.2, 0.6, 0.5, 1),
+                        rep(c(-1, 0, 1), each = 2),
+                        check = FALSE)
   expect_equal(get_snp_positions(list(ss, ss, ss, ss), model),
                list(c(1, 5, 36, 48, 125, 150) / 150,
                     c(5, 25, 96, 108, 145, 150) / 150,

@@ -24,18 +24,23 @@ test_that("calc_four_gamete_stat works", {
                                       between = NaN, mid = .5,
                                       perc_polym = 0.10))
 
-  attr(seg_sites[[2]], "positions")[4:5] <- c(0.7, 0.75)
+  pos <- get_positions(seg_sites[[2]])
+  pos[4:5] <- c(0.7, 0.75)
+  seg_sites[[2]] <- create_segsites(seg_sites[[2]], pos,
+                                    get_trio_locus(seg_sites[[2]]))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[2, ], c(mid_near = 1, mid_far = 0.4, outer = NaN,
                                       between = NaN, mid = 0.5,
                                       perc_polym = 0.10))
 
-  attr(seg_sites[[1]], "positions") <- 1:5 / 5
+
+  seg_sites[[1]] <- create_segsites(seg_sites[[1]], 1:5 / 5)
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[1, ], c(mid_near = NaN, mid_far = 0.5,
                                       outer = NaN, between = NaN, mid = 0.5,
                                       perc_polym = 0.05))
-  attr(seg_sites[[1]], "positions") <- 1:5 / 50
+
+  seg_sites[[1]] <- create_segsites(seg_sites[[1]], 1:5 / 50)
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[1, ], c(mid_near = 0.5, mid_far = NaN,
                                       outer = NaN, between = NaN, mid = 0.5,
