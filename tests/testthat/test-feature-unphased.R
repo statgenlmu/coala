@@ -52,12 +52,12 @@ test_that("unphasing works", {
 
   n_snps <- sapply(1:10000, function(i) {
     phased <- unphase_segsites(seg_sites, 2, 1)
-    c(ncol(phased[[1]]), sum(phased[[1]][1, ]))
+    c(ncol(phased[[1]]), sum(as.matrix(phased[[1]])[1, ]))
   })
 
-  expect_less_than(sum(abs(table(n_snps[1 , ]) / ncol(n_snps) -
+  expect_less_than(sum(abs(table(n_snps[1, ]) / ncol(n_snps) -
                              dbinom(0:4, 4, .5))), 0.1)
-  expect_less_than(sum(abs(table(n_snps[2 , ]) / ncol(n_snps) -
+  expect_less_than(sum(abs(table(n_snps[2, ]) / ncol(n_snps) -
                              dbinom(0:4, 4, .25))), 0.1)
 
 
@@ -74,21 +74,13 @@ test_that("unphasing works", {
   phased <- unphase_segsites(seg_sites, 2, 2)
   expect_that(phased, is_a("list"))
   expect_equal(length(phased), 1)
-  expect_equal(dim(phased[[1]]), c(4, 2))
+  expect_equal(dim(phased[[1]]), c(4, 4))
   expect_equal(colSums(seg_sites[[1]]), colSums(phased[[1]]))
 
   seg_sites[[2]] <- seg_sites[[1]]
   phased <- unphase_segsites(seg_sites, 2, 1)
   expect_that(phased, is_a("list"))
   expect_equal(length(phased), 2)
-
-  seg_sites[[1]] <- seg_sites[[1]][ , numeric()]
-  attr(seg_sites[[1]], "positions") <- numeric()
-  #attr(seg_sites[[1]], "locus") <- numeric()
-  phased <- unphase_segsites(seg_sites, 2, 1)
-  #expect_equivalent(seg_sites[[1]], matrix(0, 4, 0))
-  expect_equal(attr(seg_sites[[1]], "positions"), numeric(0))
-  #expect_equal(attr(seg_sites[[1]], "locus"), numeric(0))
 })
 
 
@@ -97,10 +89,4 @@ test_that("simulating unphased data works", {
   model <- coal_model(5, 1) + feat_unphased(2, 1) + feat_mutation(5) + sumstat_seg_sites()
   data <- simulate(model)
   expect_equal(nrow(data$seg_sites[[1]]), 5)
-
-  seg_sites[[1]] <- create_empty_segsites(4)
-  phased <- unphase_segsites(seg_sites, 2, 1)
-  expect_equivalent(as.matrix(seg_sites[[1]]), matrix(0, 4, 0))
-  expect_equal(get_positions(seg_sites[[1]]), numeric(0))
-  expect_equal(get_trio_locus(seg_sites[[1]]), numeric(0))
 })
