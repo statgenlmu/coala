@@ -4,10 +4,11 @@
 #' parameters and summary statistics can be added. Data under the model
 #' can be simulated using the \code{simulate} function.
 #'
+#' @inheritParams feat_sample
 #' @param sample_size Defines the number of populations and the number of
-#'   samples taken from each population. Given as an integer vector which
-#'   length defines the number of population and each entry gives the number
-#'   of haploids sampled from the corresponding population.
+#'   individual sampled from each population. Given as an integer vector where
+#'   each entry gives the number of individuals sampled from the corresponding
+#'   population.
 #' @param loci_number You can optionally add a number of loci with equal length
 #'   to the model. This gives to number of loci to add.
 #' @param loci_length This gives the length of the loci to add.
@@ -23,23 +24,21 @@
 #'   feat_migration(0.5, symmetric = TRUE) +
 #'   sumstat_trees()
 #' simulate(model)
-coal_model <- function(sample_size, loci_number=0, loci_length=1000) {
-  model <- list()
+coal_model <- function(sample_size, loci_number = 0,
+                       loci_length = 1000, ploidy = 1) {
+
+  model <- list(features = list(),
+                loci = list(),
+                parameter = list(),
+                sum_stats = create_sumstat_container(),
+                has_variation = FALSE,
+                scaling_factor = 1,
+                id = get_id())
+
   class(model) <- c("coalmodel")
 
-  model$features <- list()
-  model$loci <- list()
-  model$parameter <- list()
-  model$sum_stats <- create_sumstat_container()
-  model$has_variation <- FALSE
-
-  model$scaling_factor <- 1
-  model$id <- get_id()
-
   # Add sample sizes
-  assert_that(is.numeric(sample_size))
-  assert_that(sum(sample_size) > 0)
-  model <- model + feat_sample(sample_size)
+  model <- model + feat_sample(sample_size, ploidy)
 
   # Add locus
   if (loci_number > 0) {

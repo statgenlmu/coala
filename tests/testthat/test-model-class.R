@@ -149,6 +149,15 @@ test_that("get population individuals works", {
 })
 
 
+test_that("getting indiviuals in polyploid models works", {
+  model <- coal_model(1:5, ploidy = 2)
+  expect_equal(get_population_indiviuals(model, 1, haploids = FALSE), 1)
+  expect_equal(get_population_indiviuals(model, 2, haploids = FALSE), 2:3)
+  expect_equal(get_population_indiviuals(model, 3, haploids = FALSE), 4:6)
+  expect_equal(get_population_indiviuals(model, 4, haploids = FALSE), 7:10)
+  expect_equal(get_population_indiviuals(model, 5, haploids = FALSE), 11:15)
+})
+
 
 test_that("getting the ploidy and individuals works", {
   model <- model_theta_tau()
@@ -157,11 +166,11 @@ test_that("getting the ploidy and individuals works", {
   sample_size <- get_sample_size(model)
   expect_false(is_unphased(model))
 
-  model <- model_theta_tau() + feat_unphased(4, 2)
+  model <- coal_model(sample_size, ploidy = 4) + feat_unphased(2)
   expect_equal(get_ploidy(model), 4L)
   expect_equal(get_samples_per_ind(model), 2L)
   expect_equal(get_sample_size(model), sample_size * 2)
-  expect_equal(get_sample_size(model, TRUE), sample_size * 4)
+  expect_equal(get_sample_size(model, for_sim = TRUE), sample_size * 4)
   expect_true(is_unphased(model))
 })
 

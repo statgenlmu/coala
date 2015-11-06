@@ -4,11 +4,14 @@
 \alias{feat_sample}
 \title{Creates a feature that represents the sampling from one population}
 \usage{
-feat_sample(sizes, time = "0")
+feat_sample(individuals, ploidy = 1, time = "0")
 }
 \arguments{
-\item{sizes}{The number of individuals that are sampled per population,
+\item{individuals}{The number of individuals that are sampled per population,
 given as a numeric vector.}
+
+\item{ploidy}{The number of chromosomes that will be simulated per
+individual.}
 
 \item{time}{The time at which the sample is taken.}
 }

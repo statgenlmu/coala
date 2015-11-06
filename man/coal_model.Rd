@@ -4,18 +4,21 @@
 \alias{coal_model}
 \title{Creates a coalescent model}
 \usage{
-coal_model(sample_size, loci_number = 0, loci_length = 1000)
+coal_model(sample_size, loci_number = 0, loci_length = 1000, ploidy = 1)
 }
 \arguments{
 \item{sample_size}{Defines the number of populations and the number of
-samples taken from each population. Given as an integer vector which
-length defines the number of population and each entry gives the number
-of haploids sampled from the corresponding population.}
+individual sampled from each population. Given as an integer vector where
+each entry gives the number of individuals sampled from the corresponding
+population.}
 
 \item{loci_number}{You can optionally add a number of loci with equal length
 to the model. This gives to number of loci to add.}
 
 \item{loci_length}{This gives the length of the loci to add.}
+
+\item{ploidy}{The number of chromosomes that will be simulated per
+individual.}
 }
 \value{
 The coalescent model

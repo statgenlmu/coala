@@ -5,13 +5,19 @@ test_that("Creation of sample features works", {
   expect_equal(feat_sample(1:5)$get_sizes(), 1:5)
   expect_error(feat_sample("blub"))
   expect_error(feat_sample(numeric(0)))
-  expect_error(feat_sample(2, 5))
 })
 
 
 test_that("sample sizes are reported corrently", {
   expect_equal(get_sample_size(coal_model(c(10, 15))), c(10, 15))
   expect_equal(get_sample_size(coal_model(10)), 10)
+})
+
+
+test_that("sample sizes are reported corrently in polyploid models", {
+  expect_equal(get_sample_size(coal_model(c(10, 15), ploidy = 2)), c(20, 30))
+  expect_equal(get_sample_size(coal_model(c(10, 15), ploidy = 3)), c(30, 45))
+  expect_equal(get_sample_size(coal_model(3, ploidy = 8)), 24)
 })
 
 

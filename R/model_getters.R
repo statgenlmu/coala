@@ -133,9 +133,13 @@ get_locus_number <- function(model, group = NA, ignore_variation = FALSE) {
 #'   segregating sites.
 #' @param zero_indexed If true, the names of the populations are started from
 #'   0 instead of from 1.
+#' @param haploids If \code{TRUE}, the function always returns all haploids
+#'   from the population, even if the model is polyploid.
 #' @export
 get_population_indiviuals <- function(model, pop,
-                                      zero_indexed = FALSE) {
+                                      zero_indexed = FALSE,
+                                      haploids = TRUE) {
+
   sample_size <- get_sample_size(model)
   outgroup <- get_outgroup(model)
 
@@ -144,6 +148,7 @@ get_population_indiviuals <- function(model, pop,
     sample_size[outgroup] <- 0
   }
 
+  if (!haploids) sample_size <- sample_size / get_ploidy(model)
   if (pop == "all") return(1:sum(sample_size))
 
   if (!pop %in% get_populations(model)) stop("Invalid population")

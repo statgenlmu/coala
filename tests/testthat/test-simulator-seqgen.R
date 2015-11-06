@@ -319,16 +319,15 @@ test_that("seqgen works with inter-locus variation", {
 test_that("simulating unphased data works", {
   if (!has_seqgen()) skip("seq-gen not installed")
   sg <- get_simulator("seqgen")
-
-  model <- model_hky() + feat_unphased(2, 1) + sumstat_seg_sites()
-  stats <- sg$simulate(model, c(tau = 1, theta = 10))
-  expect_equal(dim(stats$jsfs), c(4, 4))
-  expect_equal(nrow(stats$seg_sites[[1]]), 6)
-
-  model <- model_hky() + feat_unphased(2, 2) + sumstat_seg_sites()
-  stats <- sg$simulate(model, c(tau = 1, theta = 10))
-  expect_equal(dim(stats$jsfs), c(7, 7))
-  expect_equal(nrow(stats$seg_sites[[1]]), 12)
+  model <- coal_model(c(5, 1), 2, ploidy = 2) +
+    feat_outgroup(2) +
+    feat_pop_merge(1.0, 2, 1) +
+    feat_mutation(5, model = "GTR", gtr_rates = 1:6) +
+    feat_unphased(1) +
+    sumstat_seg_sites()
+  stats <- sg$simulate(model)
+  expect_equal(nrow(stats$seg_sites[[1]]), 5)
+  expect_equal(nrow(stats$seg_sites[[2]]), 5)
 })
 
 

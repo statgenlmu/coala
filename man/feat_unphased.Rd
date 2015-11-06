@@ -4,12 +4,9 @@
 \alias{feat_unphased}
 \title{Feature: Unphased}
 \usage{
-feat_unphased(ploidy, samples_per_ind = ploidy)
+feat_unphased(samples_per_ind)
 }
 \arguments{
-\item{ploidy}{The number of phased chromosomes that are simulated per
-individual.}
-
 \item{samples_per_ind}{The number of pseudo-chromosomes that are created
 from the phased chromosomes for each individual.}
 }
@@ -23,7 +20,7 @@ simulation.
 }
 \details{
 If this is used, the sample size is understood as the number of individuals.
-For each individual, \code{poidy} chromosomes are simulated, and
+For each individual, \code{ploidy} chromosomes are simulated, and
 \code{samples_per_ind} pseudo-chromosomes are created of these.
 }
 

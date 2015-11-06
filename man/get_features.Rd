@@ -35,7 +35,7 @@ get_locus_length_matrix(model)
 
 get_locus_number(model, group = NA, ignore_variation = FALSE)
 
-get_population_indiviuals(model, pop, zero_indexed = FALSE)
+get_population_indiviuals(model, pop, zero_indexed = FALSE, haploids = TRUE)
 
 get_summary_statistics(model)
 }
@@ -60,6 +60,9 @@ This does not affect non-trio loci.}
 
 \item{zero_indexed}{If true, the names of the populations are started from
 0 instead of from 1.}
+
+\item{haploids}{If \code{TRUE}, the function always returns all haploids
+from the population, even if the model is polyploid.}
 }
 \description{
 Getters for coalescent models
@@ -70,8 +73,9 @@ Getters for coalescent models
 
 \item \code{get_outgroup_size}: Returns the number of samples in the outgroup
 
-\item \code{get_sample_size}: Returns a vector of samples sizes per
-population.
+\item \code{get_sample_size}: Returns a vector containing the number of
+haploids sampled per population. This is the default ordering of
+individuals used by coala.
 
 \item \code{get_parameter_table}: Returns the ranged parameters of a model as a
 data.frame

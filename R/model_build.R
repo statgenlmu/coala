@@ -46,6 +46,9 @@ add_to_model.feature <- function(feat, model, feat_name) {
     }
   }
 
+  # Execute the features checks
+  feat$check(model)
+
   # Add the parameters in the feature
   for (para in feat$get_parameters()) model <- model + para
 

@@ -1,20 +1,21 @@
 unphased_class <- R6Class("unphased", inherit = feature_class,
   private = list(ploidy = NA, samples_per_ind = NA),
   public = list(
-    initialize = function(ploidy, samples_per_ind) {
-      assert_that(length(ploidy) == 1)
-      assert_that(is.numeric(ploidy))
-      assert_that(length(samples_per_ind) == 1)
-      assert_that(is.numeric(samples_per_ind))
-      assert_that(samples_per_ind <= ploidy)
-      private$ploidy <- ploidy
+    initialize = function(samples_per_ind) {
+      assert_that(is.number(samples_per_ind))
       private$samples_per_ind <- samples_per_ind
     },
-    get_ploidy = function() private$ploidy,
+    check = function(model) {
+      if (self$get_samples_per_ind() > get_ploidy(model)) {
+        stop("samples_per_ind needs to be lower or equal to the ploidy",
+             call. = FALSE)
+      }
+      invisible(NULL)
+    },
     get_samples_per_ind = function() private$samples_per_ind,
     print = function() {
-      cat("Unphasing of", private$ploidy, "chromosomes into",
-          private$samples_per_ind, "pseudo-chromosomes\n")
+      cat("Unphasing of the simulated chromosomes into",
+          private$samples_per_ind, "pseudo-chromosomes per individual\n")
     }
   )
 )
@@ -26,21 +27,20 @@ unphased_class <- R6Class("unphased", inherit = feature_class,
 #' simulation.
 #'
 #' If this is used, the sample size is understood as the number of individuals.
-#' For each individual, \code{poidy} chromosomes are simulated, and
+#' For each individual, \code{ploidy} chromosomes are simulated, and
 #' \code{samples_per_ind} pseudo-chromosomes are created of these.
 #'
-#' @param ploidy The number of phased chromosomes that are simulated per
-#'   individual.
 #' @param samples_per_ind The number of pseudo-chromosomes that are created
 #'   from the phased chromosomes for each individual.
 #' @return The feature, which can be added to a model using `+`.
 #' @export
-feat_unphased <- function(ploidy, samples_per_ind=ploidy) {
-  unphased_class$new(ploidy, samples_per_ind)
+feat_unphased <- function(samples_per_ind) {
+  unphased_class$new(samples_per_ind)
 }
 
 
 is_feat_unphased <- function(feat) any("unphased" == class(feat))
+
 
 get_feature_unphased <- function(model) {
   mask <- vapply(model$features, is_feat_unphased, logical(1))
@@ -50,16 +50,9 @@ get_feature_unphased <- function(model) {
 }
 
 
-get_ploidy <- function(model) {
-  feat <- get_feature_unphased(model)
-  if (is.null(feat)) return(1L)
-  as.integer(feat$get_ploidy())
-}
-
-
 get_samples_per_ind <- function(model) {
   feat <- get_feature_unphased(model)
-  if (is.null(feat)) return(1L)
+  if (is.null(feat)) return(get_ploidy(model))
   as.integer(feat$get_samples_per_ind())
 }
 

@@ -103,15 +103,13 @@ test_that("msms_simulate works with inter-locus variation", {
 test_that("simulating unphased data works", {
   if (!has_msms()) skip("msms not installed")
   msms <- get_simulator("msms")
-  model <- model_theta_tau() + feat_unphased(2, 1) + sumstat_seg_sites()
-  stats <- msms$simulate(model, c(tau = 1, theta = 5))
-  expect_equal(dim(stats$jsfs), c(11, 16))
-  expect_equal(nrow(stats$seg_sites[[1]]), 25)
+  model <- coal_model(5, 2, ploidy = 2) +
+    feat_unphased(1) +
+    feat_mutation(4, fixed_number = TRUE) +
+    sumstat_seg_sites()
 
-  model <- model_theta_tau() + feat_unphased(3, 2) + sumstat_seg_sites()
-  stats <- msms$simulate(model, c(tau = 1, theta = 5))
-  expect_equal(dim(stats$jsfs), c(21, 31))
-  expect_equal(nrow(stats$seg_sites[[1]]), 50)
+  stats <- msms$simulate(model)
+  expect_equal(nrow(stats$seg_sites[[1]]), 5)
 })
 
 
