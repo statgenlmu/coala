@@ -6,10 +6,15 @@
 #' @param ... currently unused
 #' @param pars Values for parameters specified with \code{\link{par_named}} or
 #'   \code{\link{par_range}}. Should be a named numeric vector.
+#' @param cores The number of cores that the independent repetitions from
+#'   \code{nsim} will be distributed on.
+#'   Must be \code{1} on Windows, and should also be \code{1} when using R
+#'   in a graphical environment (e.g. Rstudio).
 #' @return A list of summary statistics.
 #' @export
 #' @importFrom stats simulate
 #' @importFrom assertthat assert_that
+#' @importFrom parallel mclapply
 #'
 #' @examples
 #' model <- coal_model(c(5,10), 20) +
@@ -18,17 +23,17 @@
 #'   sumstat_jsfs()
 #'
 #' simulate(model, pars=c(1, 5))
-simulate.coalmodel <- function(object, nsim = 1, seed, ..., pars = numeric(0)) {
+simulate.coalmodel <- function(object, nsim = 1, seed, ...,
+                               pars = numeric(0), cores = 1) {
+
   if (!missing(seed)) set.seed(seed)
   simprog <- select_simprog(object)
   if (is.null(simprog)) stop("No simulator found")
 
-  results <- list()
-  length(results) <- nsim
-  for (i in seq(len = nsim)) {
+  results <- mclapply(seq(len = nsim), function(i) {
     current_pars <- prepare_pars(pars, object)
-    results[[i]] <- simprog$simulate(object, current_pars)
-  }
+    simprog$simulate(object, current_pars)
+  }, mc.set.seed = TRUE, mc.cores = cores)
 
   if (nsim == 1) return(results[[1]])
   results

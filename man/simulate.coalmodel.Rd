@@ -4,7 +4,8 @@
 \alias{simulate.coalmodel}
 \title{Simulates data according to a demographic model}
 \usage{
-\method{simulate}{coalmodel}(object, nsim = 1, seed, ..., pars = numeric(0))
+\method{simulate}{coalmodel}(object, nsim = 1, seed, ..., pars = numeric(0),
+  cores = 1)
 }
 \arguments{
 \item{object}{The coalescent model to be simulated}
@@ -17,6 +18,11 @@
 
 \item{pars}{Values for parameters specified with \code{\link{par_named}} or
 \code{\link{par_range}}. Should be a named numeric vector.}
+
+\item{cores}{The number of cores that the independent repetitions from
+\code{nsim} will be distributed on.
+Must be \code{1} on Windows, and should also be \code{1} when using R
+in a graphical environment (e.g. Rstudio).}
 }
 \value{
 A list of summary statistics.
