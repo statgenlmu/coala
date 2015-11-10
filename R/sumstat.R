@@ -1,3 +1,9 @@
+#' Base Class for Summary Statistics
+#'
+#' If you want to create additional summary statistics for coala, create
+#' \pkg{R6} classes that inherit from this object.
+#'
+#' @export
 sumstat_class <- R6Class("sumstat",
   private = list(
     name = NA,

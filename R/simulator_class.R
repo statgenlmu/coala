@@ -8,8 +8,6 @@ simulator_class <- R6Class("simulator",
     simulate = function() stop("virtual method"),
     get_cmd = function() stop("virtual method"),
     get_name = function() private$name,
-    get_features = function() private$features,
-    get_sumstats = function() private$sumstats,
     get_priority = function() private$priority,
     get_info = function() c(name = private$name),
     initialize = function() NULL

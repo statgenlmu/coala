@@ -15,9 +15,8 @@ site mutation models.
 Coala also directly imports the simulation results into `R`, and allows to
 calculate additional summary statistics from the results.
 
-__Coala is currently in an early version. Please make sure to always
-check the simulation commands it executed before drawing conclusions
-from the simulation results.__
+Coala is currently in an early version. Please check the simulation commands it 
+executed before drawing conclusions from the simulation results.
 
 
 Installation
@@ -31,15 +30,15 @@ install.packages("coala")
 
 If you want to use the simulation programs `ms`, `msms` or `seqgen`, 
 they need to be installed separately. This is described in the 
-["Using External Simulators" vignette](https://cran.r-project.org/web/packages/coala/vignettes/installation.html).
+["Using External Simulators" vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-install.html).
 
 
 Usage
 -----
 Coala comes with a
-[vignette](https://cran.r-project.org/web/packages/coala/vignettes/introduction.html)
+[vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-intro.html)
 that explains the packages concepts and is a good place to start.
-The [ABC vignette](https://cran.r-project.org/web/packages/coala/vignettes/abc.html) gives an example
+The [ABC vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-abc.html) gives an example
 on how coala can be used to conduct the simulations for an Approximate Bayesian
 Computation analysis.
 
@@ -70,3 +69,6 @@ devtools::install_github('statgenlmu/coala')
 
 on Linux and OS X. This requires that you have `devtools` and a compiler or 
 Xcode installed. Bug reports and pull request on GitHub are highly appreciated.
+The [extending coala vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-extend.html)
+contains information on how to create new summary statistics and add simulators
+to coala.

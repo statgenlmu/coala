@@ -3,8 +3,6 @@ context("Simulator Class")
 test_that("simulator_class base class works", {
   sim <- simulator_class$new()
   expect_equal(sim$get_name(), "TEMPLATE")
-  expect_equal(sim$get_features(), NULL)
-  expect_equal(sim$get_sumstats(), NULL)
   expect_error(sim$simulate())
   expect_error(sim$get_cmd())
   expect_true(is_simulator(sim))
