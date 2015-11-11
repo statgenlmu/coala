@@ -6,9 +6,9 @@
 #' name equal to to binaries name in upper case is given, it also
 #' tries to use this as path of the binary.
 #'
-#'  @param name The name of the executable to look for
-#'  @param envir_var the name of the environment variable to use
-#'  @return The complete path of the executable is found, or "NULL" if not.
+#' @param name The name of the executable to look for
+#' @param envir_var the name of the environment variable to use
+#' @return The complete path of the executable is found, or "NULL" if not.
 search_executable <- function(name, envir_var = NULL) {
   # See if an environment variable is given
   exe <- NULL

@@ -26,35 +26,36 @@ test_that("calc_four_gamete_stat works", {
 
   pos <- get_positions(seg_sites[[2]])
   pos[4:5] <- c(0.7, 0.75)
-  seg_sites[[2]] <- create_segsites(seg_sites[[2]], pos,
-                                    get_trio_locus(seg_sites[[2]]))
+  seg_sites[[2]] <- set_positions(seg_sites[[1]], pos)
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[2, ], c(mid_near = 1, mid_far = 0.4, outer = NaN,
                                       between = NaN, mid = 0.5,
                                       perc_polym = 0.10))
 
 
-  seg_sites[[1]] <- create_segsites(seg_sites[[1]], 1:5 / 5)
+  seg_sites[[1]] <- create_segsites(get_snps(seg_sites[[1]]), 1:5 / 5)
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[1, ], c(mid_near = NaN, mid_far = 0.5,
                                       outer = NaN, between = NaN, mid = 0.5,
                                       perc_polym = 0.05))
 
-  seg_sites[[1]] <- create_segsites(seg_sites[[1]], 1:5 / 50)
+  seg_sites[[1]] <- create_segsites(get_snps(seg_sites[[1]]), 1:5 / 50)
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[1, ], c(mid_near = 0.5, mid_far = NaN,
                                       outer = NaN, between = NaN, mid = 0.5,
                                       perc_polym = 0.05))
 
-  seg_sites[[2]][1, ] <- 1
-  seg_sites[[2]][-1, ] <- 0
+  snps <- get_snps(seg_sites[[2]])
+  snps[1, ] <- 1
+  snps[-1, ] <- 0
+  seg_sites[[2]] <- create_segsites(snps, 1:5 / 50)
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[2, ], c(mid_near = NA, mid_far = NA, outer = NA,
                                       between = NA, mid = NA,
                                       perc_polym = 0.10))
 
 
-  seg_sites[[3]] <- create_segsites(matrix(0, 5, 0), numeric(0))
+  seg_sites[[3]] <- create_empty_segsites(5)
   locus_length <- rbind(locus_length, c(0, 0, 50, 0, 0, 1))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[3, ], c(mid_near = NaN, mid_far = NaN,
@@ -76,28 +77,24 @@ test_that("calc_four_gamete_stat works", {
   expect_equal(fpc_violations[4, ], c(mid_near = NaN, mid_far = NaN, outer = 1,
                                       between = 1, mid = NaN, perc_polym = 0.5))
 
-  seg_sites[[4]] <- create_segsites(seg_sites[[4]],
-                                    trio_locus = c(0, 0, 1, 1, 1))
+  seg_sites[[4]] <- set_trio_locus(seg_sites[[4]], c(0, 0, 1, 1, 1))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[4, ], c(mid_near = NaN, mid_far = 1, outer = NaN,
                                       between = 1, mid = 1, perc_polym = 1 / 3))
 
-  seg_sites[[4]] <- create_segsites(seg_sites[[4]],
-                                    trio_locus = c(-1, -1, 0, 0, 1))
+  seg_sites[[4]] <- set_trio_locus(seg_sites[[4]], c(-1, -1, 0, 0, 1))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[4, ], c(mid_near = NaN, mid_far = NaN, outer = 1,
                                       between = 1, mid = NaN,
                                       perc_polym = 1 / 3))
 
-  seg_sites[[4]] <- create_segsites(seg_sites[[4]],
-                                    trio_locus = c(-1, -1, 0, 1, 1))
+  seg_sites[[4]] <- set_trio_locus(seg_sites[[4]], c(-1, -1, 0, 1, 1))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[4, ], c(mid_near = NaN, mid_far = NaN, outer = 1,
                                       between = NaN, mid = NaN,
                                       perc_polym = 1 / 6))
 
-  seg_sites[[4]] <- create_segsites(seg_sites[[4]],
-                                    trio_locus = c(-1, -1, -1, 1, 1))
+  seg_sites[[4]] <- set_trio_locus(seg_sites[[4]], c(-1, -1, -1, 1, 1))
   fpc_violations <- calc_four_gamete_stat(seg_sites, 1:5, locus_length)
   expect_equal(fpc_violations[4, ], c(mid_near = NaN, mid_far = NaN, outer = 1,
                                       between = NaN, mid = NaN, perc_polym = 0))

@@ -1,5 +1,5 @@
-#include <Rcpp.h>
-#include "seg_sites.h"
+#include <RcppArmadillo.h>
+#include "../inst/include/coala.h"
 
 using namespace Rcpp;
 
@@ -57,8 +57,8 @@ NumericMatrix read_sequence(CharacterVector output,
 }
 
 
-NumericMatrix conv_seq_to_segsites(NumericMatrix sequence,
-                                   const int outgroup_size) {
+List conv_seq_to_segsites(NumericMatrix sequence,
+                          const int outgroup_size) {
 
   if (outgroup_size < 1) stop("Outgroup needed to calculate seg. sites");
 
@@ -130,9 +130,11 @@ List parse_seqgen_output(CharacterVector output,
       sequence = read_sequence(output, line_nr,
                                individuals, locus_length);
       if (calc_segsites) {
-        sequence = conv_seq_to_segsites(sequence, outgroup_size);
+        results(locus) = conv_seq_to_segsites(sequence, outgroup_size);
+      } else {
+        results(locus) = sequence;
       }
-      results(locus) = sequence;
+
     } else {
       stop(std::string("Unexpect line in seqgen output: ") + line);
     }

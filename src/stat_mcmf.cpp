@@ -1,17 +1,18 @@
 #include <cmath>
-#include <Rcpp.h>
-#include "seg_sites.h"
+#include "../inst/include/coala.h"
+
 using namespace Rcpp;
 
 
-void maxsplit(const NumericMatrix ss,
+void maxsplit(const coala::SegSites segsites,
               const int trio_locus,
               const NumericVector individuals,
               const int ploidy,
               int & max_number,
               int & snp_number) {
 
-  NumericVector trio_locus_vec = coala::getTrioLocus(ss);
+  NumericVector trio_locus_vec = coala::getTrioLocus(segsites);
+  NumericMatrix ss = coala::getSNPs(segsites);
 
   std::map<unsigned int, unsigned int> m;
   unsigned int key, ind_nr, genotype;
@@ -78,12 +79,14 @@ NumericVector calc_mcmf(const List seg_sites,
   size_t n_loci = seg_sites.size();
   NumericVector mcmf(n_loci);
 
-  NumericMatrix ss;
+  coala::SegSites ss;
   int max_split = 0, snp_number = 0, ignore_result = 0;
 
   for (size_t locus = 0; locus < n_loci; ++locus) {
-    ss = as<NumericMatrix>(seg_sites[locus]);
-    if (max(individuals) * ploidy > ss.nrow()) stop("Invalid individuals");
+    ss = as<coala::SegSites>(seg_sites[locus]);
+    if (max(individuals) * ploidy > coala::getSNPs(ss).nrow()) {
+      stop("Invalid individuals");
+    }
 
     max_split = 0;
     snp_number = 0;
@@ -105,3 +108,4 @@ NumericVector calc_mcmf(const List seg_sites,
 
   return(mcmf);
 }
+

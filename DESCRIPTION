@@ -87,3 +87,4 @@ Collate:
     'sumstat_tajimas_d.R'
     'sumstat_trees.R'
     'tempfile.R'
+RoxygenNote: 5.0.1

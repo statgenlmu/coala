@@ -21,12 +21,24 @@ create_segsites <- function(snps, positions = numeric(0), trio_locus = numeric(0
     .Call('coala_create_segsites', PACKAGE = 'coala', snps, positions, trio_locus, check)
 }
 
+get_snps <- function(seg_sites) {
+    .Call('coala_get_snps', PACKAGE = 'coala', seg_sites)
+}
+
 get_positions <- function(seg_sites) {
     .Call('coala_get_positions', PACKAGE = 'coala', seg_sites)
 }
 
+set_positions <- function(seg_sites, positions) {
+    .Call('coala_set_positions', PACKAGE = 'coala', seg_sites, positions)
+}
+
 get_trio_locus <- function(seg_sites) {
     .Call('coala_get_trio_locus', PACKAGE = 'coala', seg_sites)
+}
+
+set_trio_locus <- function(seg_sites, trio_locus) {
+    .Call('coala_set_trio_locus', PACKAGE = 'coala', seg_sites, trio_locus)
 }
 
 calc_four_gamete_stat <- function(seg_sites_list, individuals, locus_length) {
@@ -35,14 +47,14 @@ calc_four_gamete_stat <- function(seg_sites_list, individuals, locus_length) {
 
 #' Calculates the JSFS for two populations
 #'
-#' @param seg_sites List of segregating sites
+#' @param seg_sites_list List of segregating sites
 #' @param pop1 The rows of \code{seg_sites} that correspond to individuals
 #'   of the first population.
 #' @param pop2 same as \code{pop1}, but for the second population.
 #' @export
 #' @return The Joint Site Frequency Spectrum, as a matrix.
-calc_jsfs <- function(seg_sites, pop1, pop2) {
-    .Call('coala_calc_jsfs', PACKAGE = 'coala', seg_sites, pop1, pop2)
+calc_jsfs <- function(seg_sites_list, pop1, pop2) {
+    .Call('coala_calc_jsfs', PACKAGE = 'coala', seg_sites_list, pop1, pop2)
 }
 
 calc_mcmf <- function(seg_sites, individuals, has_trios = TRUE, ploidy = 1L) {
@@ -53,7 +65,7 @@ calc_nucleotide_div <- function(seg_sites, individuals) {
     .Call('coala_calc_nucleotide_div', PACKAGE = 'coala', seg_sites, individuals)
 }
 
-unphase_segsites <- function(seg_sites, ploidy, samples_per_ind) {
-    .Call('coala_unphase_segsites', PACKAGE = 'coala', seg_sites, ploidy, samples_per_ind)
+unphase_segsites <- function(seg_sites_list, ploidy, samples_per_ind) {
+    .Call('coala_unphase_segsites', PACKAGE = 'coala', seg_sites_list, ploidy, samples_per_ind)
 }
 

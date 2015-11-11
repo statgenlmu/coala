@@ -1,24 +1,27 @@
+#' @export
 print.segsites <- function(x, ...) {
-  colnames(x) <- format(get_positions(x), scientific = FALSE)
-  print.simple.list(x)
+  snps <- get_snps(x)
+  colnames(snps) <- format(get_positions(x), scientific = FALSE)
+  print(snps)
 }
 
 
+#' @export
 "[.segsites" <- function(x, chrs, snps, drop = FALSE) {
-  class(x) <- "matrix"
-  create_segsites(snps = x[chrs, select = snps, drop = FALSE],
+  create_segsites(snps = get_snps(x)[chrs, select = snps, drop = FALSE],
                   positions = get_positions(x)[snps],
                   trio_locus = get_trio_locus(x)[snps])
 }
 
 
-as.matrix.segsites <- function(x, ...) {
-  x_class <- attr(x, "class")
-  attr(x, "class") <- x_class[x_class != "segsites"]
-  attr(x, "positions") <- NULL
-  attr(x, "trio_locus") <- NULL
-  x
-}
+#' @export
+as.matrix.segsites <- function(x, ...) get_snps(x)
+
+
+#' @export
+dim.segsites <- function(x) dim(get_snps(x))
+
+
 
 
 is_segsites <- function(segsites) inherits(segsites, "segsites")
@@ -51,7 +54,9 @@ create_trios <- function(left, middle, right) {
   assert_that(length(left) == length(right))
 
   lapply(seq(along = left), function(locus) {
-    create_segsites(cbind(left[[locus]], middle[[locus]], right[[locus]]),
+    create_segsites(cbind(get_snps(left[[locus]]),
+                          get_snps(middle[[locus]]),
+                          get_snps(right[[locus]])),
                     c(get_positions(left[[locus]]),
                       get_positions(middle[[locus]]),
                       get_positions(right[[locus]])),
