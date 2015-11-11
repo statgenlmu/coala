@@ -74,7 +74,9 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
       }
 
       seg_sites <- lapply(seg_sites, function(x) {
-        if (!is_segsites(x)) x <- create_segsites(x, as.numeric(colnames(x)))
+        if (!is_segsites(x)) {
+          x <- create_segsites(x, as.numeric(colnames(x)), check = FALSE)
+        }
         x
       })
 
