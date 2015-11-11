@@ -17,28 +17,64 @@ generate_trio_trees <- function(trees, llm) {
     .Call('coala_generate_trio_trees', PACKAGE = 'coala', trees, llm)
 }
 
-create_segsites <- function(snps, positions = numeric(0), trio_locus = numeric(0), check = TRUE) {
+#' Segregating Sites
+#'
+#' This functions allow the creation and modification of segregating sites
+#' objects, which are on of the most basic statistics that is calculated in
+#' coala. Segregating Sites are primarily a matrix, where each row repesents
+#' a haplotype and each column represents a SNPs. A given entry is either 1 if
+#' the haplotype carries the derived allele for the SNP, or 0 if it carries
+#' the ancestral one.
+#'
+#' @param snps The SNP Matrix
+#' @param positions A numeric vector indicating the relative positions of each
+#'   SNP on the locus.
+#' @param trio_locus If the locus consists of a locus trio, then this
+#'   contains the trio locus each SNP belongs to.
+#' @param check Whether non-segregating sites are remove from the segregating
+#'   sites (\code{TRUE}) or not (\code{FALSE}).
+#' @export
+#' @aliases segsites
+#'
+create_segsites <- function(snps, positions, trio_locus = numeric(0), check = TRUE) {
     .Call('coala_create_segsites', PACKAGE = 'coala', snps, positions, trio_locus, check)
 }
 
-get_snps <- function(seg_sites) {
-    .Call('coala_get_snps', PACKAGE = 'coala', seg_sites)
+#' @describeIn create_segsites Returns the SNP matrix from a segregating sites
+#'  object.
+#'
+#' @param segsites The segregating sites object
+#' @export
+get_snps <- function(segsites) {
+    .Call('coala_get_snps', PACKAGE = 'coala', segsites)
 }
 
-get_positions <- function(seg_sites) {
-    .Call('coala_get_positions', PACKAGE = 'coala', seg_sites)
+#' @describeIn create_segsites Returns the SNP's positions from a segregating
+#'   sites  object.
+#' @export
+get_positions <- function(segsites) {
+    .Call('coala_get_positions', PACKAGE = 'coala', segsites)
 }
 
-set_positions <- function(seg_sites, positions) {
-    .Call('coala_set_positions', PACKAGE = 'coala', seg_sites, positions)
+#' @describeIn create_segsites Sets the SNP's positions in a segregating
+#'   sites object.
+#' @export
+set_positions <- function(segsites, positions) {
+    .Call('coala_set_positions', PACKAGE = 'coala', segsites, positions)
 }
 
-get_trio_locus <- function(seg_sites) {
-    .Call('coala_get_trio_locus', PACKAGE = 'coala', seg_sites)
+#' @describeIn create_segsites Returns the trio locus positions from a
+#'   segregating sites  object.
+#' @export
+get_trio_locus <- function(segsites) {
+    .Call('coala_get_trio_locus', PACKAGE = 'coala', segsites)
 }
 
-set_trio_locus <- function(seg_sites, trio_locus) {
-    .Call('coala_set_trio_locus', PACKAGE = 'coala', seg_sites, trio_locus)
+#' @describeIn create_segsites Sets the trio locus in a segregating sites
+#'   object.
+#' @export
+set_trio_locus <- function(segsites, trio_locus) {
+    .Call('coala_set_trio_locus', PACKAGE = 'coala', segsites, trio_locus)
 }
 
 calc_four_gamete_stat <- function(seg_sites_list, individuals, locus_length) {

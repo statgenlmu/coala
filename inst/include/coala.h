@@ -46,9 +46,11 @@ inline Rcpp::NumericMatrix getSNPs(const SegSites seg_sites) {
   return seg_sites["snps"];
 }
 
+
 inline Rcpp::NumericVector getPositions(const SegSites seg_sites) {
   return seg_sites["position"];
 }
+
 
 inline SegSites setPositions(SegSites seg_sites,
                              const Rcpp::NumericVector positions) {
@@ -59,9 +61,11 @@ inline SegSites setPositions(SegSites seg_sites,
   return seg_sites;
 }
 
+
 inline Rcpp::NumericVector getTrioLocus(const SegSites seg_sites) {
   return seg_sites["trio_locus"];
 }
+
 
 inline SegSites setTrioLocus(SegSites seg_sites,
                              const Rcpp::NumericVector trio_locus) {
