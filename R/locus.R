@@ -65,7 +65,7 @@ locus_single <- function(length) {
 }
 
 
-#' @describeIn locus_single
+#' @describeIn locus_single Multiple Loci of the same length.
 #' @param number The number of loci to add.
 #' @export
 locus_averaged <- function(number, length) {
