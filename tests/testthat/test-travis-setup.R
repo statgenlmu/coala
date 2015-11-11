@@ -24,3 +24,8 @@ test_that("OmegaPlus is available on travis", {
   if (!on_travis) skip("Not on Travis-CI")
   expect_true(has_omega())
 })
+
+
+test_that("release questions are present", {
+  release_questions()
+})
