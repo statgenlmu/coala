@@ -4,7 +4,7 @@ author: "Paul Staab"
 date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction}
+  %\VignetteIndexEntry{Extending coala}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
@@ -53,7 +53,7 @@ respectively, to `TRUE`. Arguments not request can be present if they are
 created for a different summary statistic, but will be `NULL` in most cases.
 
 In this example, we only use the segregating sites, and hence it is the only
-argument request. All the summary stastic does is to return the unmodified 
+argument request. All the summary statistic does is to return the unmodified 
 segregating sites.
 
 Warning: I am currently only satisfied with the structure of the segregating
@@ -87,7 +87,7 @@ This function requires only the `folder` argument on initialization, which is
 the folder into which the files are copied. In the `initialize` function, the
 folder is created and its name is stored in a private variable. Finally,
 it calls the constructor of `sumstat_class` via `super$initialize`. This is 
-essitial when defining your own constructors! See the `?sumstat_class` for
+essential when defining your own constructors! See the `?sumstat_class` for
 further details.
 
 
@@ -97,7 +97,7 @@ Simulators
 
 Adding support for new coalescent simulators is more difficult than adding
 summary statistics. If you are planning to do so, I highly recommend to open
-an [issue](https://github.com/statgenlmu/coala/issues/new) in coalas bug tracker
+an [issue](https://github.com/statgenlmu/coala/issues/new) in coala's bug tracker
 first, so that I can assist with the implementation.
 
 The most important part is to create a `simulate` function that the model and 

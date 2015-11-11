@@ -15,9 +15,6 @@ site mutation models.
 Coala also directly imports the simulation results into `R`, and allows to
 calculate additional summary statistics from the results.
 
-Coala is currently in an early version. Please check the simulation commands it 
-executed before drawing conclusions from the simulation results.
-
 
 Installation
 ------------
