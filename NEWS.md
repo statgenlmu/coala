@@ -1,3 +1,12 @@
+coala 0.2.1
+===========
+(not completed and released yet)
+
+## Small Changes
+* Export the functions for dealing with segregating sites.
+
+
+
 coala 0.2.0
 ===========
 

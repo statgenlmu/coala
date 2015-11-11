@@ -159,7 +159,7 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
         if (length(group_loci) == 1) return(group_loci[[1]])
 
         assert_that(length(group_loci) == 3)
-        create_trios(group_loci[[1]], group_loci[[2]], group_loci[[3]])
+        create_locus_trio(group_loci[[1]], group_loci[[2]], group_loci[[3]])
       })
       unlink(unlist(trees))
 

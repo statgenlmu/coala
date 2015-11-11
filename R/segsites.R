@@ -17,7 +17,6 @@ print.segsites <- function(x, ...) {
 #' @export
 as.matrix.segsites <- function(x, ...) get_snps(x)
 
-
 #' @export
 dim.segsites <- function(x) dim(get_snps(x))
 
@@ -49,7 +48,8 @@ conv_to_ms_output <- function(segsites) {
 }
 
 
-create_trios <- function(left, middle, right) {
+
+create_locus_trio <- function(left, middle, right) {
   assert_that(length(left) == length(middle))
   assert_that(length(left) == length(right))
 
