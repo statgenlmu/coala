@@ -1,0 +1,107 @@
+---
+title: "Adding Summary Statistics and Simulators"
+author: "Paul Staab"
+date: "coala `r packageVersion('coala')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+Coala uses a modular system based on 
+[R6 Classes](https://cran.r-project.org/package=R6) for integrating summary
+statistics and coalescent simulators. This document contains instructions on
+adding both.
+
+
+Summary Statistics
+------------------
+Summary statistics are derived from the `sumstat_class` base class. They
+primarily consists of a `calculate` function that -- well -- calculates the
+statistics value from the simulation results. A simple example is the 
+`sumstat_seg_sites()` statistic:
+
+```{r}
+library(R6)
+library(coala)
+stat_segsites_class <- R6Class("stat_segsites", inherit = sumstat_class,
+  private = list(req_segsites = TRUE),
+  public = list(
+    calculate = function(segsites, trees, files, model) segsites
+  )
+)
+
+sumstat_seg_sites <- function(name = "seg_sites", transformation = identity) {
+  stat_segsites_class$new(name, transformation)
+}
+```
+
+The calculate function must have four arguments. It is called after the 
+simulation with the following arguments:
+
+- First, a list of segregating sites, were each entry of the list contains
+  the segregating sites for a locus.
+- Second, a list of trees currently in Newick format.
+- Third, the raw output files from the simulator.
+- Finally, the model that was simulated.
+
+Only the model is always passed to `calculate`. The other three inputs are
+generated on demand and have to be requested by the statistic. To do so,
+set the private variable `req_segsites`, `req_trees` or `req_files`, 
+respectively, to `TRUE`. Arguments not request can be present if they are 
+created for a different summary statistic, but will be `NULL` in most cases.
+
+In this example, we only use the segregating sites, and hence it is the only
+argument request. All the summary stastic does is to return the unmodified 
+segregating sites.
+
+Warning: I am currently only satisfied with the structure of the segregating
+sites. The format of the `trees` and the `files` arguments might still change.
+
+
+### Adding A Constructor
+
+If the statistic has additional options that can be set on creation, overwrite
+the `initialize` function. Take, for example a simplified version of 
+`sumstat_file`:
+
+```{r}
+stat_file_class <- R6Class("stat_file", inherit = sumstat_class,
+  private = list(folder = NULL, req_files = TRUE),
+  public = list(
+    initialize = function(folder) {
+      dir.create(folder, showWarnings = FALSE)
+      private$folder <- folder
+      super$initialize("file", identity)
+    },
+    calculate = function(seg_sites, trees, files, model) {
+      file.copy(files, private$folder, overwrite = FALSE)
+      file.path(private$folder, basename(files))
+    }
+  )
+)
+```
+
+This function requires only the `folder` argument on initialization, which is
+the folder into which the files are copied. In the `initialize` function, the
+folder is created and its name is stored in a private variable. Finally,
+it calls the constructor of `sumstat_class` via `super$initialize`. This is 
+essitial when defining your own constructors! See the `?sumstat_class` for
+further details.
+
+
+
+Simulators
+----------
+
+Adding support for new coalescent simulators is more difficult than adding
+summary statistics. If you are planning to do so, I highly recommend to open
+an [issue](https://github.com/statgenlmu/coala/issues/new) in coalas bug tracker
+first, so that I can assist with the implementation.
+
+The most important part is to create a `simulate` function that the model and 
+the model parameters as arguments, conducts the simulation and parses the 
+output to create the `segsites` and/or `trees` argument for the summary 
+statistics. It should throw an error with `stop()` if it gets a model that is
+not supported.

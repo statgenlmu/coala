@@ -18,7 +18,7 @@ and must explicitly be activated. This is described in the `installation`
 vignette:
 
 ```{r installation, eval=FALSE}
-vignette("installation", package = "coala")
+vignette("coala-install", package = "coala")
 ```
 
 In this introduction we'll stick to using `scrm`.
