@@ -1,3 +1,4 @@
+#' @export
 print.segsites <- function(x, ...) {
   snps <- get_snps(x)
   colnames(snps) <- format(get_positions(x), scientific = FALSE)
@@ -5,6 +6,7 @@ print.segsites <- function(x, ...) {
 }
 
 
+#' @export
 "[.segsites" <- function(x, chrs, snps, drop = FALSE) {
   create_segsites(snps = get_snps(x)[chrs, select = snps, drop = FALSE],
                   positions = get_positions(x)[snps],
@@ -12,8 +14,11 @@ print.segsites <- function(x, ...) {
 }
 
 
+#' @export
 as.matrix.segsites <- function(x, ...) get_snps(x)
 
+
+#' @export
 dim.segsites <- function(x) dim(get_snps(x))
 
 

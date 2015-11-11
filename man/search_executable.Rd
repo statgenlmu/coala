@@ -6,16 +6,19 @@
 \usage{
 search_executable(name, envir_var = NULL)
 }
+\arguments{
+\item{name}{The name of the executable to look for}
+
+\item{envir_var}{the name of the environment variable to use}
+}
+\value{
+The complete path of the executable is found, or "NULL" if not.
+}
 \description{
 This function tries to find a binary of a given name by looking
 in the current working directory and the directories listed in
 the $PATH environment variable. If an environment variable with
 name equal to to binaries name in upper case is given, it also
 tries to use this as path of the binary.
-}
-\details{
-@param name The name of the executable to look for
- @param envir_var the name of the environment variable to use
- @return The complete path of the executable is found, or "NULL" if not.
 }
 

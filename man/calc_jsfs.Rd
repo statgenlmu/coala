@@ -7,12 +7,12 @@
 calc_jsfs(seg_sites_list, pop1, pop2)
 }
 \arguments{
+\item{seg_sites_list}{List of segregating sites}
+
 \item{pop1}{The rows of \code{seg_sites} that correspond to individuals
 of the first population.}
 
 \item{pop2}{same as \code{pop1}, but for the second population.}
-
-\item{seg_sites}{List of segregating sites}
 }
 \value{
 The Joint Site Frequency Spectrum, as a matrix.

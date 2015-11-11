@@ -4,7 +4,7 @@ using namespace Rcpp;
 
 //' Calculates the JSFS for two populations
 //'
-//' @param seg_sites List of segregating sites
+//' @param seg_sites_list List of segregating sites
 //' @param pop1 The rows of \code{seg_sites} that correspond to individuals
 //'   of the first population.
 //' @param pop2 same as \code{pop1}, but for the second population.
