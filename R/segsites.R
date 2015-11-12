@@ -22,7 +22,8 @@ dim.segsites <- function(x) dim(get_snps(x))
 
 
 
-
+#' @describeIn create_segsites Checks whether an object is a segsites object.
+#' @export
 is_segsites <- function(segsites) inherits(segsites, "segsites")
 
 
@@ -49,6 +50,12 @@ conv_to_ms_output <- function(segsites) {
 
 
 
+#' Combines three segregating sites to a locus trio
+#'
+#' @param left The segregating sites from the left locus
+#' @param middle The segregating sites from the middle locus
+#' @param right The segregating sites from the right locus
+#' @export
 create_locus_trio <- function(left, middle, right) {
   assert_that(length(left) == length(middle))
   assert_that(length(left) == length(right))

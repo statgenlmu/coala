@@ -73,7 +73,7 @@ simulators are currently available.
   coalescent with recombination._
   Bioinformatics (2015) 31 (10): 1680-1682. 
   [10.1093/bioinformatics/btu861](http://doi.org/doi:10.1093/bioinformatics/btu861)
-* __[4]__: Andrew Rambaut and Nicholas C. Grass.
+* __[4]__: Andrew Rambaut and Nicholas C. Grassly.
   _Seq-Gen: an application for the Monte Carlo simulation of DNA sequence
   evolution along phylogenetic trees._
   Comput Appl Biosci (1997) 13 (3): 235-238
