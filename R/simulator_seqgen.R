@@ -177,8 +177,8 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
       cmds <- list(trees = tree_sim_data$cmds,
                    seqgen = cmd_store$list)
 
-      calc_sumstats(seg_sites, NULL, sequences, model,
-                    parameters, cmds, get_simulator("seqgen"))
+      calc_sumstats_from_sim(seg_sites, NULL, sequences, model,
+                             parameters, cmds, self)
     },
     get_cmd = function(model) {
       c(trees = get_cmd(generate_tree_model(model)),
@@ -200,7 +200,7 @@ has_seqgen <- function() !is.null(simulators[["seqgen"]])
 #' and compile the binary first.
 #'
 #' @section Citation:
-#' Andrew Rambaut and Nicholas C. Grass.
+#' Andrew Rambaut and Nicholas C. Grassly.
 #' Seq-Gen: an application for the Monte Carlo simulation of DNA sequence
 #' evolution along phylogenetic trees.
 #' Comput Appl Biosci (1997) 13 (3): 235-238

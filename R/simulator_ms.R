@@ -95,8 +95,8 @@ ms_class <- R6Class("ms", inherit = simulator_class,
         paste("ms", sample_size, cmd[ , 1], cmd[ , 2])
       })
 
-      sum_stats <- calc_sumstats(output$segsites, output$trees, files, model,
-                                 parameters, cmds, self)
+      sum_stats <- calc_sumstats_from_sim(output$segsites, output$trees,
+                                          files, model, parameters, cmds, self)
 
       # Clean Up
       unlink(unlist(files))
