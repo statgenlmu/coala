@@ -84,8 +84,8 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
         paste("scrm", sample_size, cmd[ , 1], cmd[ , 2])
       })
 
-      stats <- calc_sumstats(seg_sites, trees, files,
-                             model, parameters, cmds, self)
+      stats <- calc_sumstats_from_sim(seg_sites, trees, files,
+                                      model, parameters, cmds, self)
       unlink(files)
 
       stats

@@ -79,18 +79,34 @@ get_summary_statistics <- function(model) {
 }
 
 
-calc_sumstats <- function(seg_sites, trees, files, model,
-                          pars, cmds, simulator) {
+calc_sumstats <- function(model, segsites_list = NULL, trees = NULL,
+                          files = NULL, ...) {
+
+  assert_that(is.model(model))
+  if (requires_segsites(model)) {
+    assert_that(!is.null(segsites_list))
+    assert_that(all(vapply(segsites_list, is_segsites, logical(1))))
+  }
+  if (requires_trees(model)) assert_that(!is.null(trees))
+  if (requires_files(model)) assert_that(!is.null(files))
+
+  stats <- lapply(model$sum_stats, function(stat) {
+      stat$transform(stat$calculate(segsites_list, trees, files, model))
+  })
+
+  c(stats, list(...))
+}
+
+
+calc_sumstats_from_sim <- function(seg_sites, trees, files, model,
+                                   pars, cmds, simulator) {
+
   if (missing(pars)) pars <- numeric(0)
-  stopifnot(is.model(model))
+  assert_that(is.model(model))
 
   if (is.list(cmds) && simulator$get_name() != "seqgen") {
     cmds <- do.call(c, cmds)
   }
-
-  sum_stats <- list(pars = pars,
-                    cmds = cmds,
-                    simulator = simulator$get_info())
 
   # Process seg_sites for trios and unphase if neccessary
   if (requires_segsites(model)) {
@@ -103,25 +119,83 @@ calc_sumstats <- function(seg_sites, trees, files, model,
                                     get_ploidy(model),
                                     get_samples_per_ind(model))
     }
-
-    assert_that(all(vapply(seg_sites, is_segsites, logical(1))))
   }
 
-  for (stat in model$sum_stats) {
-    sum_stats[[stat$get_name()]] <-
-      stat$transform(stat$calculate(seg_sites, trees, files, model))
-  }
-
-  sum_stats
+  calc_sumstats(model, seg_sites, trees, files,
+                pars = pars, cmds = cmds, simulator = simulator$get_info())
 }
+
+
+#' Calculate summary statistics for biological data
+#'
+#' This function calculates a model's summary statistic from biological data.
+#' The data needs to be provided as a list of segregating sites objects. These
+#' objects can be create using the \code{\link{create_segsites}} function.
+#'
+#' @param model The coala model. The summary statistics present in this model
+#'   will be calculated. The model should fit to the data, in particular
+#'   regarding the number of loci and haploids.
+#' @param segsites_list A list of \code{segsites} objects. See above.
+#' @param tree_list Not yet implemented.
+#' @param trios If your model is using locus trios, then you need
+#'   can create these by combining individual loci. This is a list that defines
+#'   which loci are combined to a trio. Each entry should consist of either
+#'   one or three numbers. For one number, the locus used for calculating the
+#'   summary statistics is locus in the provided data that corresponds to the
+#'   number. If three number are provided, the locus for calculation is created
+#'   by combining the corresponding three loci from the given data.
+#' @export
+calc_sumstats_from_data <- function(model,
+                                    segsites_list = NULL,
+                                    tree_list = NULL,
+                                    trios = NULL) {
+
+  assert_that(is.model(model))
+
+  if (!is.null(trios)) {
+    assert_that(is.list(trios))
+    assert_that(!is.null(segsites_list))
+    if (!is.null(tree_list)) {
+      stop("Using tree_list with trios is currently not supported")
+    }
+
+    segsites_list <- lapply(trios, function(trio) {
+      assert_that(is.numeric(trio))
+      if (length(trio) == 1) return(segsites_list[[trio[1]]])
+      assert_that(length(trio) == 3)
+      create_locus_trio(list(segsites_list[[trio[1]]]),
+                        list(segsites_list[[trio[2]]]),
+                        list(segsites_list[[trio[3]]]))[[1]]
+    })
+  }
+
+  if (!is.null(segsites_list)) {
+    assert_that(is.list(segsites_list))
+    if (!all(vapply(segsites_list, is_segsites, logical(1)))) {
+      stop("Incorrect or missing data in list of segregating sites")
+    }
+    assert_that(length(segsites_list) == get_locus_number(model))
+  }
+
+  if (!is.null(tree_list)) {
+    stop("Trees are currently not supported")
+    #assert_that(is.list(tree_list))
+    #assert_that(length(tree_list) == get_locus_number(model))
+  }
+
+  calc_sumstats(model, segsites_list, tree_list)
+}
+
 
 requires_segsites <- function(model) {
   any(sapply(get_summary_statistics(model), function(x) x$requires_segsites()))
 }
 
+
 requires_trees <- function(model) {
   any(sapply(get_summary_statistics(model), function(x) x$requires_trees()))
 }
+
 
 requires_files <- function(model) {
   any(sapply(get_summary_statistics(model), function(x) x$requires_files()))

@@ -55,8 +55,8 @@ conv_to_ms_output <- function(segsites) {
 #' @param left The segregating sites from the left locus
 #' @param middle The segregating sites from the middle locus
 #' @param right The segregating sites from the right locus
-#' @export
 create_locus_trio <- function(left, middle, right) {
+  assert_that(is.list(left) && is.list(middle) && is.list(right))
   assert_that(length(left) == length(middle))
   assert_that(length(left) == length(right))
 
