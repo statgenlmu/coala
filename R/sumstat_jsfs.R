@@ -17,15 +17,15 @@ stat_jsfs_class <- R6Class("stat_jsfs", inherit = sumstat_class,
       super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
-      ind_pop1 <- get_population_indiviuals(model, private$populations[1])
-      ind_pop2 <- get_population_indiviuals(model, private$populations[2])
+      ind_per_pop <- lapply(private$populations, get_population_indiviuals,
+                            model = model)
 
       if (private$per_locus) {
         jsfs <- lapply(seg_sites, function(x) {
-          calc_jsfs(list(x), ind_pop1, ind_pop2)
+          calc_jsfs(list(x), ind_per_pop)
         })
       } else {
-        jsfs <- calc_jsfs(seg_sites, ind_pop1, ind_pop2)
+        jsfs <- calc_jsfs(seg_sites, ind_per_pop)
       }
       jsfs
     }

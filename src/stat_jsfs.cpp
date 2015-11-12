@@ -1,53 +1,57 @@
 #include "../inst/include/coala.h"
+#include <cmath>
 
 using namespace Rcpp;
 
-//' Calculates the JSFS for two populations
+//' Calculates the JSFS
 //'
-//' @param seg_sites_list List of segregating sites
-//' @param pop1 The rows of \code{seg_sites} that correspond to individuals
-//'   of the first population.
-//' @param pop2 same as \code{pop1}, but for the second population.
+//' @param segsites_list List of segregating sites
+//' @param ind_per_pop A list of integer vector, where each entry gives the
+//'   index of the haploids that belong the the corresponding population.
 //' @export
 //' @return The Joint Site Frequency Spectrum, as a matrix.
 // [[Rcpp::export]]
-NumericMatrix calc_jsfs(const List seg_sites_list,
-                        const NumericVector pop1,
-                        const NumericVector pop2) {
+NumericVector calc_jsfs(const ListOf<coala::SegSites> segsites_list,
+                        const ListOf<IntegerVector> ind_per_pop) {
 
-  size_t n_pop1 = pop1.size();
-  size_t n_pop2 = pop2.size();
-  size_t nrows_required;
-  if (n_pop2 == 0) nrows_required = max(pop1);
-  else nrows_required = max(NumericVector::create(max(pop1), max(pop2)));
+  size_t n_pops = ind_per_pop.size();
 
-  NumericMatrix jsfs(n_pop1+1, n_pop2+1);
-  size_t idx1, idx2, ncol, nrow;
-  coala::SegSites segsites;
+  NumericVector n_inds = no_init(n_pops);
+  size_t n_entries = 1;
+
+  for (size_t i = 0; i < n_pops; ++i) {
+    n_inds(i) = ind_per_pop[i].size();
+    n_entries *= n_inds[i] + 1;
+  }
+
+  NumericVector jsfs(n_entries, 0);
+  size_t idx1, idx2, ncol;
   NumericMatrix snps;
   NumericVector trio_locus;
 
-  for (int locus = 0; locus < seg_sites_list.size(); ++locus) {
-    segsites = as<coala::SegSites>(seg_sites_list[locus]);
-    trio_locus = coala::getTrioLocus(segsites);
-    snps = coala::getSNPs(segsites);
+  for (int locus = 0; locus < segsites_list.size(); ++locus) {
+    trio_locus = coala::getTrioLocus(segsites_list[locus]);
+    snps = coala::getSNPs(segsites_list[locus]);
     ncol = snps.ncol();
-    nrow = snps.nrow();
 
     if (ncol == 0) continue;
-    if (nrow < nrows_required) stop("Seg. Sites has too few rows.");
 
     for (size_t j = 0; j < ncol; ++j) {
       if (trio_locus(j) != 0) continue; // Only calculate for middle locus
 
       idx1 = 0; idx2 = 0;
 
-      for (size_t i = 0; i < n_pop1; ++i) idx1 += snps(pop1[i]-1,j);
-      for (size_t i = 0; i < n_pop2; ++i) idx2 += snps(pop2[i]-1,j);
+      for (size_t i = 0; i < n_inds[0]; ++i) idx1 += snps(ind_per_pop[0][i]-1,j);
+      for (size_t i = 0; i < n_inds[1]; ++i) idx2 += snps(ind_per_pop[1][i]-1,j);
 
-      //Rcout << "SNP " << j << ": " << idx1 << "-" << idx2 << std::endl;
-      ++jsfs(idx1, idx2);
+      //cout << "SNP " << j << ": " << idx1 << "-" << idx2 << std::endl;
+      ++jsfs(idx1 + idx2 * (n_inds[0] + 1));
     }
+  }
+
+  if (n_pops == 2) {
+    jsfs.attr("class") = "matrix";
+    jsfs.attr("dim") = n_inds + 1;
   }
 
   return jsfs;

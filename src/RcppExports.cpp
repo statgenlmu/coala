@@ -144,15 +144,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // calc_jsfs
-NumericMatrix calc_jsfs(const List seg_sites_list, const NumericVector pop1, const NumericVector pop2);
-RcppExport SEXP coala_calc_jsfs(SEXP seg_sites_listSEXP, SEXP pop1SEXP, SEXP pop2SEXP) {
+NumericVector calc_jsfs(const ListOf<coala::SegSites> segsites_list, const ListOf<IntegerVector> ind_per_pop);
+RcppExport SEXP coala_calc_jsfs(SEXP segsites_listSEXP, SEXP ind_per_popSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const List >::type seg_sites_list(seg_sites_listSEXP);
-    Rcpp::traits::input_parameter< const NumericVector >::type pop1(pop1SEXP);
-    Rcpp::traits::input_parameter< const NumericVector >::type pop2(pop2SEXP);
-    __result = Rcpp::wrap(calc_jsfs(seg_sites_list, pop1, pop2));
+    Rcpp::traits::input_parameter< const ListOf<coala::SegSites> >::type segsites_list(segsites_listSEXP);
+    Rcpp::traits::input_parameter< const ListOf<IntegerVector> >::type ind_per_pop(ind_per_popSEXP);
+    __result = Rcpp::wrap(calc_jsfs(segsites_list, ind_per_pop));
     return __result;
 END_RCPP
 }
