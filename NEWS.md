@@ -1,11 +1,11 @@
 coala 0.2.1
 ===========
-(not completed and released yet)
 
-## Small Changes
-* Exports the functions for dealing with segregating sites (#122).
+* Fixes a test that failed on R 3.1.x due to a bug in the tests code (#127).
+* Fixes version requirement for `testthat` (#127).
 * Adds the `calc_sumstats_from_data` function for calculating summary statistics 
-  from biological data.
+  from biological data (#124).
+* Exports the functions related to segregating sites (#122).
 
 
 

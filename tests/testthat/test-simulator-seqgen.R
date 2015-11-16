@@ -100,10 +100,8 @@ test_that("it parses seqgen output", {
   expect_equivalent(seg_sites[[2]], seg_sites_o2)
 
   # Unexpected sequence character
-  capture.output({
-    expect_error(parse_seqgen_output(c(" 1 2", "1         AX"),
-                                     1, 2, 1, 0, FALSE))
-  }, type = "message")
+  expect_error(parse_seqgen_output(c(" 1 2", "1         AX"),
+                                   1, 2, 1, 0, FALSE))
 
   # False sequence length
   #expect_error(parse_seqgen_output(c(" 1 3", "1         AAA"),
