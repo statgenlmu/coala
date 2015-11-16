@@ -1,3 +1,5 @@
+This release fixes the failing check on r-oldrel-windows.
+
 ## Test environments
 * Ubuntu 15.10 (local), R 3.2.2
 * Ubuntu 12.04 (on Travis-CI), R 3.2.2
@@ -5,7 +7,7 @@
 * win-builder (R-devel and R-release)
 
 ## R CMD check results
-There were no ERRORs or WARNINGs. 
+There were no ERRORs or WARNINGs.
 
 There was 1 NOTE:
 
