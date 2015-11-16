@@ -38,11 +38,13 @@ NumericMatrix read_sequence(CharacterVector output,
         else if (tmp[j] == 'G') seq(seq_nr, pos + j) = 3;
         else if (tmp[j] == 'T') seq(seq_nr, pos + j) = 4;
         else {
+          /*
           Rcerr << "Error parsing seq-gen sequence " << seq_nr + 1
                 << " position " << pos + j + 1 << " of " << locus_length
                 << std::endl
                 << "Character " << tmp[j] << std::endl
                 << "Seq: " << tmp << std::endl;
+          */
           stop(std::string("unexpected sequence character: ") + tmp[j]);
         }
       }
