@@ -23,7 +23,7 @@ sample_class <- R6Class("sample", inherit = feature_class,
         else if (i == length(samples) - 1) cat(" and ")
       }
       cat(" individuals with ploidy", self$get_ploidy(),
-          "at time", self$get_time(), "\n")
+          "at time", print_par(self$get_time()), "\n")
     }
   )
 )
