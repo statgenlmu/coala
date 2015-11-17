@@ -6,21 +6,38 @@ using namespace Rcpp;
 //' Segregating Sites
 //'
 //' This functions allow the creation and modification of segregating sites
-//' objects, which are on of the most basic statistics that is calculated in
-//' coala. Segregating Sites are primarily a matrix, where each row repesents
-//' a haplotype and each column represents a SNPs. A given entry is either 1 if
-//' the haplotype carries the derived allele for the SNP, or 0 if it carries
-//' the ancestral one.
+//' objects, which are one of the most basic intermediary statistics that is
+//' calculated in coala. Segregating sites are primarily SNP matrix that
+//' contains all SNPs for one locus, with some additional information attached.
+//' The parts of the S3 class are detailed below.
 //'
-//' @param snps The SNP Matrix
+//' A segregating sites object contains all SNPs for one genetic locus. Each
+//' object consists of tree parts: A SNP matrix, a vector of SNP positons and
+//' a vector that states which transcript a SNP belong to, if the locus
+//' consists of multiple transscripts ('locus trio').
+//'
+//' \itemize{
+//'   \item{In the \strong{SNP} matrix, each row represents a haplotype and each
+//'         column represents a SNP. An entry is either \code{1} if the
+//'         haplotype carries the derived allele for the SNP, or \code{0} if it
+//'         carries the ancestral one.}
+//'   \item{In the \strong{positions} vector, each entry gives the relative
+//'         position of SNP in the corresponding column of the SNP matrix.}
+//'   \item{The \strong{trio_locus} vector contains the trio locus each SNP
+//'         belongs to. Entry of \code{-1},\code{0}, \code{1} represent the
+//'         left, middle, and right locus, respectively. For normal loci,
+//'         this just consists of \code{0}'s}
+//' }
+//'
+//' @param snps The SNP Matrix (see Details).
 //' @param positions A numeric vector indicating the relative positions of each
-//'   SNP on the locus.
-//' @param trio_locus If the locus consists of a locus trio, then this
-//'   contains the trio locus each SNP belongs to.
+//'   SNP on the locus (see Details).
+//' @param trio_locus If the locus consists of a locus trio (see Details).
 //' @param check Whether non-segregating sites are remove from the segregating
 //'   sites (\code{TRUE}) or not (\code{FALSE}).
 //' @export
 //' @aliases segsites
+//' @author Paul Staab
 //'
 // [[Rcpp::export]]
 coala::SegSites create_segsites(NumericMatrix snps,
