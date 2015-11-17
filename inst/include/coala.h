@@ -3,6 +3,14 @@
 
 #include <RcppArmadillo.h>
 
+
+/*
+ * Documentation for the functions here is included in the file
+ * `src/seg_sites.cc`, because it seems that Rcpp currently can't Rcpp::export
+ * inlined functions directly.
+ */
+
+
 namespace coala {
 
 typedef Rcpp::List SegSites;
