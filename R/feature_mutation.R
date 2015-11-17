@@ -54,7 +54,7 @@ mutation_class <- R6Class("mutation", inherit = feature_class,
     get_gtr_rates = function() private$gtr_rates,
     get_fixed = function() private$fixed,
     print = function() {
-      cat("Mutations with rate", print_par(private$rate),
+      cat("Mutations with rate", print_par(paste0("par(", private$rate, ")")),
           "following a", private$model, "mutation model\n")
     }
   )

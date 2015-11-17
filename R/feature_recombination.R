@@ -1,8 +1,5 @@
 recombination_class <- R6Class("recombination", inherit = feature_class,
   public = list(
-    initialize = function(rate) {
-      private$rate <- private$add_parameter(rate)
-    },
     print = function() {
       cat("Recombination with rate", print_par(private$rate), "\n")
     }
