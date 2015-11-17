@@ -1,5 +1,0 @@
-box: paulstaab/coala-test-setup
-build:
-  steps:
-    - jimhester/r-dependencies
-    - paulstaab/r-test-valgrind

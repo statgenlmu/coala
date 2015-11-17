@@ -1,4 +1,5 @@
-This release fixes the failing check on r-oldrel-windows.
+This version fixes the failing check on r-oldrel-windows.
+
 
 ## Test environments
 * Ubuntu 15.10 (local), R 3.2.2
@@ -6,19 +7,22 @@ This release fixes the failing check on r-oldrel-windows.
 * Windows (on AppVeyor), R-devel
 * win-builder (R-devel and R-release)
 
+
 ## R CMD check results
 There were no ERRORs or WARNINGs.
-
 There was 1 NOTE:
 
 * checking CRAN incoming feasibility ... NOTE
 Maintainer: ‘Paul Staab <develop@paulstaab.de>’
+
+Days since last update: 6
 
 License components with restrictions and base license permitting such:
   MIT + file LICENSE
 File 'LICENSE':
   YEAR: 2015
   COPYRIGHT HOLDER: Paul Staab
+
 
 
 ## Downstream dependencies
