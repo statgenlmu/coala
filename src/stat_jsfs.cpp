@@ -25,7 +25,7 @@ NumericVector calc_jsfs(const ListOf<coala::SegSites> segsites_list,
   }
 
   NumericVector jsfs(n_entries, 0);
-  size_t idx1, idx2, ncol;
+  size_t ncol;
   NumericMatrix snps;
   NumericVector trio_locus;
 
@@ -39,18 +39,29 @@ NumericVector calc_jsfs(const ListOf<coala::SegSites> segsites_list,
     for (size_t j = 0; j < ncol; ++j) {
       if (trio_locus(j) != 0) continue; // Only calculate for middle locus
 
-      idx1 = 0; idx2 = 0;
+      std::vector<size_t> idx(n_pops,0); // idx will be a multiindex, where idx[i] is a number
+      // of derived alleles in population i.
 
-      for (size_t i = 0; i < n_inds[0]; ++i) idx1 += snps(ind_per_pop[0][i]-1,j);
-      for (size_t i = 0; i < n_inds[1]; ++i) idx2 += snps(ind_per_pop[1][i]-1,j);
+      for(size_t n=0; n<n_pops; ++n) 
+	for(size_t i=0; i<n_inds[n]; ++i)
+	  idx[n]+=snps(ind_per_pop[n][i]-1,j);
+      
+      size_t k=idx[n_pops-1]; // this will be the index in the output jsfs
+      
+      for(int m=n_pops-2; m>=0; --m) {
+	k*=(n_inds[m]+1);
+	k+=idx[m];
+      }
 
-      //cout << "SNP " << j << ": " << idx1 << "-" << idx2 << std::endl;
-      ++jsfs(idx1 + idx2 * (n_inds[0] + 1));
+      ++jsfs(k);
     }
   }
 
   if (n_pops == 2) {
     jsfs.attr("class") = "matrix";
+    jsfs.attr("dim") = n_inds + 1;
+  } else {
+    jsfs.attr("class") = "array";
     jsfs.attr("dim") = n_inds + 1;
   }
 
