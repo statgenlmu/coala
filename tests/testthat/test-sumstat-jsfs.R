@@ -1,6 +1,36 @@
 context("SumStat JSFS")
 
 test_that("calculation of the JSFS is correct", {
+  seg.sites.3.pop <- list(create_segsites(matrix(c(1, 0, 1, 0,
+                                                   1, 1, 0, 1,
+                                                   0, 0, 0, 1,
+                                                   1, 0, 0, 1,
+                                                   1, 1, 1, 1,
+                                                   1, 0, 1, 0,
+                                                   1, 0, 1 ,0 ),
+                                                 nrow=7, ncol=4, byrow = TRUE),
+                                          c(0.1, 0.2, 0.5, 0.7)))
+  jsfs.3.pop <- calc_jsfs(seg.sites.3.pop, list(1:2, 3:4, 5:7))
+  expect_is(jsfs.3.pop, "array")
+  expect_equivalent(jsfs.3.pop, array(c(0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                        0, 1, 0, 0, 0, 0, 0, 1, 0,
+                                        0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                        0, 1, 0, 0, 0, 1, 0, 0, 0 ), dim=c(2,2,3)+1))
+
+
+  seg.sites.3.pop <- list(create_segsites(matrix(c(1, 0, 1, 0,
+                                                   1, 1, 0, 1,
+                                                   0, 0, 1, 1,
+                                                   0, 0, 0, 1,
+                                                   1, 1, 1, 1,
+                                                   1, 0, 1, 0,
+                                                   1, 0, 1 ,0 ),
+                                                 nrow=7, ncol=4, byrow = TRUE),
+                                          c(0.1, 0.2, 0.5, 0.7)))
+  jsfs.3.pop <- calc_jsfs(seg.sites.3.pop, list(1, 2:6, 7))
+  expect_equivalent(jsfs.3.pop, array(c(0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0,
+                                        0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0 ), dim=c(1,5,1)+1))
+  
   seg.sites <- list(create_segsites(matrix(c(1, 0, 1, 0,
                                              1, 1, 0, 1,
                                              0, 0, 0, 1,
