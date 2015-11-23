@@ -1,3 +1,13 @@
+coala 0.3.0
+===========
+in development
+
+## New Features
+* Adds support for calculating joint frequency spectra for more than two 
+  populations (#132).
+  
+
+
 coala 0.2.1
 ===========
 
