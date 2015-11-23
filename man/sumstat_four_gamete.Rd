@@ -47,4 +47,11 @@ columns give the statistic for different classes of pairs of SNPs:
 \item{perc_polym}{The percentage of positions that are polymorpic.}
 }
 }
+\examples{
+set.seed(30)
+model <- coal_model(5, 2) + feat_mutation(10) + feat_recombination(10) +
+  sumstat_four_gamete()
+stats <- simulate(model)
+print(stats$four_gamete)
+}
 

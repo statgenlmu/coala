@@ -46,6 +46,11 @@ stat_tajimas_d_class <- R6Class("stat_tajimas_d", inherit = sumstat_class,
 #' @return On simulation, this returns a vector with the value of Tajima's D for
 #'   each locus.
 #' @export
+#' @examples
+#' set.seed(20)
+#' model <- coal_model(5, 2) + feat_mutation(5) + sumstat_tajimas_d("taji_d")
+#' stats <- simulate(model)
+#' print(stats$taji_d)
 sumstat_tajimas_d <- function(name = "tajimas_d", population = "all",
                               transformation = identity) {
   stat_tajimas_d_class$new(name, population, transformation)

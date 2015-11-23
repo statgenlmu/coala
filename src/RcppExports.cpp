@@ -170,14 +170,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // calc_nucleotide_div
-NumericVector calc_nucleotide_div(const coala::SegSites seg_sites, const NumericVector individuals);
-RcppExport SEXP coala_calc_nucleotide_div(SEXP seg_sitesSEXP, SEXP individualsSEXP) {
+NumericVector calc_nucleotide_div(const ListOf<coala::SegSites> segsites_list, const NumericVector individuals);
+RcppExport SEXP coala_calc_nucleotide_div(SEXP segsites_listSEXP, SEXP individualsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const coala::SegSites >::type seg_sites(seg_sitesSEXP);
+    Rcpp::traits::input_parameter< const ListOf<coala::SegSites> >::type segsites_list(segsites_listSEXP);
     Rcpp::traits::input_parameter< const NumericVector >::type individuals(individualsSEXP);
-    __result = Rcpp::wrap(calc_nucleotide_div(seg_sites, individuals));
+    __result = Rcpp::wrap(calc_nucleotide_div(segsites_list, individuals));
     return __result;
 END_RCPP
 }

@@ -14,4 +14,10 @@ with this name. Summary statistic names must be unique in a model.}
 \description{
 Returns ancestral tress in NEWICK format from simulations
 }
+\examples{
+set.seed(175)
+model <- coal_model(4, 2) + sumstat_trees()
+stats <- simulate(model)
+print(stats$trees)
+}
 

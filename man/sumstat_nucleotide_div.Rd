@@ -36,4 +36,10 @@ Nei and Li (1979). "Mathematical Model for Studying Genetic Variation in
  Terms of Restriction Endonucleases". PNAS 76 (10): 5269-73.
  doi:10.1073/pnas.76.10.5269.
 }
+\examples{
+set.seed(10)
+model <- coal_model(5, 2) + feat_mutation(5) + sumstat_nucleotide_div()
+stats <- simulate(model)
+print(stats$pi)
+}
 
