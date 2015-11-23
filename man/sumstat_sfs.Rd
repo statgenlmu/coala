@@ -22,4 +22,10 @@ returned instead of the original values.}
 \description{
 Calculates the Site Frequency Spectrum from simulations
 }
+\examples{
+set.seed(50)
+model <- coal_model(5, 2) + feat_mutation(5) + sumstat_sfs()
+stats <- simulate(model)
+print(stats$sfs)
+}
 

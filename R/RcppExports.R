@@ -114,8 +114,8 @@ calc_mcmf <- function(seg_sites, individuals, has_trios = TRUE, ploidy = 1L) {
     .Call('coala_calc_mcmf', PACKAGE = 'coala', seg_sites, individuals, has_trios, ploidy)
 }
 
-calc_nucleotide_div <- function(seg_sites, individuals) {
-    .Call('coala_calc_nucleotide_div', PACKAGE = 'coala', seg_sites, individuals)
+calc_nucleotide_div <- function(segsites_list, individuals) {
+    .Call('coala_calc_nucleotide_div', PACKAGE = 'coala', segsites_list, individuals)
 }
 
 unphase_segsites <- function(seg_sites_list, ploidy, samples_per_ind) {

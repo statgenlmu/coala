@@ -8,7 +8,6 @@ stat_jsfs_class <- R6Class("stat_jsfs", inherit = sumstat_class,
   public = list(
     initialize = function(name, populations, per_locus, transformation) {
       assert_that(is.numeric(populations))
-      assert_that(length(populations) == 2)
       private$populations <- populations
 
       assert_that(is.logical(per_locus))
@@ -40,6 +39,14 @@ stat_jsfs_class <- R6Class("stat_jsfs", inherit = sumstat_class,
 #'   of globally. In this case, the result is a list, where each entry is the
 #'   JSFS for the corresponding locus.
 #' @export
+#' @examples
+#' set.seed(75)
+#' model <- coal_model(c(5, 5), 2) +
+#'   feat_mutation(5) +
+#'   feat_migration(1, symmetric = TRUE) +
+#'   sumstat_jsfs("jsfs", populations = c(1, 2))
+#' stats <- simulate(model)
+#' print(stats$jsfs)
 sumstat_jsfs <- function(name = "jsfs", populations = c(1, 2),
                          per_locus = FALSE, transformation = identity) {
   stat_jsfs_class$new(name, populations, per_locus, transformation)

@@ -25,4 +25,13 @@ returned instead of the original values.}
 \description{
 Calculates the Joint Site Frequency Spectrum from simulations
 }
+\examples{
+set.seed(75)
+model <- coal_model(c(5, 5), 2) +
+  feat_mutation(5) +
+  feat_migration(1, symmetric = TRUE) +
+  sumstat_jsfs("jsfs", populations = c(1, 2))
+stats <- simulate(model)
+print(stats$jsfs)
+}
 

@@ -31,4 +31,10 @@ Tajima's D was introduced by
 Tajima, F. (1989). "Statistical method for testing the neutral mutation
 hypothesis by DNA polymorphism.". Genetics 123 (3): 585-95.
 }
+\examples{
+set.seed(20)
+model <- coal_model(5, 2) + feat_mutation(5) + sumstat_tajimas_d("taji_d")
+stats <- simulate(model)
+print(stats$taji_d)
+}
 

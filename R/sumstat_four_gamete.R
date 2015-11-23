@@ -58,6 +58,12 @@ stat_four_gamete_class <- R6Class("stat_four_gamete", inherit = sumstat_class,
 #'   of the statistic. If specified, the results of the transformation are
 #'   returned instead of the original values.
 #' @export
+#' @examples
+#' set.seed(30)
+#' model <- coal_model(5, 2) + feat_mutation(10) + feat_recombination(10) +
+#'   sumstat_four_gamete()
+#' stats <- simulate(model)
+#' print(stats$four_gamete)
 sumstat_four_gamete  <- function(name = "four_gamete", population = 1,
                                  transformation = identity) {
   stat_four_gamete_class$new(name, population, transformation)

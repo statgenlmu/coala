@@ -18,4 +18,10 @@ returned instead of the original values.}
 \description{
 Returns the Segregation Sites Statistics from simulations
 }
+\examples{
+set.seed(50)
+model <- coal_model(5, 1) + feat_mutation(5) + sumstat_seg_sites("segsites")
+stats <- simulate(model)
+print(stats$segsites)
+}
 

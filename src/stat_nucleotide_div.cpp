@@ -3,9 +3,10 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector calc_nucleotide_div(const coala::SegSites seg_sites,
+NumericVector calc_nucleotide_div(const ListOf<coala::SegSites> segsites_list,
                                   const NumericVector individuals) {
-  size_t n_loci = seg_sites.size();
+
+  size_t n_loci = segsites_list.size();
   NumericVector pi(n_loci);
 
   NumericMatrix ss;
@@ -13,7 +14,7 @@ NumericVector calc_nucleotide_div(const coala::SegSites seg_sites,
   double cnt, c = 2.0 / (n * (n - 1));
 
   for (size_t locus = 0; locus < n_loci; ++locus) {
-    ss = as<NumericMatrix>(seg_sites[locus]);
+    ss = coala::getSNPs(segsites_list[locus]);
     m = ss.ncol();
     cnt = 0;
 

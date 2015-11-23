@@ -11,6 +11,11 @@ stat_trees_class <- R6Class("stat_trees", inherit = sumstat_class,
 #'
 #' @export
 #' @inheritParams sumstat_four_gamete
+#' @examples
+#' set.seed(175)
+#' model <- coal_model(4, 2) + sumstat_trees()
+#' stats <- simulate(model)
+#' print(stats$trees)
 sumstat_trees <- function(name = "trees") {
   stat_trees_class$new(name, identity)
 }

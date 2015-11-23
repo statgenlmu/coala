@@ -35,6 +35,11 @@ stat_pi_class <- R6Class("stat_pi", inherit = sumstat_class,
 #' @return On simulation, this returns a vector with the value of pi for
 #'   each locus.
 #' @export
+#' @examples
+#' set.seed(10)
+#' model <- coal_model(5, 2) + feat_mutation(5) + sumstat_nucleotide_div()
+#' stats <- simulate(model)
+#' print(stats$pi)
 sumstat_nucleotide_div <- function(name = "pi", population = 1,
                                    transformation = identity) {
   stat_pi_class$new(name, population, transformation)

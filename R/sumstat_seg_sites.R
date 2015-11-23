@@ -11,6 +11,11 @@ stat_segsites_class <- R6Class("stat_segsites", inherit = sumstat_class,
 #'
 #' @inheritParams sumstat_four_gamete
 #' @export
+#' @examples
+#' set.seed(50)
+#' model <- coal_model(5, 1) + feat_mutation(5) + sumstat_seg_sites("segsites")
+#' stats <- simulate(model)
+#' print(stats$segsites)
 sumstat_seg_sites <- function(name = "seg_sites", transformation = identity) {
   stat_segsites_class$new(name, transformation)
 }

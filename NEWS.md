@@ -1,8 +1,8 @@
-coala 0.3.0
+coala 0.2.2
 ===========
-in development
 
-## New Features
+* Fixes the broken nucleotide diversity and Tajima's D summary statistics
+  (#133).
 * Adds support for calculating joint frequency spectra for more than two 
   populations (#132).
   
