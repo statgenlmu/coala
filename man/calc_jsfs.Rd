@@ -10,12 +10,15 @@ calc_jsfs(segsites_list, ind_per_pop)
 \item{segsites_list}{List of segregating sites}
 
 \item{ind_per_pop}{A list of integer vector, where each entry gives the
-index of the haploids that belong the the corresponding population.}
+index of the haploids that belong the corresponding population.}
 }
 \value{
 The Joint Site Frequency Spectrum, as a matrix.
 }
 \description{
 Calculates the JSFS
+}
+\author{
+Paul Staab & Dirk Metzler
 }
 

@@ -7,8 +7,9 @@ using namespace Rcpp;
 //'
 //' @param segsites_list List of segregating sites
 //' @param ind_per_pop A list of integer vector, where each entry gives the
-//'   index of the haploids that belong the the corresponding population.
+//'   index of the haploids that belong the corresponding population.
 //' @export
+//' @author Paul Staab & Dirk Metzler
 //' @return The Joint Site Frequency Spectrum, as a matrix.
 // [[Rcpp::export]]
 NumericVector calc_jsfs(const ListOf<coala::SegSites> segsites_list,
