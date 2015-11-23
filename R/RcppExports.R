@@ -98,16 +98,16 @@ calc_four_gamete_stat <- function(seg_sites_list, individuals, locus_length) {
     .Call('coala_calc_four_gamete_stat', PACKAGE = 'coala', seg_sites_list, individuals, locus_length)
 }
 
-#' Calculates the JSFS for two populations
+#' Calculates the JSFS
 #'
-#' @param seg_sites_list List of segregating sites
-#' @param pop1 The rows of \code{seg_sites} that correspond to individuals
-#'   of the first population.
-#' @param pop2 same as \code{pop1}, but for the second population.
+#' @param segsites_list List of segregating sites
+#' @param ind_per_pop A list of integer vector, where each entry gives the
+#'   index of the haploids that belong the corresponding population.
 #' @export
+#' @author Paul Staab & Dirk Metzler
 #' @return The Joint Site Frequency Spectrum, as a matrix.
-calc_jsfs <- function(seg_sites_list, pop1, pop2) {
-    .Call('coala_calc_jsfs', PACKAGE = 'coala', seg_sites_list, pop1, pop2)
+calc_jsfs <- function(segsites_list, ind_per_pop) {
+    .Call('coala_calc_jsfs', PACKAGE = 'coala', segsites_list, ind_per_pop)
 }
 
 calc_mcmf <- function(seg_sites, individuals, has_trios = TRUE, ploidy = 1L) {

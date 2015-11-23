@@ -2,22 +2,23 @@
 % Please edit documentation in R/RcppExports.R
 \name{calc_jsfs}
 \alias{calc_jsfs}
-\title{Calculates the JSFS for two populations}
+\title{Calculates the JSFS}
 \usage{
-calc_jsfs(seg_sites_list, pop1, pop2)
+calc_jsfs(segsites_list, ind_per_pop)
 }
 \arguments{
-\item{seg_sites_list}{List of segregating sites}
+\item{segsites_list}{List of segregating sites}
 
-\item{pop1}{The rows of \code{seg_sites} that correspond to individuals
-of the first population.}
-
-\item{pop2}{same as \code{pop1}, but for the second population.}
+\item{ind_per_pop}{A list of integer vector, where each entry gives the
+index of the haploids that belong the corresponding population.}
 }
 \value{
 The Joint Site Frequency Spectrum, as a matrix.
 }
 \description{
-Calculates the JSFS for two populations
+Calculates the JSFS
+}
+\author{
+Paul Staab & Dirk Metzler
 }
 

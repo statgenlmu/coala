@@ -1,11 +1,11 @@
 Package: coala
 Version: 0.2.1.9000
-Date: 2015-11-17
+Date: 2015-11-23
 License: MIT + file LICENSE
 Title: A Framework for Coalescent Simulation
 Authors@R: c(
-    person('Paul', 'Staab', , 'develop@paulstaab.de', role=c('aut', 'cre', 'cph')),
-    person('Dirk', 'Metzler', role=c('ths'))
+    person('Paul', 'Staab', , 'develop@paulstaab.de', role=c('aut', 'cre')),
+    person('Dirk', 'Metzler', , 'metzler@bio.lmu.de', role=c('aut', 'ths'))
     )
 BugReports: https://github.com/statgenlmu/coala/issues
 URL: https://github.com/statgenlmu/coala

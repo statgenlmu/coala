@@ -12,7 +12,7 @@ stat_sfs_class <- R6Class("stat_sfs", inherit = sumstat_class,
     },
     calculate = function(seg_sites, trees, files, model) {
       individuals <- get_population_indiviuals(model, private$population)
-      sfs <- as.vector(calc_jsfs(seg_sites, individuals, numeric()))
+      sfs <- as.vector(calc_jsfs(seg_sites, list(individuals)))
       sfs[c(-1, -length(sfs))]
     }
   )
