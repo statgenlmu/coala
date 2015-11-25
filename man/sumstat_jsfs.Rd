@@ -27,11 +27,13 @@ Calculates the Joint Site Frequency Spectrum from simulations
 }
 \examples{
 set.seed(75)
-model <- coal_model(c(5, 5), 2) +
+model <- coal_model(2:4, 2) +
   feat_mutation(5) +
   feat_migration(1, symmetric = TRUE) +
-  sumstat_jsfs("jsfs", populations = c(1, 2))
+  sumstat_jsfs("jsfs_12", populations = c(1, 2)) +
+  sumstat_jsfs("jsfs_123", populations = 1:3)
 stats <- simulate(model)
-print(stats$jsfs)
+print(stats$jsfs_12)
+print(stats$jsfs_123)
 }
 
