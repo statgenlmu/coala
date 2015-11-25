@@ -1,23 +1,50 @@
 context("Feature Selection")
 
-test_that("generation of selection cmd works", {
+test_that("generation of initial selection cmd works", {
   if (!has_msms()) skip("msms not installed")
   msms <- get_simulator("msms")
   model  <- model_theta_tau() +
-    feat_selection(111, 222, population = 1, time = 5)
+    feat_selection(111, 222, 333, population = "all", time = 5)
   cmd <- msms$get_cmd(model)
-  expect_true(grepl("-N 10000", cmd))
-  expect_true(grepl("-SI 5 2 5e-04 0", cmd))
-  expect_true(grepl("-SAA 111", cmd))
-  expect_true(grepl("-SAa 222", cmd))
+  expect_true(grepl(" -N 10000 ", cmd))
+  expect_true(grepl(" -SForceKeep ", cmd))
+  expect_true(grepl(" -SI 5 2 5e-04 5e-04 ", cmd))
+  expect_true(grepl(" -Sp 0.5 ", cmd))
+  expect_true(grepl(" -SAA 111 ", cmd))
+  expect_true(grepl(" -SAa 222 ", cmd))
+  expect_true(grepl(" -Saa 333 ", cmd))
   expect_true(grepl(" $", cmd))
 
   model <- model_theta_tau() +
-    feat_selection(strength_A = 123, population = 1, time = 5)
+    feat_selection(strength_A = 123, population = 1, time = 5, Ne = 1122,
+                   start_frequency = c(0.1), position = 0.3)
   cmd <- msms$get_cmd(model)
-  expect_true(grepl("-N 10000", cmd))
-  expect_true(grepl("-SI 5 2 5e-04 0", cmd))
-  expect_true(grepl("-SA 123", cmd))
+  expect_true(grepl(" -Sc 5 1 123 ", cmd))
+  expect_true(grepl(" -SI 5 2 0.1 0 ", cmd))
+  expect_true(grepl("-N 1122", cmd))
+  expect_true(grepl(" -Sp 0.3 ", cmd))
+  expect_true(grepl(" $", cmd))
+
+  model <- model_theta_tau() +
+    feat_selection(strength_A = 123, population = 1, time = 5,
+                   start_frequency = c(0.1, 0.2))
+  expect_true(grepl(" -SI 5 2 0.1 0.2 ", msms$get_cmd(model)))
+})
+
+
+test_that("generation of selection cmd with multiple demes works", {
+  if (!has_msms()) skip("msms not installed")
+  msms <- get_simulator("msms")
+  model  <- model_theta_tau() +
+    feat_selection(111, 222, 333, population = 1, time = 5) +
+    feat_selection(444, 555, 666, population = 2, time = 5, start = FALSE)
+  cmd <- msms$get_cmd(model)
+  expect_true(grepl(" -N 10000 ", cmd))
+  expect_true(grepl(" -SForceKeep ", cmd))
+  expect_true(grepl(" -SI 5 2 5e-04 0 ", cmd))
+  expect_true(grepl(" -Sp 0.5 ", cmd))
+  expect_true(grepl(" -Sc 5 1 111 222 333 ", cmd))
+  expect_true(grepl(" -Sc 5 2 444 555 666 ", cmd))
   expect_true(grepl(" $", cmd))
 })
 
