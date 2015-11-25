@@ -4,20 +4,53 @@
 \alias{feat_selection}
 \title{Adds positive selection to a model}
 \usage{
-feat_selection(strength_AA, strength_Aa, strength_A, population = 1, time)
+feat_selection(strength_AA = 0, strength_Aa = 0, strength_aa = 0,
+  strength_A = NULL, population = "all", time, start = TRUE,
+  start_frequency = 5e-04, Ne = 10000, position = 0.5,
+  force_keep = TRUE)
 }
 \arguments{
 \item{strength_AA}{The selection strength for the selected homozygote}
 
 \item{strength_Aa}{The selection strength for the heterozygote.}
 
-\item{strength_A}{This sets the strength for the selected allele in an
-haploid model. \code{strength_AA} and \code{strength_Aa} are ignored
-when this is argument is given.}
+\item{strength_aa}{The selection strength for the recessive homoygote.}
 
-\item{population}{The population in which the allele is selected.}
+\item{strength_A}{This sets the strength for the selected allele in an
+haploid model or a diploid model with additive selection.
+\code{strength_AA}, \code{strength_Aa}, \code{strength_aa}
+are ignored when this is argument is given.}
+
+\item{population}{The population in which the allele is selected. Can either
+be \code{all} for all population, or the number of a population.}
 
 \item{time}{The time at which the selection starts.}
+
+\item{start}{Whether selection should start at this time point. At this time
+the selected allele is introduced in the population with an initial
+starting frequency. This must be set to \code{TRUE} for exactly one
+selection feature in the model. The values of \code{start_frequency},
+\code{Ne}, \code{position} and \code{force_keep} are used for the model.
+You can add aditional selection feature to the model to set the
+selection strength for more demes or change it at different time points,
+but these need to have \code{start = FALSE}.}
+
+\item{start_frequency}{The start frequency at which the selected allele is
+introduced at time \code{time}. If the model has multiple population, this
+can either be a numeric vector that contains the initial frequency for each
+population or a single number. In the latter case, the value is used for
+all population specified with \code{populations}, and 0 is used for all
+other populations.}
+
+\item{Ne}{The effective population size that is used for the forward
+simulations.}
+
+\item{position}{The position of the selected site, relative to the
+simulated sequence. Values between 0 and 1 are within the simulated area,
+while smaller values are to the left of it and larger ones to the right.}
+
+\item{force_keep}{Whether to restart simulatin in which the selected goes to
+extinction or not.}
 }
 \description{
 Adds positive selection to a model
@@ -30,6 +63,5 @@ model <- coal_model(c(10, 13), 100) +
                  strength_Aa=par_range('s', 100, 2000),
                  population = 2,
                  time=par_expr(tau))
-
 }
 
