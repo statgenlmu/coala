@@ -2,6 +2,10 @@ coala 0.3.0
 ===========
 In development
 
+## Major improvements
+* Support for more selection models, including for local adaptation.
+
+## Small Changes
 * Adds `feat_ignore_singletons`, which is a feature that makes coala ignore 
   singletons when calculating the summary statistics.
 
