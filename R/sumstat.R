@@ -119,6 +119,10 @@ calc_sumstats_from_sim <- function(seg_sites, trees, files, model,
                                     get_ploidy(model),
                                     get_samples_per_ind(model))
     }
+
+    if (has_ign_singletons(model)) {
+      seg_sites <- remove_singletons(seg_sites)
+    }
   }
 
   calc_sumstats(model, seg_sites, trees, files,
