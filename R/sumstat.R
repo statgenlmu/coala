@@ -86,6 +86,10 @@ calc_sumstats <- function(model, segsites_list = NULL, trees = NULL,
   if (requires_segsites(model)) {
     assert_that(!is.null(segsites_list))
     assert_that(all(vapply(segsites_list, is_segsites, logical(1))))
+
+    if (has_ign_singletons(model)) {
+      segsites_list <- remove_singletons(segsites_list)
+    }
   }
   if (requires_trees(model)) assert_that(!is.null(trees))
   if (requires_files(model)) assert_that(!is.null(files))
@@ -118,10 +122,6 @@ calc_sumstats_from_sim <- function(seg_sites, trees, files, model,
       seg_sites <- unphase_segsites(seg_sites,
                                     get_ploidy(model),
                                     get_samples_per_ind(model))
-    }
-
-    if (has_ign_singletons(model)) {
-      seg_sites <- remove_singletons(seg_sites)
     }
   }
 
