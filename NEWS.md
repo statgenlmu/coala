@@ -3,11 +3,13 @@ coala 0.3.0
 In development
 
 ## Major improvements
-* Support for more selection models, including for local adaptation.
+* Support for more selection models, including for local adaptation (#137).
+* Add `as.segsites.GENOME` function that converts genetic data imported with
+  the package PopGenome to coala's format.
 
 ## Small Changes
 * Adds `feat_ignore_singletons`, which is a feature that makes coala ignore 
-  singletons when calculating the summary statistics.
+  singletons when calculating the summary statistics (#138).
 
 
 
