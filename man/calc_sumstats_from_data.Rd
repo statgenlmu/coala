@@ -5,14 +5,17 @@
 \title{Calculate summary statistics for biological data}
 \usage{
 calc_sumstats_from_data(model, segsites_list = NULL, tree_list = NULL,
-  trios = NULL)
+  trios = NULL, ...)
 }
 \arguments{
 \item{model}{The coala model. The summary statistics present in this model
 will be calculated. The model should fit to the data, in particular
 regarding the number of loci and haploids.}
 
-\item{segsites_list}{A list of \code{segsites} objects. See above.}
+\item{segsites_list}{Either a list of \code{segsites} objects, or an object
+that can be converted using \code{\link{as.segsites}}. It is possible
+to specify additional argument for the conversion using the \code{...}
+argument.}
 
 \item{tree_list}{Not yet implemented.}
 
@@ -23,6 +26,9 @@ one or three numbers. For one number, the locus used for calculating the
 summary statistics is locus in the provided data that corresponds to the
 number. If three number are provided, the locus for calculation is created
 by combining the corresponding three loci from the given data.}
+
+\item{...}{Additional arguments that will be pass to
+\code{\link{as.segsites}}.}
 }
 \description{
 This function calculates a model's summary statistic from biological data.

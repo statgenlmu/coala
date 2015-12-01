@@ -73,3 +73,32 @@ create_locus_trio <- function(left, middle, right) {
                     check = FALSE)
   })
 }
+
+
+#' Convert genetic data to coala's internal format
+#'
+#' This function can be used to convert the genomic data formats used in other
+#' packages to calculate coala's segregating sites object. This is useful for
+#' calculating the summary statistics of biological data using the
+#' \code{\link{calc_sumstats_from_data}} function.
+#'
+#' Currently, only the package \pkg{PopGenome} is supported, see
+#' \code{\link{as.segsites.GENOME}} for details.
+#'
+#' @param data The data object that is converted.
+#' @param ... Additional arguments specific for the used package.
+#'
+#' @return A list of segregating sites objects.
+#' @export
+as.segsites <- function(data, ...) UseMethod("as.segsites")
+
+#' @export
+as.segsites.default <- function(data, ...) {
+  stop("Unknown data format")
+}
+
+#' @export
+as.segsites.list <- function(data, ...) {
+  assert_that(all(vapply(data, is_segsites, logical(1))))
+  data
+}
