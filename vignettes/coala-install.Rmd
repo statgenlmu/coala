@@ -30,7 +30,7 @@ where appropriate.
 
 There are three different ways to activate a binary:
 
-1. Use the `activate_ms`, `activate_msms` and `activate_seqgen` functions to
+1. Use the `activate_msms` and `activate_seqgen` functions to
 activate the simulators from within R. You should use the functions before
 creating a model.
 2. Alternatively, you can place the programs binaries in your working
@@ -40,12 +40,14 @@ a match file, coala will automatically activate the simulator.
 3. You can start the R session with an environment variable
 that hold the path to the binaries. In this case, the simulators should
 also be automatically be activated when the coala package is loaded.
+4. Coala uses the R versions of `scrm` and `ms`. `scrm` should alawys be 
+available. Install the CRAN package `phyclust` to use `ms`. 
 
 | Simulator | Priority | Expected Binary Names                    | Environment Var | Function        |
 | ---       | ---      | ---                                      | ---             | ---             |
 | seq-gen   | 100      | seqgen, seq-gen, seqgen.exe, seq-gen.exe | SEQGEN          | activate_seqgen |
 | msms      | 200      | msms.jar / java, java.exe                | MSMS / JAVA     | activate_msms   |
-| ms        | 300      | ms, ms.exe                               | MS              | activate_ms     |
+| ms        | 300      |                                          |                 | activate_ms     |
 | scrm      | 400      |                                          |                 |                 |
 
 
