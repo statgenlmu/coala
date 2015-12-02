@@ -24,18 +24,11 @@ ms_class <- R6Class("ms", inherit = simulator_class,
     binary = NULL
   ),
   public = list(
-    initialize = function(binary = NULL, priority = 300) {
-      # Try to automatically find a binary if none is given
-      if (is.null(binary)) {
-        binary <- search_executable(c("ms", "ms.exe"), "MS")
+    initialize = function(priority = 300) {
+      if (!requireNamespace("phyclust", quietly = TRUE)) {
+        stop("Please install package 'phyclust' to use ms", call. = FALSE)
       }
-      if (is.null(binary)) stop("No binary for ms found.")
-      if (!file.exists(binary)) stop("ms binary (", binary, ") does not exist.")
-
-      assert_that(is.character(binary) && length(binary) == 1)
       assert_that(is.numeric(priority) && length(priority) == 1)
-
-      private$binary <- binary
       private$priority <- priority
     },
     create_cmd_tempalte = function(model) {
@@ -68,16 +61,14 @@ ms_class <- R6Class("ms", inherit = simulator_class,
       files <- lapply(sim_cmds, function(sim_cmd) {
         vapply(1:nrow(sim_cmd), function(j) {
           file <- tempfile("ms")
-          opts <- paste(sample_size,
-                        format(sim_cmd[j, "locus_number"], scientific = FALSE),
-                        sim_cmd[j, "command"],
-                        "-seeds", paste(sample_seed(3, TRUE), collapse = " "))
-          ret <- system2(private$binary, opts, stdout = file)
-          unlink("seedms")
+          ret <- phyclust::ms(sample_size,
+                              sim_cmd[j, "locus_number"],
+                              sim_cmd[j, "command"],
+                              temp.file = file)
 
           if (!file.exists(file)) stop("ms simulation failed")
           file
-        }, character(1)) #nolint
+        }, character(1))
       })
 
       setwd(wd)
@@ -110,31 +101,29 @@ ms_class <- R6Class("ms", inherit = simulator_class,
             cmd[1, "locus_number"],
             cmd[1, "command"])
     },
-    get_info = function() c(name = "ms", binary = private$binary)
+    get_info = function() c(name = "ms",
+                            version = paste0("phyclust_",
+                                             packageVersion("phyclust")))
   )
 )
 
 has_ms <- function() !is.null(simulators[["ms"]])
 
 
-#' Use the simulator ms
+#' Active the simulator ms
 #'
 #' This adds the simulator 'ms' to the list of available simulators. In order
-#' to use 'ms', you first need to download its sources from
-#' \url{http://home.uchicago.edu/rhudson1/source/mksamples.html}
-#' and compile the binary following the instructions in the package.
+#' to use 'ms', you need to install the CRAN package \pkg{phyclust}.
 #'
-#' @section Citation:
-#' Richard R. Hudson.
+#' @references : Richard R. Hudson.
 #' Generating samples under a Wright-Fisher neutral model of genetic variation.
 #' Bioinformatics (2002) 18 (2): 337-338
 #' doi:10.1093/bioinformatics/18.2.337
 #'
-#' @param binary The path of the ms binary that will be used for simulations.
 #' @param priority The priority for this simulator. If multiple simulators
 #'   can simulate a model, the one with the highest priority will be used.
 #' @export
-activate_ms <- function(binary, priority = 300) {
-  register_simulator(ms_class$new(binary, priority))
+activate_ms <- function(priority = 300) {
+  register_simulator(ms_class$new(priority))
   invisible(NULL)
 }
