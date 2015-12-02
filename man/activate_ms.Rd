@@ -2,25 +2,20 @@
 % Please edit documentation in R/simulator_ms.R
 \name{activate_ms}
 \alias{activate_ms}
-\title{Use the simulator ms}
+\title{Active the simulator ms}
 \usage{
-activate_ms(binary, priority = 300)
+activate_ms(priority = 300)
 }
 \arguments{
-\item{binary}{The path of the ms binary that will be used for simulations.}
-
 \item{priority}{The priority for this simulator. If multiple simulators
 can simulate a model, the one with the highest priority will be used.}
 }
 \description{
 This adds the simulator 'ms' to the list of available simulators. In order
-to use 'ms', you first need to download its sources from
-\url{http://home.uchicago.edu/rhudson1/source/mksamples.html}
-and compile the binary following the instructions in the package.
+to use 'ms', you need to install the CRAN package \pkg{phyclust}.
 }
-\section{Citation}{
-
-Richard R. Hudson.
+\references{
+: Richard R. Hudson.
 Generating samples under a Wright-Fisher neutral model of genetic variation.
 Bioinformatics (2002) 18 (2): 337-338
 doi:10.1093/bioinformatics/18.2.337
