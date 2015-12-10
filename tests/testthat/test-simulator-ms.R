@@ -226,12 +226,3 @@ test_that("ms can simulate zero inflation", {
   stats <- get_simulator("ms")$simulate(model, c(tau = 1, theta = 5))
   expect_that(stats, is_a("list"))
 })
-
-
-test_that("ms can added manually", {
-  if (!has_ms()) skip("ms not installed")
-  ms_bin <- get_simulator("ms")$get_info()["binary"]
-  activate_ms(ms_bin, 299)
-  expect_equal(get_simulator("ms")$get_priority(), 299)
-  expect_error(use_ms(tempfile("not-existant")))
-})

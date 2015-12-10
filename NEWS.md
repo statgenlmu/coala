@@ -5,11 +5,13 @@ In development
 ## Major improvements
 * Support for more selection models, including for local adaptation (#137).
 * Add `as.segsites.GENOME` function that converts genetic data imported with
-  the package PopGenome to coala's format.
+  the package PopGenome to coala's format (#139).
 
 ## Small Changes
 * Adds `feat_ignore_singletons`, which is a feature that makes coala ignore 
   singletons when calculating the summary statistics (#138).
+* Use `ms` from package `phyclust` instead of requiring that the binary is
+  installed on the system.
 
 
 
