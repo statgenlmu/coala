@@ -19,7 +19,7 @@ test_that("generation of initial selection cmd works", {
     feat_selection(strength_A = 123, population = 1, time = 5, Ne = 1122,
                    start_frequency = c(0.1), position = 0.3)
   cmd <- msms$get_cmd(model)
-  expect_true(grepl(" -Sc 5 1 123 ", cmd))
+  expect_true(grepl(" -Sc 0 1 123 ", cmd))
   expect_true(grepl(" -SI 5 2 0.1 0 ", cmd))
   expect_true(grepl("-N 1122", cmd))
   expect_true(grepl(" -Sp 0.3 ", cmd))
@@ -37,14 +37,14 @@ test_that("generation of selection cmd with multiple demes works", {
   msms <- get_simulator("msms")
   model  <- model_theta_tau() +
     feat_selection(111, 222, 333, population = 1, time = 5) +
-    feat_selection(444, 555, 666, population = 2, time = 5, start = FALSE)
+    feat_selection(444, 555, 666, population = 2, time = 1.0, start = FALSE)
   cmd <- msms$get_cmd(model)
   expect_true(grepl(" -N 10000 ", cmd))
   expect_true(grepl(" -SForceKeep ", cmd))
   expect_true(grepl(" -SI 5 2 5e-04 0 ", cmd))
   expect_true(grepl(" -Sp 0.5 ", cmd))
-  expect_true(grepl(" -Sc 5 1 111 222 333 ", cmd))
-  expect_true(grepl(" -Sc 5 2 444 555 666 ", cmd))
+  expect_true(grepl(" -Sc 0 1 111 222 333 ", cmd))
+  expect_true(grepl(" -Sc 1 2 444 555 666 ", cmd))
   expect_true(grepl(" $", cmd))
 })
 
