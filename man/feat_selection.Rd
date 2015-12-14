@@ -10,7 +10,11 @@ feat_selection(strength_AA = 0, strength_Aa = 0, strength_aa = 0,
   force_keep = TRUE)
 }
 \arguments{
-\item{strength_AA}{The selection strength for the selected homozygote}
+\item{strength_AA}{The selection strength for the selected homozygote.
+The parameter is valid for the choosen population and the time further
+pastwards from either time 0 on if \code{start = TRUE}, or from \code{time}
+onwards. The same applies for \code{strength_Aa}, \code{strength_aa} and
+\code{strength_A}.}
 
 \item{strength_Aa}{The selection strength for the heterozygote.}
 
@@ -24,7 +28,10 @@ are ignored when this is argument is given.}
 \item{population}{The population in which the allele is selected. Can either
 be \code{all} for all population, or the number of a population.}
 
-\item{time}{The time at which the selection starts.}
+\item{time}{The time at which the selection starts if \code{start == TRUE}
+(looking forwards in time), or the time at which the selection strength
+changes if \code{start == FALSE}. The new strength applies for to the time
+period further into the past in this case.}
 
 \item{start}{Whether selection should start at this time point. At this time
 the selected allele is introduced in the population with an initial

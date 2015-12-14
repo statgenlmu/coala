@@ -11,7 +11,8 @@ In development
 * Adds `feat_ignore_singletons`, which is a feature that makes coala ignore 
   singletons when calculating the summary statistics (#138).
 * Use `ms` from package `phyclust` instead of requiring that the binary is
-  installed on the system.
+  installed on the system (#140).
+* Ensure that msms uses only one CPU core (#142).
 
 
 

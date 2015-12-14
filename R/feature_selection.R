@@ -71,7 +71,7 @@ selection_class <- R6Class("selection", inherit = feature_class,
 #'   be \code{all} for all population, or the number of a population.
 #' @param time The time at which the selection starts if \code{start == TRUE}
 #'   (looking forwards in time), or the time at which the selection strength
-#'   changes if \code{start == FALSE). The new strength applies for to the time
+#'   changes if \code{start == FALSE}. The new strength applies for to the time
 #'   period further into the past in this case.
 #' @param strength_AA The selection strength for the selected homozygote.
 #'   The parameter is valid for the choosen population and the time further
