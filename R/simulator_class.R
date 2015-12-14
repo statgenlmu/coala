@@ -44,7 +44,7 @@ fill_cmd_template <- function(template, model, parameters,
   }
   locus_id <- seq(along = locus_number)
 
-  args <- sapply(locus_id, function(l_id) {
+  args <- vapply(locus_id, function(l_id) {
     tmp_env <- create_par_env(model, parameters,
                               locus_length = locus_length,
                               locus_id = l_id,
@@ -52,7 +52,7 @@ fill_cmd_template <- function(template, model, parameters,
                               for_cmd = !eval_pars)
 
     paste(eval(parse(text = template), envir = tmp_env), collapse = " ")
-  })
+  }, character(1L))
 
   sim_cmds <- data.frame(locus_number = locus_number,
                          command = args,

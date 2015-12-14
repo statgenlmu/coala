@@ -65,7 +65,7 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
         cmd <- paste(vapply(model$features, conv_to_msms_arg,
                             FUN.VALUE = character(1), model),
                      collapse = "")
-        cmd <- paste0("c('", cmd, "')")
+        cmd <- paste0("c('", cmd, "-threads 1 ')")
         cache(model, "msms_cmd", cmd)
       }
       cmd

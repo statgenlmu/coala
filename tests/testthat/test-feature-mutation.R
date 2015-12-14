@@ -68,7 +68,7 @@ test_that("using a fixed number of mutations works with msms", {
   model <- coal_model(5, 1) +
     feat_mutation(5, fixed_number = TRUE) +
     sumstat_sfs()
-  expect_equal(get_simulator("msms")$get_cmd(model), "msms 5 1 -s 5 ")
+  expect_true(grepl("-s 5", get_simulator("msms")$get_cmd(model)))
 })
 
 

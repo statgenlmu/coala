@@ -20,7 +20,7 @@ test_that("generating msms options works", {
   if (!has_msms()) skip("msms not installed")
   msms <- get_simulator("msms")
   model <- coal_model(10, 2) + feat_mutation(5)
-  expect_equal(msms$get_cmd(model), "msms 10 2 -t 5 ")
+  expect_equal(msms$get_cmd(model), "msms 10 2 -t 5 -threads 1 ")
 })
 
 
