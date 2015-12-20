@@ -45,7 +45,7 @@ NumericVector calc_jsfs(const ListOf<coala::SegSites> segsites_list,
       std::vector<size_t> idx(n_pops, 0);
 
       for (size_t n=0; n < n_pops; ++n) {
-        for (size_t i = 0; i < ind_per_pop[n].size(); ++i) {
+        for (int i = 0; i < ind_per_pop[n].size(); ++i) {
           idx[n] += snps(ind_per_pop[n][i]-1, j);
         }
       }
