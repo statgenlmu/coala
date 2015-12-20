@@ -1,5 +1,4 @@
 #include "../inst/include/coala.h"
-#include <cmath>
 
 using namespace Rcpp;
 
