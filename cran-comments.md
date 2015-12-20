@@ -1,29 +1,14 @@
-This version fixes the failing check on r-oldrel-windows.
-
-
 ## Test environments
-* Ubuntu 15.10 (local), R 3.2.2
-* Ubuntu 12.04 (on Travis-CI), R 3.2.2
+* Ubuntu 15.10 (local), R 3.2.3
+* Ubuntu 12.04 (on Travis-CI), R 3.2.3
 * Windows (on AppVeyor), R-devel
 * win-builder (R-devel and R-release)
 
 
 ## R CMD check results
-There were no ERRORs or WARNINGs.
-There was 1 NOTE:
-
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: ‘Paul Staab <develop@paulstaab.de>’
-
-Days since last update: 6
-
-License components with restrictions and base license permitting such:
-  MIT + file LICENSE
-File 'LICENSE':
-  YEAR: 2015
-  COPYRIGHT HOLDER: Paul Staab
-
+There were no ERRORs, WARNINGs or NOTEs (other than CRAN incomming feasibility).
 
 
 ## Downstream dependencies
-There are currently no downstream dependencies for this package.
+The package 'jaatha', currently the only reverse dependency of 'coala', passed
+R CMD check with 'OK'.
