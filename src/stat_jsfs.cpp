@@ -16,12 +16,12 @@ NumericVector calc_jsfs(const ListOf<coala::SegSites> segsites_list,
 
   size_t n_pops = ind_per_pop.size();
 
-  NumericVector n_inds = no_init(n_pops);
-  size_t n_entries = 1;
+  NumericVector dims = no_init(n_pops);
+  unsigned int n_entries = 1;
 
   for (size_t i = 0; i < n_pops; ++i) {
-    n_inds(i) = ind_per_pop[i].size();
-    n_entries *= n_inds[i] + 1;
+    dims[i] = ind_per_pop[i].size() + 1;
+    n_entries *= dims[i];
   }
 
   NumericVector jsfs(n_entries, 0);
@@ -44,8 +44,8 @@ NumericVector calc_jsfs(const ListOf<coala::SegSites> segsites_list,
       // of derived alleles in population i.
       std::vector<size_t> idx(n_pops, 0);
 
-      for(size_t n=0; n < n_pops; ++n) {
-        for(size_t i = 0; i < n_inds[n]; ++i) {
+      for (size_t n=0; n < n_pops; ++n) {
+        for (size_t i = 0; i < ind_per_pop[n].size(); ++i) {
           idx[n] += snps(ind_per_pop[n][i]-1, j);
         }
       }
@@ -54,7 +54,7 @@ NumericVector calc_jsfs(const ListOf<coala::SegSites> segsites_list,
       k = idx[n_pops-1];
 
       for(int m = n_pops-2; m >= 0; --m) {
-        k *= (n_inds[m]+1);
+        k *= dims[m];
         k += idx[m];
       }
 
@@ -64,10 +64,10 @@ NumericVector calc_jsfs(const ListOf<coala::SegSites> segsites_list,
 
   if (n_pops == 2) {
     jsfs.attr("class") = "matrix";
-    jsfs.attr("dim") = n_inds + 1;
+    jsfs.attr("dim") = dims;
   } else if (n_pops > 2) {
     jsfs.attr("class") = "array";
-    jsfs.attr("dim") = n_inds + 1;
+    jsfs.attr("dim") = dims;
   }
 
   return jsfs;
