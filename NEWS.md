@@ -1,9 +1,8 @@
 coala 0.3.0
 ===========
-In development
 
 ## Major improvements
-* Support for more selection models, including for local adaptation (#137).
+* Support for more selection models, including ones for local adaptation (#137).
 * Add `as.segsites.GENOME` function that converts genetic data imported with
   the package PopGenome to coala's format (#139).
 
