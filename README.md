@@ -4,9 +4,9 @@ coala
 [![Linux Build Status](https://travis-ci.org/statgenlmu/coala.png?branch=master)](https://travis-ci.org/statgenlmu/coala) 
 [![Windows Build status](https://ci.appveyor.com/api/projects/status/uoduv0q64ddnqfva/branch/master?svg=true)](https://ci.appveyor.com/project/paulstaab/coala-02w83/branch/master)
 [![Coverage Status](https://coveralls.io/repos/statgenlmu/coala/badge.svg?branch=master)](https://coveralls.io/r/statgenlmu/coala)
-[![CRAN Status](http://www.r-pkg.org/badges/version/coala)](http://cran.r-project.org/web/packages/coala)
+[![CRAN Status](http://www.r-pkg.org/badges/version/coala)](https://cran.r-project.org/package=coala)
 
-Coala is an R package for to simulating biological sequences according
+Coala is an R package for simulating biological sequences according
 to a given model of evolution.  It can call a number of efficient 
 simulators based on
 [coalescent theory](https://en.wikipedia.org/wiki/Coalescent_theory). 
