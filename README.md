@@ -6,14 +6,14 @@ coala
 [![Coverage Status](https://coveralls.io/repos/statgenlmu/coala/badge.svg?branch=master)](https://coveralls.io/r/statgenlmu/coala)
 [![CRAN Status](http://www.r-pkg.org/badges/version/coala)](http://cran.r-project.org/web/packages/coala)
 
-Coala is an R package that allows to simulate biological sequences according
+Coala is an R package for to simulating biological sequences according
 to a given model of evolution.  It can call a number of efficient 
 simulators based on
 [coalescent theory](https://en.wikipedia.org/wiki/Coalescent_theory). 
 All simulators can be combined with the program _seq-gen_ to simulate finite 
 site mutation models. 
-Coala also directly imports the simulation results into `R`, and allows to
-calculate additional summary statistics from the results.
+Coala also directly imports the simulation results into `R`, and can
+calculate various summary statistics from the results.
 
 
 Installation
@@ -40,8 +40,23 @@ on how coala can be used to conduct the simulations for an Approximate Bayesian
 Computation analysis.
 
 
-Bugs
-----
+Example
+-------
+In the following example, we create a simple panmictic model, simulate it and 
+calculate the site frequency spectrum (SFS) of the simulation results:
+
+```R
+model <- coal_model(sample_size = 10, loci_number = 2) +
+  feat_mutation(5) +
+  sumstat_sfs()
+result <- simulate(model)
+result$sfs
+# [1] 15 12  1  4  0  1  0  2  0
+```
+
+
+Problems
+--------
 If you encounter problems when using _coala_, please 
 [file a bug report](https://github.com/statgenlmu/coala/issues) or mail to
 `develop (at) paulstaab.de`.
@@ -51,8 +66,9 @@ Supported Simulators
 --------------------
 The package supports the coalescent simulators _ms_, _scrm_ and _msms_.
 All simulators can be combined with _seq-gen_ to simulate finite sites 
-mutation models. The programs _ms_, _msms_ and _seq-gen_ must be installed 
-manually on the system, while the R version of _scrm_ is used automatically.
+mutation models. The programs _msms_ and _seq-gen_ must be installed 
+manually on the system. The R version of _scrm_ is used automatically,
+and the R version _ms_ if the package `phyclust` is installed.
 
 
 Development
