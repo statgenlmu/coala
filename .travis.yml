@@ -17,8 +17,8 @@ install:
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh aptget_install seq-gen pandoc pandoc-citeproc
   - mkdir ~/bin
-  - wget -P ~/bin/ http://pst-public.s3-website.eu-central-1.amazonaws.com/msms.jar
-  - wget -P ~/bin/ http://pst-public.s3-website.eu-central-1.amazonaws.com/OmegaPlus
+  - wget -P ~/bin/ https://dl.dropboxusercontent.com/u/24814716/msms.jar
+  - wget -P ~/bin/ https://dl.dropboxusercontent.com/u/24814716/OmegaPlus
   - chmod +x ~/bin/*
 
 script: ./travis-tool.sh run_tests
