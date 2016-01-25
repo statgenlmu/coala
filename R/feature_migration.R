@@ -24,12 +24,10 @@ migration_class <- R6Class("migration", inherit = feature_class,
 )
 
 
-#' Add migration/gene flow between two populations to a demographic model
+#' Feature: Migration/Gene Flow
 #'
-#' This function adds the assumption to the model that some individuals
-#' 'migrate' from one sub-population to another, i.e. they leave the one
-#' and become a member of the other. This is usually used to model ongoing
-#' gene flow through hybridisation after the populations separated.
+#' This feature adds migration between two populations to the model.
+#'
 #'
 #' You can enter a time (\code{time}) at which the migration is
 #' assumed to start (looking backwards in time). From that time on, a
@@ -45,13 +43,8 @@ migration_class <- R6Class("migration", inherit = feature_class,
 #' the next. Migration from and to an population always ends with the
 #' speciation event in which the population is created.
 #'
-#' @param rate  Instead of creating a new parameter, you can also
-#'            set the mutation rate to an expression based on existing
-#'            parameters. For example setting this to "M" will use
-#'            an parameter with name M that you have previously
-#'            created. You can also use R expression here, so "2*M"
-#'            or "5*M+2*tau" (if tau is another parameter) will also
-#'            work (also this does not make much sense).
+#' @param rate The migration rate. Can be a numeric or a
+#'        \code{\link{parameter}}.
 #' @param pop_from The population from which the individuals leave.
 #' @param pop_to The population to which the individuals move.
 #' @param symmetric Use the rate between all pairs of populations.
@@ -59,14 +52,21 @@ migration_class <- R6Class("migration", inherit = feature_class,
 #' @export
 #'
 #' @examples
-#' # Asymmetric migration for two populations
-#' model <- coal_model(c(25,25), 100) +
+#' # Asymmetric migration between two populations:
+#' model <- coal_model(c(5, 5), 10) +
 #'   feat_migration(0.5, 1, 2) +
-#'   feat_migration(0.75, 2, 1)
+#'   feat_migration(1.0, 2, 1) +
+#'   feat_mutation(5) +
+#'   sumstat_sfs()
+#' simulate(model)
 #'
-#' # Symmetric Migration
-#' model <- coal_model(c(25,25), 100) +
-#'   feat_migration(par_range('m', 0.1, 2), symmetric=TRUE)
+#' # Three populations that exchange migrations with equal
+#' # rates at times more than 0.5 time units in the past:
+#' model <- coal_model(c(3, 4, 5), 2) +
+#'   feat_migration(1.2, symmetric = TRUE, time = 0.5) +
+#'   feat_mutation(5) +
+#'   sumstat_sfs()
+#' simulate(model)
 feat_migration <- function(rate, pop_from = NULL, pop_to = NULL,
                            symmetric = FALSE, time = "0") {
   if (symmetric) {

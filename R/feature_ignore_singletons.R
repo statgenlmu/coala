@@ -19,7 +19,9 @@ ign_singletons_class <- R6Class("ign_singletons", inherit = feature_class)
 #'   feat_mutation(10) +
 #'   feat_ignore_singletons() +
 #'   sumstat_sfs("n_mut", transformation = sum)
-#' simulate(model)$n_mut # Is 0, because all SNPs are singletons in this model
+#' # In this model, all mutations are singletons. Therefore,
+#' # the number of mutations is 0 when removing singletons:
+#' simulate(model)$n_mut
 feat_ignore_singletons <- function() {
   ign_singletons_class$new()
 }

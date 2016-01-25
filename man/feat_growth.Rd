@@ -2,39 +2,44 @@
 % Please edit documentation in R/feature_growth.R
 \name{feat_growth}
 \alias{feat_growth}
-\title{Adds an exponential growth or decline of the size of one
-population to a model.}
+\title{Feature: Exponential population size growth/decline}
 \usage{
 feat_growth(rate, population = "all", time = "0")
 }
 \arguments{
-\item{rate}{A \code{\link{parameter}} stating the rate of the change.}
+\item{rate}{The growth rate. Can be a numeric or a \code{\link{parameter}}.
+See \code{Details} for an explanation how the rate affects the
+population size.}
 
 \item{population}{The population which growths/declines. Can be
 "all" for all populations, or the number of one population.}
 
-\item{time}{The time at which the growth starts.}
-}
-\value{
-The demographic model with a size change.
+\item{time}{The time at which the growth rate is changed. Can also be
+a \code{\link{parameter}}.}
 }
 \description{
-This function changes the growth factor of a population at given
-point in time (\code{time}). This factor than applies to the time
-interval farther into the past from this point.
+This feature changes the growth factor of a population at given
+point in time. This factor applies to the time interval further
+into the past from this point.
 }
 \details{
-The population size changes by factor exp(-alpha*t), where alpha
-is the growth parameter and t is the time since the growth has
-started. Hence, for positive alpha, the population will decline
-backwards in time or grow forwards in time. Similar, will decline
-in forwards time for a negative value of alpha.
+The population size changes by a factor \eqn{exp(-\alpha*t)}, where
+\eqn{\alpha} is the growth parameter and \eqn{t} is the time since
+the growth has started. For positive alpha, the population will decline
+backwards in time or grow forwards in time. For a negative value of
+\eqn{\alpha} it will decline (forward in time).
 
 If you want to add an instantaneous change of the population size,
-then use the \code{\link{feat_size_change}} function.
+then use \code{\link{feat_size_change}}.
 }
 \examples{
-model <- coal_model(c(20,37), 88) +
-  feat_growth(par_range('alpha', 0.1, 2), population=2, time="0")
+# Simulate a haploid population that has been expanding for
+# the last 2*Ne generations
+model <- coal_model(10, 1) +
+  feat_growth(5, time = 0) +
+  feat_growth(0, time = 1) +
+  feat_mutation(10) +
+  sumstat_sfs()
+simulate(model)
 }
 
