@@ -9,33 +9,32 @@ feat_migration(rate, pop_from = NULL, pop_to = NULL, symmetric = FALSE,
 }
 \arguments{
 \item{rate}{The migration rate. Can be a numeric or a
-\code{\link{parameter}}.}
+\code{\link{parameter}}. The rate is specified as
+\eqn{4 * N0 * m}, where \eqn{m} is the fraction of
+\code{pop_to} that is replaced by migrants
+from \code{pop_from} each generation (in forward time).}
 
 \item{pop_from}{The population from which the individuals leave.}
 
 \item{pop_to}{The population to which the individuals move.}
 
-\item{symmetric}{Use the rate between all pairs of populations.}
+\item{symmetric}{Use the rate for all pairs of populations.}
 
-\item{time}{The time point at which the migration with this rate starts.}
+\item{time}{The time point at which the migration with the migration
+rate is set. The rate applies to the time past warts
+of the time point, until it is changed again.}
 }
 \description{
-This feature adds migration between two populations to the model.
+This feature changes the migration rates at a given time point.
+Per default, no migration between the population occurs, which corresponds
+to a \code{rate} of \code{0}. Set it to a value greater than zero to
+enable migration from one population to another.
 }
 \details{
-You can enter a time (\code{time}) at which the migration is
-assumed to start (looking backwards in time). From that time on, a
-fixed number of migrants move from population \code{pop_from} to
-population \code{pop_to} each generation. This number is given via this
-feature's parameter, which equals 4*N0*m,  where m is the
-fraction of \code{pop_to}that is replaced with migrants each generation.
-If \code{pop_to} has also size Ne, than this is just the
-expected number of individuals that migrate each generation.
-
-You can add different mutation rates at different times to your model.
-Then each rate will be used for the period from its time point to
-the next. Migration from and to an population always ends with the
-speciation event in which the population is created.
+When looking forward in time, a fraction of \code{pop_to} that is replaced
+by migrants from \code{pop_from} each generation (see \code{rate}). When
+looking backwards in time, ancestral lines in \code{pop_to} move to
+\code{pop_from} with the given rate.
 }
 \examples{
 # Asymmetric migration between two populations:
