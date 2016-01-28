@@ -11,7 +11,8 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
     }
   ),
   public = list(
-    initialize = function(name, min_win, max_win, grid, binary, transformation) {
+    initialize = function(name, min_win, max_win,
+                          grid, binary, transformation) {
       assert_that(is.number(min_win))
       private$min_win <- min_win
       assert_that(is.number(max_win))

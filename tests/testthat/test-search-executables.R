@@ -27,4 +27,3 @@ test_that("finding executables in the current dir works", {
   unlink(exe)
   setwd(current_wd)
 })
-

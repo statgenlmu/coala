@@ -11,7 +11,7 @@ test_that("calulation works", {
                                  0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0,
                                  0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1,
                                  0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-                                 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0),
+                                 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0), #nolint
                                10, 16, byrow = TRUE), 1:16 / 16)
 
   tajd <- sumstat_tajimas_d(population = 1)
@@ -24,5 +24,7 @@ test_that("calulation works", {
               < 1e-6)
 
   expect_error(tajd$calculate(list(ss), NULL, coal_model(1, 1)))
-  expect_equal(tajd$calculate(list(create_empty_segsites(10)), NULL, NULL, model), NaN)
+  expect_equal(tajd$calculate(list(create_empty_segsites(10)),
+                              NULL, NULL, model),
+               NaN)
 })

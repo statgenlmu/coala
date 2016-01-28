@@ -188,7 +188,7 @@ conv_to_msms_arg.selection <- function(feature, model) {
       strength <- paste0("-SA',", feature$get_strength_Aa(), ", '")
     } else {
       strength <- paste0("-Sc',",
-                         ifelse(feature$get_start(), 0, feature$get_time()), ", ",
+                         ifelse(feature$get_start(), 0, feature$get_time()), ", ", #nolint
                          feature$get_population(), ", ",
                          feature$get_strength_Aa(), ", '")
     }
@@ -199,7 +199,7 @@ conv_to_msms_arg.selection <- function(feature, model) {
                          "-Saa',", feature$get_strength_aa(), ", '")
     } else {
       strength <- paste0("-Sc',",
-                         ifelse(feature$get_start(), 0, feature$get_time()), ", ",
+                         ifelse(feature$get_start(), 0, feature$get_time()), ", ", #nolint
                          feature$get_population(), ", ",
                          feature$get_strength_AA(), ", ",
                          feature$get_strength_Aa(), ", ",

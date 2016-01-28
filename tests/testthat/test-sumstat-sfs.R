@@ -59,7 +59,7 @@ test_that("SFS is calculate with an outgroup present", {
   seg_sites <- list(create_segsites(matrix(c(1, 0, 0, 0,
                                              1, 1, 0, 1,
                                              1, 0, 0, 1), 3, 4, byrow = TRUE),
-                                    1:4/4))
+                                    1:4 / 4))
   expect_equal(stat$calculate(seg_sites, NULL, NULL, model), c(1, 1))
 
   stat <- sumstat_sfs("jsfs", 3)

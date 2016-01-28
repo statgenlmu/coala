@@ -124,45 +124,6 @@ feat_mutation <- function(rate,
                      tstv_ratio, gtr_rates, fixed_number)
 }
 
-#-------------------------------------------------------------------
-# model.setMutationModel
-#-------------------------------------------------------------------
-# Defines what mutation model is used for simulations
-#
-# As default, we simulate mutation using the Infinite Sites Model.
-# Using the function, you can change it either to the Hasegawa, Kishino and
-# Yano (HKY), to the Felsenstein and Churchill 96 (F84) or to the Generalised
-# time reversible (GTR) model.
-# This requires that seq-gen is installed on our system.
-#
-# The HKY and F84 models use the the arguments 'base.frequencies' and
-# 'tstv.ratio'. The GTR model uses 'gtr.rates'.
-
-
-# model.addMutationRateHeterogenity <-
-#   function(model, min.alpha, max.alpha, parameter="alpha", categories.number) {
-#
-#     model <- addFeature(model, "gamma.rate", parameter, min.alpha,
-#                      max.alpha, NA, NA, NA)
-#
-#     if (!missing(categories.number)) {
-#       model <- addFeature(model, "gamma.categories", parameter=categories.number)
-#     }
-#
-#     return(model)
-#   }
-
-
-# Set the mutation rates for trios
-# @param middle_rate The mutation rate used for the middle locus
-# @param outer_rate The mutation rate for the two outer loci
-# @export
-# model.setTrioMutationRates <- function(model, middle_rate, outer_rate, group = 0) {
-#   model <- addFeature(model, 'mutation', parameter = middle_rate, group = group)
-#   model <- addFeature(model, 'mutation_outer', parameter = outer_rate,
-#                    group = group)
-# }
-
 is_feat_mutation <- function(feat) any("mutation" == class(feat))
 
 #' @describeIn conv_to_ms_arg Feature conversion

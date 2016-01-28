@@ -125,8 +125,9 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
       # Call seq-gen for each locus group
       seg_sites <- lapply(1:length(trees), function(locus_group) {
 
-        seqgen_args <- sg_generate_opts(model, parameters, locus_group,
-                                        sample_seed(length(trees[[locus_group]])))
+        seqgen_args <-
+          sg_generate_opts(model, parameters, locus_group,
+                           sample_seed(length(trees[[locus_group]])))
 
         if (length(seqgen_args) == 1) {
           locus_length <- get_locus_length_matrix(model)[locus_group, 3]
@@ -151,7 +152,7 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
                               locus_length = locus_length[trio_locus],
                               locus_number = get_locus_number(model,
                                                               locus_group,
-                                                              ignore_variation = TRUE),
+                                                              TRUE),
                               outgroup_size = get_outgroup_size(model, TRUE),
                               calc_segsites = requires_segsites(model))
         })

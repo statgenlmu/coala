@@ -10,7 +10,7 @@ seg_sites <- list(create_segsites(ss, c(0.1, 0.2, 0.5, 0.7)))
 test_that("mcmf is correctly calculation for normal loci", {
   expect_equal(calc_mcmf(seg_sites, 1:4, FALSE), .5)
   expect_equal(calc_mcmf(seg_sites, c(1, 3, 4), FALSE), .5)
-  expect_equal(calc_mcmf(seg_sites, 2:4, FALSE), 2/3)
+  expect_equal(calc_mcmf(seg_sites, 2:4, FALSE), 2 / 3)
   expect_equal(calc_mcmf(seg_sites, 3:4, FALSE), 1)
 })
 
@@ -67,7 +67,7 @@ test_that("initialzation of statistic works", {
                                     rep(c(0.1, 0.2, 0.5, 0.7), 3),
                                     rep(c(-1, 0, 1), each = 4)))
   expect_equal(stat$calculate(seg_sites, NULL, NULL,
-                              coal_model(4) + locus_trio()), 1/3)
+                              coal_model(4) + locus_trio()), 1 / 3)
 })
 
 

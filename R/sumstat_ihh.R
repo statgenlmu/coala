@@ -16,7 +16,8 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
                               IES = numeric())
   ),
   public = list(
-    initialize = function(name, population, max_snps, calc_ihs, transformation) {
+    initialize = function(name, population, max_snps,
+                          calc_ihs, transformation) {
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
       assert_that(is.numeric(max_snps))
@@ -51,10 +52,10 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
           return(list(ihh = ihh,
                       iHS = data.frame(ihh[ , 1:2], iHS = rep(NA, n_snps))))
         } else {
-          if ((n_snps < 50)) freqbin <- 0.90
-          else if ((n_snps < 100)) freqbin <- 0.45
-          else if ((n_snps < 200)) freqbin <- 0.225
-          else if ((n_snps < 400)) freqbin <- 0.1
+          if (n_snps < 50) freqbin <- 0.90
+          else if (n_snps < 100) freqbin <- 0.45
+          else if (n_snps < 200) freqbin <- 0.225
+          else if (n_snps < 400) freqbin <- 0.1
           else freqbin <- 0.05
           ihs <- suppressWarnings(
             data.frame(ihh2ihs(ihh, freqbin)$res.ihs[ , -4])
