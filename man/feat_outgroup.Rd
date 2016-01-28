@@ -14,7 +14,7 @@ This feature declares an existing population as outgroup. Outgroups are used
 to determine the ancestral allele in finite sites simulations and are required
 there. All individuals of the outgroup are ignored when calculating summary
 statistics. If the outgroup consists of multiple individuals, all positions
-where the indidivuals have different alleles are ignored.
+where the individuals have different alleles are ignored.
 }
 \examples{
 # A simple finite sites model
