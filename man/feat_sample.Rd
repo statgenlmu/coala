@@ -21,4 +21,5 @@ The feature, which can be added to a model using `+`.
 \description{
 Creates a feature that represents the sampling from one population
 }
+\keyword{internal}
 
