@@ -7,24 +7,23 @@
 feat_recombination(rate)
 }
 \arguments{
-\item{rate}{A \code{\link{parameter}} defining the recombination rate
-(see above).}
+\item{rate}{The recombination rate. Can be a numeric or a
+\code{\link{parameter}}. The rate is equal to
+\eqn{4*N0*r}, where \eqn{r} is the probability that a
+recombination event within the locus occurs in one generation.}
 }
 \value{
-The demographic model with recombination
+The feature, which can be added to a model using `+`.
 }
 \description{
-Adds intra-locus recombination to a model.
-}
-\details{
-The corresponding rate parameter is 4*N0*r, where r is the
-probability that a recombination event within the locus will
-occur in one generation. Even when using an infinite sites
-mutation model, this assumes an finite locus length.
+This feature adds intra-locus recombination to a model.
 }
 \examples{
-# A model with a fixed recombination rate of 5
-model <- coal_model(c(25,25), 100, 1000) +
-  feat_recombination(5)
+# Simulate a 1.5kb sequence for 10 individuals with recombination:
+model <- coal_model(10, 2, 1500) +
+  feat_recombination(1.5) +
+  feat_mutation(5) +
+  sumstat_sfs()
+simulate(model)
 }
 
