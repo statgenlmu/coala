@@ -3,6 +3,7 @@
 #' @param e1 The Model to which the feature/parameter should be added
 #' @param e2 The feature/parameter to add
 #' @return The extended model
+#' @keywords internal
 "+.coalmodel" <- function(e1, e2) {
   e2name <- deparse(substitute(e2)) # Passed throw for error messages
   add_to_model(e2, e1, e2name)

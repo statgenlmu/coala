@@ -6,6 +6,7 @@
 #'
 #' @param feature The feature for which the argument is generated
 #' @param model The complete model for which the argument is generated
+#' @keywords internal
 conv_to_ms_arg <- function(feature, model) UseMethod("conv_to_ms_arg")
 
 #' @describeIn conv_to_ms_arg Feature conversion

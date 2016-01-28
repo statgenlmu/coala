@@ -17,7 +17,7 @@ populations.}
 \item{time}{The time at which the population's size is changed.}
 }
 \value{
-A feature which can be added to a model.
+The feature, which can be added to a model using `+`.
 }
 \description{
 This feature changes the effective population size of one
@@ -31,8 +31,20 @@ If you want to add a continuous change over time,
 use \link{feat_growth}.
 }
 \examples{
-# A model with one smaller population
-model <- coal_model(c(20,37), 88) +
-  feat_size_change(.1, 2, time="1")
+# A model with one smaller population:
+model <- coal_model(c(20, 5), 3) +
+  feat_size_change(.1, population = 2) +
+  feat_mutation(1.0) +
+  feat_migration(0.5, 2, 1) +
+  sumstat_sfs()
+simulate(model)
+
+# A model of one population that experienced a bottleneck:
+model <- coal_model(10, 1) +
+  feat_size_change(0.1, time = 0.3) +
+  feat_size_change(1.0, time = 0.5) +
+  feat_mutation(20) +
+  sumstat_sfs()
+simulate(model)
 }
 
