@@ -62,13 +62,12 @@ mutation_class <- R6Class("mutation", inherit = feature_class,
 
 #' Feature: Mutation
 #'
-#' This functions adds the assumption to the model that neutral mutations
-#' occur in the genomes at a constant rate. The rate is quantified through
-#' a parameter usually named theta in population genetics. It equals 4*N0*mu,
-#' where N0 is the effective diploid population size of population one at the
-#' time of sampling and mu is the neutral mutation rate for an entire locus.
+#' This feature adds mutations to a model. The mutations occur in the genomes
+#' of the individuals with a given \code{rate}.
 #'
-#' @param rate A \code{\link{parameter}} defining the mutation rate.
+#' @param rate The mutation rate. Can be a numeric or a \code{\link{parameter}}.
+#'        The rate is specified as \eqn{4 * N0 * mu}, where \eqn{mu} is the
+#'        mutation rate per locus.
 #' @param fixed_number If set to \code{TRUE}, the number of mutations on each
 #'   locus will always be exactly equal to the rate, rather than happening with
 #'   a rate along the ancestral tree.
@@ -87,12 +86,22 @@ mutation_class <- R6Class("mutation", inherit = feature_class,
 #' @export
 #'
 #' @section Mutation Models:
-#' The Hasegawa, Kishino and Yano (HKY) model (Hasegawa et al., 1985) allows
+#' The infinite sites mutation (\strong{IFS}) model is a frequently used simplification
+#' in population genetics. It assumes that each locus consists of infinitely
+#' many sites at which mutations can occure, and each mutation hits a new site.
+#' Consequently, there are no back-mutations with this model. It does not
+#' generate DNA sequences, but rather only 0/1 coded data, were 0 denotes the
+#' ancestral state of the site, and 1 the derived state created by a mutation.
+#'
+#' The other mutation models are finite site models that generate more realistic
+#' sequences.
+#'
+#' The Hasegawa, Kishino and Yano (\strong{HKY}) model (Hasegawa et al., 1985) allows
 #' for a different rate of transitions and transversions (tstv_ratio)
 #' and unequal
 #' frequencies of the four nucleotides (base_frequencies).
 #'
-#' The general reversible process (GTR) model (e.g. Yang, 1994) is more general
+#' The general reversible process (\strong{GTR}) model (e.g. Yang, 1994) is more general
 #' than the HKY model and allows to define the rates for each
 #' type of substitution. The rates are assumed to be symmetric
 #' (e.g., the rate for T to G is equal to the one for G to T).
