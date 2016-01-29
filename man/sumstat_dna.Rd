@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat_dna.R
 \name{sumstat_dna}
 \alias{sumstat_dna}
-\title{Returns the Segregation Sites Statistics from simulations}
+\title{Summary Statistic: DNA}
 \usage{
 sumstat_dna(name = "dna", transformation = identity)
 }
@@ -15,7 +15,23 @@ with this name. Summary statistic names must be unique in a model.}
 of the statistic. If specified, the results of the transformation are
 returned instead of the original values.}
 }
+\value{
+A list of sequences for each locus. Each entries is a
+        character matrix decoding the sequences. Each row
+        is an individual, and each column is a genetic position.
+}
 \description{
-Returns the Segregation Sites Statistics from simulations
+This summary statistic returns the actual DNA sequences from
+finite sites simulations. It can not be
+calculated together with other summary statsitics or when assuming
+an infinite sites mutation model. No outgroup
+is needed for it, and the outgroup sequences will also be
+returned if present.
+}
+\examples{
+model <- coal_model(5, 1, 10) +
+ feat_mutation(5, model = "GTR", gtr_rates = rep(1, 6)) +
+ sumstat_dna()
+\dontrun{simulate(model)$dna}
 }
 
