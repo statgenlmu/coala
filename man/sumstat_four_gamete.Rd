@@ -52,9 +52,10 @@ haplotype. Under an Infinite-Sites mutation model, a violation indicates that
 there must have been at least one recombination event between the SNPs.
 }
 \examples{
-set.seed(30)
-model <- coal_model(5, 2) + feat_mutation(10) + feat_recombination(10) +
-  sumstat_four_gamete()
+model <- coal_model(5, 2) +
+ feat_mutation(50) +
+ feat_recombination(10) +
+ sumstat_four_gamete()
 stats <- simulate(model)
 print(stats$four_gamete)
 }
