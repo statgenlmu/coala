@@ -141,12 +141,12 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
 #'   calculated omega value.
 #' @export
 #' @examples
+#' \dontrun{
 #' model <- coal_model(20, 1, 50000) +
 #'   feat_recombination(50) +
 #'   feat_mutation(1000) +
 #'   feat_selection(strength_A = 1000, time = 0.03) +
 #'   sumstat_omega()
-#' \dontrun{
 #' stats <- simulate(model)
 #' plot(stats$omega$omega, type = "l")}
 sumstat_omega <- function(name = "omega", min_win = 100, max_win = 1000,

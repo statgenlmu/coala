@@ -43,12 +43,12 @@ which needs to be downloaded and compiled manually in order to use the
 statistic.
 }
 \examples{
+\dontrun{
 model <- coal_model(20, 1, 50000) +
   feat_recombination(50) +
   feat_mutation(1000) +
   feat_selection(strength_A = 1000, time = 0.03) +
   sumstat_omega()
-\dontrun{
 stats <- simulate(model)
 plot(stats$omega$omega, type = "l")}
 }
