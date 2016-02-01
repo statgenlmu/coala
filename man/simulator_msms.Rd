@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulator_msms.R
 \name{activate_msms}
 \alias{activate_msms}
-\title{Use the simulator msms}
+\title{Simulator: msms}
 \usage{
 activate_msms(jar, java, priority = 200)
 }
@@ -19,8 +19,7 @@ This adds the simulator 'msms' to the list of available simulators. To add
 msms, you need to download the jar file and have Java installed on your
 system.
 }
-\section{Citation}{
-
+\references{
 Gregory Ewing and Joachim Hermisson.
 MSMS: a coalescent simulation program including recombination,
 demographic structure and selection at a single locus.

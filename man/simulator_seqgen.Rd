@@ -2,25 +2,34 @@
 % Please edit documentation in R/simulator_seqgen.R
 \name{activate_seqgen}
 \alias{activate_seqgen}
-\title{Use seq-gen for simulating finite sites mutation models}
+\title{Simulator: seq-gen}
 \usage{
 activate_seqgen(binary, priority = 100)
 }
 \arguments{
 \item{binary}{The path of the seqgen binary that will be used
-for simulations.}
+for simulations. If none is provided, coala will look for a
+binary called 'seqgen' or 'seq-gen' using the PATH variable.}
 
 \item{priority}{The priority for this simulator. If multiple simulators
 can simulate a model, the one with the highest priority will be used.}
 }
 \description{
 This allows you to use seq-gen to simulate finite sites mutation models.
+When using seq-gen, coala will simulate ancestral tress using the other
+simulators, and call seq-gen to simulate finite sites mutations using the
+trees. Seq-gen has a low priority, but will always be used when finite
+sites mutation models are used.
+}
+\section{Installation}{
+
 You need to download the program from
 \url{http://tree.bio.ed.ac.uk/software/seqgen/}
-and compile the binary first.
+and compile the binary prior to invoking this function.
+On Debian-based systems, you can alternatively install the package
+'seg-gen'.
 }
-\section{Citation}{
-
+\references{
 Andrew Rambaut and Nicholas C. Grassly.
 Seq-Gen: an application for the Monte Carlo simulation of DNA sequence
 evolution along phylogenetic trees.

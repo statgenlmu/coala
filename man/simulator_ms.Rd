@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulator_ms.R
 \name{activate_ms}
 \alias{activate_ms}
-\title{Active the simulator ms}
+\title{Simulator: ms}
 \usage{
 activate_ms(priority = 300)
 }
@@ -11,11 +11,13 @@ activate_ms(priority = 300)
 can simulate a model, the one with the highest priority will be used.}
 }
 \description{
-This adds the simulator 'ms' to the list of available simulators. In order
-to use 'ms', you need to install the CRAN package \pkg{phyclust}.
+This function adds the simulator 'ms' to the list of available simulators.
+In order to use 'ms', you need to install the CRAN package \pkg{phyclust}.
+By default, 'scrm' will be prefered to 'ms'. Raise the priority of 'ms'
+to change this behavior.
 }
 \references{
-: Richard R. Hudson.
+Richard R. Hudson.
 Generating samples under a Wright-Fisher neutral model of genetic variation.
 Bioinformatics (2002) 18 (2): 337-338
 doi:10.1093/bioinformatics/18.2.337
