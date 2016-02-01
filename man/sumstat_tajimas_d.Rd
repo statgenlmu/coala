@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat_tajimas_d.R
 \name{sumstat_tajimas_d}
 \alias{sumstat_tajimas_d}
-\title{Tajima's D}
+\title{Summary Statistic: Tajima's D}
 \usage{
 sumstat_tajimas_d(name = "tajimas_d", population = "all",
   transformation = identity)
@@ -12,7 +12,8 @@ sumstat_tajimas_d(name = "tajimas_d", population = "all",
 the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
-\item{population}{The population for which the statistic is calculated.}
+\item{population}{The population for which the statistic is calculated.
+Can also be "all" to calculate it from all populations.}
 
 \item{transformation}{An optional function for transforming the results
 of the statistic. If specified, the results of the transformation are
@@ -23,18 +24,23 @@ On simulation, this returns a vector with the value of Tajima's D for
   each locus.
 }
 \description{
-This calculates Tajima's D from the simulation results when added to a model.
-}
-\details{
-Tajima's D was introduced by
-
-Tajima, F. (1989). "Statistical method for testing the neutral mutation
-hypothesis by DNA polymorphism.". Genetics 123 (3): 585-95.
+This statistic calculates Tajima's D from the simulation
+results when added to a model. Tajima's D primarily measures
+an deviation of singletons from the neutral expectation of
+an equilibrium model. Negative values indicate an excess of
+singletons, while positive values code a depletion of them.
 }
 \examples{
-set.seed(20)
-model <- coal_model(5, 2) + feat_mutation(5) + sumstat_tajimas_d("taji_d")
+# A neutral model that should yield values close to zero:
+model <- coal_model(5, 2) +
+  feat_mutation(20) +
+  feat_recombination(10) +
+  sumstat_tajimas_d("taji_d")
 stats <- simulate(model)
 print(stats$taji_d)
+}
+\references{
+Tajima, F. (1989). "Statistical method for testing the neutral mutation
+hypothesis by DNA polymorphism.". Genetics 123 (3): 585-95.
 }
 

@@ -24,10 +24,10 @@ SNPs are in a sample according to their number of
 derived alleles.
 }
 \examples{
-model <- coal_model(5, 2) +
-  feat_mutation(5) +
+model <- coal_model(20, 500) +
+  feat_mutation(2) +
   sumstat_sfs()
 stats <- simulate(model)
-print(stats$sfs)
+barplot(stats$sfs)
 }
 
