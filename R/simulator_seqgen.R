@@ -27,12 +27,6 @@ generate_tree_model <- function(model) {
 }
 
 
-# Function to perform simulation using seqgen
-#
-# @param opts The options to pass to ms. Must either be a character or character
-# vector.
-
-
 conv_to_seqgen_arg <- function(feature, model) UseMethod("conv_to_seqgen_arg")
 
 #' @describeIn conv_to_ms_arg Feature conversion
@@ -193,14 +187,22 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
 has_seqgen <- function() !is.null(simulators[["seqgen"]])
 
 
-#' Use seq-gen for simulating finite sites mutation models
+#' Simulator: seq-gen
 #'
 #' This allows you to use seq-gen to simulate finite sites mutation models.
+#' When using seq-gen, coala will simulate ancestral tress using the other
+#' simulators, and call seq-gen to simulate finite sites mutations using the
+#' trees. Seq-gen has a low priority, but will always be used when finite
+#' sites mutation models are used.
+#'
+#' @section Installation:
 #' You need to download the program from
 #' \url{http://tree.bio.ed.ac.uk/software/seqgen/}
-#' and compile the binary first.
+#' and compile the binary prior to invoking this function.
+#' On Debian-based systems, you can alternatively install the package
+#' 'seg-gen'.
 #'
-#' @section Citation:
+#' @references
 #' Andrew Rambaut and Nicholas C. Grassly.
 #' Seq-Gen: an application for the Monte Carlo simulation of DNA sequence
 #' evolution along phylogenetic trees.
@@ -208,8 +210,10 @@ has_seqgen <- function() !is.null(simulators[["seqgen"]])
 #' doi:10.1093/bioinformatics/13.3.235
 #'
 #' @param binary The path of the seqgen binary that will be used
-#'  for simulations.
+#'  for simulations. If none is provided, coala will look for a
+#'  binary called 'seqgen' or 'seq-gen' using the PATH variable.
 #' @inheritParams activate_ms
+#' @rdname simulator_seqgen
 #' @export
 activate_seqgen <- function(binary, priority = 100) {
   register_simulator(seqgen_class$new(binary, priority))

@@ -111,16 +111,20 @@ ms_class <- R6Class("ms", inherit = simulator_class,
 has_ms <- function() !is.null(simulators[["ms"]])
 
 
-#' Active the simulator ms
+#' Simulator: ms
 #'
-#' This adds the simulator 'ms' to the list of available simulators. In order
-#' to use 'ms', you need to install the CRAN package \pkg{phyclust}.
+#' This function adds the simulator 'ms' to the list of available simulators.
+#' In order to use 'ms', you need to install the CRAN package \pkg{phyclust}.
+#' By default, 'scrm' will be prefered to 'ms'. Raise the priority of 'ms'
+#' to change this behavior.
 #'
-#' @references : Richard R. Hudson.
+#' @references
+#' Richard R. Hudson.
 #' Generating samples under a Wright-Fisher neutral model of genetic variation.
 #' Bioinformatics (2002) 18 (2): 337-338
 #' doi:10.1093/bioinformatics/18.2.337
 #'
+#' @rdname simulator_ms
 #' @param priority The priority for this simulator. If multiple simulators
 #'   can simulate a model, the one with the highest priority will be used.
 #' @export
