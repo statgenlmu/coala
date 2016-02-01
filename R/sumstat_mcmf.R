@@ -23,12 +23,20 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
   )
 )
 
-#' The MCMF Summary Statistic
+#' Summary Statistic: Most Common Mutation's Frequency
 #'
-#' When adding this to a model, the "Most Common Mutation Frequecy" summary
-#' statistic is calculated from the simulation output.
+#' This summary statistic calculates the observed frequency
+#' of the mutational pattern that is observed most often in
+#' the data.
 #'
 #' @inheritParams sumstat_four_gamete
+#' @return A numeric vector containing MCMF for each locus.
+#' @examples
+#' # Calculate MCMF for a panmictic population
+#' model <- coal_model(10, 2) +
+#'   feat_mutation(50) +
+#'   sumstat_mcmf()
+#' simulate(model)
 #' @export
 sumstat_mcmf  <- function(name = "mcmf", population = 1,
                           transformation = identity) {
