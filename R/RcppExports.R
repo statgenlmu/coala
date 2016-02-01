@@ -20,8 +20,8 @@ generate_trio_trees <- function(trees, llm) {
 #' Segregating Sites
 #'
 #' This functions allow the creation and modification of segregating sites
-#' objects, which are one of the most basic intermediary statistics that is
-#' calculated in coala. Segregating sites are primarily SNP matrix that
+#' objects, which are one of the basic intermediary statistics that is
+#' calculated in coala. Segregating sites consist primarily of a SNP matrix that
 #' contains all SNPs for one locus, with some additional information attached.
 #' The parts of the S3 class are detailed below.
 #'
@@ -50,14 +50,15 @@ generate_trio_trees <- function(trees, llm) {
 #' @param check Whether non-segregating sites are remove from the segregating
 #'   sites (\code{TRUE}) or not (\code{FALSE}).
 #' @export
-#' @aliases segsites
+#' @rdname segsites
+#' @aliases create_segsites
 #' @author Paul Staab
 #'
 create_segsites <- function(snps, positions, trio_locus = numeric(0), check = TRUE) {
     .Call('coala_create_segsites', PACKAGE = 'coala', snps, positions, trio_locus, check)
 }
 
-#' @describeIn create_segsites Returns the SNP matrix from a segregating sites
+#' @describeIn segsites Returns the SNP matrix from a segregating sites
 #'  object.
 #'
 #' @param segsites The segregating sites object
@@ -66,28 +67,28 @@ get_snps <- function(segsites) {
     .Call('coala_get_snps', PACKAGE = 'coala', segsites)
 }
 
-#' @describeIn create_segsites Returns the SNP's positions from a segregating
+#' @describeIn segsites Returns the SNP's positions from a segregating
 #'   sites  object.
 #' @export
 get_positions <- function(segsites) {
     .Call('coala_get_positions', PACKAGE = 'coala', segsites)
 }
 
-#' @describeIn create_segsites Sets the SNP's positions in a segregating
+#' @describeIn segsites Sets the SNP's positions in a segregating
 #'   sites object.
 #' @export
 set_positions <- function(segsites, positions) {
     .Call('coala_set_positions', PACKAGE = 'coala', segsites, positions)
 }
 
-#' @describeIn create_segsites Returns the trio locus positions from a
+#' @describeIn segsites Returns the trio locus positions from a
 #'   segregating sites  object.
 #' @export
 get_trio_locus <- function(segsites) {
     .Call('coala_get_trio_locus', PACKAGE = 'coala', segsites)
 }
 
-#' @describeIn create_segsites Sets the trio locus in a segregating sites
+#' @describeIn segsites Sets the trio locus in a segregating sites
 #'   object.
 #' @export
 set_trio_locus <- function(segsites, trio_locus) {

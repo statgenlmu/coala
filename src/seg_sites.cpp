@@ -6,8 +6,8 @@ using namespace Rcpp;
 //' Segregating Sites
 //'
 //' This functions allow the creation and modification of segregating sites
-//' objects, which are one of the most basic intermediary statistics that is
-//' calculated in coala. Segregating sites are primarily SNP matrix that
+//' objects, which are one of the basic intermediary statistics that is
+//' calculated in coala. Segregating sites consist primarily of a SNP matrix that
 //' contains all SNPs for one locus, with some additional information attached.
 //' The parts of the S3 class are detailed below.
 //'
@@ -36,7 +36,8 @@ using namespace Rcpp;
 //' @param check Whether non-segregating sites are remove from the segregating
 //'   sites (\code{TRUE}) or not (\code{FALSE}).
 //' @export
-//' @aliases segsites
+//' @rdname segsites
+//' @aliases create_segsites
 //' @author Paul Staab
 //'
 // [[Rcpp::export]]
@@ -48,7 +49,7 @@ coala::SegSites create_segsites(NumericMatrix snps,
 }
 
 
-//' @describeIn create_segsites Returns the SNP matrix from a segregating sites
+//' @describeIn segsites Returns the SNP matrix from a segregating sites
 //'  object.
 //'
 //' @param segsites The segregating sites object
@@ -59,7 +60,7 @@ NumericMatrix get_snps(const coala::SegSites segsites) {
 }
 
 
-//' @describeIn create_segsites Returns the SNP's positions from a segregating
+//' @describeIn segsites Returns the SNP's positions from a segregating
 //'   sites  object.
 //' @export
 // [[Rcpp::export]]
@@ -68,7 +69,7 @@ NumericVector get_positions(const coala::SegSites segsites) {
 }
 
 
-//' @describeIn create_segsites Sets the SNP's positions in a segregating
+//' @describeIn segsites Sets the SNP's positions in a segregating
 //'   sites object.
 //' @export
 // [[Rcpp::export]]
@@ -78,7 +79,7 @@ coala::SegSites set_positions(coala::SegSites segsites,
 }
 
 
-//' @describeIn create_segsites Returns the trio locus positions from a
+//' @describeIn segsites Returns the trio locus positions from a
 //'   segregating sites  object.
 //' @export
 // [[Rcpp::export]]
@@ -87,7 +88,7 @@ NumericVector get_trio_locus(const coala::SegSites segsites) {
 }
 
 
-//' @describeIn create_segsites Sets the trio locus in a segregating sites
+//' @describeIn segsites Sets the trio locus in a segregating sites
 //'   object.
 //' @export
 // [[Rcpp::export]]
