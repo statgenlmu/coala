@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat_seg_sites.R
 \name{sumstat_seg_sites}
 \alias{sumstat_seg_sites}
-\title{Returns the Segregation Sites Statistics from simulations}
+\title{Summary Statistic: Segregating Sites}
 \usage{
 sumstat_seg_sites(name = "seg_sites", transformation = identity)
 }
@@ -15,12 +15,19 @@ with this name. Summary statistic names must be unique in a model.}
 of the statistic. If specified, the results of the transformation are
 returned instead of the original values.}
 }
+\value{
+A list of segsites objects. These can be treated as a matrix for
+most applications. Rows are individuals, columns are SNPs.
+}
 \description{
-Returns the Segregation Sites Statistics from simulations
+This summary statistics generates a matrix of segregating sites.
+This is useful for calculating summary statistics that \pkg{coala}
+does not support..
 }
 \examples{
-set.seed(50)
-model <- coal_model(5, 1) + feat_mutation(5) + sumstat_seg_sites("segsites")
+model <- coal_model(5, 1) +
+  feat_mutation(5) +
+  sumstat_seg_sites("segsites")
 stats <- simulate(model)
 print(stats$segsites)
 }

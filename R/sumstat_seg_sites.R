@@ -7,13 +7,21 @@ stat_segsites_class <- R6Class("stat_segsites", inherit = sumstat_class,
 )
 
 
-#' Returns the Segregation Sites Statistics from simulations
+#' Summary Statistic: Segregating Sites
+#'
+#' This summary statistics generates a matrix of segregating sites.
+#' This is useful for calculating summary statistics that \pkg{coala}
+#' does not support..
 #'
 #' @inheritParams sumstat_four_gamete
+#' @return
+#' A list of segsites objects. These can be treated as a matrix for
+#' most applications. Rows are individuals, columns are SNPs.
 #' @export
 #' @examples
-#' set.seed(50)
-#' model <- coal_model(5, 1) + feat_mutation(5) + sumstat_seg_sites("segsites")
+#' model <- coal_model(5, 1) +
+#'   feat_mutation(5) +
+#'   sumstat_seg_sites("segsites")
 #' stats <- simulate(model)
 #' print(stats$segsites)
 sumstat_seg_sites <- function(name = "seg_sites", transformation = identity) {
