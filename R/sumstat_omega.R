@@ -107,11 +107,11 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
 )
 
 
-#' Calculates the Omega Statistic from Simulations
+#' Summary Statistic: Omega
 #'
-#' This summary statistic calculates the omega statistic introduced by
-#' Kim & Nielsen (2004) from the simulated data. The statistic is senistive for
-#' LD patterns that are characteristic for selective sweeps. To calculate
+#' Calculates the Omega Statistic introduced by
+#' Kim & Nielsen (2004) from the simulated data. The statistic is sensitive for
+#' for hard selective sweeps. To calculate
 #' the statistic, coala relies on the command line program
 #' \href{http://sco.h-its.org/exelixis/web/software/omegaplus/index.html}{OmegaPlus},
 #' which needs to be downloaded and compiled manually in order to use the
@@ -137,9 +137,18 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
 #' @param binary The path of the binary for OmegaPlus. If set to "automatic",
 #'   coala will try to find a binary called "OmegaPlus" using the PATH
 #'   environment variable.
-#' @return A data frame consisting of the locus and the genetic position of the
-#'   calculated omega values.
+#' @return A data frame listing of locus, genetic position and the
+#'   calculated omega value.
 #' @export
+#' @examples
+#' model <- coal_model(20, 1, 50000) +
+#'   feat_recombination(50) +
+#'   feat_mutation(1000) +
+#'   feat_selection(strength_A = 1000, time = 0.03) +
+#'   sumstat_omega()
+#' \dontrun{
+#' stats <- simulate(model)
+#' plot(stats$omega$omega, type = "l")}
 sumstat_omega <- function(name = "omega", min_win = 100, max_win = 1000,
                           grid = 1000, binary = "automatic",
                           transformation = identity) {

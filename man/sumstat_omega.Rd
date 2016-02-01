@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat_omega.R
 \name{sumstat_omega}
 \alias{sumstat_omega}
-\title{Calculates the Omega Statistic from Simulations}
+\title{Summary Statistic: Omega}
 \usage{
 sumstat_omega(name = "omega", min_win = 100, max_win = 1000,
   grid = 1000, binary = "automatic", transformation = identity)
@@ -30,17 +30,27 @@ of the statistic. If specified, the results of the transformation are
 returned instead of the original values.}
 }
 \value{
-A data frame consisting of the locus and the genetic position of the
-  calculated omega values.
+A data frame listing of locus, genetic position and the
+  calculated omega value.
 }
 \description{
-This summary statistic calculates the omega statistic introduced by
-Kim & Nielsen (2004) from the simulated data. The statistic is senistive for
-LD patterns that are characteristic for selective sweeps. To calculate
+Calculates the Omega Statistic introduced by
+Kim & Nielsen (2004) from the simulated data. The statistic is sensitive for
+for hard selective sweeps. To calculate
 the statistic, coala relies on the command line program
 \href{http://sco.h-its.org/exelixis/web/software/omegaplus/index.html}{OmegaPlus},
 which needs to be downloaded and compiled manually in order to use the
 statistic.
+}
+\examples{
+model <- coal_model(20, 1, 50000) +
+  feat_recombination(50) +
+  feat_mutation(1000) +
+  feat_selection(strength_A = 1000, time = 0.03) +
+  sumstat_omega()
+\dontrun{
+stats <- simulate(model)
+plot(stats$omega$omega, type = "l")}
 }
 \references{
 Linkage disequilibrium as a signature of selective sweeps.
