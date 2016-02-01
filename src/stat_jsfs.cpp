@@ -2,14 +2,15 @@
 
 using namespace Rcpp;
 
-//' Calculates the JSFS
+//' Calculates the Joint Site Frequency Spectrum
 //'
 //' @param segsites_list List of segregating sites
 //' @param ind_per_pop A list of integer vector, where each entry gives the
 //'   index of the haploids that belong the corresponding population.
-//' @export
+//'
 //' @author Paul Staab & Dirk Metzler
 //' @return The Joint Site Frequency Spectrum, as a matrix.
+//' @keywords internal
 // [[Rcpp::export]]
 NumericVector calc_jsfs(const ListOf<coala::SegSites> segsites_list,
                         const ListOf<IntegerVector> ind_per_pop) {
