@@ -23,7 +23,7 @@ A list of sequences for each locus. Each entries is a
 \description{
 This summary statistic returns the actual DNA sequences from
 finite sites simulations. It can not be
-calculated together with other summary statsitics or when assuming
+calculated together with other summary statistics or when assuming
 an infinite sites mutation model. No outgroup
 is needed for it, and the outgroup sequences will also be
 returned if present.
