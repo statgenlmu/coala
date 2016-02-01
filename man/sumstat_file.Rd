@@ -2,14 +2,31 @@
 % Please edit documentation in R/sumstat_file.R
 \name{sumstat_file}
 \alias{sumstat_file}
-\title{Returns files with the raw results of simulations}
+\title{Summary Statistic: Files}
 \usage{
 sumstat_file(folder)
 }
 \arguments{
-\item{folder}{The path of a folder where the files will be written.}
+\item{folder}{The path to a folder. The files will be created there.}
+}
+\value{
+A character vector containing the files in order in which they
+        where created.
 }
 \description{
-Returns files with the raw results of simulations
+This "summmary statistic" returns files with the raw results of
+the simulation. Multiple files are returned in case coala needs
+multiple calls to simulators to simulate the model. These files
+do not contain any post processing of the results done by coala,
+e.g. \code{\link{feat_unphased}}, \code{\link}
+}
+\examples{
+folder <- tempfile("coala-test")
+model <- coal_model(10, 1) +
+  feat_mutation(5) +
+  sumstat_file(folder)
+simulate(model)$file
+
+unlink(folder, recursive = TRUE)  # Clean up
 }
 
