@@ -17,15 +17,14 @@ stat_pi_class <- R6Class("stat_pi", inherit = sumstat_class,
   )
 )
 
-#' Calculates the Nucleodite Diversity Pi
+#' Summary Statistic: Nucleotide Diversity
 #'
-#' This calculates the nucleotide diversity / mean pairwise difference usually
-#' for a population.
+#' The summary statistic calculates the nucleotide diversity (\eqn{\pi})
+#' per locus, which is the mean number of pairwise difference for
+#' two individuals. It is a commonly used estimator for the scaled
+#' mutation rate \eqn{\theta}.
 #'
-#' The statistic is usually denoted by pi and can be used
-#' as an estimator for the per locus scaled muation rate theta.
-#'
-#' It was introducted by
+#' The nucleotide diversity was introduced by
 #'
 #'  Nei and Li (1979). "Mathematical Model for Studying Genetic Variation in
 #'  Terms of Restriction Endonucleases". PNAS 76 (10): 5269-73.
@@ -36,8 +35,9 @@ stat_pi_class <- R6Class("stat_pi", inherit = sumstat_class,
 #'   each locus.
 #' @export
 #' @examples
-#' set.seed(10)
-#' model <- coal_model(5, 2) + feat_mutation(5) + sumstat_nucleotide_div()
+#' model <- coal_model(5, 2) +
+#'   feat_mutation(5) +
+#'   sumstat_nucleotide_div()
 #' stats <- simulate(model)
 #' print(stats$pi)
 sumstat_nucleotide_div <- function(name = "pi", population = 1,
