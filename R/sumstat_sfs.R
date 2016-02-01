@@ -18,18 +18,20 @@ stat_sfs_class <- R6Class("stat_sfs", inherit = sumstat_class,
   )
 )
 
-#' Calculates the Site Frequency Spectrum from simulations
+#' Summary Statistic: Site Frequency Spectrum
+#'
+#' The Site Frequency Spectrum (SFS) counts how many
+#' SNPs are in a sample according to their number of
+#' derived alleles.
 #'
 #' @inheritParams sumstat_four_gamete
-#' @param population Either the number of a population for with the SFS is
-#'   calculated, or \code{"all"} to calculate the combined SFS of all
-#'   populations.
 #' @export
 #' @examples
-#' set.seed(50)
-#' model <- coal_model(5, 2) + feat_mutation(5) + sumstat_sfs()
+#' model <- coal_model(20, 500) +
+#'   feat_mutation(2) +
+#'   sumstat_sfs()
 #' stats <- simulate(model)
-#' print(stats$sfs)
+#' barplot(stats$sfs)
 sumstat_sfs <- function(name = "sfs", population = "all",
                         transformation = identity) {
   stat_sfs_class$new(name, population, transformation)
