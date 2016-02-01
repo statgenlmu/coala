@@ -51,26 +51,25 @@ building this document within a reasonable range). A real analysis will need
 many more!
 
 
-We now need to prepare the simulation data for the `abc` package:
+We need to prepare the simulation data for the `abc` package. We can use
+the `create_abc_param` and `create_abc_sumstat` functions for this purpose:
 
 ```{r}
 # Getting the parameters
-sim_pars <- matrix(sapply(sim_data, function(x) x$pars), 2000, 1)
-colnames(sim_pars) <- "theta"
-head(sim_pars, n = 3)
+sim_param <- create_abc_param(sim_data, model)
+head(sim_param, n = 3)
 
 # Getting the summary statistics
-sim_sumstats <- t(sapply(sim_data, function(x) x$sfs))
-colnames(sim_sumstats) <- paste0("S", 1:9)
-head(sim_sumstats, n = 3)
+sim_sumstat <- create_abc_sumstat(sim_data, model)
+head(sim_sumstat, n = 3)
 ```
 
 
-And can now estimate `theta`:
+Now, we can estimate the posterior distribution of `theta`:
 
 ```{r abc, fig.align="center", fig.width=5}
 suppressPackageStartupMessages(library(abc))
-posterior <- abc(sfs, sim_pars, sim_sumstats, 0.05, method = "rejection")
+posterior <- abc(sfs, sim_param, sim_sumstat, 0.05, method = "rejection")
 hist(posterior, breaks = 10)
 ```
 

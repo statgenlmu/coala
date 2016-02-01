@@ -1,5 +1,5 @@
 Package: coala
-Version: 0.3.0
+Version: 0.3.9001
 Date: 2015-12-20
 License: MIT + file LICENSE
 Title: A Framework for Coalescent Simulation
@@ -55,6 +55,7 @@ Collate:
     'feature_sumstats.R'
     'feature_unphased.R'
     'import_popgenome.R'
+    'interface_abc.R'
     'locus.R'
     'model.R'
     'model_build.R'
