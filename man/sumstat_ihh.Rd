@@ -64,6 +64,14 @@ statistic for a publication.
                        genome. PLoS Biol, 4(3):e72, Mar 2006.}
  }
 }
+\examples{
+  model <- coal_model(20, 1, 1000) +
+    feat_mutation(1000) +
+    sumstat_ihh()
+\dontrun{
+    stat <- simulate(model)
+    print(stat$ihh)}
+}
 \author{
 Paul Staab
 }
