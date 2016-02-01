@@ -7,6 +7,9 @@
 list_simulators()
 }
 \description{
-This returns the usable simulators and their options
+This functions returns the usable simulators
+}
+\examples{
+list_simulators()
 }
 

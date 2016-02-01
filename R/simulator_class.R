@@ -77,14 +77,19 @@ reduce_sim_commands <- function(sim_commands) {
 
 #' Returns the available simulators
 #'
-#' This returns the usable simulators and their options
+#' This functions returns the usable simulators
+#'
 #' @export
+#' @examples
+#' list_simulators()
 list_simulators <- function() {
   do.call(rbind, lapply(ls(simulators), function(simulator) {
     info <- get_simulator(simulator)$get_info()
     name <- info[["name"]]
     info <- info[-1]
     pars <- paste(names(info), ":", info, collapse = ", ")
-    c(name = name, info = pars)
+    c(name = name,
+      info = pars,
+      priority = get_simulator(simulator)$get_priority())
   }))
 }
