@@ -29,6 +29,7 @@ stat_dna_class <- R6Class("dna_stat", inherit = sumstat_class,
 #' @return A list of sequences for each locus. Each entries is a
 #'         character matrix decoding the sequences. Each row
 #'         is an individual, and each column is a genetic position.
+#' @template summary_statistics
 #' @export
 #' @examples
 #' model <- coal_model(5, 1, 10) +

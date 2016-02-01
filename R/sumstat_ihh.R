@@ -133,6 +133,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #'    \item{iHS: iHS, normalized over all loci.}
 #'   }
 #' @export
+#' @template summary_statistics
 #' @examples
 #'   model <- coal_model(20, 1, 1000) +
 #'     feat_mutation(1000) +

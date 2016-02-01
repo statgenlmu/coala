@@ -78,6 +78,8 @@ is.named_par <- function(par) {
 #'  expression.
 #' @export
 #' @aliases  parameter
+#' @seealso For parameters that variate between the loci in a model:
+#'   \code{\link{par_variation}}, \code{\link{par_zero_inflation}}
 #' @author Paul Staab
 #' @examples
 #' # A parameter (here for the mutation rate) that is always

@@ -37,6 +37,7 @@ create_zero_frac_func <- function(locus_id, locus_number) {
 #'   `0` should be random (\code{TRUE}) or a fixed fraction (\code{FALSE}). See
 #'   \code{prob} for details.
 #' @export
+#' @seealso For parameters that are identical for all loci: \code{\link{parameter}}
 #' @examples
 #' # Simulate half of the loci with recomination and the other half without it:
 #' model <- coal_model(4, 4) +

@@ -26,6 +26,7 @@ stat_sfs_class <- R6Class("stat_sfs", inherit = sumstat_class,
 #'
 #' @inheritParams sumstat_four_gamete
 #' @export
+#' @template summary_statistics
 #' @examples
 #' model <- coal_model(20, 500) +
 #'   feat_mutation(2) +

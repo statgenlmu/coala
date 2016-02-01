@@ -53,4 +53,14 @@ model <- coal_model(c(3, 4, 5), 2) +
   sumstat_sfs()
 simulate(model)
 }
+\seealso{
+Other features: \code{\link{feat_growth}},
+  \code{\link{feat_ignore_singletons}},
+  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
+  \code{\link{feat_pop_merge}},
+  \code{\link{feat_recombination}},
+  \code{\link{feat_selection}},
+  \code{\link{feat_size_change}},
+  \code{\link{feat_unphased}}
+}
 

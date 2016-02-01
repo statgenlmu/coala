@@ -16,8 +16,9 @@ of the statistic. If specified, the results of the transformation are
 returned instead of the original values.}
 }
 \value{
-A list of segsites objects. These can be treated as a matrix for
-most applications. Rows are individuals, columns are SNPs.
+A list of \code{\link[=create_segsites]{segsites}} objects.
+        These can be treated as a matrix for
+        most applications. Rows are individuals, columns are SNPs.
 }
 \description{
 This summary statistics generates a matrix of segregating sites.
@@ -30,5 +31,22 @@ model <- coal_model(5, 1) +
   sumstat_seg_sites("segsites")
 stats <- simulate(model)
 print(stats$segsites)
+}
+\seealso{
+For a description of the segregating sites class: \code{\link{create_segsites}}
+
+To create a demographic model: \code{\link{coal_model}}
+
+To calculate this statistic from data: \code{\link{calc_sumstats_from_data}}
+
+Other summary statistics: \code{\link{sumstat_dna}},
+  \code{\link{sumstat_file}},
+  \code{\link{sumstat_four_gamete}},
+  \code{\link{sumstat_ihh}}, \code{\link{sumstat_jsfs}},
+  \code{\link{sumstat_mcmf}},
+  \code{\link{sumstat_nucleotide_div}},
+  \code{\link{sumstat_omega}}, \code{\link{sumstat_sfs}},
+  \code{\link{sumstat_tajimas_d}},
+  \code{\link{sumstat_trees}}
 }
 

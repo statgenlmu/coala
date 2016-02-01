@@ -37,4 +37,14 @@ model <- coal_model(10, 1, ploidy = 2) +
   sumstat_seg_sites()
 simulate(model)
 }
+\seealso{
+Other features: \code{\link{feat_growth}},
+  \code{\link{feat_ignore_singletons}},
+  \code{\link{feat_migration}},
+  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
+  \code{\link{feat_pop_merge}},
+  \code{\link{feat_recombination}},
+  \code{\link{feat_selection}},
+  \code{\link{feat_size_change}}
+}
 

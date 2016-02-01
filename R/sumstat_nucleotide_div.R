@@ -34,6 +34,7 @@ stat_pi_class <- R6Class("stat_pi", inherit = sumstat_class,
 #' @return On simulation, this returns a vector with the value of pi for
 #'   each locus.
 #' @export
+#' @template summary_statistics
 #' @examples
 #' model <- coal_model(5, 2) +
 #'   feat_mutation(5) +

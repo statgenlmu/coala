@@ -49,6 +49,7 @@ is.par_variation <- function(object) inherits(object, "variation_par")
 #' @param variance The variance of the gamma distribution, which the values used
 #'   for simulation will follow.
 #' @export
+#' @seealso For parameters that are identical for all loci: \code{\link{parameter}}
 #' @examples
 #' model <- coal_model(5, 10) +
 #'   feat_mutation(par_variation(par_const(5), 10)) +

@@ -20,8 +20,8 @@ growth_class <- R6Class("growth", inherit = feature_class,
 #' backwards in time or grow forwards in time. For a negative value of
 #' \eqn{\alpha} it will decline (forward in time).
 #'
-#' If you want to add an instantaneous change of the population size,
-#' then use \code{\link{feat_size_change}}.
+#' If you want to add an ,
+#' then use
 #'
 #' @param rate The growth rate. Can be a numeric or a \code{\link{parameter}}.
 #'        See \code{Details} for an explanation how the rate affects the
@@ -31,6 +31,9 @@ growth_class <- R6Class("growth", inherit = feature_class,
 #' @param time The time at which the growth rate is changed. Can also be
 #'        a \code{\link{parameter}}.
 #' @export
+#' @seealso For instantaneous population size
+#'          changes: \code{\link{feat_size_change}}
+#' @family features
 #' @examples
 #' # Simulate a haploid population that has been expanding for
 #' # the last 2*Ne generations

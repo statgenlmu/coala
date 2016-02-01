@@ -28,14 +28,17 @@ This creates a basic coalescent model to which more features, loci,
 parameters and summary statistics can be added later. Data under the model
 can be simulated using the \code{\link[=simulate.coalmodel]{simulate}} function.
 }
-\examples{
-model <- coal_model(5, 10, 100) + feat_mutation(1) + sumstat_sfs()
-simulate(model)
+\seealso{
+The 'coala-intro' vignette for a general description on how to extend
+         models.
 
-model <- coal_model(c(2, 2), 1, 10) +
-  feat_recombination(1) +
-  feat_migration(0.5, symmetric = TRUE) +
-  sumstat_trees()
-simulate(model)
+For adding mutation or for a list of other features:
+         \code{\link{feat_mutation}}
+
+For adding loci: \code{\link{locus_single}},
+         \code{\link{locus_averaged}}, \code{\link{locus_trio}}
+
+For a generating DNA sequences or for a list of summary statistics:
+         \code{\link{sumstat_dna}}
 }
 

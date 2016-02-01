@@ -26,4 +26,19 @@ model <- coal_model(10, 2, 1500) +
   sumstat_sfs()
 simulate(model)
 }
+\seealso{
+For adding recombination: \code{\link{feat_mutation}}.
+
+For using rates that variate between the loci in a model:
+  \code{\link{par_variation}}, \code{\link{par_zero_inflation}}
+
+Other features: \code{\link{feat_growth}},
+  \code{\link{feat_ignore_singletons}},
+  \code{\link{feat_migration}},
+  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
+  \code{\link{feat_pop_merge}},
+  \code{\link{feat_selection}},
+  \code{\link{feat_size_change}},
+  \code{\link{feat_unphased}}
+}
 

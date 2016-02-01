@@ -14,16 +14,17 @@
 #' @param loci_length This gives the length of the loci to add.
 #' @return The coalescent model
 #' @export
+#' @seealso The 'coala-intro' vignette for a general description on how to extend
+#'          models.
+#' @seealso For adding mutation or for a list of other features:
+#'          \code{\link{feat_mutation}}
+#' @seealso For adding loci: \code{\link{locus_single}},
+#'          \code{\link{locus_averaged}}, \code{\link{locus_trio}}
+#' @seealso For a generating DNA sequences or for a list of summary statistics:
+#'          \code{\link{sumstat_dna}}
 #' @importFrom assertthat assert_that
 #' @examples
-#' model <- coal_model(5, 10, 100) + feat_mutation(1) + sumstat_sfs()
-#' simulate(model)
-#'
-#' model <- coal_model(c(2, 2), 1, 10) +
-#'   feat_recombination(1) +
-#'   feat_migration(0.5, symmetric = TRUE) +
-#'   sumstat_trees()
-#' simulate(model)
+
 coal_model <- function(sample_size, loci_number = 0,
                        loci_length = 1000, ploidy = 1) {
 

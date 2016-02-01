@@ -48,6 +48,7 @@ migration_class <- R6Class("migration", inherit = feature_class,
 #'        rate is set. The rate applies to the time past warts
 #'        of the time point, until it is changed again.
 #' @export
+#' @family features
 #'
 #' @examples
 #' # Asymmetric migration between two populations:

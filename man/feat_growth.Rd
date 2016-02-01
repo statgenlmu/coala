@@ -29,8 +29,8 @@ the growth has started. For positive alpha, the population will decline
 backwards in time or grow forwards in time. For a negative value of
 \eqn{\alpha} it will decline (forward in time).
 
-If you want to add an instantaneous change of the population size,
-then use \code{\link{feat_size_change}}.
+If you want to add an ,
+then use
 }
 \examples{
 # Simulate a haploid population that has been expanding for
@@ -41,5 +41,18 @@ model <- coal_model(10, 1) +
   feat_mutation(10) +
   sumstat_sfs()
 simulate(model)
+}
+\seealso{
+For instantaneous population size
+         changes: \code{\link{feat_size_change}}
+
+Other features: \code{\link{feat_ignore_singletons}},
+  \code{\link{feat_migration}},
+  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
+  \code{\link{feat_pop_merge}},
+  \code{\link{feat_recombination}},
+  \code{\link{feat_selection}},
+  \code{\link{feat_size_change}},
+  \code{\link{feat_unphased}}
 }
 

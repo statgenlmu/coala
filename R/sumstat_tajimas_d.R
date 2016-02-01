@@ -48,6 +48,7 @@ stat_tajimas_d_class <- R6Class("stat_tajimas_d", inherit = sumstat_class,
 #' Tajima, F. (1989). "Statistical method for testing the neutral mutation
 #' hypothesis by DNA polymorphism.". Genetics 123 (3): 585-95.
 #' @export
+#' @template summary_statistics
 #' @examples
 #' # A neutral model that should yield values close to zero:
 #' model <- coal_model(5, 2) +

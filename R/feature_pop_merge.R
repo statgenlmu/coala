@@ -30,6 +30,7 @@ pop_merge_class <- R6Class("pop_merge", inherit = feature_class,
 #'        the population in which the speciation event occurs.
 #' @param time The time at which the merge occurs.
 #' @export
+#' @family features
 #' @examples
 #' # Two population which merge after 0.5 time units:
 #' model <- coal_model(c(25,25), 1) +

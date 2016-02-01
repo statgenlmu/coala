@@ -16,6 +16,10 @@ recombination_class <- R6Class("recombination", inherit = feature_class,
 #'        recombination event within the locus occurs in one generation.
 #' @return The feature, which can be added to a model using `+`.
 #' @export
+#' @family features
+#' @seealso For adding recombination: \code{\link{feat_mutation}}.
+#' @seealso For using rates that variate between the loci in a model:
+#'   \code{\link{par_variation}}, \code{\link{par_zero_inflation}}
 #'
 #' @examples
 #' # Simulate a 1.5kb sequence for 10 individuals with recombination:

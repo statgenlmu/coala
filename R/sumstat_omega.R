@@ -140,6 +140,7 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
 #' @return A data frame listing of locus, genetic position and the
 #'   calculated omega value.
 #' @export
+#' @template summary_statistics
 #' @examples
 #' \dontrun{
 #' model <- coal_model(20, 1, 50000) +

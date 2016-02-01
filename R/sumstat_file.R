@@ -33,6 +33,7 @@ stat_file_class <- R6Class("stat_file", inherit = sumstat_class, #nolint
 #' @return A character vector containing the files in order in which they
 #'         where created.
 #' @export
+#' @template summary_statistics
 #' @examples
 #' folder <- tempfile("coala-test")
 #' model <- coal_model(10, 1) +

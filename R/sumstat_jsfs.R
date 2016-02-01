@@ -44,6 +44,7 @@ stat_jsfs_class <- R6Class("stat_jsfs", inherit = sumstat_class,
 #'   JSFS for the corresponding locus.
 #' @return The JSFS, given as an array. The dimensions correspond to the
 #'   populatons as given in the \code{populations} argument.
+#' @template summary_statistics
 #' @export
 #' @examples
 #' model <- coal_model(c(2, 3, 4), 2) +

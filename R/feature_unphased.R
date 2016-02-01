@@ -32,6 +32,7 @@ unphased_class <- R6Class("unphased", inherit = feature_class,
 #'   from the phased chromosomes for each individual.
 #' @return The feature, which can be added to a model using `+`.
 #' @export
+#' @family features
 #' @examples
 #' # Simulate unphased data in a diploid population
 #' model <- coal_model(10, 1, ploidy = 2) +

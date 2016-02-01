@@ -14,10 +14,12 @@ stat_segsites_class <- R6Class("stat_segsites", inherit = sumstat_class,
 #' does not support..
 #'
 #' @inheritParams sumstat_four_gamete
-#' @return
-#' A list of segsites objects. These can be treated as a matrix for
-#' most applications. Rows are individuals, columns are SNPs.
+#' @return A list of \code{\link[=create_segsites]{segsites}} objects.
+#'         These can be treated as a matrix for
+#'         most applications. Rows are individuals, columns are SNPs.
 #' @export
+#' @seealso For a description of the segregating sites class: \code{\link{create_segsites}}
+#' @template summary_statistics
 #' @examples
 #' model <- coal_model(5, 1) +
 #'   feat_mutation(5) +

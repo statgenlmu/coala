@@ -27,4 +27,7 @@ model <- coal_model(5, 10) +
   sumstat_nucleotide_div()
 simulate(model)
 }
+\seealso{
+For parameters that are identical for all loci: \code{\link{parameter}}
+}
 

@@ -60,6 +60,7 @@ stat_four_gamete_class <- R6Class("stat_four_gamete", inherit = sumstat_class,
 #'    \item{perc_polym}{The percentage of positions that are polymorpic.}
 #'   }
 #' @export
+#' @template summary_statistics
 #' @examples
 #' model <- coal_model(5, 2) +
 #'  feat_mutation(50) +

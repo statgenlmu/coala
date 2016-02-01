@@ -26,10 +26,6 @@ and applies to the time interval further on into
 the past from this point. The population size is set to a
 fraction of N0.
 }
-\details{
-If you want to add a continuous change over time,
-use \link{feat_growth}.
-}
 \examples{
 # A model with one smaller population:
 model <- coal_model(c(20, 5), 3) +
@@ -46,5 +42,16 @@ model <- coal_model(10, 1) +
   feat_mutation(20) +
   sumstat_sfs()
 simulate(model)
+}
+\seealso{
+For continuous size changes over time: \code{\link{feat_growth}}.
+
+Other features: \code{\link{feat_growth}},
+  \code{\link{feat_ignore_singletons}},
+  \code{\link{feat_migration}},
+  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
+  \code{\link{feat_pop_merge}},
+  \code{\link{feat_recombination}},
+  \code{\link{feat_selection}}, \code{\link{feat_unphased}}
 }
 

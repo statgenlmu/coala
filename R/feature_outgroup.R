@@ -19,6 +19,7 @@ outgroup_class <- R6Class("outgroup", inherit = feature_class,
 #'
 #' @param population The population that is marked as outgroup.
 #' @export
+#' @family features
 #' @examples
 #' # A simple finite sites model
 #' model <- coal_model(c(4, 6, 1), 2, 10) +

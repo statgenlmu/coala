@@ -14,6 +14,7 @@ ign_singletons_class <- R6Class("ign_singletons", inherit = feature_class)
 #'
 #' @return The feature, which can be added to a model using `+`.
 #' @export
+#' @family features
 #' @examples
 #' model <- coal_model(2, 1) +
 #'   feat_mutation(10) +

@@ -17,9 +17,6 @@ size_change_class <- R6Class("size_change", inherit = feature_class,
 #' the past from this point. The population size is set to a
 #' fraction of N0.
 #'
-#' If you want to add a continuous change over time,
-#' use \link{feat_growth}.
-#'
 #' @param new_size A \code{\link{parameter}} giving the new size of the
 #'   population, as a fraction of N0.
 #' @param population The number of the population whichs size changes.
@@ -28,6 +25,8 @@ size_change_class <- R6Class("size_change", inherit = feature_class,
 #' @param time The time at which the population's size is changed.
 #' @return The feature, which can be added to a model using `+`.
 #' @export
+#' @seealso For continuous size changes over time: \code{\link{feat_growth}}.
+#' @family features
 #' @examples
 #' # A model with one smaller population:
 #' model <- coal_model(c(20, 5), 3) +

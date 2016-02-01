@@ -29,4 +29,14 @@ model <- coal_model(2, 1) +
 # the number of mutations is 0 when removing singletons:
 simulate(model)$n_mut
 }
+\seealso{
+Other features: \code{\link{feat_growth}},
+  \code{\link{feat_migration}},
+  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
+  \code{\link{feat_pop_merge}},
+  \code{\link{feat_recombination}},
+  \code{\link{feat_selection}},
+  \code{\link{feat_size_change}},
+  \code{\link{feat_unphased}}
+}
 

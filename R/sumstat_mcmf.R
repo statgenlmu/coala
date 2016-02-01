@@ -31,6 +31,7 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
 #'
 #' @inheritParams sumstat_four_gamete
 #' @return A numeric vector containing MCMF for each locus.
+#' @template summary_statistics
 #' @examples
 #' # Calculate MCMF for a panmictic population
 #' model <- coal_model(10, 2) +

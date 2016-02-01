@@ -66,10 +66,31 @@ selection. Using this feature requires that \code{msms} is installed, see
 }
 \examples{
 # Positive additive selection in population 2:
-model <- coal_model(c(10, 13), 100) +
-  feat_pop_merge(par_range('tau', .1, 2), 2, 1) +
-  feat_selection(strength_A=par_range('s', 100, 2000),
+model <- coal_model(c(10, 13), 1, 10000) +
+  feat_pop_merge(.5, 2, 1) +
+  feat_selection(strength_A = 1000,
                  population = 2,
-                 time=par_expr(tau))
+                 time = par_named("tau")) +
+  feat_mutation(100) +
+  feat_recombination(10) +
+  sumstat_tajimas_d(population = 2)
+\dontrun{simulate(model, pars = c(tau = 0.03))}
+}
+\seealso{
+For using rates that variate between the loci in a model:
+  \code{\link{par_variation}}, \code{\link{par_zero_inflation}}
+
+For summary statistics that are sensitive for selection:
+  \code{\link{sumstat_tajimas_d}}, \code{\link{sumstat_ihh}},
+  \code{\link{sumstat_omega}}, \code{\link{sumstat_mcmf}}
+
+Other features: \code{\link{feat_growth}},
+  \code{\link{feat_ignore_singletons}},
+  \code{\link{feat_migration}},
+  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
+  \code{\link{feat_pop_merge}},
+  \code{\link{feat_recombination}},
+  \code{\link{feat_size_change}},
+  \code{\link{feat_unphased}}
 }
 

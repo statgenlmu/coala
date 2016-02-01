@@ -113,4 +113,8 @@ simulate(model, pars = c(theta_log = log(5)))
 \author{
 Paul Staab
 }
+\seealso{
+For parameters that variate between the loci in a model:
+  \code{\link{par_variation}}, \code{\link{par_zero_inflation}}
+}
 

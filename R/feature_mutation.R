@@ -84,6 +84,10 @@ mutation_class <- R6Class("mutation", inherit = feature_class,
 #'   Order: A<->C, A<->G, A<->T, C<->G, C<->T, G<->T.
 #' @return The feature, which can be added to a model using `+`.
 #' @export
+#' @seealso For using rates that variate between the loci in a model:
+#'   \code{\link{par_variation}}, \code{\link{par_zero_inflation}}
+#' @seealso For adding recombination: \code{\link{feat_recombination}}.
+#' @family features
 #'
 #' @section Mutation Models:
 #' The infinite sites mutation (\strong{IFS}) model is a frequently used simplification
