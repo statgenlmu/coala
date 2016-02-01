@@ -11,7 +11,7 @@ stat_tajimas_d_class <- R6Class("stat_tajimas_d", inherit = sumstat_class,
         super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
-        ind <- get_population_indiviuals(model, private$population)
+        ind <- get_population_individuals(model, private$population)
         n <- length(ind)
         if (n < 2) stop("At least two individuals are needed for Tajima's D")
         pi <- calc_nucleotide_div(seg_sites, ind)

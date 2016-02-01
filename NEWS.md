@@ -2,7 +2,11 @@ coala 0.4.0 (in development)
 ===========
 
 * Adds the `create_abc_param` and `create_abc_sumstat` functions for converting 
-  the simulation results into the format needed for abc::abc function.
+  the simulation results into the format needed for abc::abc function (#151).
+* Improves the documenation and adds more examples and links to similar
+  help pages (#150).
+* Changes name of `get_population_indiviuals` to `get_population_individuals`
+  (#150).
 
 
 

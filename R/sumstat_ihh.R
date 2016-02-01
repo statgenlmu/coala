@@ -32,7 +32,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
     calculate = function(seg_sites, trees, files, model) {
       assert_that(is.list(seg_sites))
       assert_that(is.model(model))
-      ind <- get_population_indiviuals(model, private$population)
+      ind <- get_population_individuals(model, private$population)
       ihh <- do.call(rbind, lapply(seq(along = seg_sites), function(locus) {
         assert_that(is_segsites(seg_sites[[locus]]))
         if (ncol(seg_sites[[locus]]) == 0) return(private$empty_matrix)

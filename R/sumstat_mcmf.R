@@ -14,7 +14,7 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
     calculate = function(seg_sites, trees, files, model) {
       ploidy <- ifelse(is_unphased(model), get_ploidy(model), 1)
       calc_mcmf(seg_sites,
-                get_population_indiviuals(model,
+                get_population_individuals(model,
                                           private$population,
                                           haploids = (ploidy == 1)),
                 has_trios(model),

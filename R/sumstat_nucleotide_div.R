@@ -11,7 +11,7 @@ stat_pi_class <- R6Class("stat_pi", inherit = sumstat_class,
       super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
-      ind <- get_population_indiviuals(model, private$population)
+      ind <- get_population_individuals(model, private$population)
       calc_nucleotide_div(seg_sites, ind)
     }
   )

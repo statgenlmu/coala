@@ -13,7 +13,7 @@ stat_four_gamete_class <- R6Class("stat_four_gamete", inherit = sumstat_class,
     },
     calculate = function(seg_sites, trees, files, model) {
       calc_four_gamete_stat(seg_sites,
-                            get_population_indiviuals(model,
+                            get_population_individuals(model,
                                                       private$population),
                             get_locus_length_matrix(model))
     }
