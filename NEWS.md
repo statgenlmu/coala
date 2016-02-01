@@ -1,9 +1,17 @@
+coala 0.4.0 (in development)
+===========
+
+* Adds the `create_abc_param` and `create_abc_sumstat` functions for converting 
+  the simulation results into the format needed for abc::abc function.
+
+
+
 coala 0.3.0
 ===========
 
 ## Major improvements
 * Support for more selection models, including ones for local adaptation (#137).
-* Add `as.segsites.GENOME` function that converts genetic data imported with
+* Adds `as.segsites.GENOME` function that converts genetic data imported with
   the package PopGenome to coala's format (#139).
 
 ## Small Changes
