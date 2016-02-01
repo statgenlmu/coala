@@ -10,8 +10,13 @@ check_model(model)
 \item{model}{The model that is checked}
 }
 \description{
-This function allows to check which of the available simulators can
+This function checks which of the available simulators can
 simulate a given model. It also states the problems for the ones that
 are incompatible with the model.
+}
+\examples{
+model <- coal_model(10, 1) +
+  feat_mutation(5, fixed = TRUE)
+check_model(model)
 }
 

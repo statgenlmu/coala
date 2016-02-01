@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_simulate.R
 \name{simulate.coalmodel}
 \alias{simulate.coalmodel}
-\title{Simulates data according to a demographic model}
+\title{Simulate Data According to a Demographic Model}
 \usage{
 \method{simulate}{coalmodel}(object, nsim = 1, seed, ..., pars = numeric(0),
   cores = 1)
@@ -28,14 +28,22 @@ in a graphical environment (e.g. Rstudio).}
 A list of summary statistics.
 }
 \description{
-Simulates data according to a demographic model
+This function simulates a model created with \code{\link{coal_model}}.
+The model can be extended with features, \code{\link{parameter}s} and
+loci. Read the 'coala-introduction' vignette for detailed instructions
+on creating and simulating such models.
 }
 \examples{
+model <- coal_model(10, 3) +
+  feat_mutation(5) +
+  sumstat_sfs() +
+  sumstat_tajimas_d()
+simulate(model, nsim = 2)
+
 model <- coal_model(c(5,10), 20) +
   feat_pop_merge(par_range('tau', 0.01, 5), 2, 1) +
   feat_mutation(par_range('theta', 1, 10)) +
   sumstat_jsfs()
-
-simulate(model, pars=c(1, 5))
+simulate(model, pars=c(tau = 1, theta = 5))
 }
 

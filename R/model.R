@@ -1,8 +1,8 @@
-#' Creates a coalescent model
+#' Create a Coalescent Model
 #'
 #' This creates a basic coalescent model to which more features, loci,
-#' parameters and summary statistics can be added. Data under the model
-#' can be simulated using the \code{simulate} function.
+#' parameters and summary statistics can be added later. Data under the model
+#' can be simulated using the \code{\link[=simulate.coalmodel]{simulate}} function.
 #'
 #' @inheritParams feat_sample
 #' @param sample_size Defines the number of populations and the number of

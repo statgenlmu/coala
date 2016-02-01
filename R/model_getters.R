@@ -3,6 +3,7 @@
 #' @param model The coalescent model from which aspects are returned
 #'
 #' @export
+#' @keywords internal
 #' @author Paul Staab
 get_features <- function(model) model$features
 

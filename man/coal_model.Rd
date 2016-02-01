@@ -2,7 +2,7 @@
 % Please edit documentation in R/model.R
 \name{coal_model}
 \alias{coal_model}
-\title{Creates a coalescent model}
+\title{Create a Coalescent Model}
 \usage{
 coal_model(sample_size, loci_number = 0, loci_length = 1000, ploidy = 1)
 }
@@ -25,8 +25,8 @@ The coalescent model
 }
 \description{
 This creates a basic coalescent model to which more features, loci,
-parameters and summary statistics can be added. Data under the model
-can be simulated using the \code{simulate} function.
+parameters and summary statistics can be added later. Data under the model
+can be simulated using the \code{\link[=simulate.coalmodel]{simulate}} function.
 }
 \examples{
 model <- coal_model(5, 10, 100) + feat_mutation(1) + sumstat_sfs()
