@@ -59,9 +59,9 @@ is.named_par <- function(par) {
 }
 
 
-#' Define Model parameters
+#' Model Parameters
 #'
-#' This functions allow to add parameters to a model. parameters can either
+#' These functions add parameters to a model. Parameters can either
 #' be used in features, or added directly to a model using the plus operator.
 #' The value of parameters can be specified in the simulation command
 #' (for \code{par_named} and \code{par_range}), sampled from a prior
@@ -77,14 +77,44 @@ is.named_par <- function(par) {
 #' @describeIn par_expr Creates a parameter with value determined by evaluating an
 #'  expression.
 #' @export
-#' @aliases parameter
+#' @aliases  parameter
 #' @author Paul Staab
 #' @examples
-#' par_const(5)
-#' par_named("x")
-#' par_prior("y", rnorm(1))
-#' par_range("z", 1, 5)
-#' par_expr(2*x + y * z)
+#' # A parameter (here for the mutation rate) that is always
+#' # equal to '5':
+#' model_base <- coal_model(20, 1) +
+#'   sumstat_nucleotide_div()
+#'
+#' model <- model_base +
+#'   feat_mutation(par_const(5))
+#' simulate(model)
+#'
+#' # With using a prior:
+#' model <- model_base +
+#'   feat_mutation(par_prior("theta", rnorm(1, 5, .1)))
+#' simulate(model)
+#'
+#' # Using a named parater:
+#' model <- model_base +
+#'   feat_mutation(par_named("theta"))
+#' simulate(model, pars = c(theta = 5))
+#'
+#' # or similarly a ranged parameter:
+#' model <- model_base +
+#'   feat_mutation(par_range("theta", 1, 10))
+#' simulate(model, pars = c(theta = 5))
+#'
+#' # Expressions can be used to derive parameters from
+#' # other parameters:
+#' model <- model_base +
+#'   par_named("theta_half") +
+#'   feat_mutation(par_expr(theta_half * 2))
+#' simulate(model, pars = c(theta_half = 2.5))
+#'
+#' model <- model_base +
+#'   par_named("theta_log") +
+#'   feat_mutation(par_expr(exp(theta_log)))
+#' simulate(model, pars = c(theta_log = log(5)))
 par_expr <- function(expr) {
   parameter_class$new(as.expression(substitute(expr)))
 }

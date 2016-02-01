@@ -2,12 +2,12 @@
 % Please edit documentation in R/par_zero_inflation.R
 \name{par_zero_inflation}
 \alias{par_zero_inflation}
-\title{Zero inflation for Parameters}
+\title{Zero Inflation for Parameters}
 \usage{
 par_zero_inflation(par, prob, random = TRUE)
 }
 \arguments{
-\item{par}{A parameter whose value will be set variable.}
+\item{par}{A parameter which will be set to 0 for part of the loci.}
 
 \item{prob}{The probability that the parameters value will be set to `0`
 for each locus if \code{random} is \code{TRUE}. Otherwise, it's the
@@ -24,5 +24,18 @@ parameter value of 0 with probability \code{prob}, or with parameter's
 original value in the remaining cases.
 are called separately for each locus, which can dramatically increase the
 time needed to simulate models with many loci.
+}
+\examples{
+# Simulate half of the loci with recomination and the other half without it:
+model <- coal_model(4, 4) +
+  feat_recombination(par_zero_inflation(par_named("rho"), .5, random = FALSE)) +
+  sumstat_trees()
+simulate(model, pars = c(rho = 1))
+
+# Use a zero inflated gamma distribution:
+model <- coal_model(4, 4) +
+  feat_recombination(par_zero_inflation(par_variation(1, 10), .3)) +
+  sumstat_trees()
+simulate(model)
 }
 
