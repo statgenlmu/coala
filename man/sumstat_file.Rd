@@ -18,7 +18,8 @@ This "summmary statistic" returns files with the raw results of
 the simulation. Multiple files are returned in case coala needs
 multiple calls to simulators to simulate the model. These files
 do not contain any post processing of the results done by coala,
-e.g. \code{\link{feat_unphased}}, \code{\link}
+e.g. \code{\link{feat_unphased}},
+\code{\link{feat_ignore_singletons}}.
 }
 \examples{
 folder <- tempfile("coala-test")
