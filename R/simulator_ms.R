@@ -6,6 +6,7 @@
 #'
 #' @param feature The feature for which the argument is generated
 #' @param model The complete model for which the argument is generated
+#' @keywords internal
 conv_to_ms_arg <- function(feature, model) UseMethod("conv_to_ms_arg")
 
 #' @describeIn conv_to_ms_arg Feature conversion
@@ -110,20 +111,26 @@ ms_class <- R6Class("ms", inherit = simulator_class,
 has_ms <- function() !is.null(simulators[["ms"]])
 
 
-#' Active the simulator ms
+#' Simulator: ms
 #'
-#' This adds the simulator 'ms' to the list of available simulators. In order
-#' to use 'ms', you need to install the CRAN package \pkg{phyclust}.
+#' This function adds the simulator 'ms' to the list of available simulators.
+#' In order to use 'ms', you need to install the CRAN package \pkg{phyclust}.
+#' By default, 'scrm' will be prefered to 'ms'. Raise the priority of 'ms'
+#' to change this behavior.
 #'
-#' @references : Richard R. Hudson.
+#' @references
+#' Richard R. Hudson.
 #' Generating samples under a Wright-Fisher neutral model of genetic variation.
 #' Bioinformatics (2002) 18 (2): 337-338
 #' doi:10.1093/bioinformatics/18.2.337
 #'
+#' @name simulator_ms
 #' @param priority The priority for this simulator. If multiple simulators
 #'   can simulate a model, the one with the highest priority will be used.
 #' @export
+#' @family simulators
 activate_ms <- function(priority = 300) {
   register_simulator(ms_class$new(priority))
+  reset_cache()
   invisible(NULL)
 }

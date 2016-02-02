@@ -2,7 +2,7 @@
 % Please edit documentation in R/locus.R
 \name{locus_trio}
 \alias{locus_trio}
-\title{Adds a trio of loci to a group}
+\title{Locus Trios}
 \usage{
 locus_trio(locus_length = c(left = 1000, middle = 1000, right = 1000),
   distance = c(left_middle = 500, middle_right = 500), number = 1)
@@ -17,11 +17,28 @@ and middle an right locus, in base pairs.}
 \item{number}{The number of loci to add.}
 }
 \description{
-Adds a trio of loci to a group
+This functions adds a group of three loci to the model that are genetically
+linked to each other. They are still unlinked to all other loci or locus trios
+in the model. Simulating linked loci that are far apart from each other can
+be very slow. Please mind that mutation and recombination rates for locus
+trios are rates per trio and not per locus, i.e. they account for mutations
+that occur on the tree loci and the sequences in-between them together.
 }
 \examples{
-coal_model(c(25,25)) +
-  locus_trio(locus_length=c(1250, 1017, 980),
-             distance=c(257, 814))
+# A model with one locus trio
+coal_model(25) +
+  locus_trio(locus_length=c(1250, 1017, 980), distance=c(257, 814))
+
+# Ten identical locus trios:
+coal_model(25) +
+  locus_trio(locus_length=c(1250, 1017, 980), distance=c(257, 814), number = 10)
+
+# Two different ones:
+coal_model(25) +
+  locus_trio(locus_length=c(1000, 500, 900), distance=c(200, 400)) +
+  locus_trio(locus_length=c(700, 500, 800), distance=c(350, 150))
+}
+\seealso{
+For adding unlinked loci: \code{\link{locus}}
 }
 

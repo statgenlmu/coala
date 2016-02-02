@@ -6,7 +6,6 @@
 \alias{get_snps}
 \alias{get_trio_locus}
 \alias{is_segsites}
-\alias{segsites}
 \alias{set_positions}
 \alias{set_trio_locus}
 \title{Segregating Sites}
@@ -40,8 +39,8 @@ sites (\code{TRUE}) or not (\code{FALSE}).}
 }
 \description{
 This functions allow the creation and modification of segregating sites
-objects, which are one of the most basic intermediary statistics that is
-calculated in coala. Segregating sites are primarily SNP matrix that
+objects, which are one of the basic intermediary statistics that is
+calculated in coala. Segregating sites consist primarily of a SNP matrix that
 contains all SNPs for one locus, with some additional information attached.
 The parts of the S3 class are detailed below.
 }

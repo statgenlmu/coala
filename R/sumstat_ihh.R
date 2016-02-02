@@ -16,7 +16,8 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
                               IES = numeric())
   ),
   public = list(
-    initialize = function(name, population, max_snps, calc_ihs, transformation) {
+    initialize = function(name, population, max_snps,
+                          calc_ihs, transformation) {
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
       assert_that(is.numeric(max_snps))
@@ -31,7 +32,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
     calculate = function(seg_sites, trees, files, model) {
       assert_that(is.list(seg_sites))
       assert_that(is.model(model))
-      ind <- get_population_indiviuals(model, private$population)
+      ind <- get_population_individuals(model, private$population)
       ihh <- do.call(rbind, lapply(seq(along = seg_sites), function(locus) {
         assert_that(is_segsites(seg_sites[[locus]]))
         if (ncol(seg_sites[[locus]]) == 0) return(private$empty_matrix)
@@ -51,10 +52,10 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
           return(list(ihh = ihh,
                       iHS = data.frame(ihh[ , 1:2], iHS = rep(NA, n_snps))))
         } else {
-          if ((n_snps < 50)) freqbin <- 0.90
-          else if ((n_snps < 100)) freqbin <- 0.45
-          else if ((n_snps < 200)) freqbin <- 0.225
-          else if ((n_snps < 400)) freqbin <- 0.1
+          if (n_snps < 50) freqbin <- 0.90
+          else if (n_snps < 100) freqbin <- 0.45
+          else if (n_snps < 200) freqbin <- 0.225
+          else if (n_snps < 400) freqbin <- 0.1
           else freqbin <- 0.05
           ihs <- suppressWarnings(
             data.frame(ihh2ihs(ihh, freqbin)$res.ihs[ , -4])
@@ -89,11 +90,11 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 )
 
 
-#' Integrated Extended Haplotype Homozygosity
+#' Summary Statistic: Integrated Extended Haplotype Homozygosity
 #'
-#' This summary statistic calculates a the iHH, iES and optionally iHS
-#' statistics.
-#'
+#' This summary statistic calculates a number of values based on
+#' extended haplotype homozygosity (EHH), including iHH, iES
+#' and optionally iHS.
 #' Coala relies on \code{\link[rehh]{scan_hh}} from package \pkg{rehh} to
 #' calculate this statistic. Please refer
 #' to their documentation for detailed information on the implementation.
@@ -116,10 +117,9 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #'   be used to increase performance. Set to \code{Inf} to use all SNPs.
 #' @param calc_ihs If set to \code{TRUE}, additionally standardized iHS is
 #'   calculated.
-#' @return When added to a model, the iHH statistics are calculated after
-#'   simulation. If \code{calc_ihs = FALSE}, a data.frame with values for
-#'   IHH and IES is returned. Otherwise, a list of two data.frame are returned,
-#'   one for IHH and IES values and the other one for IHS values.
+#' @return If \code{calc_ihs = FALSE}, a data.frame with values for
+#'   iHH and iES is returned. Otherwise, a list of two data frames are
+#'   returned, one for IHH and IES values and the other one for IHS values.
 #'
 #'   In all `data.frames` rows are SNPs and the colums present the following
 #'   values for each SNP:
@@ -133,6 +133,14 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #'    \item{iHS: iHS, normalized over all loci.}
 #'   }
 #' @export
+#' @template summary_statistics
+#' @examples
+#'   model <- coal_model(20, 1, 1000) +
+#'     feat_mutation(1000) +
+#'     sumstat_ihh()
+#' \dontrun{
+#'     stat <- simulate(model)
+#'     print(stat$ihh)}
 #' @author Paul Staab
 sumstat_ihh <- function(name = "ihh", population = 1,
                         max_snps = 1000, calc_ihs = FALSE,

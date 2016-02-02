@@ -22,7 +22,7 @@ dim.segsites <- function(x) dim(get_snps(x))
 
 
 
-#' @describeIn create_segsites Checks whether an object is a segsites object.
+#' @describeIn segsites Checks whether an object is a segsites object.
 #' @export
 is_segsites <- function(segsites) inherits(segsites, "segsites")
 

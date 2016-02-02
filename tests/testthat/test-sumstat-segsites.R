@@ -25,7 +25,7 @@ test_that("SegSites are convert for trios", {
 
   model <- coal_model(4) + locus_trio(c(25, 30, 25), c(10, 10))
   seg_sites_trio <- seg_sites
-  seg_sites_trio[[1]] <- create_segsites(get_snps(seg_sites_trio[[1]][ , c(1:2, 4:6, 8:9)]),
+  seg_sites_trio[[1]] <- create_segsites(get_snps(seg_sites_trio[[1]][ , c(1:2, 4:6, 8:9)]), #nolint
                                          c(.4, 0.8, c(5, 15, 25) / 30, .2, .6),
                                          c(-1, -1, 0, 0, 0, 1, 1))
   expect_equal(conv_for_trios(seg_sites, model), seg_sites_trio)

@@ -15,3 +15,8 @@ cache <- function(model, name, variable) {
 read_cache <- function(model, name) {
   cache_env[[model$id]][[name]]
 }
+
+reset_cache <- function() {
+  rm(list = ls(envir = cache_env), envir = cache_env)
+  cache_env[["counter"]] <- 0
+}

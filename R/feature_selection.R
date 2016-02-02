@@ -65,7 +65,11 @@ selection_class <- R6Class("selection", inherit = feature_class,
   )
 )
 
-#' Adds positive selection to a model
+#' Feature: Selection
+#'
+#' This feature adds selection to a model. Only one site per locus can be under
+#' selection. Using this feature requires that \code{msms} is installed, see
+#' \code{\link{activate_msms}}.
 #'
 #' @param population The population in which the allele is selected. Can either
 #'   be \code{all} for all population, or the number of a population.
@@ -74,12 +78,12 @@ selection_class <- R6Class("selection", inherit = feature_class,
 #'   changes if \code{start == FALSE}. The new strength applies for to the time
 #'   period further into the past in this case.
 #' @param strength_AA The selection strength for the selected homozygote.
-#'   The parameter is valid for the choosen population and the time further
-#'   pastwards from either time 0 on if \code{start = TRUE}, or from \code{time}
+#'   The parameter is valid for the chosen population and the time further
+#'   past-wards from either time 0 on if \code{start = TRUE}, or from \code{time}
 #'   onwards. The same applies for \code{strength_Aa}, \code{strength_aa} and
 #'   \code{strength_A}.
 #' @param strength_Aa The selection strength for the heterozygote.
-#' @param strength_aa The selection strength for the recessive homoygote.
+#' @param strength_aa The selection strength for the recessive homozygote.
 #' @param strength_A This sets the strength for the selected allele in an
 #'   haploid model or a diploid model with additive selection.
 #'   \code{strength_AA}, \code{strength_Aa}, \code{strength_aa}
@@ -89,7 +93,7 @@ selection_class <- R6Class("selection", inherit = feature_class,
 #'   starting frequency. This must be set to \code{TRUE} for exactly one
 #'   selection feature in the model. The values of \code{start_frequency},
 #'   \code{Ne}, \code{position} and \code{force_keep} are used for the model.
-#'   You can add aditional selection feature to the model to set the
+#'   You can add additional selection feature to the model to set the
 #'   selection strength for more demes or change it at different time points,
 #'   but these need to have \code{start = FALSE}.
 #' @param start_frequency The start frequency at which the selected allele is
@@ -103,18 +107,27 @@ selection_class <- R6Class("selection", inherit = feature_class,
 #' @param position The position of the selected site, relative to the
 #'   simulated sequence. Values between 0 and 1 are within the simulated area,
 #'   while smaller values are to the left of it and larger ones to the right.
-#' @param force_keep Whether to restart simulatin in which the selected goes to
+#' @param force_keep Whether to restart simulations in which the selected goes to
 #'   extinction or not.
 #'
 #' @export
+#' @seealso For using rates that variate between the loci in a model:
+#'   \code{\link{par_variation}}, \code{\link{par_zero_inflation}}
+#' @seealso For summary statistics that are sensitive for selection:
+#'   \code{\link{sumstat_tajimas_d}}, \code{\link{sumstat_ihh}},
+#'   \code{\link{sumstat_omega}}, \code{\link{sumstat_mcmf}}
+#' @family features
 #' @examples
-#' # Positive selection in population 2:
-#' model <- coal_model(c(10, 13), 100) +
-#'   feat_pop_merge(par_range('tau', .1, 2), 2, 1) +
-#'   feat_selection(strength_AA=par_expr(2*s),
-#'                  strength_Aa=par_range('s', 100, 2000),
+#' # Positive additive selection in population 2:
+#' model <- coal_model(c(10, 13), 1, 10000) +
+#'   feat_pop_merge(.5, 2, 1) +
+#'   feat_selection(strength_A = 1000,
 #'                  population = 2,
-#'                  time=par_expr(tau))
+#'                  time = par_named("tau")) +
+#'   feat_mutation(100) +
+#'   feat_recombination(10) +
+#'   sumstat_tajimas_d(population = 2)
+#' \dontrun{simulate(model, pars = c(tau = 0.03))}
 feat_selection <- function(strength_AA = 0,
                            strength_Aa = 0,
                            strength_aa = 0,
@@ -188,7 +201,7 @@ conv_to_msms_arg.selection <- function(feature, model) {
       strength <- paste0("-SA',", feature$get_strength_Aa(), ", '")
     } else {
       strength <- paste0("-Sc',",
-                         ifelse(feature$get_start(), 0, feature$get_time()), ", ",
+                         ifelse(feature$get_start(), 0, feature$get_time()), ", ", #nolint
                          feature$get_population(), ", ",
                          feature$get_strength_Aa(), ", '")
     }
@@ -199,7 +212,7 @@ conv_to_msms_arg.selection <- function(feature, model) {
                          "-Saa',", feature$get_strength_aa(), ", '")
     } else {
       strength <- paste0("-Sc',",
-                         ifelse(feature$get_start(), 0, feature$get_time()), ", ",
+                         ifelse(feature$get_start(), 0, feature$get_time()), ", ", #nolint
                          feature$get_population(), ", ",
                          feature$get_strength_AA(), ", ",
                          feature$get_strength_Aa(), ", ",

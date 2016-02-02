@@ -11,7 +11,7 @@ stat_tajimas_d_class <- R6Class("stat_tajimas_d", inherit = sumstat_class,
         super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
-        ind <- get_population_indiviuals(model, private$population)
+        ind <- get_population_individuals(model, private$population)
         n <- length(ind)
         if (n < 2) stop("At least two individuals are needed for Tajima's D")
         pi <- calc_nucleotide_div(seg_sites, ind)
@@ -33,22 +33,28 @@ stat_tajimas_d_class <- R6Class("stat_tajimas_d", inherit = sumstat_class,
 )
 
 
-#' Tajima's D
+#' Summary Statistic: Tajima's D
 #'
-#' This calculates Tajima's D from the simulation results when added to a model.
-#'
-#' Tajima's D was introduced by
-#'
-#' Tajima, F. (1989). "Statistical method for testing the neutral mutation
-#' hypothesis by DNA polymorphism.". Genetics 123 (3): 585-95.
+#' This statistic calculates Tajima's D from the simulation
+#' results when added to a model. Tajima's D primarily measures
+#' an deviation of singletons from the neutral expectation of
+#' an equilibrium model. Negative values indicate an excess of
+#' singletons, while positive values code a depletion of them.
 #'
 #' @inheritParams sumstat_four_gamete
 #' @return On simulation, this returns a vector with the value of Tajima's D for
 #'   each locus.
+#' @references
+#' Tajima, F. (1989). "Statistical method for testing the neutral mutation
+#' hypothesis by DNA polymorphism.". Genetics 123 (3): 585-95.
 #' @export
+#' @template summary_statistics
 #' @examples
-#' set.seed(20)
-#' model <- coal_model(5, 2) + feat_mutation(5) + sumstat_tajimas_d("taji_d")
+#' # A neutral model that should yield values close to zero:
+#' model <- coal_model(5, 2) +
+#'   feat_mutation(20) +
+#'   feat_recombination(10) +
+#'   sumstat_tajimas_d("taji_d")
 #' stats <- simulate(model)
 #' print(stats$taji_d)
 sumstat_tajimas_d <- function(name = "tajimas_d", population = "all",

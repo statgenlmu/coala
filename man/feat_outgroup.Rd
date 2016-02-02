@@ -2,7 +2,7 @@
 % Please edit documentation in R/feature_outgroup.R
 \name{feat_outgroup}
 \alias{feat_outgroup}
-\title{Adds an outgroup to a demographic model}
+\title{Feature: Outgroup}
 \usage{
 feat_outgroup(population)
 }
@@ -11,7 +11,10 @@ feat_outgroup(population)
 }
 \description{
 This feature declares an existing population as outgroup. Outgroups are used
-to determine the ancestral allele in finite sites simulations.
+to determine the ancestral allele in finite sites simulations and are required
+there. All individuals of the outgroup are ignored when calculating summary
+statistics. If the outgroup consists of multiple individuals, all positions
+where the individuals have different alleles are ignored.
 }
 \examples{
 # A simple finite sites model
@@ -19,6 +22,17 @@ model <- coal_model(c(4, 6, 1), 2, 10) +
    feat_outgroup(3) +
    feat_pop_merge(0.5, 2, 1) +
    feat_pop_merge(2, 3, 1) +
-   feat_mutation(5, model="GTR", gtr_rates = 1:6)
+   feat_mutation(5, model = "GTR", gtr_rates = 1:6)
+}
+\seealso{
+Other features: \code{\link{feat_growth}},
+  \code{\link{feat_ignore_singletons}},
+  \code{\link{feat_migration}},
+  \code{\link{feat_mutation}},
+  \code{\link{feat_pop_merge}},
+  \code{\link{feat_recombination}},
+  \code{\link{feat_selection}},
+  \code{\link{feat_size_change}},
+  \code{\link{feat_unphased}}
 }
 

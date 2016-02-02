@@ -26,8 +26,7 @@ scrm_create_cmd_template <- function(model) {
 scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
   private = list(
     name = "scrm",
-    priority = 400,
-    version = packageDescription("scrm", fields = "Version")
+    version = paste0("scrm_", packageDescription("scrm", fields = "Version"))
   ),
   public = list(
     simulate = function(model, parameters) {
@@ -99,3 +98,27 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
     get_info = function() c(name = "scrm", version = private$version)
   )
 )
+
+#' Simulator: scrm
+#'
+#' This function adds the simulator 'scrm' to the list of available simulators.
+#' It is provided via the CRAN package \pkg{scrm} and should be always installed
+#' alongside with \pkg{coala}. It should be activated automatically, and this
+#' function is only needed to change it \code{priority}.
+#'
+#' @references
+#' Paul R. Staab, Sha Zhu, Dirk Metzler and Gerton Lunter (2015).
+#' "scrm: efficiently simulating long sequences using the approximated
+#' coalescent with recombination."
+#' Bioinformatics, 31(10), pp. 1680-1682.
+#' http://dx.doi.org/10.1093/bioinformatics/btu861
+#'
+#' @name simulator_scrm
+#' @inheritParams simulator_ms
+#' @family simulators
+#' @export
+activate_scrm <- function(priority = 400) {
+  register_simulator(scrm_class$new(priority))
+  reset_cache()
+  invisible(NULL)
+}

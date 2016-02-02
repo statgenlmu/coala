@@ -12,14 +12,14 @@ test_that("normal initialization of segsites works", {
   expect_equal(get_positions(segsites), pos)
   expect_equal(get_trio_locus(segsites), c(0, 0, 0))
 
-  expect_error(create_segsites(snps, 1:4/10))
-  expect_error(create_segsites(snps, pos, 1:4/10))
+  expect_error(create_segsites(snps, 1:4 / 10))
+  expect_error(create_segsites(snps, pos, 1:4 / 10))
 })
 
 
 test_that("fixed positions are removed on initialization", {
   snps <- matrix(c(1, 1, 0,  1, 1, 1,  0, 0, 0), 3, 3)
-  segsites <- create_segsites(snps, 1:3/10)
+  segsites <- create_segsites(snps, 1:3 / 10)
   expect_equal(dim(segsites), c(3, 1))
   expect_equal(get_positions(segsites), 0.1)
   expect_equivalent(as.matrix(segsites), matrix(c(1, 1, 0), 3, 1))

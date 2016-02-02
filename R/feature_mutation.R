@@ -62,13 +62,16 @@ mutation_class <- R6Class("mutation", inherit = feature_class,
 
 #' Feature: Mutation
 #'
-#' This functions adds the assumption to the model that neutral mutations
-#' occur in the genomes at a constant rate. The rate is quantified through
-#' a parameter usually named theta in population genetics. It equals 4*N0*mu,
-#' where N0 is the effective diploid population size of population one at the
-#' time of sampling and mu is the neutral mutation rate for an entire locus.
+#' This feature adds mutations to a model. Mutations occur in the genomes
+#' of the individuals with a given \code{rate}. The rate is per locus
+#' for \link[=locus]{unlinked loci} and per trio for linked
+#' \link[=locus_trio]{locus trios}. By default, the same mutation rate is used
+#' for all loci, but it is possible to change this with \code{\link{par_variation}}
+#' and \code{\link{par_zero_inflation}}.
 #'
-#' @param rate A \code{\link{parameter}} defining the mutation rate.
+#' @param rate The mutation rate. Can be a numeric or a \code{\link{parameter}}.
+#'        The rate is specified as \eqn{4 * N0 * mu}, where \eqn{mu} is the
+#'        mutation rate per locus.
 #' @param fixed_number If set to \code{TRUE}, the number of mutations on each
 #'   locus will always be exactly equal to the rate, rather than happening with
 #'   a rate along the ancestral tree.
@@ -85,25 +88,58 @@ mutation_class <- R6Class("mutation", inherit = feature_class,
 #'   Order: A<->C, A<->G, A<->T, C<->G, C<->T, G<->T.
 #' @return The feature, which can be added to a model using `+`.
 #' @export
+#' @seealso For using rates that variate between the loci in a model:
+#'   \code{\link{par_variation}}, \code{\link{par_zero_inflation}}
+#' @seealso For adding recombination: \code{\link{feat_recombination}}.
+#' @family features
 #'
 #' @section Mutation Models:
-#' The Hasegawa, Kishino and Yano (HKY) model (Hasegawa et al., 1985) allows
+#' The infinite sites mutation (\strong{IFS}) model is a frequently used simplification
+#' in population genetics. It assumes that each locus consists of infinitely
+#' many sites at which mutations can occure, and each mutation hits a new site.
+#' Consequently, there are no back-mutations with this model. It does not
+#' generate DNA sequences, but rather only 0/1 coded data, were 0 denotes the
+#' ancestral state of the site, and 1 the derived state created by a mutation.
+#'
+#' The other mutation models are finite site models that generate more realistic
+#' sequences.
+#'
+#' The Hasegawa, Kishino and Yano (\strong{HKY}) model (Hasegawa et al., 1985) allows
 #' for a different rate of transitions and transversions (tstv_ratio)
 #' and unequal
 #' frequencies of the four nucleotides (base_frequencies).
 #'
-#' The general reversible process (GTR) model (e.g. Yang, 1994) is more general
+#' The general reversible process (\strong{GTR}) model (e.g. Yang, 1994) is more general
 #' than the HKY model and allows to define the rates for each
 #' type of substitution. The rates are assumed to be symmetric
 #' (e.g., the rate for T to G is equal to the one for G to T).
 #'
 #' @examples
 #' # A model with a constant mutation rate of 5:
-#' model <- coal_model(10, 1) + feat_mutation(rate = 5)
+#' model <- coal_model(5, 1) + feat_mutation(5) + sumstat_seg_sites()
+#' simulate(model)
 #'
-#' # A model with a mutation rate that can be estimated with Jaatha:
-#' model <- coal_model(c(15,20), 100) +
-#'   feat_mutation(par_range('theta', 1, 20))
+#' # A model with 7 mutations per locus:
+#' model <- coal_model(5, 1) + feat_mutation(7, fixed = TRUE) + sumstat_seg_sites()
+#' simulate(model)
+#'
+#' # A model using the HKY model:
+#' model <- coal_model(c(10, 1), 2) +
+#'  feat_mutation(7.5, model = "HKY", tstv_ratio = 2,
+#'                base_frequencies = c(.25, .25, .25, .25)) +
+#'  feat_outgroup(2) +
+#'  feat_pop_merge(1.0, 2, 1) +
+#'  sumstat_seg_sites()
+#'  \dontrun{simulate(model)}
+#'
+#' # A model using the GTR model:
+#' model <- coal_model(c(10, 1), 1, 25) +
+#'  feat_mutation(7.5, model = "GTR",
+#'                gtr_rates = c(1, 1, 1, 1, 1, 1) / 6) +
+#'  feat_outgroup(2) +
+#'  feat_pop_merge(1.0, 2, 1) +
+#'  sumstat_dna()
+#'  \dontrun{simulate(model)$dna}
 feat_mutation <- function(rate,
                           model = "IFS",
                           base_frequencies = NA,
@@ -114,45 +150,6 @@ feat_mutation <- function(rate,
   mutation_class$new(rate, model, base_frequencies,
                      tstv_ratio, gtr_rates, fixed_number)
 }
-
-#-------------------------------------------------------------------
-# model.setMutationModel
-#-------------------------------------------------------------------
-# Defines what mutation model is used for simulations
-#
-# As default, we simulate mutation using the Infinite Sites Model.
-# Using the function, you can change it either to the Hasegawa, Kishino and
-# Yano (HKY), to the Felsenstein and Churchill 96 (F84) or to the Generalised
-# time reversible (GTR) model.
-# This requires that seq-gen is installed on our system.
-#
-# The HKY and F84 models use the the arguments 'base.frequencies' and
-# 'tstv.ratio'. The GTR model uses 'gtr.rates'.
-
-
-# model.addMutationRateHeterogenity <-
-#   function(model, min.alpha, max.alpha, parameter="alpha", categories.number) {
-#
-#     model <- addFeature(model, "gamma.rate", parameter, min.alpha,
-#                      max.alpha, NA, NA, NA)
-#
-#     if (!missing(categories.number)) {
-#       model <- addFeature(model, "gamma.categories", parameter=categories.number)
-#     }
-#
-#     return(model)
-#   }
-
-
-# Set the mutation rates for trios
-# @param middle_rate The mutation rate used for the middle locus
-# @param outer_rate The mutation rate for the two outer loci
-# @export
-# model.setTrioMutationRates <- function(model, middle_rate, outer_rate, group = 0) {
-#   model <- addFeature(model, 'mutation', parameter = middle_rate, group = group)
-#   model <- addFeature(model, 'mutation_outer', parameter = outer_rate,
-#                    group = group)
-# }
 
 is_feat_mutation <- function(feat) any("mutation" == class(feat))
 
@@ -175,7 +172,8 @@ conv_to_msms_arg.mutation <- conv_to_ms_arg.mutation
 #' @export
 conv_to_scrm_arg.mutation <- function(feature, model) {
   if (feature$get_fixed()) {
-    stop("scrm does not support simulating a fixed number of mutations")
+    stop("scrm does not support simulating a fixed number of mutations",
+         call. = FALSE)
   }
   conv_to_ms_arg.mutation(feature, model)
 }
@@ -184,10 +182,10 @@ conv_to_scrm_arg.mutation <- function(feature, model) {
 #' @export
 conv_to_seqgen_arg.mutation <- function(feature, model) {
   if (feature$get_model() == "IFS") {
-    stop("seq-gen can not simulate an IFS model")
+    stop("seq-gen can not simulate an IFS model", call. = FALSE)
   }
   if (feature$get_fixed()) {
-    stop("seq-gen can not simulate a fixed number of mutations")
+    stop("seq-gen can not simulate a fixed number of mutations", call. = FALSE)
   }
   if (feature$get_model() == "GTR") {
     rates <- paste("-r", paste(feature$get_gtr_rates(), collapse = " "))

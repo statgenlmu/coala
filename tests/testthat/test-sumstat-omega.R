@@ -4,10 +4,10 @@ test_that("Initialization of Omega works", {
   if (!has_omega()) skip("OmegaPlus not found")
   op <- sumstat_omega(name = "op", min_win = 12, max_win = 112, grid = 15)
   expect_true(is.sum_stat(op))
-  expect_equal(op$get_name(), "op")
-  expect_equal(op$get_min_win(), 12)
-  expect_equal(op$get_max_win(), 112)
-  expect_equal(op$get_grid(), 15)
+  expect_equal(op$get_name(), "op") #nolint
+  expect_equal(op$get_min_win(), 12) #nolint
+  expect_equal(op$get_max_win(), 112) #nolint
+  expect_equal(op$get_grid(), 15) #nolint
 
   expect_error(sumstat_omega(binary = tempfile("op")))
 })

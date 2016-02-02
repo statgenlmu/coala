@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{calc_jsfs}
 \alias{calc_jsfs}
-\title{Calculates the JSFS}
+\title{Calculates the Joint Site Frequency Spectrum}
 \usage{
 calc_jsfs(segsites_list, ind_per_pop)
 }
@@ -16,9 +16,10 @@ index of the haploids that belong the corresponding population.}
 The Joint Site Frequency Spectrum, as a matrix.
 }
 \description{
-Calculates the JSFS
+Calculates the Joint Site Frequency Spectrum
 }
 \author{
 Paul Staab & Dirk Metzler
 }
+\keyword{internal}
 

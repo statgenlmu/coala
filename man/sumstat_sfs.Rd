@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat_sfs.R
 \name{sumstat_sfs}
 \alias{sumstat_sfs}
-\title{Calculates the Site Frequency Spectrum from simulations}
+\title{Summary Statistic: Site Frequency Spectrum}
 \usage{
 sumstat_sfs(name = "sfs", population = "all", transformation = identity)
 }
@@ -11,21 +11,39 @@ sumstat_sfs(name = "sfs", population = "all", transformation = identity)
 the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
-\item{population}{Either the number of a population for with the SFS is
-calculated, or \code{"all"} to calculate the combined SFS of all
-populations.}
+\item{population}{The population for which the statistic is calculated.
+Can also be "all" to calculate it from all populations.}
 
 \item{transformation}{An optional function for transforming the results
 of the statistic. If specified, the results of the transformation are
 returned instead of the original values.}
 }
 \description{
-Calculates the Site Frequency Spectrum from simulations
+The Site Frequency Spectrum (SFS) counts how many
+SNPs are in a sample according to their number of
+derived alleles.
 }
 \examples{
-set.seed(50)
-model <- coal_model(5, 2) + feat_mutation(5) + sumstat_sfs()
+model <- coal_model(20, 500) +
+  feat_mutation(2) +
+  sumstat_sfs()
 stats <- simulate(model)
-print(stats$sfs)
+barplot(stats$sfs)
+}
+\seealso{
+To create a demographic model: \code{\link{coal_model}}
+
+To calculate this statistic from data: \code{\link{calc_sumstats_from_data}}
+
+Other summary statistics: \code{\link{sumstat_dna}},
+  \code{\link{sumstat_file}},
+  \code{\link{sumstat_four_gamete}},
+  \code{\link{sumstat_ihh}}, \code{\link{sumstat_jsfs}},
+  \code{\link{sumstat_mcmf}},
+  \code{\link{sumstat_nucleotide_div}},
+  \code{\link{sumstat_omega}},
+  \code{\link{sumstat_seg_sites}},
+  \code{\link{sumstat_tajimas_d}},
+  \code{\link{sumstat_trees}}
 }
 

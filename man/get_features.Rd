@@ -9,7 +9,7 @@
 \alias{get_outgroup_size}
 \alias{get_parameter}
 \alias{get_parameter_table}
-\alias{get_population_indiviuals}
+\alias{get_population_individuals}
 \alias{get_populations}
 \alias{get_sample_size}
 \alias{get_summary_statistics}
@@ -35,7 +35,8 @@ get_locus_length_matrix(model)
 
 get_locus_number(model, group = NA, ignore_variation = FALSE)
 
-get_population_indiviuals(model, pop, zero_indexed = FALSE, haploids = TRUE)
+get_population_individuals(model, pop, zero_indexed = FALSE,
+  haploids = TRUE)
 
 get_summary_statistics(model)
 }
@@ -91,7 +92,7 @@ information about the loci in the model.
 
 \item \code{get_locus_number}: Returns the number of loci in a locus group
 
-\item \code{get_population_indiviuals}: Returns the index of the individuals of one
+\item \code{get_population_individuals}: Returns the index of the individuals of one
 population. Ignores outgroups, so that it can be used for indexing
 segregating sites.
 
@@ -100,4 +101,5 @@ segregating sites.
 \author{
 Paul Staab
 }
+\keyword{internal}
 

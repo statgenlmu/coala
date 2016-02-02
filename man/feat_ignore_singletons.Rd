@@ -25,6 +25,18 @@ model <- coal_model(2, 1) +
   feat_mutation(10) +
   feat_ignore_singletons() +
   sumstat_sfs("n_mut", transformation = sum)
-simulate(model)$n_mut # Is 0, because all SNPs are singletons in this model
+# In this model, all mutations are singletons. Therefore,
+# the number of mutations is 0 when removing singletons:
+simulate(model)$n_mut
+}
+\seealso{
+Other features: \code{\link{feat_growth}},
+  \code{\link{feat_migration}},
+  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
+  \code{\link{feat_pop_merge}},
+  \code{\link{feat_recombination}},
+  \code{\link{feat_selection}},
+  \code{\link{feat_size_change}},
+  \code{\link{feat_unphased}}
 }
 

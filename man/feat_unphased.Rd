@@ -2,7 +2,7 @@
 % Please edit documentation in R/feature_unphased.R
 \name{feat_unphased}
 \alias{feat_unphased}
-\title{Feature: Unphased}
+\title{Feature: Unphased Sequences}
 \usage{
 feat_unphased(samples_per_ind)
 }
@@ -14,13 +14,37 @@ from the phased chromosomes for each individual.}
 The feature, which can be added to a model using `+`.
 }
 \description{
-This simulated unphased data by creating "pseudo-chromosomes". For these,
-each position is randomly taken from a phased chromosome obtained by
-simulation.
+This simulates unphased data by randomly mixing the sites within one
+individual. Each position is randomly taken from a phased chromosome..
 }
 \details{
-If this is used, the sample size is understood as the number of individuals.
 For each individual, \code{ploidy} chromosomes are simulated, and
 \code{samples_per_ind} pseudo-chromosomes are created of these.
+}
+\examples{
+# Simulate unphased data in a diploid population
+model <- coal_model(10, 1, ploidy = 2) +
+  feat_mutation(10) +
+  feat_unphased(2) +
+  sumstat_seg_sites()
+simulate(model)
+
+# The same as before, but return only one chromosome for
+# each individual:
+model <- coal_model(10, 1, ploidy = 2) +
+  feat_mutation(10) +
+  feat_unphased(1) +
+  sumstat_seg_sites()
+simulate(model)
+}
+\seealso{
+Other features: \code{\link{feat_growth}},
+  \code{\link{feat_ignore_singletons}},
+  \code{\link{feat_migration}},
+  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
+  \code{\link{feat_pop_merge}},
+  \code{\link{feat_recombination}},
+  \code{\link{feat_selection}},
+  \code{\link{feat_size_change}}
 }
 

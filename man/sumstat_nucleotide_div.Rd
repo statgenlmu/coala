@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat_nucleotide_div.R
 \name{sumstat_nucleotide_div}
 \alias{sumstat_nucleotide_div}
-\title{Calculates the Nucleodite Diversity Pi}
+\title{Summary Statistic: Nucleotide Diversity}
 \usage{
 sumstat_nucleotide_div(name = "pi", population = 1,
   transformation = identity)
@@ -12,7 +12,8 @@ sumstat_nucleotide_div(name = "pi", population = 1,
 the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
-\item{population}{The population for which the statistic is calculated.}
+\item{population}{The population for which the statistic is calculated.
+Can also be "all" to calculate it from all populations.}
 
 \item{transformation}{An optional function for transforming the results
 of the statistic. If specified, the results of the transformation are
@@ -23,23 +24,38 @@ On simulation, this returns a vector with the value of pi for
   each locus.
 }
 \description{
-This calculates the nucleotide diversity / mean pairwise difference usually
-for a population.
+The summary statistic calculates the nucleotide diversity (\eqn{\pi})
+per locus, which is the mean number of pairwise difference for
+two individuals. It is a commonly used estimator for the scaled
+mutation rate \eqn{\theta}.
 }
 \details{
-The statistic is usually denoted by pi and can be used
-as an estimator for the per locus scaled muation rate theta.
-
-It was introducted by
+The nucleotide diversity was introduced by
 
 Nei and Li (1979). "Mathematical Model for Studying Genetic Variation in
  Terms of Restriction Endonucleases". PNAS 76 (10): 5269-73.
  doi:10.1073/pnas.76.10.5269.
 }
 \examples{
-set.seed(10)
-model <- coal_model(5, 2) + feat_mutation(5) + sumstat_nucleotide_div()
+model <- coal_model(5, 2) +
+  feat_mutation(5) +
+  sumstat_nucleotide_div()
 stats <- simulate(model)
 print(stats$pi)
+}
+\seealso{
+To create a demographic model: \code{\link{coal_model}}
+
+To calculate this statistic from data: \code{\link{calc_sumstats_from_data}}
+
+Other summary statistics: \code{\link{sumstat_dna}},
+  \code{\link{sumstat_file}},
+  \code{\link{sumstat_four_gamete}},
+  \code{\link{sumstat_ihh}}, \code{\link{sumstat_jsfs}},
+  \code{\link{sumstat_mcmf}}, \code{\link{sumstat_omega}},
+  \code{\link{sumstat_seg_sites}},
+  \code{\link{sumstat_sfs}},
+  \code{\link{sumstat_tajimas_d}},
+  \code{\link{sumstat_trees}}
 }
 

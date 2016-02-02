@@ -20,13 +20,11 @@ unphased_class <- R6Class("unphased", inherit = feature_class,
   )
 )
 
-#' Feature: Unphased
+#' Feature: Unphased Sequences
 #'
-#' This simulated unphased data by creating "pseudo-chromosomes". For these,
-#' each position is randomly taken from a phased chromosome obtained by
-#' simulation.
+#' This simulates unphased data by randomly mixing the sites within one
+#' individual. Each position is randomly taken from a phased chromosome..
 #'
-#' If this is used, the sample size is understood as the number of individuals.
 #' For each individual, \code{ploidy} chromosomes are simulated, and
 #' \code{samples_per_ind} pseudo-chromosomes are created of these.
 #'
@@ -34,6 +32,22 @@ unphased_class <- R6Class("unphased", inherit = feature_class,
 #'   from the phased chromosomes for each individual.
 #' @return The feature, which can be added to a model using `+`.
 #' @export
+#' @family features
+#' @examples
+#' # Simulate unphased data in a diploid population
+#' model <- coal_model(10, 1, ploidy = 2) +
+#'   feat_mutation(10) +
+#'   feat_unphased(2) +
+#'   sumstat_seg_sites()
+#' simulate(model)
+#'
+#' # The same as before, but return only one chromosome for
+#' # each individual:
+#' model <- coal_model(10, 1, ploidy = 2) +
+#'   feat_mutation(10) +
+#'   feat_unphased(1) +
+#'   sumstat_seg_sites()
+#' simulate(model)
 feat_unphased <- function(samples_per_ind) {
   unphased_class$new(samples_per_ind)
 }

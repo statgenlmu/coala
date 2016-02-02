@@ -3,6 +3,7 @@
 #' @param model The coalescent model from which aspects are returned
 #'
 #' @export
+#' @keywords internal
 #' @author Paul Staab
 get_features <- function(model) model$features
 
@@ -136,7 +137,7 @@ get_locus_number <- function(model, group = NA, ignore_variation = FALSE) {
 #' @param haploids If \code{TRUE}, the function always returns all haploids
 #'   from the population, even if the model is polyploid.
 #' @export
-get_population_indiviuals <- function(model, pop,
+get_population_individuals <- function(model, pop,
                                       zero_indexed = FALSE,
                                       haploids = TRUE) {
 

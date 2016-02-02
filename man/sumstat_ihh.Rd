@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat_ihh.R
 \name{sumstat_ihh}
 \alias{sumstat_ihh}
-\title{Integrated Extended Haplotype Homozygosity}
+\title{Summary Statistic: Integrated Extended Haplotype Homozygosity}
 \usage{
 sumstat_ihh(name = "ihh", population = 1, max_snps = 1000,
   calc_ihs = FALSE, transformation = identity)
@@ -12,7 +12,8 @@ sumstat_ihh(name = "ihh", population = 1, max_snps = 1000,
 the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
-\item{population}{The population for which the statistic is calculated.}
+\item{population}{The population for which the statistic is calculated.
+Can also be "all" to calculate it from all populations.}
 
 \item{max_snps}{The maximal number of SNPs per locus that are used for the
 calculation. If a locus has more SNPs, only a random subset of them will
@@ -26,10 +27,9 @@ of the statistic. If specified, the results of the transformation are
 returned instead of the original values.}
 }
 \value{
-When added to a model, the iHH statistics are calculated after
-  simulation. If \code{calc_ihs = FALSE}, a data.frame with values for
-  IHH and IES is returned. Otherwise, a list of two data.frame are returned,
-  one for IHH and IES values and the other one for IHS values.
+If \code{calc_ihs = FALSE}, a data.frame with values for
+  iHH and iES is returned. Otherwise, a list of two data frames are
+  returned, one for IHH and IES values and the other one for IHS values.
 
   In all `data.frames` rows are SNPs and the colums present the following
   values for each SNP:
@@ -44,10 +44,9 @@ When added to a model, the iHH statistics are calculated after
   }
 }
 \description{
-This summary statistic calculates a the iHH, iES and optionally iHS
-statistics.
-}
-\details{
+This summary statistic calculates a number of values based on
+extended haplotype homozygosity (EHH), including iHH, iES
+and optionally iHS.
 Coala relies on \code{\link[rehh]{scan_hh}} from package \pkg{rehh} to
 calculate this statistic. Please refer
 to their documentation for detailed information on the implementation.
@@ -65,7 +64,31 @@ statistic for a publication.
                        genome. PLoS Biol, 4(3):e72, Mar 2006.}
  }
 }
+\examples{
+  model <- coal_model(20, 1, 1000) +
+    feat_mutation(1000) +
+    sumstat_ihh()
+\dontrun{
+    stat <- simulate(model)
+    print(stat$ihh)}
+}
 \author{
 Paul Staab
+}
+\seealso{
+To create a demographic model: \code{\link{coal_model}}
+
+To calculate this statistic from data: \code{\link{calc_sumstats_from_data}}
+
+Other summary statistics: \code{\link{sumstat_dna}},
+  \code{\link{sumstat_file}},
+  \code{\link{sumstat_four_gamete}},
+  \code{\link{sumstat_jsfs}}, \code{\link{sumstat_mcmf}},
+  \code{\link{sumstat_nucleotide_div}},
+  \code{\link{sumstat_omega}},
+  \code{\link{sumstat_seg_sites}},
+  \code{\link{sumstat_sfs}},
+  \code{\link{sumstat_tajimas_d}},
+  \code{\link{sumstat_trees}}
 }
 

@@ -35,20 +35,26 @@ variation <- function(mean, variance) {
 is.par_variation <- function(object) inherits(object, "variation_par")
 
 
-#' Let the parameter values vary between different loci
+#' Variable Parameters
 #'
-#' The function can be used to let the values of a parameter vary between
+#' This function can be used to let the values of a parameter vary between
 #' the different loci. When used, the values for the enclosed parameter
 #' will follow a gamma distribution with mean of the parameters original
 #' value, and the variance specified as argument \code{variance}. This requires
-#' that the original value is always positive. When using this, the simulators
+#' that the original value is positive. When using this, the simulators
 #' are called separately for each locus, which can dramatically increase the
 #' time needed to simulate models with many loci.
 #'
-#' @param par A parameter whose value will be set variable.
+#' @param par A parameter whichs value will be made variable between the loci.
 #' @param variance The variance of the gamma distribution, which the values used
 #'   for simulation will follow.
 #' @export
+#' @seealso For parameters that are identical for all loci: \code{\link{parameter}}
+#' @examples
+#' model <- coal_model(5, 10) +
+#'   feat_mutation(par_variation(par_const(5), 10)) +
+#'   sumstat_nucleotide_div()
+#' simulate(model)
 par_variation <- function(par, variance) {
   variation_par_class$new(par, variance)
 }

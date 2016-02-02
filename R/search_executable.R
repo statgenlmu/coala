@@ -9,6 +9,7 @@
 #' @param name The name of the executable to look for
 #' @param envir_var the name of the environment variable to use
 #' @return The complete path of the executable is found, or "NULL" if not.
+#' @keywords internal
 search_executable <- function(name, envir_var = NULL) {
   # See if an environment variable is given
   exe <- NULL

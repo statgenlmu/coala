@@ -17,7 +17,7 @@ test_that("Creation of migration features works", {
 test_that("generating scrm cmd for growth works", {
   model <- coal_model(4:5, 1) + feat_migration(par_range("m", 1, 2), 2, 1)
   expect_equal(get_simulator("scrm")$get_cmd(model),
-               "scrm 9 1 -I 2 4 5 -em 0 2 1 m ")
+               "scrm 9 1 -I 2 4 5 -em 0 1 2 m ")
   model <- coal_model(4:5, 1) + feat_migration(3, symmetric = TRUE, time = 5)
   expect_equal(get_simulator("scrm")$get_cmd(model),
                "scrm 9 1 -I 2 4 5 -eM 5 3 ")

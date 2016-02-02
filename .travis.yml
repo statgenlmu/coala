@@ -27,9 +27,8 @@ after_failure:
   - ./travis-tool.sh dump_logs
 
 after_success:
-  - ./travis-tool.sh r_binary_install igraph stringdist shiny
-  - ./travis-tool.sh install_github jimhester/lintr
-  - ./travis-tool.sh r_install covr
+  - ./travis-tool.sh r_binary_install igraph stringdist shiny covr
+  - ./travis-tool.sh r_install lintr
   - Rscript -e 'lintr::lint_package()'
   - Rscript -e 'library(covr); coveralls()'
 

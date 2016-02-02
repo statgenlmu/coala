@@ -12,3 +12,5 @@
 ^vignettes/rsconnect$
 ^cran-comments.md$
 ^wercker.yml$
+^.lintr$
+^man-roxygen$

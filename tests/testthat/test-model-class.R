@@ -129,33 +129,33 @@ test_that("getting the available Populations works", {
 
 
 test_that("get population individuals works", {
-  expect_equal(get_population_indiviuals(model_theta_tau(), 1), 1:10)
-  expect_equal(get_population_indiviuals(model_theta_tau(), 2), 11:25)
-  expect_equal(get_population_indiviuals(model_theta_tau(), "all"), 1:25)
-  expect_error(get_population_indiviuals(model_theta_tau(), 3))
-  expect_error(get_population_indiviuals(model_theta_tau(), "al"))
+  expect_equal(get_population_individuals(model_theta_tau(), 1), 1:10)
+  expect_equal(get_population_individuals(model_theta_tau(), 2), 11:25)
+  expect_equal(get_population_individuals(model_theta_tau(), "all"), 1:25)
+  expect_error(get_population_individuals(model_theta_tau(), 3))
+  expect_error(get_population_individuals(model_theta_tau(), "al"))
 
   # With an outgroup
-  expect_equal(get_population_indiviuals(model_hky(), "all"), 1:6)
-  expect_equal(get_population_indiviuals(model_hky(), 1), 1:3)
-  expect_equal(get_population_indiviuals(model_hky(), 2), 4:6)
-  expect_error(get_population_indiviuals(model_hky(), 3))
+  expect_equal(get_population_individuals(model_hky(), "all"), 1:6)
+  expect_equal(get_population_individuals(model_hky(), 1), 1:3)
+  expect_equal(get_population_individuals(model_hky(), 2), 4:6)
+  expect_error(get_population_individuals(model_hky(), 3))
 
   model <- coal_model(1:3) + feat_outgroup(2)
-  expect_equal(get_population_indiviuals(model, "all"), 1:4)
-  expect_equal(get_population_indiviuals(model, 1), 1)
-  expect_error(get_population_indiviuals(model, 2))
-  expect_equal(get_population_indiviuals(model, 3), 2:4)
+  expect_equal(get_population_individuals(model, "all"), 1:4)
+  expect_equal(get_population_individuals(model, 1), 1)
+  expect_error(get_population_individuals(model, 2))
+  expect_equal(get_population_individuals(model, 3), 2:4)
 })
 
 
 test_that("getting indiviuals in polyploid models works", {
   model <- coal_model(1:5, ploidy = 2)
-  expect_equal(get_population_indiviuals(model, 1, haploids = FALSE), 1)
-  expect_equal(get_population_indiviuals(model, 2, haploids = FALSE), 2:3)
-  expect_equal(get_population_indiviuals(model, 3, haploids = FALSE), 4:6)
-  expect_equal(get_population_indiviuals(model, 4, haploids = FALSE), 7:10)
-  expect_equal(get_population_indiviuals(model, 5, haploids = FALSE), 11:15)
+  expect_equal(get_population_individuals(model, 1, haploids = FALSE), 1)
+  expect_equal(get_population_individuals(model, 2, haploids = FALSE), 2:3)
+  expect_equal(get_population_individuals(model, 3, haploids = FALSE), 4:6)
+  expect_equal(get_population_individuals(model, 4, haploids = FALSE), 7:10)
+  expect_equal(get_population_individuals(model, 5, haploids = FALSE), 11:15)
 })
 
 

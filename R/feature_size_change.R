@@ -9,30 +9,40 @@ size_change_class <- R6Class("size_change", inherit = feature_class,
 )
 
 
-#' Adds an instantaneous change of the population size of one
-#' population to a model.
+#' Feature: Instantaneous Size Change
 #'
-#' This function changes the effective population size of one
+#' This feature changes the effective population size of one
 #' population. The change is performed at a given time point
 #' and applies to the time interval further on into
 #' the past from this point. The population size is set to a
-#' fraction of N0, the present day size of population one.
-#'
-#' If you want to add a slow, continuous change over some time,
-#' then use \link{feat_growth}.
+#' fraction of N0.
 #'
 #' @param new_size A \code{\link{parameter}} giving the new size of the
-#'   population, as a factor of N0.
+#'   population, as a fraction of N0.
 #' @param population The number of the population whichs size changes.
 #'          Can also be set to "all". Then the size changes applies to all
 #'          populations.
-#' @param time The time at which the populations size is changed.
-#' @return A feature which can be added to a model.
+#' @param time The time at which the population's size is changed.
+#' @return The feature, which can be added to a model using `+`.
 #' @export
+#' @seealso For continuous size changes over time: \code{\link{feat_growth}}.
+#' @family features
 #' @examples
-#' # A model with one smaller population
-#' model <- coal_model(c(20,37), 88) +
-#'   feat_size_change(.1, 2, time="1")
+#' # A model with one smaller population:
+#' model <- coal_model(c(20, 5), 3) +
+#'   feat_size_change(.1, population = 2) +
+#'   feat_mutation(1.0) +
+#'   feat_migration(0.5, 2, 1) +
+#'   sumstat_sfs()
+#' simulate(model)
+#'
+#' # A model of one population that experienced a bottleneck:
+#' model <- coal_model(10, 1) +
+#'   feat_size_change(0.1, time = 0.3) +
+#'   feat_size_change(1.0, time = 0.5) +
+#'   feat_mutation(20) +
+#'   sumstat_sfs()
+#' simulate(model)
 feat_size_change <- function(new_size, population = 1, time = "0") {
   size_change_class$new(new_size, population, time)
 }

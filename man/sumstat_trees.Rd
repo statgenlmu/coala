@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat_trees.R
 \name{sumstat_trees}
 \alias{sumstat_trees}
-\title{Returns ancestral tress in NEWICK format from simulations}
+\title{Summary Statistic: Ancestral Trees}
 \usage{
 sumstat_trees(name = "trees")
 }
@@ -12,12 +12,33 @@ the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 }
 \description{
-Returns ancestral tress in NEWICK format from simulations
+This statistic returns ancestral tress in NEWICK format.
 }
 \examples{
-set.seed(175)
+# Without recombination:
 model <- coal_model(4, 2) + sumstat_trees()
 stats <- simulate(model)
 print(stats$trees)
+
+# With recombination:
+model <- model + feat_recombination(5)
+stats <- simulate(model)
+print(stats$trees)
+}
+\seealso{
+To create a demographic model: \code{\link{coal_model}}
+
+To calculate this statistic from data: \code{\link{calc_sumstats_from_data}}
+
+Other summary statistics: \code{\link{sumstat_dna}},
+  \code{\link{sumstat_file}},
+  \code{\link{sumstat_four_gamete}},
+  \code{\link{sumstat_ihh}}, \code{\link{sumstat_jsfs}},
+  \code{\link{sumstat_mcmf}},
+  \code{\link{sumstat_nucleotide_div}},
+  \code{\link{sumstat_omega}},
+  \code{\link{sumstat_seg_sites}},
+  \code{\link{sumstat_sfs}},
+  \code{\link{sumstat_tajimas_d}}
 }
 

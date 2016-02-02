@@ -2,38 +2,56 @@
 % Please edit documentation in R/feature_size_change.R
 \name{feat_size_change}
 \alias{feat_size_change}
-\title{Adds an instantaneous change of the population size of one
-population to a model.}
+\title{Feature: Instantaneous Size Change}
 \usage{
 feat_size_change(new_size, population = 1, time = "0")
 }
 \arguments{
 \item{new_size}{A \code{\link{parameter}} giving the new size of the
-population, as a factor of N0.}
+population, as a fraction of N0.}
 
 \item{population}{The number of the population whichs size changes.
 Can also be set to "all". Then the size changes applies to all
 populations.}
 
-\item{time}{The time at which the populations size is changed.}
+\item{time}{The time at which the population's size is changed.}
 }
 \value{
-A feature which can be added to a model.
+The feature, which can be added to a model using `+`.
 }
 \description{
-This function changes the effective population size of one
+This feature changes the effective population size of one
 population. The change is performed at a given time point
 and applies to the time interval further on into
 the past from this point. The population size is set to a
-fraction of N0, the present day size of population one.
-}
-\details{
-If you want to add a slow, continuous change over some time,
-then use \link{feat_growth}.
+fraction of N0.
 }
 \examples{
-# A model with one smaller population
-model <- coal_model(c(20,37), 88) +
-  feat_size_change(.1, 2, time="1")
+# A model with one smaller population:
+model <- coal_model(c(20, 5), 3) +
+  feat_size_change(.1, population = 2) +
+  feat_mutation(1.0) +
+  feat_migration(0.5, 2, 1) +
+  sumstat_sfs()
+simulate(model)
+
+# A model of one population that experienced a bottleneck:
+model <- coal_model(10, 1) +
+  feat_size_change(0.1, time = 0.3) +
+  feat_size_change(1.0, time = 0.5) +
+  feat_mutation(20) +
+  sumstat_sfs()
+simulate(model)
+}
+\seealso{
+For continuous size changes over time: \code{\link{feat_growth}}.
+
+Other features: \code{\link{feat_growth}},
+  \code{\link{feat_ignore_singletons}},
+  \code{\link{feat_migration}},
+  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
+  \code{\link{feat_pop_merge}},
+  \code{\link{feat_recombination}},
+  \code{\link{feat_selection}}, \code{\link{feat_unphased}}
 }
 

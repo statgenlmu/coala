@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat_mcmf.R
 \name{sumstat_mcmf}
 \alias{sumstat_mcmf}
-\title{The MCMF Summary Statistic}
+\title{Summary Statistic: Most Common Mutation's Frequency}
 \usage{
 sumstat_mcmf(name = "mcmf", population = 1, transformation = identity)
 }
@@ -11,14 +11,42 @@ sumstat_mcmf(name = "mcmf", population = 1, transformation = identity)
 the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
-\item{population}{The population for which the statistic is calculated.}
+\item{population}{The population for which the statistic is calculated.
+Can also be "all" to calculate it from all populations.}
 
 \item{transformation}{An optional function for transforming the results
 of the statistic. If specified, the results of the transformation are
 returned instead of the original values.}
 }
+\value{
+A numeric vector containing MCMF for each locus.
+}
 \description{
-When adding this to a model, the "Most Common Mutation Frequecy" summary
-statistic is calculated from the simulation output.
+This summary statistic calculates the observed frequency
+of the mutational pattern that is observed most often in
+the data.
+}
+\examples{
+# Calculate MCMF for a panmictic population
+model <- coal_model(10, 2) +
+  feat_mutation(50) +
+  sumstat_mcmf()
+simulate(model)
+}
+\seealso{
+To create a demographic model: \code{\link{coal_model}}
+
+To calculate this statistic from data: \code{\link{calc_sumstats_from_data}}
+
+Other summary statistics: \code{\link{sumstat_dna}},
+  \code{\link{sumstat_file}},
+  \code{\link{sumstat_four_gamete}},
+  \code{\link{sumstat_ihh}}, \code{\link{sumstat_jsfs}},
+  \code{\link{sumstat_nucleotide_div}},
+  \code{\link{sumstat_omega}},
+  \code{\link{sumstat_seg_sites}},
+  \code{\link{sumstat_sfs}},
+  \code{\link{sumstat_tajimas_d}},
+  \code{\link{sumstat_trees}}
 }
 

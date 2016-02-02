@@ -15,21 +15,34 @@ pop_merge_class <- R6Class("pop_merge", inherit = feature_class,
 
 #' Feature: Population Merge
 #'
-#' View backwards in time, this feature merges a population into another.
+#' Backwards in time, this feature merges one population into another.
 #' Forwards in time, this corresponds to a speciation event.
 #'
-#' Additionally, to the merge all migration rates from and the growth rate of
+#' Additionally to the merge, all migration rates from and the growth rate of
 #' the source population will be set to 0 at the time of the merge to mimic
-#' a speciation event forwards in time.
+#' a speciation event forwards in time. Technically, \code{pop_source} is
+#' still present in the model, but not used unless migration to the population
+#' is manually enabled.
 #'
 #' @param pop_source The population from which all lines are moved.
-#' @param pop_target The population to which the lines are moved.
+#'        This is the newly created population in the speciation event.
+#' @param pop_target The population to which the lines are moved. This is
+#'        the population in which the speciation event occurs.
 #' @param time The time at which the merge occurs.
 #' @export
+#' @family features
 #' @examples
-#' model <- coal_model(c(25,25), 100) +
+#' # Two population which merge after 0.5 time units:
+#' model <- coal_model(c(25,25), 1) +
 #'   feat_pop_merge(0.5, 2, 1) +
-#'   feat_mutation(5)
+#'   feat_mutation(5) +
+#'   sumstat_tajimas_d()
+#' simulate(model)
+#'
+#' # An standard isolation-with-migration model:
+#' model_iwm <- model +
+#'   feat_migration(.75, symmetric = TRUE)
+#' simulate(model_iwm)
 feat_pop_merge <- function(time, pop_source, pop_target) {
   pop_merge_class$new(time, pop_source, pop_target)
 }

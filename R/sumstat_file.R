@@ -20,10 +20,28 @@ stat_file_class <- R6Class("stat_file", inherit = sumstat_class, #nolint
 )
 
 
-#' Returns files with the raw results of simulations
+#' Summary Statistic: Files
 #'
-#' @param folder The path of a folder where the files will be written.
+#' This "summmary statistic" returns files with the raw results of
+#' the simulation. Multiple files are returned in case coala needs
+#' multiple calls to simulators to simulate the model. These files
+#' do not contain any post processing of the results done by coala,
+#' e.g. \code{\link{feat_unphased}} and
+#' \code{\link{feat_ignore_singletons}}.
+#'
+#' @param folder The path to a folder. The files will be created there.
+#' @return A character vector containing the files in order in which they
+#'         where created.
 #' @export
+#' @template summary_statistics
+#' @examples
+#' folder <- tempfile("coala-test")
+#' model <- coal_model(10, 1) +
+#'   feat_mutation(5) +
+#'   sumstat_file(folder)
+#' simulate(model)$file
+#'
+#' unlink(folder, recursive = TRUE)  # Clean up
 sumstat_file <- function(folder) {
   stat_file_class$new(folder)
 }

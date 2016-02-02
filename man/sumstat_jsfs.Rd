@@ -2,7 +2,7 @@
 % Please edit documentation in R/sumstat_jsfs.R
 \name{sumstat_jsfs}
 \alias{sumstat_jsfs}
-\title{Calculates the Joint Site Frequency Spectrum from simulations}
+\title{Summary Statistic: Joint Site Frequency Spectrum}
 \usage{
 sumstat_jsfs(name = "jsfs", populations = c(1, 2), per_locus = FALSE,
   transformation = identity)
@@ -12,7 +12,8 @@ sumstat_jsfs(name = "jsfs", populations = c(1, 2), per_locus = FALSE,
 the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
-\item{populations}{The populations for which the statistic is calculated.}
+\item{populations}{An integer vector containing the populations for which
+the JSFS is generated.}
 
 \item{per_locus}{If \code{TRUE}, the JSFS is return for each locus instead
 of globally. In this case, the result is a list, where each entry is the
@@ -22,18 +23,38 @@ JSFS for the corresponding locus.}
 of the statistic. If specified, the results of the transformation are
 returned instead of the original values.}
 }
+\value{
+The JSFS, given as an array. The dimensions correspond to the
+  populatons as given in the \code{populations} argument.
+}
 \description{
-Calculates the Joint Site Frequency Spectrum from simulations
+The summary statistic calculates the joint site frequency
+spectrum (JSFS) for multiple populations.
 }
 \examples{
-set.seed(75)
-model <- coal_model(2:4, 2) +
+model <- coal_model(c(2, 3, 4), 2) +
   feat_mutation(5) +
   feat_migration(1, symmetric = TRUE) +
   sumstat_jsfs("jsfs_12", populations = c(1, 2)) +
-  sumstat_jsfs("jsfs_123", populations = 1:3)
+  sumstat_jsfs("jsfs_123", populations = c(1, 2, 3))
 stats <- simulate(model)
 print(stats$jsfs_12)
 print(stats$jsfs_123)
+}
+\seealso{
+To create a demographic model: \code{\link{coal_model}}
+
+To calculate this statistic from data: \code{\link{calc_sumstats_from_data}}
+
+Other summary statistics: \code{\link{sumstat_dna}},
+  \code{\link{sumstat_file}},
+  \code{\link{sumstat_four_gamete}},
+  \code{\link{sumstat_ihh}}, \code{\link{sumstat_mcmf}},
+  \code{\link{sumstat_nucleotide_div}},
+  \code{\link{sumstat_omega}},
+  \code{\link{sumstat_seg_sites}},
+  \code{\link{sumstat_sfs}},
+  \code{\link{sumstat_tajimas_d}},
+  \code{\link{sumstat_trees}}
 }
 

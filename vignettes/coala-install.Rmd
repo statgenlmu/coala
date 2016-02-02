@@ -50,13 +50,40 @@ available. Install the CRAN package `phyclust` to use `ms`.
 | ms        | 300      |                                          |                 | activate_ms     |
 | scrm      | 400      |                                          |                 |                 |
 
+You can use the `list_simulators()` command to view which 
+simulators are currently available:
+
+```{r size="small"}
+library(coala)
+list_simulators()
+```
+
+# Priority
+
+The `check_model` function checks which simulators support a specific model,
+and states the problems that coala has detected with the simulators that do not.
+For example, a simple model with infinite-sites mutations (IFS) can be simulated
+with `scrm` or -- if installed -- with `ms` and `msms`, but not with `seq-gen`
+because the latter generates finite-sites mutations:
+
+```{r}
+model <- coal_model(10, 1) +
+  feat_mutation(5, model = "IFS") +
+  sumstat_nucleotide_div()
+check_model(model)
+model
+```
 
 In case multiple simulators can simulate a model, the one with the highest 
-priority is be used. The priority values can be adapted using the 
-`activate_ms`, `activate_msms` and `activate_seqgen` commands.
+priority is used. In our example, that is `scrm`. If we would like to use
+`ms` instead, we need to raise its priority:
 
-Finally, you can use the `list_simulators()` command to view which 
-simulators are currently available.
+```{r}
+activate_ms(priority = 500)
+model
+```
+
+
 
 
 # References

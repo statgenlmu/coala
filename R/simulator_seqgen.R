@@ -27,12 +27,6 @@ generate_tree_model <- function(model) {
 }
 
 
-# Function to perform simulation using seqgen
-#
-# @param opts The options to pass to ms. Must either be a character or character
-# vector.
-
-
 conv_to_seqgen_arg <- function(feature, model) UseMethod("conv_to_seqgen_arg")
 
 #' @describeIn conv_to_ms_arg Feature conversion
@@ -98,14 +92,14 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
         binary <- search_executable(c("seqgen", "seq-gen",
                                       "seqgen.exe", "seq-gen.exe"), "SEQGEN")
       }
-      if (is.null(binary)) stop("No binary file for msms found.")
+      if (is.null(binary)) stop("No binary file for seqgen found.")
       if (!file.exists(binary)) stop("seqgen binary (", binary,
                                      ") does not exist.")
+      message("Using '", binary, "' as seqgen binary")
       assert_that(is.character(binary) && length(binary) == 1)
       private$binary <- binary
 
-      assert_that(is.numeric(priority) && length(priority) == 1)
-      private$priority <- priority
+      super$initialize(priority)
     },
     call = function(args) {
       suppressWarnings(results <- system2(private$binary, args, stdout = TRUE))
@@ -125,8 +119,9 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
       # Call seq-gen for each locus group
       seg_sites <- lapply(1:length(trees), function(locus_group) {
 
-        seqgen_args <- sg_generate_opts(model, parameters, locus_group,
-                                        sample_seed(length(trees[[locus_group]])))
+        seqgen_args <-
+          sg_generate_opts(model, parameters, locus_group,
+                           sample_seed(length(trees[[locus_group]])))
 
         if (length(seqgen_args) == 1) {
           locus_length <- get_locus_length_matrix(model)[locus_group, 3]
@@ -151,7 +146,7 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
                               locus_length = locus_length[trio_locus],
                               locus_number = get_locus_number(model,
                                                               locus_group,
-                                                              ignore_variation = TRUE),
+                                                              TRUE),
                               outgroup_size = get_outgroup_size(model, TRUE),
                               calc_segsites = requires_segsites(model))
         })
@@ -192,14 +187,22 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
 has_seqgen <- function() !is.null(simulators[["seqgen"]])
 
 
-#' Use seq-gen for simulating finite sites mutation models
+#' Simulator: seq-gen
 #'
 #' This allows you to use seq-gen to simulate finite sites mutation models.
+#' When using seq-gen, coala will simulate ancestral tress using the other
+#' simulators, and call seq-gen to simulate finite sites mutations using the
+#' trees. Seq-gen has a low priority, but will always be used when finite
+#' sites mutation models are used.
+#'
+#' @section Installation:
 #' You need to download the program from
 #' \url{http://tree.bio.ed.ac.uk/software/seqgen/}
-#' and compile the binary first.
+#' and compile the binary prior to invoking this function.
+#' On Debian-based systems, you can alternatively install the package
+#' 'seg-gen'.
 #'
-#' @section Citation:
+#' @references
 #' Andrew Rambaut and Nicholas C. Grassly.
 #' Seq-Gen: an application for the Monte Carlo simulation of DNA sequence
 #' evolution along phylogenetic trees.
@@ -207,10 +210,14 @@ has_seqgen <- function() !is.null(simulators[["seqgen"]])
 #' doi:10.1093/bioinformatics/13.3.235
 #'
 #' @param binary The path of the seqgen binary that will be used
-#'  for simulations.
-#' @inheritParams activate_ms
+#'  for simulations. If none is provided, coala will look for a
+#'  binary called 'seqgen' or 'seq-gen' using the PATH variable.
+#' @inheritParams simulator_ms
+#' @name simulator_seqgen
+#' @family simulators
 #' @export
-activate_seqgen <- function(binary, priority = 100) {
+activate_seqgen <- function(binary = NULL, priority = 100) {
   register_simulator(seqgen_class$new(binary, priority))
+  reset_cache()
   invisible(NULL)
 }

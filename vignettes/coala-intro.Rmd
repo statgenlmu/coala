@@ -80,7 +80,7 @@ to the features help pages for detailed information.
 
 ## Multiple Populations
 
-If we a model consisting of multiple populations, we need to state the sample 
+If we build a model consisting of multiple populations, we need to state the sample 
 sizes as a vector of sample sizes for the different populations. The lines
 
 ```{r}

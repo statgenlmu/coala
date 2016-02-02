@@ -9,20 +9,24 @@ outgroup_class <- R6Class("outgroup", inherit = feature_class,
   )
 )
 
-#' Adds an outgroup to a demographic model
+#' Feature: Outgroup
 #'
 #' This feature declares an existing population as outgroup. Outgroups are used
-#' to determine the ancestral allele in finite sites simulations.
+#' to determine the ancestral allele in finite sites simulations and are required
+#' there. All individuals of the outgroup are ignored when calculating summary
+#' statistics. If the outgroup consists of multiple individuals, all positions
+#' where the individuals have different alleles are ignored.
 #'
 #' @param population The population that is marked as outgroup.
 #' @export
+#' @family features
 #' @examples
 #' # A simple finite sites model
 #' model <- coal_model(c(4, 6, 1), 2, 10) +
 #'    feat_outgroup(3) +
 #'    feat_pop_merge(0.5, 2, 1) +
 #'    feat_pop_merge(2, 3, 1) +
-#'    feat_mutation(5, model="GTR", gtr_rates = 1:6)
+#'    feat_mutation(5, model = "GTR", gtr_rates = 1:6)
 feat_outgroup <- function(population) {
   outgroup_class$new(population)
 }

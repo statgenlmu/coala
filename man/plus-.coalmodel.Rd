@@ -17,4 +17,5 @@ The extended model
 \description{
 Add a feature or parameter to a model
 }
+\keyword{internal}
 
