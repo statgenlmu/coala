@@ -10,7 +10,10 @@ simulator_class <- R6Class("simulator",
     get_name = function() private$name,
     get_priority = function() private$priority,
     get_info = function() c(name = private$name),
-    initialize = function() NULL
+    initialize = function(priority) {
+      assert_that(is.number(priority))
+      private$priority <- priority
+    }
   )
 )
 
@@ -83,13 +86,14 @@ reduce_sim_commands <- function(sim_commands) {
 #' @examples
 #' list_simulators()
 list_simulators <- function() {
-  do.call(rbind, lapply(ls(simulators), function(simulator) {
+  simulators <- do.call(rbind, lapply(ls(simulators), function(simulator) {
     info <- get_simulator(simulator)$get_info()
     name <- info[["name"]]
     info <- info[-1]
     pars <- paste(names(info), ":", info, collapse = ", ")
-    c(name = name,
-      info = pars,
-      priority = get_simulator(simulator)$get_priority())
+    data.frame(name = name,
+               priority = get_simulator(simulator)$get_priority(),
+               info = pars)
   }))
+  simulators[order(simulators$priority, decreasing = TRUE), ]
 }

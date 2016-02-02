@@ -24,6 +24,7 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
       if (is.null(jar)) stop("No jar file for msms found.")
       if (!file.exists(jar)) stop("msms jar (", jar, ") does not exist.")
       assert_that(is.character(jar) && length(jar) == 1)
+      message("Using '", jar, "' as msms jar")
       private$jar <- jar
 
       if (is.null(java)) java <- search_executable(c("java", "java.exe"))
@@ -32,8 +33,7 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
       assert_that(is.character(java) && length(java) == 1)
       private$java <- java
 
-      assert_that(is.numeric(priority) && length(priority) == 1)
-      private$priority <- priority
+      super$initialize(priority)
     },
     call_msms = function(msms_args) {
       out_file <- tempfile("msms")
@@ -135,7 +135,8 @@ has_msms <- function() !is.null(simulators[["msms"]])
 #' @inheritParams activate_ms
 #' @rdname simulator_msms
 #' @export
-activate_msms <- function(jar, java, priority = 200) {
+activate_msms <- function(jar = NULL, java = NULL, priority = 200) {
   register_simulator(msms_class$new(jar, java, priority))
+  reset_cache()
   invisible(NULL)
 }

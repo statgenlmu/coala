@@ -4,7 +4,7 @@
 \alias{activate_msms}
 \title{Simulator: msms}
 \usage{
-activate_msms(jar, java, priority = 200)
+activate_msms(jar = NULL, java = NULL, priority = 200)
 }
 \arguments{
 \item{jar}{The path of the msms jar file.}

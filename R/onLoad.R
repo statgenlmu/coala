@@ -1,9 +1,13 @@
 .onLoad <- function(libname, pkgname) {
   # scrm should always be available
-  register_simulator(scrm_class$new())
+  activate_scrm()
 
   # Silently create the simulators for which a binary is available
-  tryCatch(register_simulator(ms_class$new()), error = function(e) {}) #nolint
-  tryCatch(register_simulator(msms_class$new()), error = function(e) {}) #nolint
-  tryCatch(register_simulator(seqgen_class$new()), error = function(e) {}) #nolint
+  suppressMessages({
+    tryCatch(activate_ms(), error = function(e) {}) #nolint
+    tryCatch(activate_msms(), error = function(e) {}) #nolint
+    tryCatch(activate_seqgen(), error = function(e) {}) #nolint
+  })
+
+  invisible(NULL)
 }

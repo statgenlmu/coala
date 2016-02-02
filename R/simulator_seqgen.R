@@ -92,14 +92,14 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
         binary <- search_executable(c("seqgen", "seq-gen",
                                       "seqgen.exe", "seq-gen.exe"), "SEQGEN")
       }
-      if (is.null(binary)) stop("No binary file for msms found.")
+      if (is.null(binary)) stop("No binary file for seqgen found.")
       if (!file.exists(binary)) stop("seqgen binary (", binary,
                                      ") does not exist.")
+      message("Using '", binary, "' as seqgen binary")
       assert_that(is.character(binary) && length(binary) == 1)
       private$binary <- binary
 
-      assert_that(is.numeric(priority) && length(priority) == 1)
-      private$priority <- priority
+      super$initialize(priority)
     },
     call = function(args) {
       suppressWarnings(results <- system2(private$binary, args, stdout = TRUE))
@@ -215,7 +215,8 @@ has_seqgen <- function() !is.null(simulators[["seqgen"]])
 #' @inheritParams activate_ms
 #' @rdname simulator_seqgen
 #' @export
-activate_seqgen <- function(binary, priority = 100) {
+activate_seqgen <- function(binary = NULL, priority = 100) {
   register_simulator(seqgen_class$new(binary, priority))
+  reset_cache()
   invisible(NULL)
 }

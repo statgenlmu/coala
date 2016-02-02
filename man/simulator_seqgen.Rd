@@ -4,7 +4,7 @@
 \alias{activate_seqgen}
 \title{Simulator: seq-gen}
 \usage{
-activate_seqgen(binary, priority = 100)
+activate_seqgen(binary = NULL, priority = 100)
 }
 \arguments{
 \item{binary}{The path of the seqgen binary that will be used

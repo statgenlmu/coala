@@ -130,5 +130,6 @@ has_ms <- function() !is.null(simulators[["ms"]])
 #' @export
 activate_ms <- function(priority = 300) {
   register_simulator(ms_class$new(priority))
+  reset_cache()
   invisible(NULL)
 }

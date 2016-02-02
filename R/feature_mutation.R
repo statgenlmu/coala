@@ -172,7 +172,8 @@ conv_to_msms_arg.mutation <- conv_to_ms_arg.mutation
 #' @export
 conv_to_scrm_arg.mutation <- function(feature, model) {
   if (feature$get_fixed()) {
-    stop("scrm does not support simulating a fixed number of mutations")
+    stop("scrm does not support simulating a fixed number of mutations",
+         call. = FALSE)
   }
   conv_to_ms_arg.mutation(feature, model)
 }
@@ -181,10 +182,10 @@ conv_to_scrm_arg.mutation <- function(feature, model) {
 #' @export
 conv_to_seqgen_arg.mutation <- function(feature, model) {
   if (feature$get_model() == "IFS") {
-    stop("seq-gen can not simulate an IFS model")
+    stop("seq-gen can not simulate an IFS model", call. = FALSE)
   }
   if (feature$get_fixed()) {
-    stop("seq-gen can not simulate a fixed number of mutations")
+    stop("seq-gen can not simulate a fixed number of mutations", call. = FALSE)
   }
   if (feature$get_model() == "GTR") {
     rates <- paste("-r", paste(feature$get_gtr_rates(), collapse = " "))
