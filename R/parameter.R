@@ -68,16 +68,7 @@ is.named_par <- function(par) {
 #' distribution (\code{par_prior}) or can be derived from other parameters
 #' (\code{par_expr}).
 #'
-#' @param expr An R expression.
-#'  This allows to define a parameter using an R expression.
-#'  It can contain other named parameters (e.g. \code{2 * a} will create an
-#'  parameter that is twice the value of an existing parameter \code{a}).
-#'  Make sure that the expression always evaluates
-#'  to a valid parameter value (a single numeric in almost all cases).
-#' @describeIn par_expr Creates a parameter with value determined by evaluating an
-#'  expression.
-#' @export
-#' @aliases  parameter
+#' @name parameter
 #' @seealso For parameters that variate between the loci in a model:
 #'   \code{\link{par_variation}}, \code{\link{par_zero_inflation}}
 #' @author Paul Staab
@@ -117,13 +108,23 @@ is.named_par <- function(par) {
 #'   par_named("theta_log") +
 #'   feat_mutation(par_expr(exp(theta_log)))
 #' simulate(model, pars = c(theta_log = log(5)))
+NULL
+
+#' @describeIn parameter Creates a parameter with value determined by evaluating an expression.
+#' @param expr An R expression.
+#'  This allows to define a parameter using an R expression.
+#'  It can contain other named parameters (e.g. \code{2 * a} will create an
+#'  parameter that is twice the value of an existing parameter \code{a}).
+#'  Make sure that the expression always evaluates
+#'  to a valid parameter value (a single numeric in almost all cases).
+#' @export
 par_expr <- function(expr) {
   parameter_class$new(as.expression(substitute(expr)))
 }
 
 
-#' @describeIn par_expr Creates an parameter that is equal to a fixed value.
-#'   Different to par_expr, the value is evaluated on parameter creation.
+#' @describeIn parameter Creates an parameter that is equal to a fixed value.
+#'   Different to \code{par_expr}, the value is evaluated on parameter creation.
 #' @export
 #' @param constant An R expression.
 #'   The constant value of the parameter.
@@ -134,7 +135,7 @@ par_const <- function(constant) {
 }
 
 
-#' @describeIn par_expr Creates an parameter whose value is specified via the
+#' @describeIn parameter Creates an parameter whose value is specified via the
 #'   \code{pars} argument in \code{\link{simulate.coalmodel}}.
 #' @export
 #' @param name Character. The name of the parameter. Must be unique in a model.
@@ -176,7 +177,7 @@ range_par_class <- R6Class("range_par", inherit = named_par_class,
 is.ranged_par <- function(par) inherits(par, "range_par")
 
 
-#' @describeIn par_expr Creates an parameter that can take a range of possible
+#' @describeIn parameter Creates an parameter that can take a range of possible
 #'  values.
 #'  Similar to \code{\link{par_named}}, the value of the parameter
 #'  used in a simulation is set via the \code{pars} argument.
