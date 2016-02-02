@@ -7,6 +7,7 @@ coala 0.4.0 (in development)
   help pages (#150).
 * Changes name of `get_population_indiviuals` to `get_population_individuals`
   (#150).
+* Adds an option to `active_msms()` to download msms' jar file.
 
 
 

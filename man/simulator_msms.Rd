@@ -5,7 +5,7 @@
 \alias{simulator_msms}
 \title{Simulator: msms}
 \usage{
-activate_msms(jar = NULL, java = NULL, priority = 200)
+activate_msms(jar = NULL, java = NULL, priority = 200, download = FALSE)
 }
 \arguments{
 \item{jar}{The path of the msms jar file.}
@@ -14,6 +14,10 @@ activate_msms(jar = NULL, java = NULL, priority = 200)
 
 \item{priority}{The priority for this simulator. If multiple simulators
 can simulate a model, the one with the highest priority will be used.}
+
+\item{download}{If set to \code{TRUE}, coala will try to download
+the msms jar file. In that case, the \code{jar} argument
+is not required.}
 }
 \description{
 This adds the simulator 'msms' to the list of available simulators. To add

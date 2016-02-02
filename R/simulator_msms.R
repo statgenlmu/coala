@@ -15,10 +15,18 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
     name = "msms",
     jar = NULL,
     java = NULL,
-    priority = 200
+    priority = 200,
+    url = "http://www.mabs.at/ewing/msms/msms3.2rc-b163.jar"
   ),
   public = list(
-    initialize = function(jar = NULL, java = NULL, priority = 200) {
+    initialize = function(jar, java, priority, download) {
+      # Download the jar if requested by the user
+      assert_that(is.logical(download) && length(download) == 1)
+      if (download) {
+        jar <- base::tempfile("msms_", fileext = ".jar")
+        utils::download.file(private$url, jar)
+      }
+
       # Try to automatically find a jar file and java if not given
       if (is.null(jar)) jar <- search_executable("msms.jar", "MSMS")
       if (is.null(jar)) stop("No jar file for msms found.")
@@ -132,12 +140,18 @@ has_msms <- function() !is.null(simulators[["msms"]])
 #'
 #' @param jar The path of the msms jar file.
 #' @param java The path of the java executable on your system.
+#' @param download If set to \code{TRUE}, coala will try to download
+#'        the msms jar file. In that case, the \code{jar} argument
+#'        is not required.
 #' @inheritParams simulator_ms
 #' @name simulator_msms
 #' @family simulators
 #' @export
-activate_msms <- function(jar = NULL, java = NULL, priority = 200) {
-  register_simulator(msms_class$new(jar, java, priority))
+activate_msms <- function(jar = NULL, java = NULL,
+                          priority = 200, download = FALSE) {
+  register_simulator(msms_class$new(jar, java,
+                                    priority,
+                                    download))
   reset_cache()
   invisible(NULL)
 }
