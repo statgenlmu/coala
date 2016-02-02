@@ -41,31 +41,50 @@ locus_class <- R6Class("locus",
 is.locus <- function(locus) any("locus" == class(locus))
 
 
-#' Add one locus or multiple loci to a Model
+#' Loci
+#'
+#' This functions adds one or more loci to a model. A locus is a continuous
+#' stretch of DNA of a given length. All loci are simulated independently of each
+#' other, and are in particular genetically unlinked. A model can contain a
+#' large number of different loci created with \code{locus_single}. This will,
+#' however, slow down the simulation. For performance reasons, it is
+#' better to add the same number of loci with averaged length using
+#' \code{locus_averaged} if this simplification is justifiable. Both can also be
+#' combined in a single model. In the results,
+#' the summary statistics for the loci are returned in order in which they
+#' are added to the model.
 #'
 #' @param length The length of the locus in base pairs.
-#' @export
+#' @seealso For adding three loci which are linked to each other:
+#'  \code{\link{locus_trio}}
 #' @examples
-#' # A model with one locus of length 1005 bp
-#' coal_model(5:7, 0) + locus_single(1005)
+#' # A model with one locus of length 1005 bp:
+#' coal_model(10) + locus_single(1005)
+#' # This is equivalent to:
+#' coal_model(10, 1, 1005)
 #'
-#' # A model with ten loci of average length 950bp
-#' coal_model(15, 0) + locus_averaged(10, 950)
-#' # or just
-#' coal_model(15, 10, 950)
+#' # A model can contain multiple loci:
+#' coal_model(5) + locus_single(100) + locus_single(200) + locus_single(300)
+#' # Or more efficient with averaged length:
+#' coal_model(5) + locus_averaged(3, 200)
+#' # Or equivalently:
+#' coal_model(5, 3, 200)
 #'
-#' # A model with two loci. The first group consists of 10 loci with
-#' # a length 560bp each, the second one of two loci with length 750bp and 560pb,
-#' # respectively.
-#' coal_model(20, 10, 560) +
-#'   locus_single(750) +
-#'   locus_single(430)
+#' # Single and averaged loci can also be combined arbitrarily:
+#' coal_model(15) + locus_averaged(10, 150) + locus_single(250)
+#' coal_model(15, 10, 150) + locus_single(250) + locus_averaged(10, 350)
+#' @name locus
+#' @aliases loci
+NULL
+
+#' @describeIn locus Adds a single locus.
+#' @export
 locus_single <- function(length) {
   locus_class$new(length, 1)
 }
 
 
-#' @describeIn locus_single Multiple Loci of the same length.
+#' @describeIn locus Adds multiple loci with equal length.
 #' @param number The number of loci to add.
 #' @export
 locus_averaged <- function(number, length) {
@@ -73,18 +92,35 @@ locus_averaged <- function(number, length) {
 }
 
 
-#' Adds a trio of loci to a group
+#' Locus Trios
 #'
-#' @inheritParams locus_single
+#' This functions adds a group of three loci to the model that are genetically
+#' linked to each other. They are still unlinked to all other loci or locus trios
+#' in the model. Simulating linked loci that are far apart from each other can
+#' be very slow. Please mind that mutation and recombination rates for locus
+#' trios are rates per trio and not per locus, i.e. they account for mutations
+#' that occur on the tree loci and the sequences in-between them together.
+#'
+#' @inheritParams locus
 #' @param locus_length An integer vector of length 3, giving the length of each
 #'   of the three loci (left, middle and right).
 #' @param distance A vector of two, giving the distance between left and middle,
 #'   and middle an right locus, in base pairs.
 #' @export
+#' @seealso For adding unlinked loci: \code{\link{locus}}
 #' @examples
-#' coal_model(c(25,25)) +
-#'   locus_trio(locus_length=c(1250, 1017, 980),
-#'              distance=c(257, 814))
+#' # A model with one locus trio
+#' coal_model(25) +
+#'   locus_trio(locus_length=c(1250, 1017, 980), distance=c(257, 814))
+#'
+#' # Ten identical locus trios:
+#' coal_model(25) +
+#'   locus_trio(locus_length=c(1250, 1017, 980), distance=c(257, 814), number = 10)
+#'
+#' # Two different ones:
+#' coal_model(25) +
+#'   locus_trio(locus_length=c(1000, 500, 900), distance=c(200, 400)) +
+#'   locus_trio(locus_length=c(700, 500, 800), distance=c(350, 150))
 locus_trio <- function(locus_length = c(left = 1000,
                                         middle = 1000,
                                         right = 1000),

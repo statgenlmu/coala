@@ -21,16 +21,50 @@ to the model. This gives to number of loci to add.}
 individual.}
 }
 \value{
-The coalescent model
+The basic coalescent model which can be extended with features,
+  parameters, loci and summary statistics.
 }
 \description{
 This creates a basic coalescent model to which more features, loci,
 parameters and summary statistics can be added later. Data under the model
 can be simulated using the \code{\link[=simulate.coalmodel]{simulate}} function.
 }
+\examples{
+# A model with one population and 20 unlinked loci:
+model <- coal_model(10, 20) +
+  feat_mutation(5) +
+  sumstat_tajimas_d()
+check_model(model)
+simulate(model)
+
+# A model with two populations:
+model <- coal_model(c(13, 18), 5) +
+  feat_migration(.5, symmetric = TRUE) +
+  sumstat_trees()
+check_model(model)
+simulate(model)
+
+# A model with 10 populations:
+model <- coal_model(rep(2, 10), 5) +
+  feat_migration(.5, symmetric = TRUE) +
+  sumstat_trees()
+check_model(model)
+simulate(model)
+
+# A model with recombination:
+model <- coal_model(20, 1, 1000) +
+  feat_recombination(10) +
+  feat_mutation(5) +
+  sumstat_four_gamete()
+check_model(model)
+simulate(model)
+}
 \seealso{
 The 'coala-intro' vignette for a general description on how to extend
          models.
+
+For checking which simulators can be used for this model:
+         \code{\link{check_model}}
 
 For adding mutation or for a list of other features:
          \code{\link{feat_mutation}}
