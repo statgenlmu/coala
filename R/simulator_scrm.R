@@ -108,14 +108,14 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
 #'
 #' @references
 #' Paul R. Staab, Sha Zhu, Dirk Metzler and Gerton Lunter (2015).
-#' “scrm: efficiently simulating long sequences using the approximated
-#'  coalescent with recombination.”
+#' "scrm: efficiently simulating long sequences using the approximated
+#' coalescent with recombination."
 #' Bioinformatics, 31(10), pp. 1680-1682.
 #' http://dx.doi.org/10.1093/bioinformatics/btu861
 #'
-#' @rdname simulator_scrm
-#' @param priority The priority for this simulator. If multiple simulators
-#'   can simulate a model, the one with the highest priority will be used.
+#' @name simulator_scrm
+#' @inheritParams simulator_ms
+#' @family simulators
 #' @export
 activate_scrm <- function(priority = 400) {
   register_simulator(scrm_class$new(priority))

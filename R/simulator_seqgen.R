@@ -212,8 +212,9 @@ has_seqgen <- function() !is.null(simulators[["seqgen"]])
 #' @param binary The path of the seqgen binary that will be used
 #'  for simulations. If none is provided, coala will look for a
 #'  binary called 'seqgen' or 'seq-gen' using the PATH variable.
-#' @inheritParams activate_ms
-#' @rdname simulator_seqgen
+#' @inheritParams simulator_ms
+#' @name simulator_seqgen
+#' @family simulators
 #' @export
 activate_seqgen <- function(binary = NULL, priority = 100) {
   register_simulator(seqgen_class$new(binary, priority))

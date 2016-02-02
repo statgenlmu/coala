@@ -124,10 +124,11 @@ has_ms <- function() !is.null(simulators[["ms"]])
 #' Bioinformatics (2002) 18 (2): 337-338
 #' doi:10.1093/bioinformatics/18.2.337
 #'
-#' @rdname simulator_ms
+#' @name simulator_ms
 #' @param priority The priority for this simulator. If multiple simulators
 #'   can simulate a model, the one with the highest priority will be used.
 #' @export
+#' @family simulators
 activate_ms <- function(priority = 300) {
   register_simulator(ms_class$new(priority))
   reset_cache()

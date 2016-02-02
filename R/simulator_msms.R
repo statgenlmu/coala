@@ -132,8 +132,9 @@ has_msms <- function() !is.null(simulators[["msms"]])
 #'
 #' @param jar The path of the msms jar file.
 #' @param java The path of the java executable on your system.
-#' @inheritParams activate_ms
-#' @rdname simulator_msms
+#' @inheritParams simulator_ms
+#' @name simulator_msms
+#' @family simulators
 #' @export
 activate_msms <- function(jar = NULL, java = NULL, priority = 200) {
   register_simulator(msms_class$new(jar, java, priority))
