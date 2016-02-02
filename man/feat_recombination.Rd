@@ -16,7 +16,11 @@ recombination event within the locus occurs in one generation.}
 The feature, which can be added to a model using `+`.
 }
 \description{
-This feature adds intra-locus recombination to a model.
+This feature adds intra-locus recombination to a model.  The rate is per locus
+for \link[=locus]{unlinked loci} and per trio for linked
+\link[=locus_trio]{locus trios}. By default, the same recombination rate is used
+for all loci, but it is possible to change this with \code{\link{par_variation}}
+and \code{\link{par_zero_inflation}}.
 }
 \examples{
 # Simulate a 1.5kb sequence for 10 individuals with recombination:
@@ -28,9 +32,6 @@ simulate(model)
 }
 \seealso{
 For adding recombination: \code{\link{feat_mutation}}.
-
-For using rates that variate between the loci in a model:
-  \code{\link{par_variation}}, \code{\link{par_zero_inflation}}
 
 Other features: \code{\link{feat_growth}},
   \code{\link{feat_ignore_singletons}},

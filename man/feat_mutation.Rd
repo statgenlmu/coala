@@ -36,7 +36,11 @@ The feature, which can be added to a model using `+`.
 }
 \description{
 This feature adds mutations to a model. Mutations occur in the genomes
-of the individuals with a given \code{rate}.
+of the individuals with a given \code{rate}. The rate is per locus
+for \link[=locus]{unlinked loci} and per trio for linked
+\link[=locus_trio]{locus trios}. By default, the same mutation rate is used
+for all loci, but it is possible to change this with \code{\link{par_variation}}
+and \code{\link{par_zero_inflation}}.
 }
 \section{Mutation Models}{
 
