@@ -27,17 +27,26 @@ install.packages("coala")
 
 If you want to use the simulation programs `ms`, `msms` or `seqgen`, 
 they need to be installed separately. This is described in the 
-["Using External Simulators" vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-install.html).
+["Using External Simulators" vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-install.html) and
+in [the wiki](https://github.com/statgenlmu/coala/wiki/Installation).
 
 
 Usage
 -----
 Coala comes with a
 [vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-intro.html)
-that explains the packages concepts and is a good place to start.
-The [ABC vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-abc.html) gives an example
-on how coala can be used to conduct the simulations for an Approximate Bayesian
-Computation analysis.
+that explains the packages concepts and is a good place to start. It also has a 
+[vignette containing a few example applications](https://cran.r-project.org/web/packages/coala/vignettes/coala-examples.html).
+
+Detailed information about coala's functions is provided via R's help system. 
+Call `help(_function_)` in R to view them. They usually also contain examples and further links.
+
+The [ABC vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-abc.html) 
+gives an example on how coala can be used to conduct the simulations for [Approximate Bayesian
+Computation](https://en.wikipedia.org/wiki/Approximate_Bayesian_computation).
+
+Also take a look at the [project wiki](https://github.com/statgenlmu/coala/wiki) for additional
+resources.
 
 
 Example
@@ -66,8 +75,9 @@ Supported Simulators
 --------------------
 The package supports the coalescent simulators _ms_, _scrm_ and _msms_.
 All simulators can be combined with _seq-gen_ to simulate finite sites 
-mutation models. The programs _msms_ and _seq-gen_ must be installed 
-manually on the system. The R version of _scrm_ is used automatically,
+mutation models. The programs _msms_ and _seq-gen_ must be [installed 
+manually](https://github.com/statgenlmu/coala/wiki/Installation#installing-additional-simulators). 
+The R version of _scrm_ should be installed automatically,
 and the R version _ms_ if the package `phyclust` is installed.
 
 
@@ -84,4 +94,5 @@ on Linux and OS X. This requires that you have `devtools` and a compiler or
 Xcode installed. Bug reports and pull request on GitHub are highly appreciated.
 The [extending coala vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-extend.html)
 contains information on how to create new summary statistics and add simulators
-to coala.
+to coala. The [wiki](https://github.com/statgenlmu/coala/wiki) also contains a few
+resources for developers.
