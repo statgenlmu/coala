@@ -31,8 +31,8 @@ they need to be installed separately. This is described in the
 in [the wiki](https://github.com/statgenlmu/coala/wiki/Installation).
 
 
-Usage
------
+Usage & Help
+------------
 Coala comes with a
 [vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-intro.html)
 that explains the packages concepts and is a good place to start. It also has a 
@@ -46,7 +46,7 @@ gives an example on how coala can be used to conduct the simulations for [Approx
 Computation](https://en.wikipedia.org/wiki/Approximate_Bayesian_computation).
 
 Also take a look at the [project wiki](https://github.com/statgenlmu/coala/wiki) for additional
-resources.
+resources. You can ask questions on coala's [mailing list](https://groups.google.com/forum/#!forum/coala-pkg). 
 
 
 Example
@@ -63,12 +63,15 @@ result$sfs
 # [1] 15 12  1  4  0  1  0  2  0
 ```
 
+More examples can be found in the 
+[examples vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-examples.html).
+
 
 Problems
 --------
 If you encounter problems when using _coala_, please 
 [file a bug report](https://github.com/statgenlmu/coala/issues) or mail to
-`develop (at) paulstaab.de`.
+`coala-pkg (at) googlegroups.com`.
 
 
 Supported Simulators
