@@ -17,23 +17,25 @@ on your system.
 
 
 # Installation
+
 Short instructions on obtaining and compiling the programs are 
 given in the help pages of `activate_ms`, `activate_msms` and `activate_seqgen`. 
+More detailed instructions are provided in [the wiki](https://github.com/statgenlmu/coala/wiki/Installation).
 
 
 # Activation
 
-Additionally to having the binary for a simulator, you need to inform `coala`
-where the binary is. We refere to this process as _activation_ of a binary.
+In addition to providing the binary for a simulator, you need to inform `coala`
+where the binary is. We refer to this process as _activation_ of a binary.
 Afterwards, `coala` will use the simulator automatically
-where appropriate.
+where-ever appropriate.
 
 There are three different ways to activate a binary:
 
 1. Use the `activate_msms` and `activate_seqgen` functions to
 activate the simulators from within R. You should use the functions before
 creating a model.
-2. Alternatively, you can place the programs binaries in your working
+2. Alternatively, you can place the binaries in your working
 directory or in a folder listed in your _PATH_ environment variable using
 one of the names listed under "Expected Binary Names" below. If there is
 a match file, coala will automatically activate the simulator.
@@ -58,10 +60,13 @@ library(coala)
 list_simulators()
 ```
 
+
+
 # Priority
 
 The `check_model` function checks which simulators support a specific model,
-and states the problems that coala has detected with the simulators that do not.
+and states the problems which coala has detected with the simulators that do not
+support it.
 For example, a simple model with infinite-sites mutations (IFS) can be simulated
 with `scrm` or -- if installed -- with `ms` and `msms`, but not with `seq-gen`
 because the latter generates finite-sites mutations:
@@ -74,7 +79,7 @@ check_model(model)
 model
 ```
 
-In case multiple simulators can simulate a model, the one with the highest 
+If multiple simulators can simulate a model, the one with the highest 
 priority is used. In our example, that is `scrm`. If we would like to use
 `ms` instead, we need to raise its priority:
 

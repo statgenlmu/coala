@@ -63,7 +63,7 @@ barplot(stats$sfs / sum(stats$sfs),
 
 
 
-## 3. Plot the nucleotide diversity agains the mutation rate:
+## 3. Plot the nucleotide diversity against the mutation rate:
 ```{r}
 model3 <- coal_model(10, 50) +
   feat_mutation(par_prior("theta", sample.int(100, 1))) +
@@ -75,6 +75,6 @@ plot(theta, mean_pi, pch = 19, col = "orange")
 abline(lm(mean_pi ~ theta), col = "red2", lty = 3)
 ```
 
-If you have an example for using coala, feel free to extend this 
+If you have a nice example for using coala, feel free to extend this 
 vignette via a pull request [on GitHub](https://github.com/statgenlmu/coala)!
 

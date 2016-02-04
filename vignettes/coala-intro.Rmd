@@ -14,14 +14,14 @@ biological sequences like DNA by tracing their ancestry back in time. The
 `coala` package is an interface for calling a number of commonly used
 coalescent simulators from R. It should be able to use the simulator
 `scrm` out of the box. Other simulators need to be installed separately
-and must explicitly be activated. This is described in the `installation`
+and must be activated explicitly. This is described in the `installation`
 vignette:
 
 ```{r installation, eval=FALSE}
 vignette("coala-install", package = "coala")
 ```
 
-In this introduction we'll stick to using `scrm`.
+In this introduction we will stick to using `scrm`.
 
 # Creating a model
 In order to conduct simulations, we first need to specify a model of
@@ -65,7 +65,7 @@ model
 ```
 
 Now, mutations occur with rate 1 and according to an infinite-sites mutation 
-model (IFS). Details on both rate and mutation model are given the help
+model (IFS). Details of rate and mutation model are given in the help
 page of the feature (`?feat_mutation`). 
 
 Coala currently support the features
@@ -81,7 +81,7 @@ to the features help pages for detailed information.
 ## Multiple Populations
 
 If we build a model consisting of multiple populations, we need to state the sample 
-sizes as a vector of sample sizes for the different populations. The lines
+sizes as a vector of sample sizes for the different populations. The lines,
 
 ```{r}
 model <- coal_model(sample_size = c(5, 2, 0), loci_number = 1) +
@@ -91,11 +91,11 @@ model <- coal_model(sample_size = c(5, 2, 0), loci_number = 1) +
 ```
 
 create a model of three populations, with a symmetric migration rate of `0.5`
-between them. View backwards in time, population 3 merges into population 2
+between them. When viewed backwards in time, population 3 merges into population 2
 `0.5` coalescent time units in the past and population 2 into population 1
 `0.3` time units further into the past. Looking forwards in time, this 
 represents two speciation events with migration going on afterwards. At time `0`
-five haploids of population 1 and two ones of population 2 are sampled. Please
+five haploids are sampled from population 1 and two from population 2. Please
 note that sample sizes for all populations must be given, even if no haploid
 is sampled from a population, as it is the case for population 3 here.
 
@@ -125,9 +125,9 @@ funcs[grep("^sumstat_", funcs)]
 
 # Simulating the model
 
-We now can simulate the model. The printed output of a model contains information
+Now we can simulate the model. The printed output of a model contains information
 which program will be used for the simulation and which arguments will be used.
-As coala is in a early stage, please make sure to always check both. 
+As coala is in an early stage, please make sure to always check both. 
 
 The
 function `simulate` will call the program with the printed options, parse its
@@ -138,9 +138,9 @@ set.seed(123)
 sumstats <- simulate(model)
 ```
 
-The returned object `sumstats` a list, in which each entry corresponds to one 
+The returned object `sumstats` is a list, in which each entry corresponds to one 
 summary statistic. As there is only one summary statistic in our model, 
-it has only one entry:
+the list has only one entry:
 
 ```{r}
 names(sumstats)
@@ -189,29 +189,30 @@ adds two more loci with length of 750bp to the model.
 
 # Adding Parameters
 So far, we have used a model without parameters that can vary between 
-simulations. In particular for fitting a model to data via ABC or Jaatha it is 
-useful to such parameters so that you don't need to create a new model for
+simulations. In particular for fitting a model to data via ABC or Jaatha, it is 
+useful to add parameters to a previous model instead of creating a new model for
 each simulation.
 
 
 ### Named Parameters
-Named parameters values can be specified in the simulation command. If we want
-to simulate a model for different values of the mutation rate, we can use
+Named parameters values can be specified in the simulation command. If we want, for example,
+to launch simulations for a model with different values of the mutation rate, we can use
 a named parameter:
 
 ```{r}
 model <- coal_model(5, 1) +
   feat_mutation(rate = par_named("theta")) +
   sumstat_seg_sites()
-sumstats <- simulate(model, pars=c(theta=2.5))
+sumstats1 <- simulate(model, pars = c(theta = 2.5))
+sumstats2 <- simulate(model, pars = c(theta = 4.3))
 ```
 
 
 
 ### Parameters with Priors
 A parameter distributed according to a prior can be specified using the 
-`par_prior` function. The functions first argument is a name for the parameter,
-the second an expression that when evaluated produces a sample from the
+`par_prior` function. The function's first argument is a name for the parameter,
+the second an expression that, when evaluated, produces a sample from the
 prior distribution. 
 
 So if we want the mutation to follow a uniform distribution between 
@@ -240,13 +241,13 @@ model <- coal_model(5, 1) +
 ```
 
 sets a possible range from _0.1_ to _5_ for the mutation rate. The actual
-rate is given in `simulate` just as with named parameters.
+rate is given in the `simulate` function, just as with named parameters.
 
 
 ### Expressions
 Finally, there is a very powerful type of parameters generated with `par_expr`.
 Similar to parameters with priors, the value of the parameter is given as an
-R expression, which is evaluated before simulation. Different to `par_prior`,
+R expression, which is evaluated before simulation. Unlinke `par_prior`,
 this expression can contain other named parameters. For example 
 
 ```{r}

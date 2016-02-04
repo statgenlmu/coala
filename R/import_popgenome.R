@@ -13,6 +13,8 @@
 #'   This requires that \pkg{PopGenome} knows where coding regions are., e.g.
 #'   by using gff files.
 #' @param ... Ignored.
+#' @seealso An example and additional instructions are provided in the
+#'          `coala-data-import` vignette
 #' @export
 as.segsites.GENOME <- function(data, only_synonymous = FALSE, ...) {
   require_package("PopGenome")

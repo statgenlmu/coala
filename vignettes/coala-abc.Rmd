@@ -11,16 +11,16 @@ vignette: >
 
 [Approximate Bayesian Computation (ABC)](http://en.wikipedia.org/wiki/Approximate_Bayesian_computation)
 is a simulation based method for Bayesian inference. It is commonly used in
-evolutionary biology to estimate parameters of e.g. demographic models.
+evolutionary biology to estimate parameters of demographic models.
 Coala makes it easy to conduct the simulations for an ABC analysis and works
 well together with the `abc` package for doing the estimation. 
 To demonstrate the principle, we will estimate the parameter of an 
 over-simplified toy model. 
 
-Lets assume we have 50 genetic loci from 10 individuals from a panmictic 
-population. We'll use the site frequency spectrum of the data as a summary
-statistic to estimate the scaled mutation rate `theta`. Lets assume the
-frequency spectrum we get from the data is
+Let's assume that we have 50 genetic loci from 10 individuals from a panmictic
+population. We will use the site frequency spectrum of the data as a set of
+summary statistics to estimate the scaled mutation rate, `theta`. Let's assume
+we get the following frequency spectrum from the data:
 
 ```{r sfs}
 sfs <- c(112, 57, 24, 34, 16, 29, 8, 10, 15)
@@ -28,7 +28,7 @@ sfs <- c(112, 57, 24, 34, 16, 29, 8, 10, 15)
 
 
 
-We can now use coala to setup the model:
+We can now use coala to set the model up:
 
 ```{r model setup}
 library(coala)
@@ -37,16 +37,16 @@ model <- coal_model(10, 50) +
   sumstat_sfs()
 ```
 
-Note that we used `par_prior` to set a flat uniform prior between 1 and 5 for
+Note that we used `par_prior` to set a uniform prior between 1 and 5 for
 `theta`. 
 
-We can now do easily simulate the model:
+We can now easily simulate the model:
 
 ```{r simulate, cache=TRUE}
 sim_data <- simulate(model, nsim = 2000, seed = 17)
 ```
 
-For this toy model, we did just 2000 simulations (to keep the time for
+For this toy model, we ran just 2000 simulations (to keep the time for
 building this document within a reasonable range). A real analysis will need
 many more!
 

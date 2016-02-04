@@ -6,6 +6,7 @@
 #'
 #' @param model The model that is checked
 #' @export
+#' @seealso Do view the priority of the simulators: \code{\link{list_simulators}}
 #' @examples
 #' model <- coal_model(10, 1) +
 #'   feat_mutation(5, fixed = TRUE)

@@ -24,4 +24,9 @@ calculating the summary statistics of biological data using the
 Currently, only the package \pkg{PopGenome} is supported, see
 \code{\link{as.segsites.GENOME}} for details.
 }
+\seealso{
+Further instructions are provided in the `coala-data-import` vignette
+
+For information about segsites: \code{\link{segsites}}
+}
 

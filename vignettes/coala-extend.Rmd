@@ -18,7 +18,7 @@ adding both.
 Summary Statistics
 ------------------
 Summary statistics are derived from the `sumstat_class` base class. They
-primarily consists of a `calculate` function that -- well -- calculates the
+primarily consist of a `calculate` function that -- well -- calculates the
 statistics value from the simulation results. A simple example is the 
 `sumstat_seg_sites()` statistic:
 
@@ -37,24 +37,25 @@ sumstat_seg_sites <- function(name = "seg_sites", transformation = identity) {
 }
 ```
 
-The calculate function must have four arguments. It is called after the 
+The calculate is called after the 
 simulation with the following arguments:
 
-- First, a list of segregating sites, were each entry of the list contains
-  the segregating sites for a locus.
+- First, a list of segregating sites, where each entry of the list contains
+  the segregating sites of a locus.
 - Second, a list of trees currently in Newick format.
 - Third, the raw output files from the simulator.
 - Finally, the model that was simulated.
 
-Only the model is always passed to `calculate`. The other three inputs are
-generated on demand and have to be requested by the statistic. To do so,
-set the private variable `req_segsites`, `req_trees` or `req_files`, 
-respectively, to `TRUE`. Arguments not request can be present if they are 
+Among the above mentioned parameters, model is always passed to the calculate 
+function. The other three input parameters are generated on demand and have to 
+be requested by the statistic. To do so,
+set the private variables `req_segsites`, `req_trees` or `req_files`, 
+respectively, to `TRUE`. Arguments not requested can be present if they are 
 created for a different summary statistic, but will be `NULL` in most cases.
 
-In this example, we only use the segregating sites, and hence it is the only
-argument request. All the summary statistic does is to return the unmodified 
-segregating sites.
+In this example we only use the segregating sites, and hence it is the only
+argument request. All that the summary statistic does is to return the 
+unmodified segregating sites.
 
 Warning: I am currently only satisfied with the structure of the segregating
 sites. The format of the `trees` and the `files` arguments might still change.
@@ -63,7 +64,7 @@ sites. The format of the `trees` and the `files` arguments might still change.
 ### Adding A Constructor
 
 If the statistic has additional options that can be set on creation, overwrite
-the `initialize` function. Take, for example a simplified version of 
+the `initialize` function. Take, for example, a simplified version of 
 `sumstat_file`:
 
 ```{r}
@@ -103,5 +104,5 @@ first, so that I can assist with the implementation.
 The most important part is to create a `simulate` function that the model and 
 the model parameters as arguments, conducts the simulation and parses the 
 output to create the `segsites` and/or `trees` argument for the summary 
-statistics. It should throw an error with `stop()` if it gets a model that is
-not supported.
+statistics. It should throw an error with `stop()` if it is given a model 
+which is not supported.

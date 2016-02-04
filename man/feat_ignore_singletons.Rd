@@ -17,7 +17,7 @@ singletons from the simulated data before the summary statistics are
 calculated.
 }
 \details{
-For this function, a singleton a mutation for which the derived allele is
+For this function, a singleton is a mutation for which the derived allele is
 observed exactly once in all populations.
 }
 \examples{

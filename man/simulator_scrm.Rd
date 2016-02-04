@@ -17,6 +17,15 @@ It is provided via the CRAN package \pkg{scrm} and should be always installed
 alongside with \pkg{coala}. It should be activated automatically, and this
 function is only needed to change it \code{priority}.
 }
+\examples{
+# Change scrm's priority
+model <- coal_model(10, 1) + feat_mutation(5)
+model # scrm is used by default
+activate_scrm(250)
+model # Now ms is used instead (if installed)
+activate_scrm(550)
+model # Now scrm is used again
+}
 \references{
 Paul R. Staab, Sha Zhu, Dirk Metzler and Gerton Lunter (2015).
 "scrm: efficiently simulating long sequences using the approximated

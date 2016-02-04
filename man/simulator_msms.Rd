@@ -24,6 +24,10 @@ This adds the simulator 'msms' to the list of available simulators. To add
 msms, you need to download the jar file and have Java installed on your
 system.
 }
+\examples{
+# Download and activate msms (requires Java)
+\dontrun{activate_msms(download = TRUE)}
+}
 \references{
 Gregory Ewing and Joachim Hermisson.
 MSMS: a coalescent simulation program including recombination,

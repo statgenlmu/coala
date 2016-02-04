@@ -19,12 +19,12 @@ argument.}
 
 \item{tree_list}{Not yet implemented.}
 
-\item{trios}{If your model is using locus trios, then you need
+\item{trios}{If your model is using locus trios, then you
 can create these by combining individual loci. This is a list that defines
 which loci are combined to a trio. Each entry should consist of either
 one or three numbers. For one number, the locus used for calculating the
 summary statistics is locus in the provided data that corresponds to the
-number. If three number are provided, the locus for calculation is created
+number. If three numbers are provided, the locus for calculation is created
 by combining the corresponding three loci from the given data.}
 
 \item{...}{Additional arguments that will be pass to
@@ -34,5 +34,17 @@ by combining the corresponding three loci from the given data.}
 This function calculates a model's summary statistic from biological data.
 The data needs to be provided as a list of segregating sites objects. These
 objects can be create using the \code{\link{create_segsites}} function.
+}
+\examples{
+segsites <- create_segsites(matrix(c(1, 0, 0,
+                                     1, 1, 0,
+                                     0, 0, 1), 3, 3, TRUE),
+                            c(.1, .3, .5))
+model <- coal_model(3, 1) +
+  sumstat_sfs() +
+  sumstat_nucleotide_div() +
+  sumstat_mcmf()
+sumstats <- calc_sumstats_from_data(model, list(segsites))
+print(sumstats)
 }
 
