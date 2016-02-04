@@ -13,8 +13,8 @@ While `coala` primiary focuses on simulation of data, it also offers
 to calculate summary statsitcs from real data. This is particular useful
 when comparing the statistics of real and simulated data.
 
-Rather than offering function to import data directly, coala can convert
-the internal formats of other packages into its own format. Currently, only
+Rather than offering functions to import data directly, coala can convert
+the internal formats of other R packages into its own format. Currently, only
 `PopGenome` is supported, but we plan to also support `ape` and `pegas` in the
 future.
 
@@ -22,9 +22,9 @@ future.
 Importing Data from PopGenome
 -----------------------------
 
-PopGenome offers functions for reading different data formats, including `vcf` 
-and `fasta`. Please refer to its documentation for instructions. As example,
-we will read in one short fasta file that is included in coala:
+The R package PopGenome provides functions for reading various data formats, including `vcf` 
+and `fasta`. Please refer to its documentation for detailed instructions. As example,
+we will read sequence data from a short fasta file that is included in coala:
 
 ```{r import_data, results="hide"}
 suppressPackageStartupMessages(library(PopGenome))
@@ -42,7 +42,7 @@ library(coala)
 segsites <- as.segsites(data_pg)
 ```
 
-Now, we can calculate summary statistics using `calc_sumstats_from_data`:
+Next, we calculate summary statistics using `calc_sumstats_from_data`:
 ```{r calc_sumstats_1}
 model <- coal_model(c(5, 5, 2), 1, 25) + 
   feat_mutation(5) +

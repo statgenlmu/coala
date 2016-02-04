@@ -40,8 +40,8 @@ sumstat_seg_sites <- function(name = "seg_sites", transformation = identity) {
 The calculate function must have four arguments. It is called after the 
 simulation with the following arguments:
 
-- First, a list of segregating sites, were each entry of the list contains
-  the segregating sites for a locus.
+- First, a list of segregating sites, where each entry of the list contains
+  the segregating sites of a locus.
 - Second, a list of trees currently in Newick format.
 - Third, the raw output files from the simulator.
 - Finally, the model that was simulated.
@@ -49,10 +49,10 @@ simulation with the following arguments:
 Only the model is always passed to `calculate`. The other three inputs are
 generated on demand and have to be requested by the statistic. To do so,
 set the private variable `req_segsites`, `req_trees` or `req_files`, 
-respectively, to `TRUE`. Arguments not request can be present if they are 
+respectively, to `TRUE`. Arguments that are not requested can be present if they are 
 created for a different summary statistic, but will be `NULL` in most cases.
 
-In this example, we only use the segregating sites, and hence it is the only
+In this example we only use the segregating sites, and hence it is the only
 argument request. All the summary statistic does is to return the unmodified 
 segregating sites.
 
@@ -63,7 +63,7 @@ sites. The format of the `trees` and the `files` arguments might still change.
 ### Adding A Constructor
 
 If the statistic has additional options that can be set on creation, overwrite
-the `initialize` function. Take, for example a simplified version of 
+the `initialize` function. Take, for example, a simplified version of 
 `sumstat_file`:
 
 ```{r}
