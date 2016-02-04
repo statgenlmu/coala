@@ -253,3 +253,71 @@ test_that("model checking give not errors", {
   capture.output(check_model(model_hky()))
   capture.output(check_model(model_trios()))
 })
+
+
+test_that("model parts can be combined into a partial model", {
+  incomplete_model <- feat_growth(1, 1) + feat_growth(2, 2)
+  expect_true(is_partial_model(incomplete_model))
+  expect_equal(length(incomplete_model), 2)
+
+  incomplete_model <- sumstat_sfs() + sumstat_dna()
+  expect_true(is_partial_model(incomplete_model))
+  expect_equal(length(incomplete_model), 2)
+
+  incomplete_model <- par_const(5) + par_const(7)
+  expect_true(is_partial_model(incomplete_model))
+  expect_equal(length(incomplete_model), 2)
+
+  incomplete_model <- locus_single(1) + locus_averaged(2, 10)
+  expect_true(is_partial_model(incomplete_model))
+  expect_equal(length(incomplete_model), 2)
+})
+
+
+test_that("partial models can be extended", {
+  incomplete_model <- feat_growth(1, 1) +
+    feat_mutation(5) +
+    feat_recombination(7)
+  expect_true(is_partial_model(incomplete_model))
+  expect_equal(length(incomplete_model), 3)
+  expect_equal(incomplete_model[[1]], feat_growth(1, 1))
+  expect_equal(incomplete_model[[2]], feat_mutation(5))
+  expect_equal(incomplete_model[[3]], feat_recombination(7))
+
+  incomplete_model_2 <- incomplete_model + sumstat_sfs()
+  expect_true(is_partial_model(incomplete_model_2))
+  expect_equal(length(incomplete_model_2), 4)
+  expect_equal(incomplete_model_2[[4]], sumstat_sfs())
+})
+
+
+test_that("partial models can be added to models", {
+  incomplete_model <- feat_growth(1, 1) +
+    feat_mutation(5) +
+    feat_recombination(par_const(8)) +
+    locus_averaged(10, 100) +
+    par_const(6) +
+    sumstat_sfs()
+  model <- coal_model(10) + incomplete_model
+
+  model_direct <- coal_model(10) +
+    feat_growth(1, 1) +
+    feat_mutation(5) +
+    feat_recombination(par_const(8)) +
+    locus_averaged(10, 100) +
+    par_const(6) +
+    sumstat_sfs()
+  model_direct$id <- model$id
+
+  expect_equal(model, model_direct)
+})
+
+
+test_that("printing partical models works", {
+  incomplete_model <- feat_growth(1, 1) +
+    feat_mutation(5) +
+    feat_recombination(par_const(8))
+  expect_output(print(incomplete_model), "growth")
+  expect_output(print(incomplete_model), "Mutation")
+  expect_output(print(incomplete_model), "Recombination")
+})
