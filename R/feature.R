@@ -1,5 +1,6 @@
+#' @include model.R
 #' @importFrom R6 R6Class
-feature_class <- R6Class("feature",
+feature_class <- R6Class("feature", inherit = model_part,
   private = list(
     parameter = list(),
     population = NULL,

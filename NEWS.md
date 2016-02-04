@@ -7,7 +7,10 @@ coala 0.4.0 (in development)
   help pages (#150).
 * Changes name of `get_population_indiviuals` to `get_population_individuals`
   (#150).
-* Adds an option to `active_msms()` to download msms' jar file.
+* Adds an option to `active_msms()` to download msms' jar file (#153).
+* Adds support for partial models. Now, arbitrary sets of features, loci,
+  parameters and summary statistics can be combined via `+` and then be
+  added to one or more models later.
 
 
 

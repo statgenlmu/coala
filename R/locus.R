@@ -1,5 +1,6 @@
+#' @include model.R
 #' @importFrom R6 R6Class
-locus_class <- R6Class("locus",
+locus_class <- R6Class("locus", inherit = model_part,
   private = list(
     number = 0,
     length = NA

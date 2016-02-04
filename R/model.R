@@ -66,7 +66,7 @@ coal_model <- function(sample_size, loci_number = 0,
                 scaling_factor = 1,
                 id = get_id())
 
-  class(model) <- c("coalmodel")
+  class(model) <- c("coalmodel", "coalmodelpart")
 
   # Add sample sizes
   model <- model + feat_sample(sample_size, ploidy)
@@ -83,6 +83,8 @@ coal_model <- function(sample_size, loci_number = 0,
 is.model <- function(model) {
   "coalmodel" %in% class(model)
 }
+
+model_part <- R6Class("coalmodelpart")
 
 
 # Selects a program for simulation that is capable of all current features

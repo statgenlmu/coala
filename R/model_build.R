@@ -4,11 +4,31 @@
 #' @param e2 The feature/parameter to add
 #' @return The extended model
 #' @keywords internal
-"+.coalmodel" <- function(e1, e2) {
-  e2name <- deparse(substitute(e2)) # Passed throw for error messages
-  add_to_model(e2, e1, e2name)
+"+.coalmodelpart" <- function(e1, e2) {
+  e2name <- deparse(substitute(e2)) # Passed through for error messages
+
+  if (is.model(e1)) return(add_to_model(e2, e1, e2name))
+
+  if (is_partial_model(e1)) {
+    e1[[length(e1) + 1]] <- e2
+    return(e1)
+  }
+
+  partial_model <- list(e1, e2)
+  class(partial_model) <- c("partial_model", "coalmodelpart")
+  partial_model
 }
 
+is_partial_model <- function(x) inherits(x, "partial_model")
+
+#' @export
+print.partial_model <- function(x, ...) {
+  cat("Partial coal_model with ", length(x), " components:\n")
+  for (part in x) {
+    cat("* ")
+    print(part)
+  }
+}
 
 add_to_model <- function(x, model, x_name) UseMethod("add_to_model")
 add_to_model.default <- function(x, model, x_name) {
@@ -64,5 +84,13 @@ add_to_model.feature <- function(feat, model, feat_name) {
 add_to_model.locus <- function(locus, model, locus_name) {
   model$loci[[length(model$loci) + 1]] <- locus
   model$id <- get_id()
+  model
+}
+
+
+add_to_model.partial_model <- function(partial_model, model, partical_name) {
+  for (part in partial_model) {
+    model <- model + part
+  }
   model
 }

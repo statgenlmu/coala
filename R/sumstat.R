@@ -3,9 +3,10 @@
 #' If you want to create additional summary statistics for coala, create
 #' \pkg{R6} classes that inherit from this object.
 #'
+#' @include model.R
 #' @keywords internal
 #' @export
-sumstat_class <- R6Class("sumstat",
+sumstat_class <- R6Class("sumstat", inherit = model_part,
   private = list(
     name = NA,
     req_files = FALSE,
