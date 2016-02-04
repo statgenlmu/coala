@@ -7,6 +7,6 @@
 \title{A Framework for Coalescent Simulation in R}
 \description{
 This package allows to specify and simulate coalescent models from
-within R. The `introduction` vignettes is a good place to start.
+within R. The `introduction` vignette is a good place to start.
 }
 
