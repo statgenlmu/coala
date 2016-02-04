@@ -128,6 +128,9 @@ has_ms <- function() !is.null(simulators[["ms"]])
 #' @param priority The priority for this simulator. If multiple simulators
 #'   can simulate a model, the one with the highest priority will be used.
 #' @export
+#' @examples
+#' # To prefer ms to scrm:
+#' \dontrun{activate_ms(priority = 500)}
 #' @family simulators
 activate_ms <- function(priority = 300) {
   register_simulator(ms_class$new(priority))

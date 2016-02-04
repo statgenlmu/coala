@@ -1,3 +1,47 @@
+#' Segregating Sites
+#'
+#' This functions allow the creation and modification of segregating sites
+#' objects, which are one of the basic intermediary statistics that is
+#' calculated in coala. Segregating sites consist primarily of a SNP matrix that
+#' contains all SNPs for one locus, with some additional information attached.
+#' The parts of the S3 class are detailed below.
+#'
+#' A segregating sites object contains all SNPs for one genetic locus. Each
+#' object consists of tree parts: A SNP matrix, a vector of SNP positons and
+#' a vector that states which transcript a SNP belong to, if the locus
+#' consists of multiple transscripts ('locus trio').
+#'
+#' \itemize{
+#'   \item{In the \strong{SNP} matrix, each row represents a haplotype and each
+#'         column represents a SNP. An entry is either \code{1} if the
+#'         haplotype carries the derived allele for the SNP, or \code{0} if it
+#'         carries the ancestral one.}
+#'   \item{In the \strong{positions} vector, each entry gives the relative
+#'         position of SNP in the corresponding column of the SNP matrix.}
+#'   \item{The \strong{trio_locus} vector contains the trio locus each SNP
+#'         belongs to. Entry of \code{-1},\code{0}, \code{1} represent the
+#'         left, middle, and right locus, respectively. For normal loci,
+#'         this just consists of \code{0}'s}
+#' }
+#'
+#' @name segsites
+#' @author Paul Staab
+#' @seealso For converting biological data to segsites: \code{\link{as.segsites}}
+#' @examples
+#' snps <- matrix(c(1, 0, 0,
+#'                  1, 1, 0,
+#'                  0, 0, 1), 3, 3, TRUE)
+#' pos <- c(.1, .3, .5)
+#' segsites <- create_segsites(snps, pos)
+#' print(segsites)
+#' get_snps(segsites)
+#' get_positions(segsites)
+#'
+#' # When subsetting individuals, sites that are not
+#' # segregating in these are automatically removed:
+#' segsites[1:2, 1:3]
+NULL
+
 #' @export
 print.segsites <- function(x, ...) {
   snps <- get_snps(x)
@@ -50,7 +94,7 @@ conv_to_ms_output <- function(segsites) {
 
 
 
-#' Combines three segregating sites to a locus trio
+#' @describeIn segsites Combines three segregating sites to a locus trio
 #'
 #' @param left The segregating sites from the left locus
 #' @param middle The segregating sites from the middle locus
@@ -89,6 +133,8 @@ create_locus_trio <- function(left, middle, right) {
 #' @param ... Additional arguments specific for the used package.
 #'
 #' @return A list of segregating sites objects.
+#' @seealso Further instructions are provided in the `coala-data-import` vignette
+#' @seealso For information about segsites: \code{\link{segsites}}
 #' @export
 as.segsites <- function(data, ...) UseMethod("as.segsites")
 

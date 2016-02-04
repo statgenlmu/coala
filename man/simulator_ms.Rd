@@ -17,6 +17,10 @@ In order to use 'ms', you need to install the CRAN package \pkg{phyclust}.
 By default, 'scrm' will be prefered to 'ms'. Raise the priority of 'ms'
 to change this behavior.
 }
+\examples{
+# To prefer ms to scrm:
+\dontrun{activate_ms(priority = 500)}
+}
 \references{
 Richard R. Hudson.
 Generating samples under a Wright-Fisher neutral model of genetic variation.

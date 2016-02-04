@@ -156,6 +156,17 @@ calc_sumstats_from_sim <- function(seg_sites, trees, files, model,
 #' @param ... Additional arguments that will be pass to
 #'   \code{\link{as.segsites}}.
 #' @export
+#' @examples
+#' segsites <- create_segsites(matrix(c(1, 0, 0,
+#'                                      1, 1, 0,
+#'                                      0, 0, 1), 3, 3, TRUE),
+#'                             c(.1, .3, .5))
+#' model <- coal_model(3, 1) +
+#'   sumstat_sfs() +
+#'   sumstat_nucleotide_div() +
+#'   sumstat_mcmf()
+#' sumstats <- calc_sumstats_from_data(model, list(segsites))
+#' print(sumstats)
 calc_sumstats_from_data <- function(model,
                                     segsites_list = NULL,
                                     tree_list = NULL,

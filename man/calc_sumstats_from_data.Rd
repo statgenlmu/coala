@@ -35,4 +35,16 @@ This function calculates a model's summary statistic from biological data.
 The data needs to be provided as a list of segregating sites objects. These
 objects can be create using the \code{\link{create_segsites}} function.
 }
+\examples{
+segsites <- create_segsites(matrix(c(1, 0, 0,
+                                     1, 1, 0,
+                                     0, 0, 1), 3, 3, TRUE),
+                            c(.1, .3, .5))
+model <- coal_model(3, 1) +
+  sumstat_sfs() +
+  sumstat_nucleotide_div() +
+  sumstat_mcmf()
+sumstats <- calc_sumstats_from_data(model, list(segsites))
+print(sumstats)
+}
 

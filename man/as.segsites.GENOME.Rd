@@ -25,4 +25,8 @@ This function imports all loci from the \code{GENOME} object that have at
 least one valid site (\code{data@n.valid.sites}). The number of valid sites
 is used as length of a locus.
 }
+\seealso{
+An example and additional instructions are provided in the
+         `coala-data-import` vignette
+}
 

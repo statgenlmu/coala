@@ -146,6 +146,9 @@ has_msms <- function() !is.null(simulators[["msms"]])
 #' @inheritParams simulator_ms
 #' @name simulator_msms
 #' @family simulators
+#' @examples
+#' # Download and activate msms (requires Java)
+#' \dontrun{activate_msms(download = TRUE)}
 #' @export
 activate_msms <- function(jar = NULL, java = NULL,
                           priority = 200, download = FALSE) {

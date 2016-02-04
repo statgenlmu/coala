@@ -30,6 +30,9 @@ and compile the binary prior to invoking this function.
 On Debian-based systems, you can alternatively install the package
 'seg-gen'.
 }
+\examples{
+\dontrun{activate_seqgen("./bin/seqgen")}
+}
 \references{
 Andrew Rambaut and Nicholas C. Grassly.
 Seq-Gen: an application for the Monte Carlo simulation of DNA sequence

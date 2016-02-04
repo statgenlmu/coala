@@ -216,6 +216,8 @@ has_seqgen <- function() !is.null(simulators[["seqgen"]])
 #' @name simulator_seqgen
 #' @family simulators
 #' @export
+#' @examples
+#' \dontrun{activate_seqgen("./bin/seqgen")}
 activate_seqgen <- function(binary = NULL, priority = 100) {
   register_simulator(seqgen_class$new(binary, priority))
   reset_cache()

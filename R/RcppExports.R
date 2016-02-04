@@ -17,31 +17,7 @@ generate_trio_trees <- function(trees, llm) {
     .Call('coala_generate_trio_trees', PACKAGE = 'coala', trees, llm)
 }
 
-#' Segregating Sites
-#'
-#' This functions allow the creation and modification of segregating sites
-#' objects, which are one of the basic intermediary statistics that is
-#' calculated in coala. Segregating sites consist primarily of a SNP matrix that
-#' contains all SNPs for one locus, with some additional information attached.
-#' The parts of the S3 class are detailed below.
-#'
-#' A segregating sites object contains all SNPs for one genetic locus. Each
-#' object consists of tree parts: A SNP matrix, a vector of SNP positons and
-#' a vector that states which transcript a SNP belong to, if the locus
-#' consists of multiple transscripts ('locus trio').
-#'
-#' \itemize{
-#'   \item{In the \strong{SNP} matrix, each row represents a haplotype and each
-#'         column represents a SNP. An entry is either \code{1} if the
-#'         haplotype carries the derived allele for the SNP, or \code{0} if it
-#'         carries the ancestral one.}
-#'   \item{In the \strong{positions} vector, each entry gives the relative
-#'         position of SNP in the corresponding column of the SNP matrix.}
-#'   \item{The \strong{trio_locus} vector contains the trio locus each SNP
-#'         belongs to. Entry of \code{-1},\code{0}, \code{1} represent the
-#'         left, middle, and right locus, respectively. For normal loci,
-#'         this just consists of \code{0}'s}
-#' }
+#' @describeIn segsites Creates segregating sites
 #'
 #' @param snps The SNP Matrix (see Details).
 #' @param positions A numeric vector indicating the relative positions of each
@@ -50,9 +26,6 @@ generate_trio_trees <- function(trees, llm) {
 #' @param check Whether non-segregating sites are remove from the segregating
 #'   sites (\code{TRUE}) or not (\code{FALSE}).
 #' @export
-#' @rdname segsites
-#' @aliases create_segsites
-#' @author Paul Staab
 #'
 create_segsites <- function(snps, positions, trio_locus = numeric(0), check = TRUE) {
     .Call('coala_create_segsites', PACKAGE = 'coala', snps, positions, trio_locus, check)

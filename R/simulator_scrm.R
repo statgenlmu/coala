@@ -117,6 +117,14 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
 #' @inheritParams simulator_ms
 #' @family simulators
 #' @export
+#' @examples
+#' # Change scrm's priority
+#' model <- coal_model(10, 1) + feat_mutation(5)
+#' model # scrm is used by default
+#' activate_scrm(250)
+#' model # Now ms is used instead (if installed)
+#' activate_scrm(550)
+#' model # Now scrm is used again
 activate_scrm <- function(priority = 400) {
   register_simulator(scrm_class$new(priority))
   reset_cache()
