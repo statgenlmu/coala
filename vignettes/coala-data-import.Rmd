@@ -35,6 +35,9 @@ individuals <- list(paste0("Individual_1-", 1:5), paste0("Individual_2-", 1:5))
 data_pg <- set.populations(data_pg, individuals)
 ```
 
+Here the sequences originate from two population and an outgroup. The outgroup
+is required for most summary statistics.
+
 We can now convert `data_pg` using the `as.segsites` function: 
 
 ```{r}

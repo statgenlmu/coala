@@ -18,7 +18,8 @@ calculated.
 }
 \details{
 This function assumes that a singleton is a mutation for which the derived
-allele is observed exactly once in all populations.
+allele is observed exactly once in all sequences, regardless of the
+population structure.
 }
 \examples{
 model <- coal_model(2, 1) +
