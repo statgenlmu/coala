@@ -17,7 +17,7 @@ A data.frame that can be used as \code{sumstat}
         argument of \code{\link[abc]{abc}}.
 }
 \description{
-This functions creates an object compatible with the \code{sumstat}
+This function creates an object compatible with the \code{sumstat}
 argument of the \code{\link[abc]{abc}} function from coala's simulation
 results. It converts all summary statistics that are in the simulation
 results and expects that each of them is a numeric vector.

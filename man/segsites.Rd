@@ -36,7 +36,7 @@ SNP on the locus (see Details).}
 
 \item{trio_locus}{If the locus consists of a locus trio (see Details).}
 
-\item{check}{Whether non-segregating sites are remove from the segregating
+\item{check}{Whether non-segregating sites are removed from the segregating
 sites (\code{TRUE}) or not (\code{FALSE}).}
 
 \item{segsites}{The segregating sites object}
@@ -48,7 +48,7 @@ sites (\code{TRUE}) or not (\code{FALSE}).}
 \item{right}{The segregating sites from the right locus}
 }
 \description{
-This functions allow the creation and modification of segregating sites
+These functions create and modify segregating sites
 objects, which are one of the basic intermediary statistics that is
 calculated in coala. Segregating sites consist primarily of a SNP matrix that
 contains all SNPs for one locus, with some additional information attached.
@@ -56,7 +56,7 @@ The parts of the S3 class are detailed below.
 }
 \details{
 A segregating sites object contains all SNPs for one genetic locus. Each
-object consists of tree parts: A SNP matrix, a vector of SNP positons and
+object consists of three parts: A SNP matrix, a vector of SNP positons and
 a vector that states which transcript a SNP belong to, if the locus
 consists of multiple transscripts ('locus trio').
 

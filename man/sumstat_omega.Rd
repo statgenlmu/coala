@@ -36,7 +36,7 @@ A data frame listing of locus, genetic position and the
 \description{
 Calculates the Omega Statistic introduced by
 Kim & Nielsen (2004) from the simulated data. The statistic is sensitive for
-for hard selective sweeps. To calculate
+hard selective sweeps. To calculate
 the statistic, coala relies on the command line program
 \href{http://sco.h-its.org/exelixis/web/software/omegaplus/index.html}{OmegaPlus},
 which needs to be downloaded and compiled manually in order to use the

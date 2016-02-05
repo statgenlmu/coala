@@ -7,7 +7,7 @@
 check_model(model)
 }
 \arguments{
-\item{model}{The model that is checked}
+\item{model}{The model which is checked}
 }
 \description{
 This function checks which of the available simulators can

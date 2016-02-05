@@ -4,7 +4,7 @@
 #' simulate a given model. It also states the problems for the ones that
 #' are incompatible with the model.
 #'
-#' @param model The model that is checked
+#' @param model The model which is checked
 #' @export
 #' @seealso Do view the priority of the simulators: \code{\link{list_simulators}}
 #' @examples

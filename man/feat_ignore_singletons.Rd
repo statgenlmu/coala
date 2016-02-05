@@ -17,8 +17,8 @@ singletons from the simulated data before the summary statistics are
 calculated.
 }
 \details{
-For this function, a singleton is a mutation for which the derived allele is
-observed exactly once in all populations.
+This function assumes that a singleton is a mutation for which the derived
+allele is observed exactly once in all populations.
 }
 \examples{
 model <- coal_model(2, 1) +

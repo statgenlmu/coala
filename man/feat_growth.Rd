@@ -28,9 +28,6 @@ The population size changes by a factor \eqn{exp(-\alpha*t)}, where
 the growth has started. For positive alpha, the population will decline
 backwards in time or grow forwards in time. For a negative value of
 \eqn{\alpha} it will decline (forward in time).
-
-If you want to add an ,
-then use
 }
 \examples{
 # Simulate a haploid population that has been expanding for

@@ -24,9 +24,9 @@ vignette("coala-install", package = "coala")
 In this introduction we will stick to using `scrm`.
 
 # Creating a model
-In order to conduct simulations, we first need to specify a model of
-evolution that is used for the simulations. The function `coal_model` 
-creates a basic coalescent model:
+In order to conduct simulations, we first need to specify the components of
+the simulation model. The function `coal_model` creates a basic coalescent
+model:
 
 ```{r create_model}
 library(coala)
@@ -231,8 +231,9 @@ sumstats2$pars
 
 
 ### Parameter Ranges
-For Jaatha, you need to give a range of possible values for each parameters.
-This is done using `par_range`. For instance
+For simulations that will we used for parameter inference with the R
+package `jaatha`, you need to give a range of possible values for each 
+parameter. This is done using `par_range`. For instance
 
 ```{r}
 model <- coal_model(5, 1) +

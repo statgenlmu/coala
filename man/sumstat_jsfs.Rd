@@ -15,7 +15,7 @@ with this name. Summary statistic names must be unique in a model.}
 \item{populations}{An integer vector containing the populations for which
 the JSFS is generated.}
 
-\item{per_locus}{If \code{TRUE}, the JSFS is return for each locus instead
+\item{per_locus}{If \code{TRUE}, the JSFS is returned for each locus instead
 of globally. In this case, the result is a list, where each entry is the
 JSFS for the corresponding locus.}
 
