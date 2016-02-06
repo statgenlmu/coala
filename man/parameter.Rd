@@ -34,9 +34,9 @@ can not depend on other named parameters.}
 
 \item{name}{Character. The name of the parameter. Must be unique in a model.}
 
-\item{lower}{A numeric. The lower boundary of the parameter"s range.}
+\item{lower}{A numeric. The lower boundary of the parameter's range.}
 
-\item{upper}{A numeric. The upper boundary of the parameter"s range.}
+\item{upper}{A numeric. The upper boundary of the parameter's range.}
 
 \item{prior}{An expression. Evaluation this expression should give
 a sample from the prior distribution you want for the parameter.

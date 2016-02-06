@@ -153,7 +153,7 @@ calc_sumstats_from_sim <- function(seg_sites, trees, files, model,
 #'   summary statistics is locus in the provided data that corresponds to the
 #'   number. If three numbers are provided, the locus for calculation is created
 #'   by combining the corresponding three loci from the given data.
-#' @param ... Additional arguments that will be pass to
+#' @param ... Additional arguments that will be passed to
 #'   \code{\link{as.segsites}}.
 #' @export
 #' @examples

@@ -17,7 +17,7 @@ A data.frame that can be used as \code{param}
         argument of \code{\link[abc]{abc}}.
 }
 \description{
-This functions creates an object compatible with the \code{param}
+This function creates an object compatible with the \code{param}
 argument of the \code{\link[abc]{abc}} function from coala's simulation
 results.
 }

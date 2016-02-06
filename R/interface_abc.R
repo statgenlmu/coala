@@ -1,6 +1,6 @@
 #' Convert Simulation Results to abc's Parameter Format
 #'
-#' This functions creates an object compatible with the \code{param}
+#' This function creates an object compatible with the \code{param}
 #' argument of the \code{\link[abc]{abc}} function from coala's simulation
 #' results.
 #'
@@ -36,7 +36,7 @@ create_abc_param <- function(sim_results, model) {
 
 #' Convert Simulation Results to abc's Summary Statistic Format
 #'
-#' This functions creates an object compatible with the \code{sumstat}
+#' This function creates an object compatible with the \code{sumstat}
 #' argument of the \code{\link[abc]{abc}} function from coala's simulation
 #' results. It converts all summary statistics that are in the simulation
 #' results and expects that each of them is a numeric vector.

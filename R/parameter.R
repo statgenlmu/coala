@@ -186,8 +186,8 @@ is.ranged_par <- function(par) inherits(par, "range_par")
 #'  \pkg{jaatha}.
 #'
 #' @export
-#' @param lower A numeric. The lower boundary of the parameter"s range.
-#' @param upper A numeric. The upper boundary of the parameter"s range.
+#' @param lower A numeric. The lower boundary of the parameter's range.
+#' @param upper A numeric. The upper boundary of the parameter's range.
 par_range <- function(name, lower, upper) {
   range_par_class$new(lower, upper, name)
 }

@@ -46,7 +46,7 @@ is.locus <- function(locus) any("locus" == class(locus))
 #'
 #' This functions adds one or more loci to a model. A locus is a continuous
 #' stretch of DNA of a given length. All loci are simulated independently of each
-#' other, and are in particular genetically unlinked. A model can contain a
+#' other, and are genetically unlinked. A model can contain a
 #' large number of different loci created with \code{locus_single}. This will,
 #' however, slow down the simulation. For performance reasons, it is
 #' better to add the same number of loci with averaged length using

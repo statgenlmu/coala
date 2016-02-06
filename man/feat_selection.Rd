@@ -20,7 +20,7 @@ onwards. The same applies for \code{strength_Aa}, \code{strength_aa} and
 
 \item{strength_aa}{The selection strength for the recessive homozygote.}
 
-\item{strength_A}{This sets the strength for the selected allele in an
+\item{strength_A}{This sets the strength for the selected allele in a
 haploid model or a diploid model with additive selection.
 \code{strength_AA}, \code{strength_Aa}, \code{strength_aa}
 are ignored when this is argument is given.}
@@ -30,10 +30,10 @@ be \code{all} for all population, or the number of a population.}
 
 \item{time}{The time at which the selection starts if \code{start == TRUE}
 (looking forwards in time), or the time at which the selection strength
-changes if \code{start == FALSE}. The new strength applies for to the time
+changes if \code{start == FALSE}. The new strength applies for the time
 period further into the past in this case.}
 
-\item{start}{Whether selection should start at this time point. At this time
+\item{start}{Whether selection should start at this time point. At this time,
 the selected allele is introduced in the population with an initial
 starting frequency. This must be set to \code{TRUE} for exactly one
 selection feature in the model. The values of \code{start_frequency},
@@ -43,7 +43,7 @@ selection strength for more demes or change it at different time points,
 but these need to have \code{start = FALSE}.}
 
 \item{start_frequency}{The start frequency at which the selected allele is
-introduced at time \code{time}. If the model has multiple population, this
+introduced at \code{time}. If the model has multiple population, this
 can either be a numeric vector that contains the initial frequency for each
 population or a single number. In the latter case, the value is used for
 all population specified with \code{populations}, and 0 is used for all

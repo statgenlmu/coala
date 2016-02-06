@@ -9,8 +9,9 @@ ign_singletons_class <- R6Class("ign_singletons", inherit = feature_class)
 #' singletons from the simulated data before the summary statistics are
 #' calculated.
 #'
-#' For this function, a singleton is a mutation for which the derived allele is
-#' observed exactly once in all populations.
+#' This function assumes that a singleton is a mutation for which the derived
+#' allele is observed exactly once in all sequences, regardless of the
+#' population structure.
 #'
 #' @return The feature, which can be added to a model using `+`.
 #' @export

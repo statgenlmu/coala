@@ -1,13 +1,13 @@
 #' Segregating Sites
 #'
-#' This functions allow the creation and modification of segregating sites
+#' These functions create and modify segregating sites
 #' objects, which are one of the basic intermediary statistics that is
 #' calculated in coala. Segregating sites consist primarily of a SNP matrix that
 #' contains all SNPs for one locus, with some additional information attached.
 #' The parts of the S3 class are detailed below.
 #'
 #' A segregating sites object contains all SNPs for one genetic locus. Each
-#' object consists of tree parts: A SNP matrix, a vector of SNP positons and
+#' object consists of three parts: A SNP matrix, a vector of SNP positons and
 #' a vector that states which transcript a SNP belong to, if the locus
 #' consists of multiple transscripts ('locus trio').
 #'

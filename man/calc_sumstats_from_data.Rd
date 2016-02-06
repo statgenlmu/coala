@@ -27,7 +27,7 @@ summary statistics is locus in the provided data that corresponds to the
 number. If three numbers are provided, the locus for calculation is created
 by combining the corresponding three loci from the given data.}
 
-\item{...}{Additional arguments that will be pass to
+\item{...}{Additional arguments that will be passed to
 \code{\link{as.segsites}}.}
 }
 \description{

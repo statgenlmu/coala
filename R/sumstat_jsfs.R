@@ -39,7 +39,7 @@ stat_jsfs_class <- R6Class("stat_jsfs", inherit = sumstat_class,
 #' @inheritParams sumstat_four_gamete
 #' @param populations An integer vector containing the populations for which
 #'        the JSFS is generated.
-#' @param per_locus If \code{TRUE}, the JSFS is return for each locus instead
+#' @param per_locus If \code{TRUE}, the JSFS is returned for each locus instead
 #'   of globally. In this case, the result is a list, where each entry is the
 #'   JSFS for the corresponding locus.
 #' @return The JSFS, given as an array. The dimensions correspond to the

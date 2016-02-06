@@ -46,7 +46,7 @@ and \code{\link{par_zero_inflation}}.
 
 The infinite sites mutation (\strong{IFS}) model is a frequently used simplification
 in population genetics. It assumes that each locus consists of infinitely
-many sites at which mutations can occure, and each mutation hits a new site.
+many sites at which mutations can occur, and each mutation hits a new site.
 Consequently, there are no back-mutations with this model. It does not
 generate DNA sequences, but rather only 0/1 coded data, were 0 denotes the
 ancestral state of the site, and 1 the derived state created by a mutation.

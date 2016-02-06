@@ -18,7 +18,7 @@ pop_merge_class <- R6Class("pop_merge", inherit = feature_class,
 #' Backwards in time, this feature merges one population into another.
 #' Forwards in time, this corresponds to a speciation event.
 #'
-#' Additionally to the merge, all migration rates from and the growth rate of
+#' In addition to the merge, the growth rate of and all migration rates from
 #' the source population will be set to 0 at the time of the merge to mimic
 #' a speciation event forwards in time. Technically, \code{pop_source} is
 #' still present in the model, but not used unless migration to the population

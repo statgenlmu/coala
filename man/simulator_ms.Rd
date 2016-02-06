@@ -14,7 +14,7 @@ can simulate a model, the one with the highest priority will be used.}
 \description{
 This function adds the simulator 'ms' to the list of available simulators.
 In order to use 'ms', you need to install the CRAN package \pkg{phyclust}.
-By default, 'scrm' will be prefered to 'ms'. Raise the priority of 'ms'
+By default, 'scrm' will be preferred over 'ms'. Raise the priority of 'ms'
 to change this behavior.
 }
 \examples{

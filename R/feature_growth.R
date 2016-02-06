@@ -20,9 +20,6 @@ growth_class <- R6Class("growth", inherit = feature_class,
 #' backwards in time or grow forwards in time. For a negative value of
 #' \eqn{\alpha} it will decline (forward in time).
 #'
-#' If you want to add an ,
-#' then use
-#'
 #' @param rate The growth rate. Can be a numeric or a \code{\link{parameter}}.
 #'        See \code{Details} for an explanation how the rate affects the
 #'        population size.

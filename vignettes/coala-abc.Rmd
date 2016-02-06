@@ -48,7 +48,8 @@ sim_data <- simulate(model, nsim = 2000, seed = 17)
 
 For this toy model, we ran just 2000 simulations (to keep the time for
 building this document within a reasonable range). A real analysis will need
-many more!
+many more, but you can reduce the simulation time by parallelizing them 
+with the `cores` argument.
 
 
 We need to prepare the simulation data for the `abc` package. We can use
@@ -70,9 +71,15 @@ Now, we can estimate the posterior distribution of `theta`:
 ```{r abc, fig.align="center", fig.width=5}
 suppressPackageStartupMessages(library(abc))
 posterior <- abc(sfs, sim_param, sim_sumstat, 0.05, method = "rejection")
-hist(posterior, breaks = 10)
+hist(posterior, breaks = 20)
 ```
 
-Due to the low number of simulations we get a relatively flat posterior,
-but we still get an idea what the value for `theta` might be.
+Due to the low number of simulations, this posterior should only
+be treated as a rough approximation. We have prepared a version using a million 
+simulations instead. Generating it took significantly longer (about two hours 
+on a modern laptop), but we get a smoother estimate of the posterior 
+distribution:
 
+<center>
+![Histogram of posterior distribution](img/abc_posterior.jpeg)
+</center>

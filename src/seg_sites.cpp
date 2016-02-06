@@ -9,7 +9,7 @@ using namespace Rcpp;
 //' @param positions A numeric vector indicating the relative positions of each
 //'   SNP on the locus (see Details).
 //' @param trio_locus If the locus consists of a locus trio (see Details).
-//' @param check Whether non-segregating sites are remove from the segregating
+//' @param check Whether non-segregating sites are removed from the segregating
 //'   sites (\code{TRUE}) or not (\code{FALSE}).
 //' @export
 //'
