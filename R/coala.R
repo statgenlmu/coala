@@ -11,7 +11,3 @@
 # Mute warnings about R6 object internals
 #' @importFrom utils suppressForeignCheck
 suppressForeignCheck(c("self", "private", "super"))
-
-release_questions <- function() {
-  c("Have you tested the package with valgrind?")
-}
