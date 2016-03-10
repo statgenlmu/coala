@@ -188,7 +188,7 @@ conv_to_msms_arg.selection <- function(feature, model) {
     }
 
     start_cmd <- paste0("-SI', ", feature$get_time(), ", '",
-                        n_pop, " " , paste(start_freq, collapse = " "), " ",
+                        n_pop, " ", paste(start_freq, collapse = " "), " ",
                         "-Sp', ", feature$get_position(), ", '",
                         "-N', ", feature$get_Ne(), ", '",
                         ifelse(feature$get_force_keep(), "-SForceKeep ", ""))

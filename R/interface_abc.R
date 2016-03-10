@@ -83,7 +83,8 @@ create_abc_sumstat <- function(sim_results, model) {
       value <- x[[stat$get_name()]]
       assert_that(is.numeric(value))
       if (!is.vector(value)) {
-        warning("Value of the ", stat$get_name(), " statistic is not a vector. ",
+        warning("Value of the ", stat$get_name(),
+                " statistic is not a vector. ",
                 "Converting it to vector, but this may not be correct. ",
                 "Better use transformation functions to convert the ",
                 "statistics to vectors.")

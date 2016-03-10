@@ -44,4 +44,3 @@ test_that("resetting the cache works", {
   cache(model2, "a", 2)
   expect_equal(read_cache(model2, "a"), 2)
 })
-

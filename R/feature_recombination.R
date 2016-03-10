@@ -51,4 +51,4 @@ conv_to_scrm_arg.recombination <- conv_to_ms_arg.recombination
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.recombination <- ignore_par
+conv_to_seqgen_arg.recombination <- ignore_par #nolint

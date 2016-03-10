@@ -123,7 +123,7 @@ has_variation <- function(model) model$has_variation
 
 
 has_trios <- function(model) {
-  sum(get_locus_length_matrix(model)[ , c(1:2, 4:5)]) > 0
+  sum(get_locus_length_matrix(model)[, c(1:2, 4:5)]) > 0
 }
 
 

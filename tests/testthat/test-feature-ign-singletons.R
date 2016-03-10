@@ -10,8 +10,8 @@ test_that("we can add remove singletons to a models", {
 test_that("the function to remove singletons works", {
   ssl <- list(create_test_segsites(), create_test_segsites())
   expect_equal(remove_singletons(ssl),
-               list(create_test_segsites()[ , -c(1, 3)],
-                    create_test_segsites()[ , -c(1, 3)]))
+               list(create_test_segsites()[, -c(1, 3)],
+                    create_test_segsites()[, -c(1, 3)]))
 
   expect_equal(remove_singletons(list(create_empty_segsites())),
                list(create_empty_segsites()))

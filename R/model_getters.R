@@ -72,14 +72,14 @@ get_locus_length <- function(model, locus = NULL, group = NULL, total = TRUE) {
   }
 
   if (total) return(rowSums(llm[group, 1:5, drop = FALSE]))
-  if (sum(llm[group , c(1:2, 4:5)]) == 0) return(llm[group , 3])
+  if (sum(llm[group, c(1:2, 4:5)]) == 0) return(llm[group, 3])
   llm[group, 1:5]
 }
 
 
 get_locus_group <- function(model, locus) {
   llm <- get_locus_length_matrix(model)
-  min(which(cumsum(llm[ , "number"]) >= locus))
+  min(which(cumsum(llm[, "number"]) >= locus))
 }
 
 
@@ -122,7 +122,7 @@ get_locus_length_matrix <- function(model) {
 #' @param ignore_variation For internal use. Will likely be removed soon.
 #' @export
 get_locus_number <- function(model, group = NA, ignore_variation = FALSE) {
-  numbers <- get_locus_length_matrix(model)[ , "number"]
+  numbers <- get_locus_length_matrix(model)[, "number"]
   if (is.na(group)) return(sum(numbers))
   if (has_variation(model) && !ignore_variation) return(1)
   numbers[group]

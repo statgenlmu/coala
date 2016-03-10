@@ -80,7 +80,7 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
       })
 
       cmds <- lapply(sim_cmds, function(cmd) {
-        paste("scrm", sample_size, cmd[ , 1], cmd[ , 2])
+        paste("scrm", sample_size, cmd[, 1], cmd[, 2])
       })
 
       stats <- calc_sumstats_from_sim(seg_sites, trees, files,

@@ -67,10 +67,10 @@ fill_cmd_template <- function(template, model, parameters,
 
 reduce_sim_commands <- function(sim_commands) {
   if (nrow(sim_commands) == 1) return(sim_commands)
-  grouped_commands <- unique(sim_commands[ , 2])
+  grouped_commands <- unique(sim_commands[, 2])
   if (length(grouped_commands) == nrow(sim_commands)) return(sim_commands)
   grouped_locus_number <- vapply(grouped_commands, function(cmd) {
-    sum(sim_commands[sim_commands[ , 2] == cmd, 1])
+    sum(sim_commands[sim_commands[, 2] == cmd, 1])
   }, numeric(1)) #nolint
   data.frame(locus_number = grouped_locus_number,
              command = grouped_commands,

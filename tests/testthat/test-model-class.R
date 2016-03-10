@@ -238,7 +238,7 @@ test_that("creating a parameter table works ", {
     par_range("theta", 1, 2) +
     par_range("tau", 5, 6)
   expect_equal(get_parameter_table(model),
-               data.frame(name = c("theta","tau"),
+               data.frame(name = c("theta", "tau"),
                           lower.range = c(1, 5),
                           upper.range = c(2, 6),
                           stringsAsFactors = FALSE))

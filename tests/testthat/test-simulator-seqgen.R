@@ -271,7 +271,7 @@ test_that("Error is thrown without an outgroup", {
 
 test_that("a more complicated model works", {
   if (!has_seqgen()) skip("seqgen not installed")
-  model <- coal_model(c(5,5,2), 1, 100) +
+  model <- coal_model(c(5, 5, 2), 1, 100) +
     feat_mutation(par_range("theta", .1, 40), model = "HKY",
                   base_frequencies = c(0.26, 0.20, 0.22, 0.32),
                   tstv_ratio = 1.26) +

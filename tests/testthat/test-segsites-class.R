@@ -27,20 +27,20 @@ test_that("fixed positions are removed on initialization", {
 
 
 test_that("subsetting of segsites works", {
-  segsites <- create_segsites((matrix(c(1, 1, 0, 1, 1,
+  segsites <- create_segsites(matrix(c(1, 1, 0, 1, 1,
                                         0, 0, 0, 1, 0,
-                                        0, 1, 1, 0, 1), 3, 5, byrow = TRUE)),
+                                        0, 1, 1, 0, 1), 3, 5, byrow = TRUE),
                               c(.1, .2, .5, .7, .75))
 
   expect_equal(dim(segsites), c(3, 5))
-  ss_subset <- segsites[ , 1:2]
+  ss_subset <- segsites[, 1:2]
   expect_equal(dim(ss_subset), c(3, 2))
-  expect_equivalent(as.matrix(ss_subset), as.matrix(segsites)[ , 1:2])
+  expect_equivalent(as.matrix(ss_subset), as.matrix(segsites)[, 1:2])
   expect_equal(get_positions(ss_subset), get_positions(segsites)[1:2])
 
-  expect_equal(dim(segsites[ , 1]), c(3, 1))
-  expect_equal(dim(segsites[1:2 , ]), c(2, 3))
-  expect_equal(dim(segsites[-2 , 1:3]), c(2, 2))
+  expect_equal(dim(segsites[, 1]), c(3, 1))
+  expect_equal(dim(segsites[1:2, ]), c(2, 3))
+  expect_equal(dim(segsites[-2, 1:3]), c(2, 2))
 })
 
 

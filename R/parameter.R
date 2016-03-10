@@ -163,7 +163,7 @@ range_par_class <- R6Class("range_par", inherit = named_par_class,
                            "and", private$range[2], "\n")
     },
     check_value = function(value) {
-      if ((!is.numeric(value)) || length(value) != 1) {
+      if (!is.numeric(value) || length(value) != 1) {
         stop("The value for ", private$name, " must be a single numeric value")
       }
       if (value < private$range[1] - 1e-5 || value > private$range[2] + 1e-5) {

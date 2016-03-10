@@ -15,15 +15,15 @@ conv_to_ms_arg.seg_sites_feat <- function(feature, model) {
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.seg_sites_feat <- conv_to_ms_arg.seg_sites_feat
+conv_to_msms_arg.seg_sites_feat <- conv_to_ms_arg.seg_sites_feat #nolint
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.seg_sites_feat <- conv_to_ms_arg.seg_sites_feat
+conv_to_scrm_arg.seg_sites_feat <- conv_to_ms_arg.seg_sites_feat #nolint
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.seg_sites_feat <- conv_to_ms_arg.seg_sites_feat
+conv_to_seqgen_arg.seg_sites_feat <- conv_to_ms_arg.seg_sites_feat #nolint
 
 
 
