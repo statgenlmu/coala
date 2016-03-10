@@ -1,6 +1,11 @@
 language: r
 cache: packages
 
+r:
+  - oldrel
+  - release
+  - devel
+
 before_install:
   - mkdir ~/bin
   - wget -P ~/bin/ https://dl.dropboxusercontent.com/u/24814716/msms.jar
