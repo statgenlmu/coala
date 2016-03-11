@@ -48,7 +48,7 @@ conv_for_trios <- function(seg_sites, model) {
     pos[middle] <- (pos[middle] - borders[2]) * total_length / locus_length[3]
     pos[right] <- (pos[right] - borders[4]) * total_length / locus_length[5]
 
-    trio_segsites <- seg_sites[[i]][ , left | middle | right]
+    trio_segsites <- seg_sites[[i]][, left | middle | right]
 
     seg_sites[[i]] <- create_segsites(as.matrix(trio_segsites),
                                       pos[left | middle | right],

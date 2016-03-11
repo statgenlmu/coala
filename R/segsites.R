@@ -59,7 +59,7 @@ print.segsites <- function(x, ...) {
 
 
 #' @export
-as.matrix.segsites <- function(x, ...) get_snps(x)
+as.matrix.segsites <- function(x, ...) get_snps(x) #nolint
 
 #' @export
 dim.segsites <- function(x) dim(get_snps(x))
@@ -72,9 +72,9 @@ is_segsites <- function(segsites) inherits(segsites, "segsites")
 
 
 create_test_segsites <- function() {
-  create_segsites((matrix(c(1, 1, 0, 1, 1,
+  create_segsites(matrix(c(1, 1, 0, 1, 1,
                             0, 0, 0, 1, 0,
-                            0, 1, 1, 0, 1), 3, 5, byrow = TRUE)),
+                            0, 1, 1, 0, 1), 3, 5, byrow = TRUE),
                   c(.1, .2, .5, .7, .75))
 }
 
@@ -139,12 +139,12 @@ create_locus_trio <- function(left, middle, right) {
 as.segsites <- function(data, ...) UseMethod("as.segsites")
 
 #' @export
-as.segsites.default <- function(data, ...) {
+as.segsites.default <- function(data, ...) { #nolint
   stop("Unknown data format")
 }
 
 #' @export
-as.segsites.list <- function(data, ...) {
+as.segsites.list <- function(data, ...) { #nolint
   assert_that(all(vapply(data, is_segsites, logical(1))))
   data
 }

@@ -3,10 +3,10 @@ context("SumStat Trees")
 test_that("tree summary statistics require files", {
   expect_false(requires_files(coal_model(5)))
   expect_false(requires_segsites(coal_model(5)))
-  expect_true(requires_trees((coal_model(5) + sumstat_trees())))
-  expect_true(requires_trees((coal_model(5) + sumstat_sg_trees())))
-  expect_false(requires_segsites((coal_model(5) + sumstat_trees())))
-  expect_false(requires_segsites((coal_model(5) + sumstat_sg_trees())))
+  expect_true(requires_trees(coal_model(5) + sumstat_trees()))
+  expect_true(requires_trees(coal_model(5) + sumstat_sg_trees()))
+  expect_false(requires_segsites(coal_model(5) + sumstat_trees()))
+  expect_false(requires_segsites(coal_model(5) + sumstat_sg_trees()))
 })
 
 
@@ -70,8 +70,8 @@ test_that("simulating trees for seq-gen works", {
   model <- generate_tree_model(model_theta_tau() +
                                  feat_recombination(1) +
                                  locus_averaged(2, 10) +
-                                 locus_trio(locus_length = c(1,3,5),
-                                            distance = c(2,4)))
+                                 locus_trio(locus_length = c(1, 3, 5),
+                                            distance = c(2, 4)))
 
   expect_true(requires_trees(model))
   stats <- simulate(model, pars = c(1, 5))

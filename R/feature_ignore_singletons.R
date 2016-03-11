@@ -38,23 +38,23 @@ has_ign_singletons <- function(model) {
 remove_singletons <- function(segsites_list) {
   lapply(segsites_list, function(segsites) {
     is_singleton <- colSums(get_snps(segsites)) == 1
-    segsites[ , !is_singleton]
+    segsites[, !is_singleton]
   })
 }
 
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_ms_arg.ign_singletons <- ignore_par
+conv_to_ms_arg.ign_singletons <- ignore_par #nolint
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_msms_arg.ign_singletons <- ignore_par
+conv_to_msms_arg.ign_singletons <- ignore_par #nolint
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_scrm_arg.ign_singletons <- ignore_par
+conv_to_scrm_arg.ign_singletons <- ignore_par #nolint
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
-conv_to_seqgen_arg.ign_singletons <- ignore_par
+conv_to_seqgen_arg.ign_singletons <- ignore_par #nolint

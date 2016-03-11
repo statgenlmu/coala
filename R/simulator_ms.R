@@ -64,7 +64,7 @@ ms_class <- R6Class("ms", inherit = simulator_class,
           file <- tempfile("ms")
           ret <- phyclust::ms(sample_size,
                               sim_cmd[j, "locus_number"],
-                              sim_cmd[j, "command"],
+                              sim_cmd[j, "command"], #nolint
                               temp.file = file)
 
           if (!file.exists(file)) stop("ms simulation failed")
@@ -84,7 +84,7 @@ ms_class <- R6Class("ms", inherit = simulator_class,
       }
 
       cmds <- lapply(sim_cmds, function(cmd) {
-        paste("ms", sample_size, cmd[ , 1], cmd[ , 2])
+        paste("ms", sample_size, cmd[, 1], cmd[, 2])
       })
 
       sum_stats <- calc_sumstats_from_sim(output$segsites, output$trees,

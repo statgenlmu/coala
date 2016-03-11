@@ -106,7 +106,7 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
       }
 
       cmds <- lapply(sim_cmds, function(cmd) {
-        paste("msms", sample_size, cmd[ , 1], cmd[ , 2])
+        paste("msms", sample_size, cmd[, 1], cmd[, 2])
       })
 
       sum_stats <- calc_sumstats_from_sim(output$segsites, output$trees, files,

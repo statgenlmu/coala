@@ -16,7 +16,7 @@
 #' @seealso An example and additional instructions are provided in the
 #'          `coala-data-import` vignette
 #' @export
-as.segsites.GENOME <- function(data, only_synonymous = FALSE, ...) {
+as.segsites.GENOME <- function(data, only_synonymous = FALSE, ...) { #nolint
   require_package("PopGenome")
 
   lapply(which(data@n.valid.sites > 0), function(locus_number) {
@@ -40,7 +40,7 @@ as.segsites.GENOME <- function(data, only_synonymous = FALSE, ...) {
       syn[is.na(syn)] <- FALSE
       seg_sites <- bam[c(pops, outgroup), syn, drop = FALSE]
     } else {
-      seg_sites <- bam[c(pops, outgroup), , drop = FALSE]
+      seg_sites <- bam[c(pops, outgroup), , drop = FALSE] #nolint
     }
     stopifnot(!is.null(seg_sites))
 
