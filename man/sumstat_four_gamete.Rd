@@ -51,6 +51,11 @@ of derived and ancestral alleles at the SNPs are observed in a gamete/a
 haplotype. Under an Infinite-Sites mutation model, a violation indicates that
 there must have been at least one recombination event between the SNPs.
 }
+\section{Unphased Data}{
+
+For unphased data, the four gamete condition is only counted as violated if
+it is violated for all possible phasing of the data.
+}
 \examples{
 model <- coal_model(5, 2) +
  feat_mutation(50) +

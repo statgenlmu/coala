@@ -131,15 +131,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // calc_four_gamete_stat
-NumericMatrix calc_four_gamete_stat(const List seg_sites_list, const IntegerVector individuals, const NumericMatrix locus_length);
-RcppExport SEXP coala_calc_four_gamete_stat(SEXP seg_sites_listSEXP, SEXP individualsSEXP, SEXP locus_lengthSEXP) {
+NumericMatrix calc_four_gamete_stat(const ListOf<coala::SegSites> seg_sites_list, const IntegerVector individuals, const NumericMatrix locus_length, const unsigned int ploidy);
+RcppExport SEXP coala_calc_four_gamete_stat(SEXP seg_sites_listSEXP, SEXP individualsSEXP, SEXP locus_lengthSEXP, SEXP ploidySEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const List >::type seg_sites_list(seg_sites_listSEXP);
+    Rcpp::traits::input_parameter< const ListOf<coala::SegSites> >::type seg_sites_list(seg_sites_listSEXP);
     Rcpp::traits::input_parameter< const IntegerVector >::type individuals(individualsSEXP);
     Rcpp::traits::input_parameter< const NumericMatrix >::type locus_length(locus_lengthSEXP);
-    __result = Rcpp::wrap(calc_four_gamete_stat(seg_sites_list, individuals, locus_length));
+    Rcpp::traits::input_parameter< const unsigned int >::type ploidy(ploidySEXP);
+    __result = Rcpp::wrap(calc_four_gamete_stat(seg_sites_list, individuals, locus_length, ploidy));
     return __result;
 END_RCPP
 }

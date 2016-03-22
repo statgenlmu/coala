@@ -12,10 +12,12 @@ stat_four_gamete_class <- R6Class("stat_four_gamete", inherit = sumstat_class,
       super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
+      individuals <- get_population_individuals(model, private$population,
+                                                haploids = !is_unphased(model))
       calc_four_gamete_stat(seg_sites,
-                            get_population_individuals(model,
-                                                      private$population),
-                            get_locus_length_matrix(model))
+                            individuals,
+                            get_locus_length_matrix(model),
+                            ifelse(is_unphased(model), get_ploidy(model), 1))
     }
   )
 )
@@ -31,6 +33,10 @@ stat_four_gamete_class <- R6Class("stat_four_gamete", inherit = sumstat_class,
 #' of derived and ancestral alleles at the SNPs are observed in a gamete/a
 #' haplotype. Under an Infinite-Sites mutation model, a violation indicates that
 #' there must have been at least one recombination event between the SNPs.
+#'
+#' @section Unphased Data:
+#' For unphased data, the four gamete condition is only counted as violated if
+#' it is violated for all possible phasing of the data.
 #'
 #' @param name The name of the summary statistic. When simulating a model,
 #'   the value of the statistics are written to an entry of the returned list
