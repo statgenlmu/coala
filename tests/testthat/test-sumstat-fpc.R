@@ -112,6 +112,62 @@ test_that("calc_four_gamete_stat works", {
 })
 
 
+test_that("calc_four_gamete_stat respects unphased data", {
+  snps <- matrix(c(1, 0, 0, 0, 0,
+                   1, 0, 1, 0, 1,
+                   0, 1, 0, 1, 0,
+                   0, 1, 1, 0, 1), 4, byrow = TRUE)
+  seg_sites <- list(create_segsites(snps, c(0.1, 0.12, 0.5, 0.51, 0.61)))
+  locus_length <- matrix(c(0, 0, 100, 0, 0, 1), 1, 6)
+
+  fpc_violations <- calc_four_gamete_stat(seg_sites, 1:2, locus_length, 2)
+  expect_equal(fpc_violations[1, ], c(mid_near = NaN, mid_far = NaN,
+                                      outer = NaN,
+                                      between = NaN, mid = NaN,
+                                      perc_polym = 0.05))
+
+  snps <- matrix(c(1, 0, 0, 0, 0,
+                   1, 0, 1, 0, 1,
+                   0, 1, 1, 0, 1,
+                   0, 1, 0, 0, 1,
+                   0, 0, 1, 0, 1,
+                   0, 0, 1, 0, 1,
+                   1, 1, 0, 1, 1,
+                   1, 1, 1, 1, 1), 8, byrow = TRUE)
+  seg_sites <- list(create_segsites(snps, c(0.1, 0.11, 0.12, 0.13, 0.14)))
+  fpc_violations <- calc_four_gamete_stat(seg_sites, 1:4, locus_length, 2)
+  expect_equal(fpc_violations[1, ], c(mid_near = 1 / 3, mid_far = NaN,
+                                      outer = NaN,
+                                      between = NaN, mid = 1 / 3,
+                                      perc_polym = 0.05))
+
+})
+
+
+test_that("sumstat_four_gamete respects ploidy", {
+  model <- coal_model(4, 1, 100, 2) + sumstat_four_gamete()
+  snps <- matrix(c(1, 0, 0, 0, 0,
+                   1, 0, 1, 0, 1,
+                   0, 1, 1, 0, 1,
+                   0, 1, 0, 0, 1,
+                   0, 0, 1, 0, 1,
+                   0, 0, 1, 0, 1,
+                   1, 1, 0, 1, 1,
+                   1, 1, 1, 1, 1), 8, byrow = TRUE)
+  seg_sites <- list(create_segsites(snps, c(0.1, 0.11, 0.12, 0.13, 0.14)))
+  stats <- calc_sumstats_from_data(model, seg_sites)
+  expect_equal(stats$four_gamete[1, ],
+               c(mid_near = 2 / 3, mid_far = NaN, outer = NaN,
+                 between = NaN, mid = 2 / 3, perc_polym = 0.05))
+
+  model <- model + feat_unphased(2)
+  stats <- calc_sumstats_from_data(model, seg_sites)
+  expect_equal(stats$four_gamete[1, ],
+               c(mid_near = 1 / 3, mid_far = NaN, outer = NaN,
+                 between = NaN, mid = 1 / 3, perc_polym = 0.05))
+})
+
+
 test_that("Simulation the statistic works", {
   model <- coal_model(5, 1) + feat_mutation(5) + sumstat_four_gamete()
   stats <- simulate(model)
