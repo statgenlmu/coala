@@ -23,10 +23,11 @@ inline bool is_singleton(const NumericMatrix seg_sites,
                          const size_t snp,
                          const size_t ploidy) {
 
-  size_t mut_count = 0;
+  size_t mut_count = 0, ind_offset;
   for (size_t k = 0; k < n_ind; ++k) {
+    ind_offset = (individuals[k] - 1) * ploidy;
     for (size_t l = 0; l < ploidy; ++l) {
-      mut_count += seg_sites((individuals[k]-1) * ploidy + l, snp);
+      mut_count += seg_sites(ind_offset + l, snp);
     }
   }
 
@@ -101,16 +102,20 @@ NumericMatrix calc_four_gamete_stat(const ListOf<coala::SegSites> seg_sites_list
         std::fill(combinations.begin(), combinations.end(), false);
 
         // Count combinations
-        size_t n[2];
+        size_t n[2], ind_offset;
         for (size_t k = 0; k < n_ind; ++k) {
+          ind_offset = (individuals[k] - 1) * ploidy;
           n[0] = 0;
           n[1] = 0;
           for (size_t l = 0; l < ploidy; ++l) {
-            n[0] += snps_matrix((individuals[k]-1) * ploidy + l, idx_i);
-            n[1] += snps_matrix((individuals[k]-1) * ploidy + l, idx_j);
+            n[0] += snps_matrix(ind_offset + l, idx_i);
+            n[1] += snps_matrix(ind_offset + l, idx_j);
           }
-          if ((n[0] == 0 || n[0] == ploidy) && (n[1] == 0 || n[1] == ploidy)) {
-            combinations[2 * (n[0] == ploidy) + (n[1] == ploidy)] = true;
+          if ((n[0] == 0 || n[0] == ploidy) || (n[1] == 0 || n[1] == ploidy)) {
+            for (size_t l = 0; l < ploidy; ++l) {
+              combinations[2 * snps_matrix(ind_offset + l, idx_i) +
+                            snps_matrix(ind_offset + l, idx_j)] = true;
+            }
           }
         }
 
