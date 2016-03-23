@@ -138,10 +138,11 @@ get_locus_number <- function(model, group = NA, ignore_variation = FALSE) {
 #'   from the population, even if the model is polyploid.
 #' @export
 get_population_individuals <- function(model, pop,
-                                      zero_indexed = FALSE,
-                                      haploids = TRUE) {
+                                       zero_indexed = FALSE,
+                                       haploids = TRUE) {
 
-  sample_size <- get_sample_size(model)
+  sample_size <- get_sample_size(model, !haploids)
+  if (!haploids) sample_size <- sample_size / get_ploidy(model)
   outgroup <- get_outgroup(model)
 
   if (!is.na(outgroup)) {
@@ -149,7 +150,6 @@ get_population_individuals <- function(model, pop,
     sample_size[outgroup] <- 0
   }
 
-  if (!haploids) sample_size <- sample_size / get_ploidy(model)
   if (pop == "all") return(1:sum(sample_size))
 
   if (!pop %in% get_populations(model)) stop("Invalid population")

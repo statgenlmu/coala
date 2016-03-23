@@ -17,7 +17,8 @@ stat_four_gamete_class <- R6Class("stat_four_gamete", inherit = sumstat_class,
       calc_four_gamete_stat(seg_sites,
                             individuals,
                             get_locus_length_matrix(model),
-                            ifelse(is_unphased(model), get_ploidy(model), 1))
+                            ifelse(is_unphased(model),
+                                   get_samples_per_ind(model), 1))
     }
   )
 )
