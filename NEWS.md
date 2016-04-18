@@ -3,7 +3,8 @@ coala 0.5.0 (in development)
 
 * The four gamete condition now respects unphased data. If the data is unphased,
   the four gamete condition is only counted as violated if it is violated for 
-  all possible phasing of the data.
+  all possible phasing of the data (#162).
+* Skip unittests if `testthat` is not available.
 
 
 
