@@ -9,6 +9,8 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericVector parse_ms_positions(const std::string line) {
   if (line.size() < 11 || line.substr(0, 11) != "positions: ") {
+    Rcout << "Error: Failed to parse positions from ms\' output" << std::endl
+          << "Offending line: '" << line << "'" << std::endl;
     stop("Failed to read positions from ms' output");
   }
 

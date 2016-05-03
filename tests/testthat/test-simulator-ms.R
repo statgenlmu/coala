@@ -7,9 +7,9 @@ test_that("parsing positions works", {
   expect_equal(parse_ms_positions("positions: 0.1 0.2 0.3 0.4 0.5"), 1:5 / 10)
   expect_equal(parse_ms_positions("positions: 0.1"), 0.1)
 
-  expect_error(parse_ms_positions("0.1 0.2 0.3"))
-  expect_error(parse_ms_positions(" "))
-  expect_error(parse_ms_positions("segsites: 0"))
+  expect_output(expect_error(parse_ms_positions("0.1 0.2 0.3")))
+  expect_output(expect_error(parse_ms_positions(" ")))
+  expect_output(expect_error(parse_ms_positions("segsites: 0")))
 })
 
 
