@@ -26,7 +26,7 @@ scrm_create_cmd_template <- function(model) {
 scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
   private = list(
     name = "scrm",
-    version = paste0("scrm_", packageDescription("scrm", fields = "Version"))
+    version = packageDescription("scrm", fields = "Version")
   ),
   public = list(
     simulate = function(model, parameters) {
@@ -63,9 +63,14 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
           }
 
           if (requires_trees(model)) {
-            split_tree <- lapply(stats$trees, function(x) {
-              strsplit(x, split = "\n", fixed = TRUE)[[1]]
-            })
+            if (packageVersion("scrm") < "1.7.2") {
+              split_tree <- lapply(stats$trees, function(x) {
+                strsplit(x, split = "\n", fixed = TRUE)[[1]]
+              })
+            } else {
+              split_tree <- stats$trees
+            }
+
             trees[cl:(cl + cmds[i, 1] - 1)] <- split_tree[]  #nolint
           }
           cl <- cl + cmds[i, 1]
@@ -73,6 +78,7 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
       }
 
       seg_sites <- lapply(seg_sites, function(x) {
+
         if (!is_segsites(x)) {
           x <- create_segsites(x, as.numeric(colnames(x)), check = FALSE)
         }

@@ -53,10 +53,10 @@ test_that("unphasing works", {
     c(ncol(phased[[1]]), sum(as.matrix(phased[[1]])[1, ]))
   })
 
-  expect_less_than(sum(abs(table(n_snps[1, ]) / ncol(n_snps) -
-                             dbinom(0:4, 4, .5))), 0.1)
-  expect_less_than(sum(abs(table(n_snps[2, ]) / ncol(n_snps) -
-                             dbinom(0:4, 4, .25))), 0.1)
+  expect_lt(sum(abs(table(n_snps[1, ]) / ncol(n_snps) -
+                      dbinom(0:4, 4, .5))), 0.1)
+  expect_lt(sum(abs(table(n_snps[2, ]) / ncol(n_snps) -
+                      dbinom(0:4, 4, .25))), 0.1)
 
 
   seg_sites[[1]] <- create_segsites(matrix(c(0, 1, 0, 1,
