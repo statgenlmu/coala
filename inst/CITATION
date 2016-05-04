@@ -1,0 +1,13 @@
+bibentry(
+  bibtype = 'Article',
+  title = '{Coala}: an {R} framework for coalescent simulation',
+  author = c(person('Paul R. Staab'),
+             person('Dirk Metzler')),
+  year = 2016,
+  journal = 'Bioinformatics',
+  #volume = 31,
+  #number = 10,
+  #pages = '1680-1682',
+  doi = '10.1093/bioinformatics/btw098',
+  url = 'http://bioinformatics.oxfordjournals.org/content/early/2016/03/09/bioinformatics.btw098.abstract'
+)
