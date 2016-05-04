@@ -69,11 +69,15 @@ migration_class <- R6Class("migration", inherit = feature_class,
 feat_migration <- function(rate, pop_from = NULL, pop_to = NULL,
                            symmetric = FALSE, time = "0") {
   if (symmetric) {
+    if (!(is.null(pop_from) && is.null(pop_to))) {
+      warning("Ignoring 'pop_form' and 'pop_to' because 'symmetric' is TRUE")
+    }
     return(migration_class$new(rate, time = time, symmetric = TRUE))
-  } else {
-    return(migration_class$new(rate, pop_from, pop_to, time))
   }
+
+  migration_class$new(rate, pop_from, pop_to, time)
 }
+
 
 #' @describeIn conv_to_ms_arg Feature conversion
 #' @export
