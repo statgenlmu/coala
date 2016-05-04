@@ -14,6 +14,14 @@ test_that("Creation of migration features works", {
 })
 
 
+test_that("Using symmetric mig with given populations gives a warnings", {
+  expect_silent(feat_migration(1.0, symmetric = TRUE))
+  expect_warning(feat_migration(1.0, 1, 2, symmetric = TRUE))
+  expect_warning(feat_migration(1.0, pop_from = 1, symmetric = TRUE))
+  expect_warning(feat_migration(1.0, pop_to = 2, symmetric = TRUE))
+})
+
+
 test_that("generating scrm cmd for growth works", {
   model <- coal_model(4:5, 1) + feat_migration(par_range("m", 1, 2), 2, 1)
   expect_equal(get_simulator("scrm")$get_cmd(model),

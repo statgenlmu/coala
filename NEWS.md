@@ -5,7 +5,9 @@ coala 0.5.0 (in development)
   the four gamete condition is only counted as violated if it is violated for 
   all possible phasing of the data (#162).
 * Skip unittests if `testthat` is not available (#165).
-* Add compatability with upcoming version 1.7.2-0 of  `scrm`.
+* Add compatability with upcoming version 1.7.2-0 of  `scrm` (#167).
+* Add a warning is `symmetric` is used together with `pop_from` or `pop_to`
+  in `feat_migration`.
 
 
 
