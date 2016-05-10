@@ -37,43 +37,23 @@ conv_to_seqgen_arg.default <- function(feature, model) {
 
 
 sg_generate_opts <- function(model, parameters, locus,
-                             seeds, for_cmd = FALSE) {
+                             seed = NULL, for_cmd = FALSE) {
   locus_lengths <- get_locus_length(model, group = locus, total = FALSE)
 
   if (length(locus_lengths) == 5) {
     locus_lengths <- locus_lengths[c(1, 3, 5)]
   }
 
-  cmd <- sg_generate_opt_cmd(model)
+  cmd <- get_simulator("seqgen")$create_cmd_template(model)
   #print(cmd)
 
   # Fill the parameters in the template
   sapply(seq(along = locus_lengths), function(i) {
     par_envir <- create_par_env(model, parameters, locus = locus,
                                 locus_length = locus_lengths[i],
-                                seed = seeds[i], for_cmd = for_cmd)
+                                for_cmd = for_cmd)
     paste(eval(parse(text = cmd[[i]]), envir = par_envir), collapse = " ")
   })
-}
-
-
-sg_generate_opt_cmd <- function(model) {
-  cmd <- read_cache(model, "seqgen_cmd")
-
-  if (is.null(cmd)) {
-    if (has_trios(model)) is_outer <- c(TRUE, FALSE, TRUE)
-    else is_outer <- FALSE
-
-    cmd <- lapply(is_outer, function(outer) {
-      cmd <- paste(vapply(model$features, conv_to_seqgen_arg,
-                          FUN.VALUE = character(1), model = model),
-                   collapse = "")
-      cmd <- paste0("c('", cmd, "')")
-    })
-
-    cache(model, "seqgen_cmd", cmd)
-  }
-  cmd
 }
 
 
@@ -101,8 +81,28 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
 
       super$initialize(priority)
     },
+    create_cmd_template = function(model) {
+      cmd <- read_cache(model, "seqgen_cmd")
+
+      if (is.null(cmd)) {
+        if (has_trios(model)) is_outer <- c(TRUE, FALSE, TRUE)
+        else is_outer <- FALSE
+
+        cmd <- lapply(is_outer, function(outer) {
+          cmd <- paste(vapply(model$features, conv_to_seqgen_arg,
+                              FUN.VALUE = character(1), model = model),
+                       collapse = "")
+          cmd <- paste0("c('", cmd, "')")
+        })
+
+        cache(model, "seqgen_cmd", cmd)
+      }
+      cmd
+    },
     call = function(args) {
-      suppressWarnings(results <- system2(private$binary, args, stdout = TRUE))
+      suppressWarnings(results <- system2(private$binary,
+                                          paste(args, "-z", sample_seed(1)),
+                                          stdout = TRUE))
       results
     },
     simulate = function(model, parameters = numeric()) {
@@ -119,9 +119,7 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
       # Call seq-gen for each locus group
       seg_sites <- lapply(1:length(trees), function(locus_group) {
 
-        seqgen_args <-
-          sg_generate_opts(model, parameters, locus_group,
-                           sample_seed(length(trees[[locus_group]])))
+        seqgen_args <- sg_generate_opts(model, parameters, locus_group)
 
         if (length(seqgen_args) == 1) {
           locus_length <- get_locus_length_matrix(model)[locus_group, 3]

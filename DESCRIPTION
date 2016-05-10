@@ -72,6 +72,7 @@ Collate:
     'sample_seed.R'
     'search_executable.R'
     'segsites.R'
+    'simulation_tasks.R'
     'simulator_class.R'
     'simulator_ms.R'
     'simulator_msms.R'

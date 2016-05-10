@@ -197,6 +197,5 @@ conv_to_seqgen_arg.mutation <- function(feature, model) {
          rates, " ",
          "-l', locus_length, '",
          "-s', par(", feature$get_rate(), " / locus_length), '",
-         "-p', locus_length + 1, '",
-         "-z', par(seed), '-q")
+         "-p', locus_length + 1, '-q")
 }

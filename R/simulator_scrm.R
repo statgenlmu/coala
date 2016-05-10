@@ -29,8 +29,9 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
     version = packageDescription("scrm", fields = "Version")
   ),
   public = list(
+    create_cmd_template = scrm_create_cmd_template,
     simulate = function(model, parameters) {
-      cmd_template <- scrm_create_cmd_template(model)
+      cmd_template <- self$create_cmd_template(model)
       sample_size <- sum(get_sample_size(model, for_sim = TRUE))
 
       sim_cmds <- lapply(1:get_locus_group_number(model), function(group) {

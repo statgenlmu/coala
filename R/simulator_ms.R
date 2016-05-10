@@ -32,7 +32,7 @@ ms_class <- R6Class("ms", inherit = simulator_class,
       assert_that(is.numeric(priority) && length(priority) == 1)
       private$priority <- priority
     },
-    create_cmd_tempalte = function(model) {
+    create_cmd_template = function(model) {
       cmd <- read_cache(model, "ms_cmd")
       if (is.null(cmd)) {
         cmd <- paste(vapply(model$features, conv_to_ms_arg,
@@ -48,7 +48,7 @@ ms_class <- R6Class("ms", inherit = simulator_class,
       stopifnot(length(parameters) == 0 | all(is.numeric(parameters)))
 
       # Generate the simulation commands
-      cmd_template <- self$create_cmd_tempalte(model)
+      cmd_template <- self$create_cmd_template(model)
       sample_size <- sum(get_sample_size(model, for_sim = TRUE))
 
       sim_cmds <- lapply(1:get_locus_group_number(model), function(group) {
@@ -95,7 +95,7 @@ ms_class <- R6Class("ms", inherit = simulator_class,
       sum_stats
     },
     get_cmd = function(model) {
-      template <- self$create_cmd_tempalte(model)
+      template <- self$create_cmd_template(model)
       cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
       paste("ms",
             sum(get_sample_size(model, TRUE)),

@@ -200,17 +200,17 @@ test_that("ms works with scientific notation", {
   ms <- get_simulator("ms")
 
   model <- coal_model(5, 1, 1e8) + feat_recombination(1)
-  template <- ms$create_cmd_tempalte(model)
+  template <- ms$create_cmd_template(model)
   opts <- fill_cmd_template(template, model, numeric(0), 1)
   expect_true(grepl("100000000", opts$command[1]))
 
   model <- coal_model(5, 1, 1000) + feat_recombination(1e8)
-  template <- ms$create_cmd_tempalte(model)
+  template <- ms$create_cmd_template(model)
   opts <- fill_cmd_template(template, model, numeric(0), 1)
   expect_true(grepl("100000000", opts$command[1]))
 
   model <- coal_model(5, 1, 1000) + feat_mutation(1e8)
-  template <- ms$create_cmd_tempalte(model)
+  template <- ms$create_cmd_template(model)
   opts <- fill_cmd_template(template, model, numeric(0), 1)
   expect_true(grepl("100000000", opts$command[1]))
 })

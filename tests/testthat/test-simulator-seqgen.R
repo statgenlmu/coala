@@ -152,7 +152,6 @@ test_that("test.sg_generate_opts", {
   opts <- strsplit(opts, " ")[[1]]
   expect_true("-l" %in% opts)
   expect_true("-p" %in% opts)
-  expect_true("-z" %in% opts)
   expect_true("-q" %in% opts)
   expect_true("-mHKY" %in% opts)
   expect_true("-t" %in% opts)
