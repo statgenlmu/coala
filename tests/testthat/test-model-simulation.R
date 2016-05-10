@@ -4,10 +4,10 @@ test_that("basic models can be simulated", {
   expect_error(simulate(model_theta_tau(), pars = 1))
   expect_error(simulate(model_theta_tau(), pars = 1:3))
   expect_error(simulate(model_theta_tau(), pars = c(2, 50)))
-  sum.stats <- simulate(model_theta_tau(), pars = c(1, 5))
-  expect_true(is.list(sum.stats))
-  expect_false(is.null(sum.stats$jsfs))
-  expect_true(sum(sum.stats$jsfs) > 0)
+  sum_stats <- simulate(model_theta_tau(), pars = c(1, 5))
+  expect_true(is.list(sum_stats))
+  expect_false(is.null(sum_stats$jsfs))
+  expect_true(sum(sum_stats$jsfs) > 0)
 })
 
 

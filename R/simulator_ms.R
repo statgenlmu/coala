@@ -44,60 +44,41 @@ ms_class <- R6Class("ms", inherit = simulator_class,
 
       cmd
     },
-    simulate = function(model, parameters=numeric()) {
-      stopifnot(length(parameters) == 0 | all(is.numeric(parameters)))
-
-      # Generate the simulation commands
-      cmd_template <- self$create_cmd_template(model)
+    call = function(sample_size, n_loci, command) {
+      output <- tempfile("ms")
+      phyclust::ms(sample_size, n_loci, command, temp.file = output)
+      if (!file.exists(output)) stop("ms simulation failed")
+      list(file = output, cmd = paste("ms", sample_size, n_loci, command))
+    },
+    simulate = function(model, n_loci, command) {
       sample_size <- sum(get_sample_size(model, for_sim = TRUE))
 
-      sim_cmds <- lapply(1:get_locus_group_number(model), function(group) {
-        fill_cmd_template(cmd_template, model, parameters, group)
-      })
+      # Call ms
+      result <- self$call(sample_size, n_loci, command)
 
-      wd <- getwd()
-      setwd(tempdir())
-
-      # Do the actual simulation
-      files <- lapply(sim_cmds, function(sim_cmd) {
-        vapply(1:nrow(sim_cmd), function(j) {
-          file <- tempfile("ms")
-          ret <- phyclust::ms(sample_size,
-                              sim_cmd[j, "locus_number"],
-                              sim_cmd[j, "command"], #nolint
-                              temp.file = file)
-
-          if (!file.exists(file)) stop("ms simulation failed")
-          file
-        }, character(1))
-      })
-
-      setwd(wd)
-
-      # Parse the output and calculate summary statistics
+      # Parse the output
       if (requires_segsites(model) || requires_trees(model)) {
-        output <- parse_ms_output(files, #nolint
+        output <- parse_ms_output(list(result$file),
                                   get_sample_size(model, for_sim = TRUE),
                                   get_locus_number(model))
       } else {
         output <- list(seg_sites = NULL, trees = NULL)
       }
 
-      cmds <- lapply(sim_cmds, function(cmd) {
-        paste("ms", sample_size, cmd[, 1], cmd[, 2])
-      })
+      # Add the file if needed
+      if (requires_files(model)) output$file <- result$file
+      else unlink(result$file)
 
-      sum_stats <- calc_sumstats_from_sim(output$segsites, output$trees,
-                                          files, model, parameters, cmds, self)
+      # Add the simulation cmd
+      output$cmd <- result$cmd
+      output$simulator <- self
 
-      # Clean Up
-      unlink(unlist(files))
-      sum_stats
+      output
     },
     get_cmd = function(model) {
       template <- self$create_cmd_template(model)
       cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
-      paste("ms",
+      paste(self$get_name(),
             sum(get_sample_size(model, TRUE)),
             cmd[1, "locus_number"],
             cmd[1, "command"])

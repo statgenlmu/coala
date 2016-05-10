@@ -2,11 +2,15 @@ generate_sim_tasks <- function(model, parameters) {
   simulator <- select_simprog(model)
   if (is.null(simulator)) stop("No simulator found")
 
-  do.call(rbind, lapply(seq_len(get_locus_group_number(model)), function(i) {
-    cmd_template <- simulator$create_cmd_template(model)
-    cmds <- fill_cmd_template(cmd_template, model, parameters, i)
-    data.frame(simulator = simulator$get_name(), cmds, stringsAsFactors = FALSE)
+  locus_groups <- seq_len(get_locus_group_number(model))
+  tasks <- do.call(rbind, lapply(locus_groups, function(i) {
+      cmd_template <- simulator$create_cmd_template(model)
+      cmds <- fill_cmd_template(cmd_template, model, parameters, i)
+      data.frame(simulator = simulator$get_name(), cmds,
+                 stringsAsFactors = FALSE)
   }))
+
+  tasks
 }
 
 
@@ -53,4 +57,27 @@ reduce_sim_commands <- function(sim_commands) {
              command = grouped_commands,
              stringsAsFactors = FALSE,
              row.names = NULL)
+}
+
+
+combine_results <- function(sim_results) {
+  results <- list()
+
+  if (!is.null(sim_results[[1]]$seg_sites)) {
+    results$seg_sites <-
+      do.call(c, lapply(sim_results, function(x) x$seg_sites))
+  }
+
+  if (!is.null(sim_results[[1]]$trees)) {
+    results$trees <- do.call(c, lapply(sim_results, function(x) x$trees))
+  }
+
+  if (!is.null(sim_results[[1]]$files)) {
+    results$files <- do.call(c, lapply(sim_results, function(x) x$files))
+  }
+
+  results$cmds <- do.call(list, lapply(sim_results, function(x) x$cmd))
+  results$simulators <- do.call(list, lapply(sim_results,
+                                             function(x) x$simulator))
+  results
 }

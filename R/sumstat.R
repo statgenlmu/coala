@@ -110,13 +110,9 @@ calc_sumstats_from_sim <- function(seg_sites, trees, files, model,
   if (missing(pars)) pars <- numeric(0)
   assert_that(is.model(model))
 
-  if (is.list(cmds) && simulator$get_name() != "seqgen") {
-    cmds <- do.call(c, cmds)
-  }
-
   # Process seg_sites for trios and unphase if neccessary
   if (requires_segsites(model)) {
-    if (has_trios(model) && simulator$get_name() != "seqgen") {
+    if (has_trios(model) && simulator[[1]]$get_name() != "seqgen") {
       seg_sites <- conv_for_trios(seg_sites, model)
     }
 
@@ -127,8 +123,10 @@ calc_sumstats_from_sim <- function(seg_sites, trees, files, model,
     }
   }
 
+  simulator_info <- lapply(simulator, function(x) x$get_info())
+
   calc_sumstats(model, seg_sites, trees, files,
-                pars = pars, cmds = cmds, simulator = simulator$get_info())
+                pars = pars, cmds = cmds, simulator = simulator_info)
 }
 
 

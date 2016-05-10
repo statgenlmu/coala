@@ -112,6 +112,6 @@ List parse_ms_output(const List file_names,
 
   if (locus != loci_number - 1) stop("Too few loci in ms output");
 
-  return List::create(_["segsites"] = seg_sites,
+  return List::create(_["seg_sites"] = seg_sites,
                       _["trees"] = trees);
 }

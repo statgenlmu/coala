@@ -95,6 +95,8 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
           cmd <- paste0("c('", cmd, "')")
         })
 
+        tree_model <- generate_tree_model(model)
+
         cache(model, "seqgen_cmd", cmd)
       }
       cmd
@@ -107,7 +109,6 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
     },
     simulate = function(model, parameters = numeric()) {
       # Simulate the ancestral trees
-      tree_model <- generate_tree_model(model)
       tree_sim_data <- simulate.coalmodel(tree_model, pars = parameters)
       trees <- tree_sim_data$trees
       assert_that(!is.null(trees))
