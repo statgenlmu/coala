@@ -114,8 +114,16 @@ select_simprog <- function(model) {
 
 
 create_group_model <- function(model, group) {
-  group_model <- model
-  group_model$loci <- model$loci[group]
+  key <- paste0("group_model_", group)
+  group_model <- read_cache(model, key)
+
+  if (is.null(group_model)) {
+    group_model <- model
+    group_model$loci <- model$loci[group]
+    group_model$id <- get_id()
+    cache(model, key, group_model)
+  }
+
   group_model
 }
 
