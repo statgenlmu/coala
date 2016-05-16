@@ -42,11 +42,9 @@ simulate.coalmodel <- function(object, nsim = 1, seed, ...,
   results <- mclapply(seq(len = nsim), function(i) {
     sim_tasks <- generate_sim_tasks(object, current_pars)
 
-    result <- combine_results(lapply(seq_len(nrow(sim_tasks)), function(i) {
-      simulator <- get_simulator(sim_tasks[i, "simulator"])
-      simulator$simulate(object,
-                         sim_tasks[i, "locus_number"],
-                         sim_tasks[i, "command"])
+    result <- combine_results(lapply(seq_along(sim_tasks), function(i) {
+      simulator <- sim_tasks[[i]]$get_simulator()
+      simulator$simulate(object, sim_tasks[[i]])
     }))
 
     calc_sumstats_from_sim(result$seg_sites, result$trees, result$files,

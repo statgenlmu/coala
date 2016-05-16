@@ -23,20 +23,20 @@ scrm_create_cmd_template <- function(model) {
 #' @importFrom scrm scrm
 #' @include simulator_class.R
 #' @include simulator_ms.R
-scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
+scrm_class <- R6Class('Scrm', inherit = ms_class, #nolint
   private = list(
     name = "scrm",
     version = packageDescription("scrm", fields = "Version")
   ),
   public = list(
     create_cmd_template = scrm_create_cmd_template,
-    simulate = function(model, n_loci, command) {
+    simulate = function(model, sim_task) {
       sample_size <- sum(get_sample_size(model, for_sim = TRUE))
 
       if (requires_files(model)) file <- tempfile("scrm")
       else file <- ""
 
-      cmd <- paste(sample_size, n_loci, command)
+      cmd <- paste(sample_size, sim_task$locus_number, sim_task$get_arg("cmd"))
       result <- scrm(cmd, file)
 
       if (requires_segsites(model)) {
@@ -57,12 +57,6 @@ scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
       if (file != "") result$file <- file
 
       result
-    },
-    get_cmd = function(model) {
-      template <- scrm_create_cmd_template(model)
-      cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
-      paste("scrm",
-            sum(get_sample_size(model, TRUE)), cmd[1, 1], cmd[1, 2])
     },
     get_info = function() c(name = "scrm", version = private$version)
   )

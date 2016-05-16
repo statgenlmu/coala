@@ -44,17 +44,26 @@ ms_class <- R6Class("ms", inherit = simulator_class,
 
       cmd
     },
+    create_task = function(model, pars, locus_number,
+                           locus_id = 1,
+                           eval_pars = TRUE) {
+      tmplt <- self$create_cmd_template(model)
+      cmd <- fill_cmd_template(tmplt, model, pars, locus_id, eval_pars)
+      create_sim_task(self, locus_number,
+                      cmd = cmd,
+                      sample_size = sum(get_sample_size(model, for_sim = TRUE)))
+    },
     call = function(sample_size, n_loci, command) {
       output <- tempfile("ms")
       phyclust::ms(sample_size, n_loci, command, temp.file = output)
       if (!file.exists(output)) stop("ms simulation failed")
       list(file = output, cmd = paste("ms", sample_size, n_loci, command))
     },
-    simulate = function(model, n_loci, command) {
-      sample_size <- sum(get_sample_size(model, for_sim = TRUE))
-
+    simulate = function(model, sim_task) {
       # Call ms
-      result <- self$call(sample_size, n_loci, command)
+      result <- self$call(sim_task$get_arg("sample_size"),
+                          sim_task$locus_number,
+                          sim_task$get_arg("cmd"))
 
       # Parse the output
       if (requires_segsites(model) || requires_trees(model)) {
@@ -76,12 +85,11 @@ ms_class <- R6Class("ms", inherit = simulator_class,
       output
     },
     get_cmd = function(model) {
-      template <- self$create_cmd_template(model)
-      cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
+      task <- self$create_task(model, NULL, get_locus_number(model), 1, FALSE)
       paste(self$get_name(),
-            sum(get_sample_size(model, TRUE)),
-            cmd[1, "locus_number"],
-            cmd[1, "command"])
+            task$get_arg("sample_size"),
+            task$locus_number,
+            task$get_arg("cmd"))
     },
     get_info = function() c(name = "ms",
                             version = paste0("phyclust_",

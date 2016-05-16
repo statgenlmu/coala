@@ -113,6 +113,13 @@ select_simprog <- function(model) {
 }
 
 
+create_group_model <- function(model, group) {
+  group_model <- model
+  group_model$loci <- model$loci[group]
+  group_model
+}
+
+
 add_variation <- function(model) {
   model$has_variation <- TRUE
   model

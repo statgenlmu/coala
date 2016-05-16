@@ -19,6 +19,7 @@ Depends:
     R (>= 3.1.0)
 Imports:
     assertthat (>= 0.1),
+    digest,
     methods,
     parallel,
     R6 (>= 2.0.1),

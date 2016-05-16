@@ -31,20 +31,16 @@ test_that("non-random zero inflation works", {
   model <- coal_model(5, 100) +
     feat_mutation(par_zero_inflation(5, 0.211, FALSE))
   expect_true(has_variation(model))
-  tmplt <- scrm_create_cmd_template(model)
-  cmd_tmplt <- fill_cmd_template(tmplt, model, NULL, locus_group = 1)
-  expect_equivalent(cmd_tmplt, data.frame(locus_number = c(21, 79),
-                                          command = c("-t 0 ", "-t 5 "),
-                                          stringsAsFactors = FALSE))
+  tasks <- generate_sim_tasks(model, NULL)
+  expect_equal(tasks[[1]]$locus_number, 21)
+  expect_equal(tasks[[2]]$locus_number, 79)
 
   model <- coal_model(5, 100) +
     feat_mutation(par_zero_inflation(5, 0.4, FALSE))
   expect_true(has_variation(model))
-  tmplt <- scrm_create_cmd_template(model)
-  cmd_tmplt <- fill_cmd_template(tmplt, model, NULL, locus_group = 1)
-  expect_equivalent(cmd_tmplt, data.frame(locus_number = c(40, 60),
-                                          command = c("-t 0 ", "-t 5 "),
-                                          stringsAsFactors = FALSE))
+  tasks <- generate_sim_tasks(model, NULL)
+  expect_equal(tasks[[1]]$locus_number, 40)
+  expect_equal(tasks[[2]]$locus_number, 60)
 })
 
 
