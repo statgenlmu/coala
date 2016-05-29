@@ -2,7 +2,9 @@
 stat_segsites_class <- R6Class("stat_segsites", inherit = sumstat_class,
   private = list(req_segsites = TRUE),
   public = list(
-    calculate = function(seg_sites, trees, files, model) seg_sites
+    calculate = function(seg_sites, trees, files, model, sim_tasks = NULL) {
+      seg_sites
+    }
   )
 )
 

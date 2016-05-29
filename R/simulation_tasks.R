@@ -47,6 +47,8 @@ simulation_task_class <- R6Class("simulation_task",
 )
 
 
+is_simulation_task <- function(x) inherits(x, "simulation_task")
+
 create_sim_task <- function(simulator, locus_number, ...) {
   simulation_task_class$new(simulator, locus_number, ...)
 }

@@ -51,7 +51,8 @@ simulate.coalmodel <- function(object, nsim = 1, seed, ...,
                            model = object,
                            pars = current_pars,
                            cmds = result$cmds,
-                           simulator = result$simulators)
+                           simulator = result$simulators,
+                           sim_tasks = sim_tasks)
   }, mc.set.seed = TRUE, mc.cores = cores)
 
   if (nsim == 1) return(results[[1]])

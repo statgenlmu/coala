@@ -18,7 +18,7 @@ generate_tree_model <- function(model) {
 
     # Summary Stastics
     tree_model$sum_stats <- create_sumstat_container()
-    tree_model <- tree_model + sumstat_sg_trees()
+    tree_model <- tree_model + sumstat_trees()
 
     cache(model, "tree_model", tree_model)
   }
@@ -81,6 +81,23 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
 
       super$initialize(priority)
     },
+    create_task = function(model, pars, locus_number,
+                           locus_id = 1,
+                           eval_pars = TRUE) {
+      tree_model <- generate_tree_model(model)
+      tree_simulator <- select_simprog(tree_model)
+      tree_task <- tree_simulator$create_task(tree_model, pars, locus_number,
+                                              locus_id, eval_pars)
+
+      cmd <- sg_generate_opts(model, pars, locus_id)
+      trio_dists <- get_locus_length_matrix(model)[1, 1:5]
+
+      create_sim_task(self, locus_number,
+                      cmd = cmd,
+                      trio_dists = trio_dists,
+                      tree_model = tree_model,
+                      tree_task = tree_task)
+    },
     create_cmd_template = function(model) {
       cmd <- read_cache(model, "seqgen_cmd")
 
@@ -95,8 +112,6 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
           cmd <- paste0("c('", cmd, "')")
         })
 
-        tree_model <- generate_tree_model(model)
-
         cache(model, "seqgen_cmd", cmd)
       }
       cmd
@@ -107,72 +122,70 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
                                           stdout = TRUE))
       results
     },
-    simulate = function(model, parameters = numeric()) {
+    simulate = function(model, sim_task) {
+      assert_that(is.model(model))
+      assert_that(is_simulation_task(sim_task))
+
+      trio_dists <- sim_task$get_arg("trio_dists")
+      has_trios <- sum(trio_dists > 0) > 1
+
       # Simulate the ancestral trees
-      tree_sim_data <- simulate.coalmodel(tree_model, pars = parameters)
-      trees <- tree_sim_data$trees
-      assert_that(!is.null(trees))
+      tree_task <- sim_task$get_arg("tree_task")
+      tree_model <- sim_task$get_arg("tree_model")
+      trees <- tree_task$get_simulator()$simulate(tree_model, tree_task)$trees
+      assert_that(is.list(trees))
+      assert_that(length(trees) == tree_task$locus_number)
 
-      cmd_store <- new.env()
-      cmd_store$list <- list()
-      length(cmd_store$list) <- length(trees)
-
-      # Call seq-gen for each locus group
-      seg_sites <- lapply(1:length(trees), function(locus_group) {
-
-        seqgen_args <- sg_generate_opts(model, parameters, locus_group)
-
-        if (length(seqgen_args) == 1) {
-          locus_length <- get_locus_length_matrix(model)[locus_group, 3]
-        } else {
-          locus_length <- get_locus_length_matrix(model)[locus_group,
-                                                         c(1, 3, 5)]
-        }
-
-        cmd_store$list[[locus_group]] <- rep(NA, length(seqgen_args))
-
-        # Call seq-gen of each trio locus
-        group_loci <- lapply(seq(along = seqgen_args), function(trio_locus) {
-          seqgen_file <- tempfile("seqgen")
-          cmd <- paste(seqgen_args[trio_locus],
-                       trees[[locus_group]][trio_locus])
-
-          cmd_store$list[[locus_group]][trio_locus] <- paste("seq-gen", cmd)
-          sim_output <- self$call(cmd)
-
-          parse_seqgen_output(sim_output,
-                              individuals = sum(get_sample_size(model, TRUE)),
-                              locus_length = locus_length[trio_locus],
-                              locus_number = get_locus_number(model,
-                                                              locus_group,
-                                                              TRUE),
-                              outgroup_size = get_outgroup_size(model, TRUE),
-                              calc_segsites = requires_segsites(model))
-        })
-
-        if (length(group_loci) == 1) return(group_loci[[1]])
-
-        assert_that(length(group_loci) == 3)
-        create_locus_trio(group_loci[[1]], group_loci[[2]], group_loci[[3]])
-      })
-      unlink(unlist(trees))
-
-      # Generate the summary statistics
-      seg_sites <- unlist(seg_sites, recursive = FALSE)
-
-      if (requires_segsites(model)) {
-        sequences <- NULL
-      } else {
-        sequences <- seg_sites
-        seg_sites <- NULL
+      # Prepare the trees for seqgen
+      if (!has_trios) {
+        locus_length <- trio_dists[3]
+        tree_files <- c(middle = tempfile("seqgen_tress"))
+        sapply(trees, write, file = tree_files, append = TRUE, sep = "\n")
       }
 
-      # Return the commands
-      cmds <- list(trees = tree_sim_data$cmds,
-                   seqgen = cmd_store$list)
 
-      calc_sumstats_from_sim(seg_sites, NULL, sequences, model,
-                             parameters, cmds, self)
+      cmds <- sim_task$get_arg("cmd")
+
+      # Call seq-gen for each trio locus
+      sim_results <- lapply(seq_along(cmds), function(trio_locus) {
+        cmd <- paste(cmds[trio_locus], tree_files[trio_locus])
+
+        sim_output <- self$call(cmd)
+
+        result <- list(cmd = cmd)
+
+        if (requires_segsites(model)) {
+          result$seg_sites <-
+            parse_seqgen_output(sim_output,
+                                individuals = sum(get_sample_size(model, TRUE)),
+                                locus_length = locus_length[trio_locus],
+                                locus_number = sim_task$locus_number,
+                                outgroup_size = get_outgroup_size(model, TRUE),
+                                calc_segsites = TRUE)
+        }
+
+        if (requires_files(model)) {
+          result$files <- tempfile("seqgen_result")
+          write(sim_output, file = result$files, sep = "\n")
+        }
+
+        result
+      })
+      unlink(tree_files)
+
+      if (length(sim_results) == 1) {
+        output <- sim_results[[1]]
+      } else {
+        assert_that(length(sim_results) == 3)
+        output <- list(
+          seg_sites = create_locus_trio(sim_results[[1]]$seg_sites,
+                                        sim_results[[2]]$seg_sites,
+                                        sim_results[[3]]$seg_sites)
+        )
+      }
+
+      output$simulator <- self
+      output
     },
     get_cmd = function(model) {
       c(trees = get_cmd(generate_tree_model(model)),

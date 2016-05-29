@@ -82,7 +82,7 @@ get_summary_statistics <- function(model) {
 
 
 calc_sumstats <- function(model, segsites_list = NULL, trees = NULL,
-                          files = NULL, ...) {
+                          files = NULL, sim_tasks = NULL, ...) {
 
   assert_that(is.model(model))
   if (requires_segsites(model)) {
@@ -97,7 +97,8 @@ calc_sumstats <- function(model, segsites_list = NULL, trees = NULL,
   if (requires_files(model)) assert_that(!is.null(files))
 
   stats <- lapply(model$sum_stats, function(stat) {
-      stat$transform(stat$calculate(segsites_list, trees, files, model))
+      stat$transform(stat$calculate(segsites_list, trees, files,
+                                    model, sim_tasks))
   })
 
   c(stats, list(...))
@@ -105,7 +106,7 @@ calc_sumstats <- function(model, segsites_list = NULL, trees = NULL,
 
 
 calc_sumstats_from_sim <- function(seg_sites, trees, files, model,
-                                   pars, cmds, simulator) {
+                                   pars, cmds, simulator, sim_tasks) {
 
   if (missing(pars)) pars <- numeric(0)
   assert_that(is.model(model))
@@ -126,7 +127,8 @@ calc_sumstats_from_sim <- function(seg_sites, trees, files, model,
   simulator_info <- lapply(simulator, function(x) x$get_info())
 
   calc_sumstats(model, seg_sites, trees, files,
-                pars = pars, cmds = cmds, simulator = simulator_info)
+                pars = pars, cmds = cmds, simulator = simulator_info,
+                sim_tasks = sim_tasks)
 }
 
 

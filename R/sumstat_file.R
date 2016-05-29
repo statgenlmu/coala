@@ -9,7 +9,7 @@ stat_file_class <- R6Class("stat_file", inherit = sumstat_class, #nolint
       private$folder <- folder
       super$initialize("file", identity)
     },
-    calculate = function(seg_sites, trees, files, model) {
+    calculate = function(seg_sites, trees, files, model, sim_tasks = NULL) {
       if (is.list(files)) files <- unlist(files)
       if (!all(file.copy(files, private$folder, overwrite = FALSE)))
         stop("Failed to copy simulated files. Look for warnings.")
