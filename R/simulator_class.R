@@ -5,8 +5,13 @@ simulator_class <- R6Class("simulator",
     priority = 50
   ),
   public = list(
-    simulate = function() stop("virtual method"),
-    get_cmd = function() stop("virtual method"),
+    # Methods that simulators must implement
+    create_task = function(model, pars, locus_number,
+                           locus_id = 1,
+                           eval_pars = TRUE) stop("virtual method"),
+    simulate = function(model, sim_task) stop("virtual method"),
+
+    # Infrastructure for simulators
     get_name = function() private$name,
     get_priority = function() private$priority,
     get_info = function() c(name = private$name),
@@ -16,6 +21,7 @@ simulator_class <- R6Class("simulator",
     }
   )
 )
+
 
 is_simulator <- function(simulator) inherits(simulator, "simulator")
 
