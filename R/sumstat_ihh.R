@@ -18,7 +18,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
   public = list(
     initialize = function(name, population, max_snps,
                           calc_ihs, transformation) {
-      assert_that(is.numeric(population))
+      assert_that(identical(population, "all") || is.numeric(population))
       assert_that(length(population) == 1)
       assert_that(is.numeric(max_snps))
       assert_that(length(max_snps) == 1)
