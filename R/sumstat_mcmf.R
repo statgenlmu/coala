@@ -17,6 +17,7 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
                 get_population_individuals(model,
                                           private$population,
                                           haploids = (ploidy == 1)),
+                get_locus_length_matrix(model),
                 has_trios(model),
                 ploidy)
     }
