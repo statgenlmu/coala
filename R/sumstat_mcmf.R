@@ -2,13 +2,15 @@
 stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
   private = list(
     population = NULL,
-    req_segsites = TRUE
+    req_segsites = TRUE,
+    improved = TRUE
   ),
   public = list(
-    initialize = function(name, population, transformation) {
+    initialize = function(name, population, transformation, improved) {
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
       private$population <- population
+      private$improved <- improved
       super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
@@ -18,6 +20,7 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
                                           private$population,
                                           haploids = (ploidy == 1)),
                 get_locus_length_matrix(model),
+                private$improved,
                 has_trios(model),
                 ploidy)
     }
@@ -41,6 +44,6 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
 #' simulate(model)
 #' @export
 sumstat_mcmf  <- function(name = "mcmf", population = 1,
-                          transformation = identity) {
-  stat_mcmf_class$new(name, population, transformation)
+                          transformation = identity, improved = TRUE) {
+  stat_mcmf_class$new(name, population, transformation, improved)
 }

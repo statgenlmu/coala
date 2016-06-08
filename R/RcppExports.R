@@ -85,8 +85,8 @@ calc_jsfs <- function(segsites_list, ind_per_pop) {
     .Call('coala_calc_jsfs', PACKAGE = 'coala', segsites_list, ind_per_pop)
 }
 
-calc_mcmf <- function(seg_sites, individuals, locus_length, has_trios = TRUE, ploidy = 1L) {
-    .Call('coala_calc_mcmf', PACKAGE = 'coala', seg_sites, individuals, locus_length, has_trios, ploidy)
+calc_mcmf <- function(seg_sites, individuals, locus_length, improved = TRUE, has_trios = TRUE, ploidy = 1L) {
+    .Call('coala_calc_mcmf', PACKAGE = 'coala', seg_sites, individuals, locus_length, improved, has_trios, ploidy)
 }
 
 calc_nucleotide_div <- function(segsites_list, individuals) {

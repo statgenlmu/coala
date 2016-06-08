@@ -105,15 +105,29 @@ void maxsplit(const coala::SegSites segsites,
 NumericMatrix calc_mcmf(const List seg_sites,
                         const NumericVector individuals,
                         const NumericMatrix locus_length,
+                        const bool improved = true,
                         const bool has_trios = true,
                         const int ploidy = 1) {
 
   size_t n_loci = seg_sites.size();
-  NumericMatrix mcmf(n_loci, 3);
-  mcmf.attr("dimnames") =
-    List::create(R_NilValue, CharacterVector::create(
-        "mcmf", "bal", "perc_polym")
+
+  //Create the matrix that contains the mcmf
+  int col_num = 3;
+  if (!improved) col_num = 1;
+
+  NumericMatrix mcmf(n_loci, col_num);
+
+  if (improved) {
+    mcmf.attr("dimnames") =
+      List::create(R_NilValue, CharacterVector::create(
+          "mcmf", "bal", "perc_polym")
     );
+  }else{
+    mcmf.attr("dimnames") =
+      List::create(R_NilValue, CharacterVector::create(
+          "mcmf")
+      );
+  }
 
   coala::SegSites ss;
   int max_split = 0, snp_number = 0, ignore_result = 0;
@@ -142,23 +156,25 @@ NumericMatrix calc_mcmf(const List seg_sites,
 
     if (snp_number == 0) {
       mcmf(locus,0) = NA_REAL;
-      mcmf(locus,1) = NA_REAL;
-      mcmf(locus,2) = NA_REAL;
+      if(improved) {
+        mcmf(locus,1) = NA_REAL;
+        mcmf(locus,2) = NA_REAL;
+      }
       continue;
     }
     mcmf(locus,0) = (double)max_split / snp_number;
+    if(improved) {
+      if (weigth < 0.3) {
+        weigth = 0;
+      }else{
+        weigth = 1;
+      }
+      mcmf(locus, 1) = weigth;
 
-    if (weigth < 0.3) {
-      weigth = 0;
-    }else{
-      weigth = 1;
+      // Calculate SNPs per basepair
+      mcmf(locus, 2) = sum(trio_locus_v == 0) / locus_length(0, 2);
     }
-    mcmf(locus, 1) = weigth;
-
-    // Calculate SNPs per basepair
-    mcmf(locus, 2) = sum(trio_locus_v == 0) / locus_length(0, 2);
   }
 
   return(mcmf);
 }
-
