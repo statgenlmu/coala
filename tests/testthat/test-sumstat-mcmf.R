@@ -78,3 +78,12 @@ test_that("mcmf statistics is correct for diploid models", {
   expect_equal(stat$calculate(seg_sites, NULL, NULL,
                               model + feat_unphased(2)), .75)
 })
+
+
+test_that("mcmf can be calculated for all populations", {
+  stat <- sumstat_mcmf(population = "all")
+  model1 <- coal_model(c(2, 2))
+  model2 <- coal_model(4)
+  expect_equal(stat$calculate(seg_sites, NULL, NULL, model1),
+               stat$calculate(seg_sites, NULL, NULL, model2))
+})
