@@ -6,7 +6,7 @@ stat_four_gamete_class <- R6Class("stat_four_gamete", inherit = sumstat_class,
   ),
   public = list(
     initialize = function(name, population, transformation) {
-      assert_that(is.numeric(population))
+      assert_that(identical(population, "all") || is.numeric(population))
       assert_that(length(population) == 1)
       private$population <- population
       super$initialize(name, transformation)
