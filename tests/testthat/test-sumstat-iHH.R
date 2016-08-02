@@ -96,8 +96,10 @@ test_that("calculation of ihh works", {
 test_that("ihh can be calculated for all populations", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh(population = "all")
-  expect_equal(stat_ihh$calculate(list(seg_sites), NULL, NULL, coal_model(c(2, 2), 1, 337)),
-               stat_ihh$calculate(list(seg_sites), NULL, NULL, coal_model(4, 1, 337)))
+  expect_equal(stat_ihh$calculate(list(seg_sites), NULL, NULL,
+                                  coal_model(c(2, 2), 1, 337)),
+               stat_ihh$calculate(list(seg_sites), NULL, NULL,
+                                  coal_model(4, 1, 337)))
 })
 
 

@@ -59,7 +59,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
           else freqbin <- 0.05
           ihs <- suppressWarnings({
             ihs <- ihh2ihs(ihh, freqbin)
-            data.frame(ihs$iHS[, -4])
+            data.frame(ihs$iHS[, -4]) #nolint
           })
           return(list(ihh = ihh, iHS = ihs))
         }

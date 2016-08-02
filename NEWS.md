@@ -9,7 +9,7 @@ coala 0.4.1
 * Add a warning is `symmetric` is used together with `pop_from` or `pop_to`
   in `feat_migration` (#168).
 * Add citation information (#168).
-* Fix compatibility with rehh 2.0.0.
+* Fix compatibility with rehh 2.0.0 (#172).
 
 
 
