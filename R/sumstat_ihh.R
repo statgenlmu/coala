@@ -57,9 +57,10 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
           else if (n_snps < 200) freqbin <- 0.225
           else if (n_snps < 400) freqbin <- 0.1
           else freqbin <- 0.05
-          ihs <- suppressWarnings(
-            data.frame(ihh2ihs(ihh, freqbin)$res.ihs[, -4])
-          )
+          ihs <- suppressWarnings({
+            ihs <- ihh2ihs(ihh, freqbin)
+            data.frame(ihs$iHS[, -4]) #nolint
+          })
           return(list(ihh = ihh, iHS = ihs))
         }
       }
@@ -77,7 +78,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
       rehh_data@haplo <- as.matrix(seg_sites[ind, snp_mask]) + 1
       rehh_data@position <- pos[[1]][snp_mask]
       rehh_data@snp.name <- as.character(seq(along = rehh_data@position))
-      rehh_data@chr.name <- chr_name
+      rehh_data@chr.name <- as.character(chr_name)
       rehh_data@nhap <- length(ind)
       rehh_data@nsnp <- length(rehh_data@position)
       rehh_data
