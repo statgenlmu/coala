@@ -4,27 +4,45 @@
 \alias{sumstat_mcmf}
 \title{Summary Statistic: Most Common Mutation's Frequency}
 \usage{
-sumstat_mcmf(name = "mcmf", population = 1, transformation = identity)
+sumstat_mcmf(name = "mcmf", population = 1, transformation = identity,
+  expand_mcmf = TRUE)
 }
 \arguments{
-\item{name}{The name of the summary statistic. When simulating a model,
-the value of the statistics are written to an entry of the returned list
-with this name. Summary statistic names must be unique in a model.}
+\item{name}{The name of the summary statistic. When simulating
+a model, the value of the statistics are written to an entry
+of the returned list with this name. Summary statistic names
+must be unique in a model.}
 
-\item{population}{The population for which the statistic is calculated.
-Can also be "all" to calculate it from all populations.}
+\item{population}{The population for which the statistic is
+calculated. Can also be "all" to calculate it from all populations.}
 
-\item{transformation}{An optional function for transforming the results
-of the statistic. If specified, the results of the transformation are
-returned instead of the original values.}
+\item{transformation}{An optional function for transforming
+the results of the statistic. If specified, the results of the
+transformation are returned instead of the original values.}
+
+\item{expand_mcmf}{The type of mcmf to be used. See Details}
 }
 \value{
 A numeric vector containing MCMF for each locus.
+  \describe{
+   \item{mcmf}{The observed frequency of the mutational pattern
+     that is observed most often in the data.}
+   \item{bal}{The frequency of derived alleles in the most
+     frequently observed mutational pattern.}
+   \item{perc_poly}{The percentage of positions that are polymorpic.}
+  }
 }
 \description{
 This summary statistic calculates the observed frequency
 of the mutational pattern that is observed most often in
 the data.
+}
+\details{
+The expand_mcmf = TRUE calculates only the mcmf per locus.
+The expand_mcmf = 2 versions adds the frequency of
+derived alleles in the most frequently observed mutational
+pattern. The expand_mcmf = 3 also calculates the percentage
+of positions that are polymorpic.
 }
 \examples{
 # Calculate MCMF for a panmictic population

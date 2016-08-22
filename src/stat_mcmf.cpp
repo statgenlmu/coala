@@ -1,8 +1,9 @@
 #include <cmath>
 #include "../inst/include/coala.h"
+#include <iostream>
 
 using namespace Rcpp;
-
+using namespace std;
 
 void maxsplit(const coala::SegSites segsites,
               const int trio_locus,
@@ -10,7 +11,7 @@ void maxsplit(const coala::SegSites segsites,
               const int ploidy,
               int & max_number,
               int & snp_number,
-              double & tree) {
+              double & weigth) {
 
   NumericVector trio_locus_vec = coala::getTrioLocus(segsites);
   NumericMatrix ss = coala::getSNPs(segsites);
@@ -22,7 +23,7 @@ void maxsplit(const coala::SegSites segsites,
   bool switch_snp_decided;
   double half_ploidy = 0.5 * ploidy;
 
-  for (int snp = 0; snp < ss.ncol(); ++snp) {
+  for (int snp = 0; snp < ss.ncol(); ++snp) { //Loop thorugh the columns
     if (trio_locus_vec[snp] != trio_locus) continue;
 
     // For each SNP, create a binary representation of the SNP...
@@ -31,12 +32,12 @@ void maxsplit(const coala::SegSites segsites,
     key = 0;
 
     std::vector<unsigned int> sample(individuals.size());
-	  for (int k = 0; k < individuals.size(); ++k) {
+	  for (int k = 0; k < individuals.size(); ++k) { //Loop through the rows
 	    key *= ploidy + 1;
 
       ind_nr = (individuals[k] - 1) * ploidy;
 	    genotype = 0;
-	    for (int chr = 0; chr < ploidy; ++chr) genotype += ss(ind_nr + chr, snp);
+	    for (int chr = 0; chr < ploidy; ++chr) genotype += ss(ind_nr + chr, snp); //ss(2row, 1column)
 
 	    if (!switch_snp_decided) {
 	      if (genotype > half_ploidy) {
@@ -52,80 +53,97 @@ void maxsplit(const coala::SegSites segsites,
 	    key += genotype;
 	  }
 
+	  //cout<<"key: " <<key<< " genotype: "<<genotype<<endl;
+
 	  //Associate the key with the corresponding genotype
 	  std::map<unsigned int, std::vector<unsigned int> >::iterator b=balance.find(key);
 	  if(b==balance.end()) {
 	    balance[key]=sample;
 	  }
 
-    // Ignore snps that are not segregating in the given individuals
+    // Ignore snps that are not segregating (in at least one of) the individuals
     if (key == 0) continue;
 
 	  // and increase the corresponding counter
-	  ++snp_number;
-	  std::map<unsigned int,unsigned int>::iterator p=m.find(key);
-	  if(p==m.end()) {
-	    m[key]=1;
+	  ++snp_number; //This is K in the document, be careful because the other have been left out
+	  std::map<unsigned int,unsigned int>::iterator p=m.find(key); //Look for the key
+	  if(p==m.end()) { //If the key doesn't exist, the counter will reach the end of p
+	    m[key]=1; //Then initialize the counter for that key
 	  } else {
-	    ++(p->second);
+	    ++(p->second); //Otherwise, if the key already exists, increase the counter one time
 	  }
   }
 
   // Return the maximal counter
   unsigned int maxi = 0;
-  unsigned int iden = 0;
+  unsigned int iden = 0; //Get the key of the maximal counter
   for (std::map<unsigned int,unsigned int>::iterator p=m.begin(); p!=m.end(); ++p) {
-	  if(p->second > maxi) {
+	  if(p->second > maxi) { //Get the value in m whose counter achieved the largest number
 	    maxi = p->second;
-	    iden = p->first;
+	    iden = p->first; //and also get the key for the next step
 	  }
   }
   max_number += maxi;
 
-  //Return the genotype associated to the most common split using the key
+  //Return the genotype associated to the most common split using the key(iden)
   std::map<unsigned int, std::vector<unsigned int> >::iterator search = balance.find(iden);
   int count = 0;
   int ones = 0;
+  //cout<<"Genotype: ";
   if(search != balance.end()) {
     std::vector<unsigned int> summary = search->second;
     for (std::vector<unsigned int>::iterator p = summary.begin(); p != summary.end(); ++p) {
+      //cout<<*p;
       ones += *p;
       count++;
     }
   }
-
+  //cout<<endl;
   if (count != 0 ) {
-    tree = (double)ones/count;
+    weigth = (double)ones/count;
   }else{
-    tree = NA_REAL;
+    weigth = NA_REAL;
   }
+  //cout<<"ones: "<<ones<<" / count: "<<count<< " and Weigth: " <<weigth << endl;
+  //cout<<"max_split: "<<max_number<<" snp_number: "<<snp_number<<endl;
 }
 
 // [[Rcpp::export]]
 NumericMatrix calc_mcmf(const List seg_sites,
                         const NumericVector individuals,
                         const NumericMatrix locus_length,
-                        const bool improved = true,
+                        const int expand_mcmf,
                         const bool has_trios = true,
                         const int ploidy = 1) {
 
   size_t n_loci = seg_sites.size();
 
   //Create the matrix that contains the mcmf
-  int col_num = 3;
-  if (!improved) col_num = 1;
+  int col_num;
+  if ( expand_mcmf == 1 ) {
+    col_num = 1;
+  }else if( expand_mcmf == 2 ) {
+    col_num = 2;
+  }else{
+    col_num = 3;
+  }
 
   NumericMatrix mcmf(n_loci, col_num);
 
-  if (improved) {
-    mcmf.attr("dimnames") =
-      List::create(R_NilValue, CharacterVector::create(
-          "mcmf", "bal", "perc_polym")
-    );
-  }else{
+  if (expand_mcmf == 1 ) {
     mcmf.attr("dimnames") =
       List::create(R_NilValue, CharacterVector::create(
           "mcmf")
+      );
+  }else if( expand_mcmf == 2 ) {
+    mcmf.attr("dimnames") =
+      List::create(R_NilValue, CharacterVector::create(
+          "mcmf", "bal")
+      );
+  }else{
+    mcmf.attr("dimnames") =
+      List::create(R_NilValue, CharacterVector::create(
+          "mcmf", "bal", "perc_polym")
       );
   }
 
@@ -133,7 +151,7 @@ NumericMatrix calc_mcmf(const List seg_sites,
   int max_split = 0, snp_number = 0, ignore_result = 0;
   double weigth = 0;
 
-  for (size_t locus = 0; locus < n_loci; ++locus) {
+  for (size_t locus = 0; locus < n_loci; ++locus) { //Loop through the loci
     ss = as<coala::SegSites>(seg_sites[locus]);
     NumericVector trio_locus_v;
     trio_locus_v = coala::getTrioLocus(ss);
@@ -144,8 +162,8 @@ NumericMatrix calc_mcmf(const List seg_sites,
 
     max_split = 0;
     snp_number = 0;
-
     weigth = 0;
+    //cout<<"individuals: " <<individuals<<" ploidy: "<< ploidy<<" max_split: "<<max_split<<" snp_number: "<<snp_number<<" weigth: "<<weigth<<endl;
     if (has_trios) {
       maxsplit(ss, -1, individuals, ploidy, max_split, snp_number, weigth);
       maxsplit(ss, 1, individuals, ploidy, max_split, snp_number, weigth);
@@ -154,25 +172,30 @@ NumericMatrix calc_mcmf(const List seg_sites,
       maxsplit(ss, 0, individuals, ploidy, max_split, snp_number, weigth);
     }
 
+    //cout<<"max_split: "<<max_split<<" snp_number: "<<snp_number<<endl;
+
     if (snp_number == 0) {
       mcmf(locus,0) = NA_REAL;
-      if(improved) {
+      if(expand_mcmf == 2 || expand_mcmf == 3) {
         mcmf(locus,1) = NA_REAL;
+      }
+      if(expand_mcmf == 3) {
         mcmf(locus,2) = NA_REAL;
       }
       continue;
     }
     mcmf(locus,0) = (double)max_split / snp_number;
-    if(improved) {
-      if (weigth < 0.3) {
+    if(expand_mcmf == 2 || expand_mcmf == 3) {
+      /*if (weigth < 0.3) {
         weigth = 0;
       }else{
         weigth = 1;
-      }
+      }*/
       mcmf(locus, 1) = weigth;
-
+      if(expand_mcmf == 3) {
       // Calculate SNPs per basepair
-      mcmf(locus, 2) = sum(trio_locus_v == 0) / locus_length(0, 2);
+        mcmf(locus, 2) = sum(trio_locus_v == 0) / locus_length(0, 2);
+      }
     }
   }
 
