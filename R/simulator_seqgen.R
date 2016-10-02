@@ -136,22 +136,31 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
       assert_that(is.list(trees))
       assert_that(length(trees) == tree_task$locus_number)
 
+      # Prepare the simulation commands
+      cmds <- sim_task$get_arg("cmd")
+
       # Prepare the trees for seqgen
+      tree_files <- tempfile(c(left = "left",
+                               middle = "middle",
+                               right = "right"))
+      generate_trio_trees(trees, trio_dists, tree_files)
+
       if (!has_trios) {
+        unlink(tree_files[-2])
+        tree_files <- tree_files[2]
         locus_length <- trio_dists[3]
-        tree_files <- c(middle = tempfile("seqgen_tress"))
-        sapply(trees, write, file = tree_files, append = TRUE, sep = "\n")
+      } else {
+        locus_length <- trio_dists[c(1, 3, 5)]
       }
 
-
-      cmds <- sim_task$get_arg("cmd")
+      assert_that(length(tree_files) == length(cmds))
+      assert_that(length(tree_files) == length(locus_length))
 
       # Call seq-gen for each trio locus
       sim_results <- lapply(seq_along(cmds), function(trio_locus) {
         cmd <- paste(cmds[trio_locus], tree_files[trio_locus])
 
         sim_output <- self$call(cmd)
-
         result <- list(cmd = cmd)
 
         if (requires_segsites(model)) {
@@ -180,7 +189,10 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
         output <- list(
           seg_sites = create_locus_trio(sim_results[[1]]$seg_sites,
                                         sim_results[[2]]$seg_sites,
-                                        sim_results[[3]]$seg_sites)
+                                        sim_results[[3]]$seg_sites),
+          files = c(sim_results[[1]]$files,
+                    sim_results[[2]]$files,
+                    sim_results[[3]]$files)
         )
       }
 

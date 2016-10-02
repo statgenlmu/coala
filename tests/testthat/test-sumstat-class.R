@@ -37,7 +37,7 @@ test_that("Adding Sumstats to a model works", {
 
 test_that("Calculation of sumstats works", {
   stat_sum_class <- R6::R6Class("Stat_Sum", inherit = sumstat_class,
-    public = list(calculate = function(seg_sites, trees, files, model) {
+    public = list(calculate = function(seg_sites, ...) {
       sapply(seg_sites, sum)
     })
   )
@@ -54,7 +54,7 @@ test_that("Calculation of sumstats works", {
 
 test_that("Calculation of sumstats from simresults works", {
   stat_sum_class <- R6::R6Class("Stat_Sum", inherit = sumstat_class,
-    public = list(calculate = function(seg_sites, trees, files, model) {
+    public = list(calculate = function(seg_sites, ...) {
       sapply(seg_sites, sum)
     })
   )
@@ -72,7 +72,7 @@ test_that("Calculation of sumstats from simresults works", {
 
 test_that("Calculation of sumstats respects transformations", {
   stat_sum_class <- R6::R6Class("Stat_Sum", inherit = sumstat_class,
-    public = list(calculate = function(seg_sites, trees, files, model) {
+    public = list(calculate = function(seg_sites, ...) {
       sapply(seg_sites, sum)
     })
   )

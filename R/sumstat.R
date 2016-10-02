@@ -101,6 +101,8 @@ calc_sumstats <- function(model, segsites_list = NULL, trees = NULL,
                                     model, sim_tasks))
   })
 
+  unlink(files)
+
   c(stats, list(...))
 }
 
