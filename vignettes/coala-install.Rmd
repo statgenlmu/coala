@@ -83,9 +83,8 @@ If multiple simulators can simulate a model, the one with the highest
 priority is used. In our example, that is `scrm`. If we would like to use
 `ms` instead, we need to raise its priority:
 
-```{r}
+```{r eval=FALSE}
 activate_ms(priority = 500)
-model
 ```
 
 

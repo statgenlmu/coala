@@ -30,6 +30,10 @@ scrm_class <- R6Class('Scrm', inherit = ms_class, #nolint
   ),
   public = list(
     create_cmd_template = scrm_create_cmd_template,
+    initialize = function(priority = 400) {
+      assert_that(is.numeric(priority) && length(priority) == 1)
+      private$priority <- priority
+    },
     simulate = function(model, sim_task) {
       sample_size <- sum(get_sample_size(model, for_sim = TRUE))
 
@@ -54,7 +58,7 @@ scrm_class <- R6Class('Scrm', inherit = ms_class, #nolint
       result$cmd <- paste("scrm", cmd)
       result$simulator <- self
 
-      if (file != "") result$file <- file
+      if (file != "") result$files <- file
 
       result
     },
