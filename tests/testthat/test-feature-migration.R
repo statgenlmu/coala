@@ -37,5 +37,5 @@ test_that("migration can be simulated with scrm", {
     feat_mutation(1) +
     par_range("m", 1, 2) +
     feat_migration(par_expr(2 * m), 2, 1, time = par_expr(log(m)))
-  expect_that(get_simulator("scrm")$simulate(model, c(m = 1.5)), is_a("list"))
+  expect_that(simulate(model, pars = c(m = 1.5)), is_a("list"))
 })

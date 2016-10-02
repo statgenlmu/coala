@@ -37,13 +37,23 @@ simulate.coalmodel <- function(object, nsim = 1, seed, ...,
                                pars = numeric(0), cores = 1) {
 
   if (!missing(seed)) set.seed(seed)
-  simprog <- select_simprog(object)
-  if (is.null(simprog)) stop("No simulator found")
 
   results <- mclapply(seq(len = nsim), function(i) {
     current_pars <- prepare_pars(pars, object)
-    simprog$simulate(object, current_pars)
-  }, mc.set.seed = TRUE, mc.cores = cores)
+    sim_tasks <- generate_sim_tasks(object, current_pars)
+
+    result <- combine_results(lapply(seq_along(sim_tasks), function(i) {
+      simulator <- sim_tasks[[i]]$get_simulator()
+      simulator$simulate(object, sim_tasks[[i]])
+    }))
+
+    calc_sumstats_from_sim(result$seg_sites, result$trees, result$files,
+                           model = object,
+                           pars = current_pars,
+                           cmds = result$cmds,
+                           simulator = result$simulators,
+                           sim_tasks = sim_tasks)
+  }, mc.cores = cores)
 
   if (nsim == 1) return(results[[1]])
   results

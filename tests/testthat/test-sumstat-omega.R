@@ -57,6 +57,7 @@ test_that("Omega checks that the number of grid points is valid", {
 
 test_that("Omega works if there are few SNPs", {
   if (!has_omega()) skip("OmegaPlus not found")
+  if (!has_ms()) skip("ms not found")
   model <- coal_model(10, 2, 1000) +
     feat_mutation(1, fixed_number = TRUE) +
     sumstat_omega("op", grid = 10)
@@ -71,6 +72,7 @@ test_that("Omega works if there are few SNPs", {
 
 test_that("Omega works if grid is too large", {
   if (!has_omega()) skip("OmegaPlus not found")
+  if (!has_ms()) skip("ms not found")
   model <- coal_model(10, 1, 100) +
     feat_mutation(10, fixed_number = TRUE) +
     sumstat_omega("op", grid = 100)

@@ -15,7 +15,7 @@ stat_jsfs_class <- R6Class("stat_jsfs", inherit = sumstat_class,
       private$per_locus <- per_locus
       super$initialize(name, transformation)
     },
-    calculate = function(seg_sites, trees, files, model) {
+    calculate = function(seg_sites, trees, files, model, sim_tasks = NULL) {
       ind_per_pop <- lapply(private$populations, get_population_individuals,
                             model = model)
 

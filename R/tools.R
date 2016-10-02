@@ -8,3 +8,8 @@ require_package <- function(pkg) {
   }
   invisible(TRUE)
 }
+
+sample_seed <- function(n = 1, for_ms = FALSE) {
+  max_value <- ifelse(for_ms, 65536, 1e9)
+  sample.int(max_value, n)
+}

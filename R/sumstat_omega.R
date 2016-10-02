@@ -41,7 +41,7 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
       }
       invisible(TRUE)
     },
-    calculate = function(seg_sites, trees, files, model) {
+    calculate = function(seg_sites, trees, files, model, sim_tasks = NULL) {
       cur_wd <- getwd()
 
       tmp_dir <- tempfile("omegaprime")

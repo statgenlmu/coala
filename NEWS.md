@@ -1,3 +1,10 @@
+coala 0.5.0
+===========
+
+* Major interal refactoring on how simulators interface with coala (#174).
+
+
+
 coala 0.4.1
 ===========
 

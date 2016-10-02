@@ -11,7 +11,7 @@ stat_four_gamete_class <- R6Class("stat_four_gamete", inherit = sumstat_class,
       private$population <- population
       super$initialize(name, transformation)
     },
-    calculate = function(seg_sites, trees, files, model) {
+    calculate = function(seg_sites, trees, files, model, sim_tasks = NULL) {
       individuals <- get_population_individuals(model, private$population,
                                                 haploids = !is_unphased(model))
       calc_four_gamete_stat(seg_sites,

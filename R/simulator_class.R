@@ -5,8 +5,13 @@ simulator_class <- R6Class("simulator",
     priority = 50
   ),
   public = list(
-    simulate = function() stop("virtual method"),
-    get_cmd = function() stop("virtual method"),
+    # Methods that simulators must implement
+    create_task = function(model, pars, locus_number,
+                           locus_id = 1,
+                           eval_pars = TRUE) stop("virtual method"),
+    simulate = function(model, sim_task) stop("virtual method"),
+
+    # Infrastructure for simulators
     get_name = function() private$name,
     get_priority = function() private$priority,
     get_info = function() c(name = private$name),
@@ -16,6 +21,7 @@ simulator_class <- R6Class("simulator",
     }
   )
 )
+
 
 is_simulator <- function(simulator) inherits(simulator, "simulator")
 
@@ -34,48 +40,7 @@ get_simulator <- function(name) {
 }
 
 
-fill_cmd_template <- function(template, model, parameters,
-                              locus_group, eval_pars = TRUE) {
 
-  locus_length <- get_locus_length(model, group = locus_group)
-  total_locus_number <- get_locus_number(model, locus_group, TRUE)
-
-  if (has_variation(model)) {
-    locus_number <- rep(1, total_locus_number)
-  } else {
-    locus_number <- total_locus_number
-  }
-  locus_id <- seq(along = locus_number)
-
-  args <- vapply(locus_id, function(l_id) {
-    tmp_env <- create_par_env(model, parameters,
-                              locus_length = locus_length,
-                              locus_id = l_id,
-                              locus_number = total_locus_number,
-                              for_cmd = !eval_pars)
-
-    paste(eval(parse(text = template), envir = tmp_env), collapse = " ")
-  }, character(1L))
-
-  sim_cmds <- data.frame(locus_number = locus_number,
-                         command = args,
-                         stringsAsFactors = FALSE)
-
-  reduce_sim_commands(sim_cmds)
-}
-
-
-reduce_sim_commands <- function(sim_commands) {
-  if (nrow(sim_commands) == 1) return(sim_commands)
-  grouped_commands <- unique(sim_commands[, 2])
-  if (length(grouped_commands) == nrow(sim_commands)) return(sim_commands)
-  grouped_locus_number <- vapply(grouped_commands, function(cmd) {
-    sum(sim_commands[sim_commands[, 2] == cmd, 1])
-  }, numeric(1)) #nolint
-  data.frame(locus_number = grouped_locus_number,
-             command = grouped_commands,
-             stringsAsFactors = FALSE)
-}
 
 
 #' Returns the available simulators
@@ -96,4 +61,40 @@ list_simulators <- function() {
                info = pars)
   }))
   simulators[order(simulators$priority, decreasing = TRUE), ]
+}
+
+
+test_simulator_class <- R6Class("test", inherit = simulator_class,
+  private = list(
+    name = "test",
+    priority = -99999
+  ),
+  public = list(
+    initialize = function() {}, #nolint
+    create_cmd_template = function(model) {
+      pars <- paste0("par(", get_par_names(model), ")")
+      paste0("c('sum(', ", paste(pars, collapse = ", '+', "), ", ')')")
+    },
+    get_cmd = function(model) {
+      template <- self$create_cmd_template(model)
+      cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
+      paste("test",
+            cmd[1, "locus_number"],
+            cmd[1, "command"])
+    },
+    simulate = function(model, cmd) {
+      eval()
+    }
+  )
+)
+
+test_simulator <- function() test_simulator_class$new()
+
+test_feature_class <- R6Class("test_feature", inherit = feature_class)
+
+test_model <- function(locus_number = 10) {
+  coal_model(5, locus_number) +
+    test_feature_class$new() +
+    par_named("a") +
+    par_named("b")
 }
