@@ -16,10 +16,12 @@ stat_dna_class <- R6Class("dna_stat", inherit = sumstat_class,
         assert_that(file.exists(files[i]))
         locus_length <- sum(sim_tasks[[i]]$get_arg("trio_dists"))
         dna <- parse_seqgen_output(readLines(files[i]),
-                                   individuals = sum(get_sample_size(model, TRUE)),
+                                   individuals = sum(get_sample_size(model,
+                                                                     TRUE)),
                                    locus_length = locus_length,
                                    locus_number = sim_tasks[[i]]$locus_number,
-                                   outgroup_size = get_outgroup_size(model, TRUE),
+                                   outgroup_size = get_outgroup_size(model,
+                                                                     TRUE),
                                    calc_segsites = FALSE)
         dna[[1]]
       })

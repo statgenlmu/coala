@@ -1,8 +1,8 @@
 context("Simulators")
 
 progs <- list(scrm = get_simulator("scrm"))
-if (has_ms()) progs[['ms']] <- get_simulator("ms")
-if (has_msms()) progs[['msms']] <- get_simulator("msms")
+if (has_ms()) progs[["ms"]] <- get_simulator("ms")
+if (has_msms()) progs[["msms"]] <- get_simulator("msms")
 
 for (simulator in progs) {
   name <- simulator$get_name()
@@ -46,7 +46,7 @@ for (simulator in progs) {
     expect_equal(length(result$trees[[2]]), 1)
 
 
-    model <- coal_model(10, 2, 100) + feat_recombination(5)+ sumstat_trees()
+    model <- coal_model(10, 2, 100) + feat_recombination(5) + sumstat_trees()
     task <- simulator$create_task(model, NULL, 2)
     result <- simulator$simulate(model, task)
 

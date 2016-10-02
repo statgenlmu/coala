@@ -76,9 +76,3 @@ test_that("simulating with more than one repetition works", {
   expect_equal(sim[[1]]$pars, c(tau = 1, theta = 5))
   expect_equal(sim[[2]]$pars, c(tau = 1, theta = 5))
 })
-
-
-
-
-
-

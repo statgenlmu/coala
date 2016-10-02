@@ -70,7 +70,7 @@ test_simulator_class <- R6Class("test", inherit = simulator_class,
     priority = -99999
   ),
   public = list(
-    initialize = function() {},
+    initialize = function() {}, #nolint
     create_cmd_template = function(model) {
       pars <- paste0("par(", get_par_names(model), ")")
       paste0("c('sum(', ", paste(pars, collapse = ", '+', "), ", ')')")
@@ -98,5 +98,3 @@ test_model <- function(locus_number = 10) {
     par_named("a") +
     par_named("b")
 }
-
-
