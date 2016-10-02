@@ -70,7 +70,6 @@ Collate:
     'parameter_prior.R'
     'parameter_variation.R'
     'parameter_zero_inflation.R'
-    'sample_seed.R'
     'search_executable.R'
     'segsites.R'
     'simulation_tasks.R'

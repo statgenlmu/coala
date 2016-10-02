@@ -28,7 +28,7 @@ library(coala)
 stat_segsites_class <- R6Class("stat_segsites", inherit = sumstat_class,
   private = list(req_segsites = TRUE),
   public = list(
-    calculate = function(segsites, trees, files, model) segsites
+    calculate = function(segsites, trees, files, model, sim_task) segsites
   )
 )
 
@@ -76,7 +76,7 @@ stat_file_class <- R6Class("stat_file", inherit = sumstat_class,
       private$folder <- folder
       super$initialize("file", identity)
     },
-    calculate = function(seg_sites, trees, files, model) {
+    calculate = function(seg_sites, trees, files, model, sim_task) {
       file.copy(files, private$folder, overwrite = FALSE)
       file.path(private$folder, basename(files))
     }

@@ -24,6 +24,10 @@ test_that("parallel simulations are reproducible", {
 
   res3 <- simulate(model, seed = 215, cores = 1)
   expect_equal(res, res3)
+
+  set.seed(215)
+  res4 <- simulate(model, cores = 2)
+  expect_equal(res, res4)
 })
 
 
@@ -52,6 +56,19 @@ test_that("models with priors can be simulated", {
 })
 
 
+test_that("priors are sampled for every repetition", {
+  model <- coal_model(5, 1) +
+    feat_mutation(par_prior("theta", stats::rexp(1))) +
+    sumstat_sfs("sfs")
+  stats <- simulate(model, nsim = 2)
+  expect_true(stats[[1]]$pars != stats[[2]]$pars)
+
+  skip_on_os("windows")
+  stats <- simulate(model, nsim = 2, cores = 2, seed = 17)
+  expect_true(stats[[1]]$pars != stats[[2]]$pars)
+})
+
+
 test_that("simulating with more than one repetition works", {
   sim <- simulate(model_theta_tau(), 2, seed = 17, pars = c(1, 5))
   expect_that(sim, is_a("list"))
@@ -59,6 +76,9 @@ test_that("simulating with more than one repetition works", {
   expect_equal(sim[[1]]$pars, c(tau = 1, theta = 5))
   expect_equal(sim[[2]]$pars, c(tau = 1, theta = 5))
 })
+
+
+
 
 
 

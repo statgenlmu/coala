@@ -134,8 +134,7 @@ function `simulate` will call the program with the printed options, parse its
 output and calculated the added summary statistics:
 
 ```{r}
-set.seed(123)
-sumstats <- simulate(model)
+sumstats <- simulate(model, seed = 123)
 ```
 
 The returned object `sumstats` is a list, in which each entry corresponds to one 

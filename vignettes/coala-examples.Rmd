@@ -77,4 +77,3 @@ abline(lm(mean_pi ~ theta), col = "red2", lty = 3)
 
 If you have a nice example for using coala, feel free to extend this 
 vignette via a pull request [on GitHub](https://github.com/statgenlmu/coala)!
-
