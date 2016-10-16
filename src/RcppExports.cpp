@@ -157,18 +157,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // calc_mcmf
-NumericMatrix calc_mcmf(const List seg_sites, const NumericVector individuals, const NumericMatrix locus_length, const int expand_mcmf, const bool has_trios, const int ploidy);
-RcppExport SEXP coala_calc_mcmf(SEXP seg_sitesSEXP, SEXP individualsSEXP, SEXP locus_lengthSEXP, SEXP expand_mcmfSEXP, SEXP has_triosSEXP, SEXP ploidySEXP) {
+NumericMatrix calc_mcmf(const List seg_sites, const NumericVector individuals, const NumericMatrix locus_length, const bool expand_mcmf, const int type_expand, const bool has_trios, const int ploidy);
+RcppExport SEXP coala_calc_mcmf(SEXP seg_sitesSEXP, SEXP individualsSEXP, SEXP locus_lengthSEXP, SEXP expand_mcmfSEXP, SEXP type_expandSEXP, SEXP has_triosSEXP, SEXP ploidySEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< const List >::type seg_sites(seg_sitesSEXP);
     Rcpp::traits::input_parameter< const NumericVector >::type individuals(individualsSEXP);
     Rcpp::traits::input_parameter< const NumericMatrix >::type locus_length(locus_lengthSEXP);
-    Rcpp::traits::input_parameter< const int >::type expand_mcmf(expand_mcmfSEXP);
+    Rcpp::traits::input_parameter< const bool >::type expand_mcmf(expand_mcmfSEXP);
+    Rcpp::traits::input_parameter< const int >::type type_expand(type_expandSEXP);
     Rcpp::traits::input_parameter< const bool >::type has_trios(has_triosSEXP);
     Rcpp::traits::input_parameter< const int >::type ploidy(ploidySEXP);
-    __result = Rcpp::wrap(calc_mcmf(seg_sites, individuals, locus_length, expand_mcmf, has_trios, ploidy));
+    __result = Rcpp::wrap(calc_mcmf(seg_sites, individuals, locus_length, expand_mcmf, type_expand, has_trios, ploidy));
     return __result;
 END_RCPP
 }

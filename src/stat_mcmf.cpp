@@ -1,6 +1,5 @@
 #include <cmath>
 #include "../inst/include/coala.h"
-#include <iostream>
 
 using namespace Rcpp;
 using namespace std;
@@ -53,8 +52,6 @@ void maxsplit(const coala::SegSites segsites,
 	    key += genotype;
 	  }
 
-	  //cout<<"key: " <<key<< " genotype: "<<genotype<<endl;
-
 	  //Associate the key with the corresponding genotype
 	  std::map<unsigned int, std::vector<unsigned int> >::iterator b=balance.find(key);
 	  if(b==balance.end()) {
@@ -89,30 +86,28 @@ void maxsplit(const coala::SegSites segsites,
   std::map<unsigned int, std::vector<unsigned int> >::iterator search = balance.find(iden);
   int count = 0;
   int ones = 0;
-  //cout<<"Genotype: ";
+
   if(search != balance.end()) {
     std::vector<unsigned int> summary = search->second;
     for (std::vector<unsigned int>::iterator p = summary.begin(); p != summary.end(); ++p) {
-      //cout<<*p;
       ones += *p;
       count++;
     }
   }
-  //cout<<endl;
+
   if (count != 0 ) {
     weigth = (double)ones/count;
   }else{
     weigth = NA_REAL;
   }
-  //cout<<"ones: "<<ones<<" / count: "<<count<< " and Weigth: " <<weigth << endl;
-  //cout<<"max_split: "<<max_number<<" snp_number: "<<snp_number<<endl;
 }
 
 // [[Rcpp::export]]
 NumericMatrix calc_mcmf(const List seg_sites,
                         const NumericVector individuals,
                         const NumericMatrix locus_length,
-                        const int expand_mcmf,
+                        const bool expand_mcmf = false,
+                        const int type_expand = 1,
                         const bool has_trios = true,
                         const int ploidy = 1) {
 
@@ -120,9 +115,9 @@ NumericMatrix calc_mcmf(const List seg_sites,
 
   //Create the matrix that contains the mcmf
   int col_num;
-  if ( expand_mcmf == 1 ) {
+  if ( type_expand == 1 ) {
     col_num = 1;
-  }else if( expand_mcmf == 2 ) {
+  }else if( type_expand == 2 ) {
     col_num = 2;
   }else{
     col_num = 3;
@@ -130,12 +125,12 @@ NumericMatrix calc_mcmf(const List seg_sites,
 
   NumericMatrix mcmf(n_loci, col_num);
 
-  if (expand_mcmf == 1 ) {
+  if (type_expand == 1 ) {
     mcmf.attr("dimnames") =
       List::create(R_NilValue, CharacterVector::create(
           "mcmf")
       );
-  }else if( expand_mcmf == 2 ) {
+  }else if( type_expand == 2 ) {
     mcmf.attr("dimnames") =
       List::create(R_NilValue, CharacterVector::create(
           "mcmf", "bal")
@@ -163,7 +158,7 @@ NumericMatrix calc_mcmf(const List seg_sites,
     max_split = 0;
     snp_number = 0;
     weigth = 0;
-    //cout<<"individuals: " <<individuals<<" ploidy: "<< ploidy<<" max_split: "<<max_split<<" snp_number: "<<snp_number<<" weigth: "<<weigth<<endl;
+
     if (has_trios) {
       maxsplit(ss, -1, individuals, ploidy, max_split, snp_number, weigth);
       maxsplit(ss, 1, individuals, ploidy, max_split, snp_number, weigth);
@@ -172,32 +167,24 @@ NumericMatrix calc_mcmf(const List seg_sites,
       maxsplit(ss, 0, individuals, ploidy, max_split, snp_number, weigth);
     }
 
-    //cout<<"max_split: "<<max_split<<" snp_number: "<<snp_number<<endl;
-
     if (snp_number == 0) {
       mcmf(locus,0) = NA_REAL;
-      if(expand_mcmf == 2 || expand_mcmf == 3) {
+      if(type_expand == 2 || type_expand == 3) {
         mcmf(locus,1) = NA_REAL;
       }
-      if(expand_mcmf == 3) {
+      if(type_expand == 3) {
         mcmf(locus,2) = NA_REAL;
       }
       continue;
     }
     mcmf(locus,0) = (double)max_split / snp_number;
-    if(expand_mcmf == 2 || expand_mcmf == 3) {
-      /*if (weigth < 0.3) {
-        weigth = 0;
-      }else{
-        weigth = 1;
-      }*/
+    if(type_expand == 2 || type_expand == 3) {
       mcmf(locus, 1) = weigth;
-      if(expand_mcmf == 3) {
+      if(type_expand== 3) {
       // Calculate SNPs per basepair
         mcmf(locus, 2) = sum(trio_locus_v == 0) / locus_length(0, 2);
       }
     }
   }
-
   return(mcmf);
 }
