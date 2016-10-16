@@ -3,25 +3,31 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
   private = list(
     population = NULL,
     req_segsites = TRUE,
-    expand_mcmf = 1
+    expand_mcmf = FALSE,
+    type_expand = 2
   ),
   public = list(
-    initialize = function(name, population, transformation, expand_mcmf) {
+    initialize = function(name, population, transformation, expand_mcmf, type_expand) {
+      browser()
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
+      assert_that(is.logical(expand_mcmf))
+      assert_that(is.numeric(type_expand))
       private$population <- population
       private$expand_mcmf <- expand_mcmf
+      private$type_expand <- type_expand
       super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
       ploidy <- ifelse(is_unphased(model), get_ploidy(model), 1)
-      #browser()
+      browser()
       calc_mcmf(seg_sites,
                 get_population_individuals(model,
                                           private$population,
                                           haploids = (ploidy == 1)),
                 get_locus_length_matrix(model),
                 private$expand_mcmf,
+                private$type_expand,
                 has_trios(model),
                 ploidy)
     }
@@ -68,6 +74,6 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
 #' simulate(model)
 #' @export
 sumstat_mcmf  <- function(name = "mcmf", population = 1,
-                          transformation = identity, expand_mcmf = TRUE) {
-  stat_mcmf_class$new(name, population, transformation, expand_mcmf)
+                          transformation = identity, expand_mcmf = FALSE, type_expand = 2) {
+  stat_mcmf_class$new(name, population, transformation, expand_mcmf, type_expand)
 }
