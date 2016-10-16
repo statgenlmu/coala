@@ -4,11 +4,10 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
     population = NULL,
     req_segsites = TRUE,
     expand_mcmf = FALSE,
-    type_expand = 2
+    type_expand = 1
   ),
   public = list(
     initialize = function(name, population, transformation, expand_mcmf, type_expand) {
-      browser()
       assert_that(is.numeric(population))
       assert_that(length(population) == 1)
       assert_that(is.logical(expand_mcmf))
@@ -20,7 +19,7 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
     },
     calculate = function(seg_sites, trees, files, model) {
       ploidy <- ifelse(is_unphased(model), get_ploidy(model), 1)
-      browser()
+      if(private$expand_mcmf == FALSE) {
       calc_mcmf(seg_sites,
                 get_population_individuals(model,
                                           private$population,
@@ -29,7 +28,18 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
                 private$expand_mcmf,
                 private$type_expand,
                 has_trios(model),
-                ploidy)
+                ploidy)[,1]
+      }else{
+        calc_mcmf(seg_sites,
+                  get_population_individuals(model,
+                                             private$population,
+                                             haploids = (ploidy == 1)),
+                  get_locus_length_matrix(model),
+                  private$expand_mcmf,
+                  private$type_expand,
+                  has_trios(model),
+                  ploidy)
+      }
     }
   )
 )
@@ -40,11 +50,14 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
 #' of the mutational pattern that is observed most often in
 #' the data.
 #'
-#' The expand_mcmf = TRUE calculates only the mcmf per locus.
-#' The expand_mcmf = 2 versions adds the frequency of
-#' derived alleles in the most frequently observed mutational
-#' pattern. The expand_mcmf = 3 also calculates the percentage
-#' of positions that are polymorpic.
+#' The expand_mcmf = FALSE calculates the mcmf per locus
+#' and returns a vector. The expand_mcmf = TRUE and type_expand = 1
+#' returns the same results as the first column of a Matrix. The
+#' expand_mcmf = TRUE and type_expand = 2 adds the frequency of
+#' derived alleles in the most frequently observed mutational pattern
+#' as a second column. The expand_mcmf = TRUE and type_expand = 3 adds
+#' the percentage of positions that are polymorpic. When
+#' expanded_mcmf = TRUE results are returned as a matrix.
 #'
 #' @param name The name of the summary statistic. When simulating
 #' a model, the value of the statistics are written to an entry
@@ -55,8 +68,9 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
 #' @param transformation An optional function for transforming
 #' the results of the statistic. If specified, the results of the
 #' transformation are returned instead of the original values.
-#' @param expand_mcmf The type of mcmf to be used. See Details
-#' @return A numeric vector containing MCMF for each locus.
+#' @param expand_mcmf Whether to use or not the expanded MCMF. See Details
+#' @param type_expand. Specifies the type of expanded MCMF to be used.See Details
+#' @return A numeric vector or matrix containing MCMF for each locus.
 #'   \describe{
 #'    \item{mcmf}{The observed frequency of the mutational pattern
 #'      that is observed most often in the data.}
@@ -74,6 +88,6 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
 #' simulate(model)
 #' @export
 sumstat_mcmf  <- function(name = "mcmf", population = 1,
-                          transformation = identity, expand_mcmf = FALSE, type_expand = 2) {
+                          transformation = identity, expand_mcmf = FALSE, type_expand = 1) {
   stat_mcmf_class$new(name, population, transformation, expand_mcmf, type_expand)
 }
