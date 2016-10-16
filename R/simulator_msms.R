@@ -41,7 +41,10 @@ msms_class <- R6Class("Msms", inherit = ms_class,
       assert_that(is.character(java) && length(java) == 1)
       private$java <- java
 
-      super$initialize(priority)
+      assert_that(is.numeric(priority) && length(priority) == 1)
+      private$priority <- priority
+
+      invisible(NULL)
     },
     call = function(sample_size, n_loci, command) {
       output <- tempfile("msms")
