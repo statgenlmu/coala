@@ -97,3 +97,17 @@ test_that("ms works with scientific notation", {
   task <- ms$create_task(model, NULL, 1)
   expect_true(grepl("100000000", task$get_arg("cmd")))
 })
+
+
+test_that("ms simulation works", {
+  if (!has_ms()) skip("ms not installed")
+  ms <- get_simulator("ms")
+  model <- coal_model(5, 10, 10) +
+    locus_averaged(5, 10) +
+    feat_mutation(1) +
+    feat_recombination(1) +
+    sumstat_seg_sites()
+  task <- ms$create_task(model, NULL, 1)
+  stats <- ms$simulate(model, task)
+  expect_is(stats, "list")
+})

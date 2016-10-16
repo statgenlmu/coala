@@ -69,7 +69,7 @@ ms_class <- R6Class("ms", inherit = simulator_class,
       if (requires_segsites(model) || requires_trees(model)) {
         output <- parse_ms_output(list(result$file),
                                   get_sample_size(model, for_sim = TRUE),
-                                  get_locus_number(model))
+                                  sim_task$locus_number)
       } else {
         output <- list(seg_sites = NULL, trees = NULL)
       }
