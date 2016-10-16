@@ -5,7 +5,7 @@
 \title{Summary Statistic: Most Common Mutation's Frequency}
 \usage{
 sumstat_mcmf(name = "mcmf", population = 1, transformation = identity,
-  expand_mcmf = TRUE)
+  expand_mcmf = FALSE, type_expand = 1)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating
@@ -20,10 +20,12 @@ calculated. Can also be "all" to calculate it from all populations.}
 the results of the statistic. If specified, the results of the
 transformation are returned instead of the original values.}
 
-\item{expand_mcmf}{The type of mcmf to be used. See Details}
+\item{expand_mcmf}{Whether to use or not the expanded MCMF. See Details}
+
+\item{type_expand}{Specifies the type of expanded MCMF to be used.See Details}
 }
 \value{
-A numeric vector containing MCMF for each locus.
+A numeric vector or matrix containing MCMF for each locus.
   \describe{
    \item{mcmf}{The observed frequency of the mutational pattern
      that is observed most often in the data.}
@@ -38,11 +40,14 @@ of the mutational pattern that is observed most often in
 the data.
 }
 \details{
-The expand_mcmf = TRUE calculates only the mcmf per locus.
-The expand_mcmf = 2 versions adds the frequency of
-derived alleles in the most frequently observed mutational
-pattern. The expand_mcmf = 3 also calculates the percentage
-of positions that are polymorpic.
+The expand_mcmf = FALSE calculates the mcmf per locus
+and returns a vector. The expand_mcmf = TRUE and type_expand = 1
+returns the same results as the first column of a Matrix. The
+expand_mcmf = TRUE and type_expand = 2 adds the frequency of
+derived alleles in the most frequently observed mutational pattern
+as a second column. The expand_mcmf = TRUE and type_expand = 3 adds
+the percentage of positions that are polymorpic. When
+expanded_mcmf = TRUE results are returned as a matrix.
 }
 \examples{
 # Calculate MCMF for a panmictic population

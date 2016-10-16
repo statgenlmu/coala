@@ -69,7 +69,7 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
 #' the results of the statistic. If specified, the results of the
 #' transformation are returned instead of the original values.
 #' @param expand_mcmf Whether to use or not the expanded MCMF. See Details
-#' @param type_expand. Specifies the type of expanded MCMF to be used.See Details
+#' @param type_expand Specifies the type of expanded MCMF to be used.See Details
 #' @return A numeric vector or matrix containing MCMF for each locus.
 #'   \describe{
 #'    \item{mcmf}{The observed frequency of the mutational pattern
