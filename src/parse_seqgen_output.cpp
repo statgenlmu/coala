@@ -128,7 +128,7 @@ List parse_seqgen_output(CharacterVector output,
 
     if (line.at(0) == ' ') {
       ++locus;
-      if (locus == locus_number) stop("Unexpected locus number");
+      if (locus == locus_number) stop("More loci than expected");
       sequence = read_sequence(output, line_nr,
                                individuals, locus_length);
       if (calc_segsites) {
@@ -142,7 +142,7 @@ List parse_seqgen_output(CharacterVector output,
     }
   }
 
-  if (locus != locus_number - 1) stop("Unexpected locus number");
+  if (locus != locus_number - 1) stop("Less loci than expected");
 
   return(results);
 }

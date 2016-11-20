@@ -131,6 +131,7 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
 
       # Simulate the ancestral trees
       tree_task <- sim_task$get_arg("tree_task")
+      tree_task$locus_number <- sim_task$locus_number
       tree_model <- sim_task$get_arg("tree_model")
       trees <- tree_task$get_simulator()$simulate(tree_model, tree_task)$trees
       assert_that(is.list(trees))
