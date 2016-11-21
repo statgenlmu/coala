@@ -13,9 +13,9 @@ before_install:
   - wget -P ~/bin/ https://dl.dropboxusercontent.com/u/24814716/seq-gen
   - chmod +x ~/bin/*
 
-r_github_packages:
-  - jimhester/lintr 
-  - jimhester/covr
+r_packages:
+  - lintr
+  - covr
 
 after_success:
   - Rscript -e "lintr::lint_package()"
