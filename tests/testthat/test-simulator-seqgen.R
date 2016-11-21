@@ -229,6 +229,7 @@ test_that("seqgen can simulate files", {
 test_that("seq-gen can simulate trios", {
   if (!has_seqgen()) skip("seqgen not installed")
   model <- model_gtr() +
+    feat_recombination(5) +
     locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5), number = 2) +
     locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5)) +
     sumstat_seg_sites()
@@ -329,4 +330,33 @@ test_that("seqgen can added manually", {
   activate_seqgen(sg_bin, 99)
   expect_equal(get_simulator("seqgen")$get_priority(), 99)
   expect_error(use_seqgen(tempfile("not-existant")))
+})
+
+
+
+test_that("seq-gen work with msms", {
+  if (!has_seqgen()) skip("seqgen not installed")
+  if (!has_msms()) skip("msms not installed")
+
+  model <- model_gtr() +
+    feat_recombination(5) +
+    locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5), number = 2) +
+    locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5)) +
+    sumstat_seg_sites() +
+    feat_selection(strength_Aa = 1000, time = 0.05)
+
+  sum.stats <- simulate(model, pars = c(1, 10))
+  expect_true(sum(sum.stats$jsfs) <= sum(sapply(sum.stats$seg_sites, ncol)))
+})
+
+
+test_that("seq-gen works with zero-inflation", {
+  if (!has_seqgen()) skip("seqgen not installed")
+
+  model <- model_gtr() +
+    feat_recombination(par_zero_inflation(5, .5)) +
+    sumstat_seg_sites()
+
+  sum.stats <- simulate(model, pars = c(1, 10))
+  expect_true(sum(sum.stats$jsfs) <= sum(sapply(sum.stats$seg_sites, ncol)))
 })
