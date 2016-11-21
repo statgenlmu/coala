@@ -74,9 +74,11 @@ test_that("initialzation of statistic works", {
 test_that("mcmf statistics is correct for diploid models", {
   stat <- sumstat_mcmf(population = 1)
   model <- coal_model(2, ploidy = 2)
-  expect_equal(stat$calculate(seg_sites, NULL, NULL, model), .5)
+  expect_equal(stat$calculate(seg_sites, NULL, NULL, model), .75)
   expect_equal(stat$calculate(seg_sites, NULL, NULL,
                               model + feat_unphased(2)), .75)
+  expect_equal(stat$calculate(seg_sites, NULL, NULL,
+                              model + feat_unphased(1)), 1)
 })
 
 
@@ -95,6 +97,11 @@ test_that("mcmf can be calculated for multiple populations", {
     sumstat_mcmf("mcmf2", population = 2) +
     feat_mutation(10) +
     feat_migration(1, symmetric = TRUE)
+  stats <- simulate(model)
+  expect_is(stats$mcmf1, "numeric")
+  expect_is(stats$mcmf2, "numeric")
+
+  model <- model + feat_unphased(1)
   stats <- simulate(model)
   expect_is(stats$mcmf1, "numeric")
   expect_is(stats$mcmf2, "numeric")
