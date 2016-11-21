@@ -354,7 +354,7 @@ test_that("seq-gen works with zero-inflation", {
   if (!has_seqgen()) skip("seqgen not installed")
 
   model <- model_gtr() +
-    feat_recombination(par_zero_inflation(5, .5))
+    feat_recombination(par_zero_inflation(5, .5)) +
     sumstat_seg_sites()
 
   sum.stats <- simulate(model, pars = c(1, 10))
