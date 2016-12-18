@@ -8,9 +8,9 @@ r:
 
 before_install:
   - mkdir ~/bin
-  - wget -P ~/bin/ https://dl.dropboxusercontent.com/u/24814716/msms.jar
-  - wget -P ~/bin/ https://dl.dropboxusercontent.com/u/24814716/OmegaPlus
-  - wget -P ~/bin/ https://dl.dropboxusercontent.com/u/24814716/seq-gen
+  - wget -P ~/bin/ https://www.dropbox.com/s/csi77fa994g9cpw/msms.jar?dl=1
+  - wget -P ~/bin/ https://www.dropbox.com/s/m9ppejh6qz0eqmy/OmegaPlus?dl=1
+  - wget -P ~/bin/ https://www.dropbox.com/s/el8375o09snd5v5/seq-gen?dl=1
   - chmod +x ~/bin/*
 
 r_packages:
