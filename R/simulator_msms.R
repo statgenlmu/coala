@@ -10,7 +10,7 @@ conv_to_msms_arg.default <- function(feature, model) {
 
 #' @include simulator_class.R
 #' @include simulator_ms.R
-msms_class <- R6Class("Msms", inherit = simulator_class,
+msms_class <- R6Class("Msms", inherit = ms_class,
   private = list(
     name = "msms",
     jar = NULL,
@@ -41,33 +41,29 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
       assert_that(is.character(java) && length(java) == 1)
       private$java <- java
 
-      super$initialize(priority)
+      assert_that(is.numeric(priority) && length(priority) == 1)
+      private$priority <- priority
+
+      invisible(NULL)
     },
-    call_msms = function(msms_args) {
-      out_file <- tempfile("msms")
+    call = function(sample_size, n_loci, command) {
+      output <- tempfile("msms")
       seed <- sample_seed(1)
 
       # Create the command
-      arg <- paste("-jar", private$jar, as.character(msms_args),
+      cmd <- paste("-jar", private$jar,
+                   paste(sample_size, n_loci, command),
                    "-seed", format(seed, scientific = FALSE))
 
       # Execute the command
-      status <- system2(private$java, args = arg, stdout = out_file)
+      status <- system2(private$java, args = cmd, stdout = output)
 
-      if (status != 0 || !file.exists(out_file)) stop("msms simulation failed")
-      if (file.info(out_file)$size == 0) stop("msms output is empty")
+      if (status != 0 || !file.exists(output)) stop("msms simulation failed")
+      if (file.info(output)$size == 0) stop("msms output is empty")
 
-      out_file
+      list(file = output, cmd = paste(private$java, cmd))
     },
-    get_cmd = function(model) {
-      template <- self$create_cmd_tempalte(model)
-      cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
-      paste("msms",
-            sum(get_sample_size(model, TRUE)),
-            cmd[1, "locus_number"],
-            cmd[1, "command"])
-    },
-    create_cmd_tempalte = function(model) {
+    create_cmd_template = function(model) {
       cmd <- read_cache(model, "msms_cmd")
       if (is.null(cmd)) {
         cmd <- paste(vapply(model$features, conv_to_msms_arg,
@@ -77,44 +73,6 @@ msms_class <- R6Class("Msms", inherit = simulator_class,
         cache(model, "msms_cmd", cmd)
       }
       cmd
-    },
-    simulate = function(model, parameters=numeric(0)) {
-      cmd_template <- self$create_cmd_tempalte(model)
-      sample_size <- sum(get_sample_size(model, for_sim = TRUE))
-
-      sim_cmds <- lapply(1:get_locus_group_number(model), function(group) {
-        fill_cmd_template(cmd_template, model, parameters, group)
-      })
-
-      # Run the simulation(s)
-      files <- lapply(sim_cmds, function(sim_cmd) {
-        vapply(1:nrow(sim_cmd), function(i) {
-          msms_options <- paste(sample_size,
-                                sim_cmd[i, "locus_number"],
-                                sim_cmd[i, "command"])
-          self$call_msms(msms_options)
-        }, character(1)) #nolint
-      })
-
-      # Parse the output and calculate summary statistics
-      if (requires_segsites(model) || requires_trees(model)) {
-        output <- parse_ms_output(files, #nolint
-                                  get_sample_size(model, for_sim = TRUE),
-                                  get_locus_number(model))
-      } else {
-        output <- list(seg_sites = NULL, trees = NULL)
-      }
-
-      cmds <- lapply(sim_cmds, function(cmd) {
-        paste("msms", sample_size, cmd[, 1], cmd[, 2])
-      })
-
-      sum_stats <- calc_sumstats_from_sim(output$segsites, output$trees, files,
-                                          model, parameters, cmds, self)
-
-      # Clean Up
-      unlink(unlist(files))
-      sum_stats
     },
     get_info = function() {
       c(name = "msms", jar = private$jar, java = private$java)

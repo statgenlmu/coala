@@ -10,7 +10,7 @@ stat_sfs_class <- R6Class("stat_sfs", inherit = sumstat_class,
       private$population <- population
       super$initialize(name, transformation)
     },
-    calculate = function(seg_sites, trees, files, model) {
+    calculate = function(seg_sites, trees, files, model, sim_tasks = NULL) {
       individuals <- get_population_individuals(model, private$population)
       sfs <- as.vector(calc_jsfs(seg_sites, list(individuals)))
       sfs[c(-1, -length(sfs))]

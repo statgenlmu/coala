@@ -327,3 +327,11 @@ test_that("printing partical models works", {
   expect_output(print(incomplete_model), "Mutation")
   expect_output(print(incomplete_model), "Recombination")
 })
+
+
+test_that("create_group_models creates group models", {
+  model <- model_theta_tau() + locus_averaged(2, 5) + locus_single(7)
+  expect_equal(create_group_model(model, 1)$loci, model_theta_tau()$loci)
+  expect_equal(create_group_model(model, 2)$loci, list(locus_averaged(2, 5)))
+  expect_equal(create_group_model(model, 3)$loci, list(locus_single(7)))
+})

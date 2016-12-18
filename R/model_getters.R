@@ -102,19 +102,13 @@ get_populations <- function(model) {
 #' information about the loci in the model.
 #' @export
 get_locus_length_matrix <- function(model) {
-  llm <- read_cache(model, "llm")
-  if (is.null(llm)) {
-    assert_that(length(model$loci) >= 0)
-    llm <- do.call(rbind, lapply(model$loci, function(l) {
-             number <- ifelse(l$get_number() > 1,
-                              round(l$get_number() / model$scaling_factor),
-                              l$get_number())
-             c(l$get_length(TRUE), number = number)
-           }))
-
-    cache(model, "llm", llm)
-  }
-  llm
+  assert_that(length(model$loci) >= 0)
+  do.call(rbind, lapply(model$loci, function(l) {
+    number <- ifelse(l$get_number() > 1,
+                     round(l$get_number() / model$scaling_factor),
+                     l$get_number())
+    c(l$get_length(TRUE), number = number)
+  }))
 }
 
 

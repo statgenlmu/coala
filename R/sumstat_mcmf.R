@@ -8,7 +8,8 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
   ),
   public = list(
     initialize = function(name, population, transformation, expand_mcmf, type_expand) {
-      assert_that(is.numeric(population))
+      assert_that(identical(population, "all") || is.numeric(population))
+
       assert_that(length(population) == 1)
       assert_that(is.logical(expand_mcmf))
       assert_that(is.numeric(type_expand))
@@ -18,7 +19,7 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
       super$initialize(name, transformation)
     },
     calculate = function(seg_sites, trees, files, model) {
-      ploidy <- ifelse(is_unphased(model), get_ploidy(model), 1)
+      ploidy <- get_samples_per_ind(model)
       if(private$expand_mcmf == FALSE) {
       calc_mcmf(seg_sites,
                 get_population_individuals(model,

@@ -23,83 +23,44 @@ scrm_create_cmd_template <- function(model) {
 #' @importFrom scrm scrm
 #' @include simulator_class.R
 #' @include simulator_ms.R
-scrm_class <- R6Class('Scrm', inherit = simulator_class, #nolint
+scrm_class <- R6Class('Scrm', inherit = ms_class, #nolint
   private = list(
     name = "scrm",
     version = packageDescription("scrm", fields = "Version")
   ),
   public = list(
-    simulate = function(model, parameters) {
-      cmd_template <- scrm_create_cmd_template(model)
+    create_cmd_template = scrm_create_cmd_template,
+    initialize = function(priority = 400) {
+      assert_that(is.numeric(priority) && length(priority) == 1)
+      private$priority <- priority
+    },
+    simulate = function(model, sim_task) {
       sample_size <- sum(get_sample_size(model, for_sim = TRUE))
 
-      sim_cmds <- lapply(1:get_locus_group_number(model), function(group) {
-        fill_cmd_template(cmd_template, model, parameters, group)
-      })
+      if (requires_files(model)) file <- tempfile("scrm")
+      else file <- ""
 
-      locus_number <- sum(get_locus_number(model))
-      seg_sites <- list()
-      if (requires_segsites(model)) length(seg_sites) <- locus_number
+      cmd <- paste(sample_size, sim_task$locus_number, sim_task$get_arg("cmd"))
+      result <- scrm(cmd, file)
 
-      trees <- list()
-      if (requires_trees(model)) length(trees) <- locus_number
-
-      sim_number <- sum(sapply(sim_cmds, nrow))
-      if (requires_files(model)) {
-        files <- sapply(1:sim_number, function(x) tempfile("scrm"))
-      } else {
-        files <- rep("", sim_number)
+      if (requires_segsites(model)) {
+        result$seg_sites <- lapply(result$seg_sites, function(x) {
+          create_segsites(x, as.numeric(colnames(x)), check = FALSE)
+        })
       }
 
-      cl <- 1
-      j <- 0
-      for (cmds in sim_cmds) {
-        for (i in 1:nrow(cmds)) {
-          j <- j + 1
-          stats <- scrm(paste(sample_size, cmds[i, 1], cmds[i, 2]), files[j])
-
-          if (requires_segsites(model)) {
-            seg_sites[cl:(cl + cmds[i, 1] - 1)] <- stats$seg_sites[] #nolint
-          }
-
-          if (requires_trees(model)) {
-            if (packageVersion("scrm") < "1.7.2") {
-              split_tree <- lapply(stats$trees, function(x) {
-                strsplit(x, split = "\n", fixed = TRUE)[[1]]
-              })
-            } else {
-              split_tree <- stats$trees
-            }
-
-            trees[cl:(cl + cmds[i, 1] - 1)] <- split_tree[]  #nolint
-          }
-          cl <- cl + cmds[i, 1]
-        }
+      if (requires_trees(model) && packageVersion("scrm") < "1.7.2") {
+        result$trees <- lapply(result$trees, function(x) {
+          strsplit(x, split = "\n", fixed = TRUE)[[1]]
+        })
       }
 
-      seg_sites <- lapply(seg_sites, function(x) {
+      result$cmd <- paste("scrm", cmd)
+      result$simulator <- self
 
-        if (!is_segsites(x)) {
-          x <- create_segsites(x, as.numeric(colnames(x)), check = FALSE)
-        }
-        x
-      })
+      if (file != "") result$files <- file
 
-      cmds <- lapply(sim_cmds, function(cmd) {
-        paste("scrm", sample_size, cmd[, 1], cmd[, 2])
-      })
-
-      stats <- calc_sumstats_from_sim(seg_sites, trees, files,
-                                      model, parameters, cmds, self)
-      unlink(files)
-
-      stats
-    },
-    get_cmd = function(model) {
-      template <- scrm_create_cmd_template(model)
-      cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
-      paste("scrm",
-            sum(get_sample_size(model, TRUE)), cmd[1, 1], cmd[1, 2])
+      result
     },
     get_info = function() c(name = "scrm", version = private$version)
   )

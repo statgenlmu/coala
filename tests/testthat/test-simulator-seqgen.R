@@ -152,7 +152,6 @@ test_that("test.sg_generate_opts", {
   opts <- strsplit(opts, " ")[[1]]
   expect_true("-l" %in% opts)
   expect_true("-p" %in% opts)
-  expect_true("-z" %in% opts)
   expect_true("-q" %in% opts)
   expect_true("-mHKY" %in% opts)
   expect_true("-t" %in% opts)
@@ -171,31 +170,43 @@ test_that("generation of tree models works", {
 })
 
 
-test_that("simulation with seq-gen works", {
+test_that("seqgen creates tasks", {
   if (!has_seqgen()) skip("seqgen not installed")
   sg <- get_simulator("seqgen")
 
-  set.seed(100)
-  sum.stats <- sg$simulate(model_hky(), c(tau = 1, theta = 10))
-  expect_true(is.list(sum.stats))
-  expect_true(is.array(sum.stats$jsfs))
-  expect_true(sum(sum.stats$jsfs) > 0)
+  sim_task <- sg$create_task(model_hky(), c(tau = 1, theta = 5), 2)
+  expect_true(is_simulation_task(sim_task))
+  expect_equal(sim_task$locus_number, 2)
+  expect_true(is_simulation_task(sim_task$get_arg("tree_task")))
+  expect_true(grepl("-mHKY", sim_task$get_arg("cmd")))
+  expect_equivalent(sim_task$get_arg("trio_dists"),
+                    c(0, 0, get_locus_length(model_hky()), 0, 0))
+})
+
+
+test_that("simulation with seq-gen works", {
+  if (!has_seqgen()) skip("seqgen not installed")
 
   set.seed(100)
-  sum.stats2 <- sg$simulate(model_hky(), c(tau = 1, theta = 10))
-  expect_equal(sum.stats2$jsfs, sum.stats$jsfs)
+  sum_stats <- simulate(model_hky(), pars = c(tau = 1, theta = 10))
+  expect_true(is.list(sum_stats))
+  expect_true(is.array(sum_stats$jsfs))
+  expect_true(sum(sum_stats$jsfs) > 0)
+
+  set.seed(100)
+  sum_stats2 <- simulate(model_hky(), pars = c(tau = 1, theta = 10))
+  expect_equal(sum_stats2$jsfs, sum_stats$jsfs)
 })
 
 
 test_that("seqgen simulates long sequences", {
   if (!has_seqgen()) skip("seqgen not installed")
-  sg <- get_simulator("seqgen")
-  stat <- sg$simulate(model_hky() + locus_single(10000), c(tau = 1, theta = 5))
+  stat <- simulate(model_hky() + locus_single(10000), pars = c(1, 5))
   expect_true(sum(stat$jsfs) > 1)
 })
 
 
-test_that("All example models can be simulated", {
+test_that("seqgen can simulate all example models", {
   if (!has_seqgen()) skip("seqgen not installed")
   set.seed(12)
   for (model in list(model_hky(), model_gtr())) {
@@ -205,43 +216,20 @@ test_that("All example models can be simulated", {
 })
 
 
-test_that("test.RateHeterogenity", {
-  skip("Temporarily deactivated")
+test_that("seqgen can simulate files", {
   if (!has_seqgen()) skip("seqgen not installed")
-  set.seed(12)
-  #model.rh <-
-  #  model.addMutationRateHeterogenity(model.hky, 0.1, 5, categories.number = 5)
-  jsfs <- simulate(model.rh, c(1, 10, 1))
-  expect_true(sum(jsfs$jsfs) > 0)
-})
-
-
-test_that("test.seqgenWithMsms", {
-  if (!has_seqgen()) skip("seqgen not installed")
-  if (!has_msms()) skip("msms not installed")
-
-  m1 <- model_hky() + feat_selection(500, 250, population = 1, time = 0.1)
-  set.seed(4444)
-  sum.stats <- simulate(m1, pars = c(1, 5))
-  expect_false(is.null(sum.stats$jsfs))
-
-  set.seed(4444)
-  sum.stats2 <- simulate(m1, pars = c(1, 5))
-  expect_equal(sum.stats2$jsfs, sum.stats$jsfs)
-
-  # With interlocus variation
-  m2 <- model_hky() +
-    feat_selection(strength_A = par_zero_inflation(1000, .5),
-                   population = 1, time = 0.1)
-    #feat_migration(par_zero_inflation(1, .5), symmetric = TRUE)
-  stats <- simulate(m2, pars = c(1, 5))
-  expect_false(is.null(sum.stats$jsfs))
+  tmp_dir <- tempfile("seqgen_tmp_files_test")
+  stats <- simulate(model_hky() + sumstat_file(tmp_dir), pars = c(1, 5))
+  expect_true(dir.exists(tmp_dir))
+  expect_true(file.exists(stats$file))
+  unlink(tmp_dir, recursive = TRUE)
 })
 
 
 test_that("seq-gen can simulate trios", {
   if (!has_seqgen()) skip("seqgen not installed")
   model <- model_gtr() +
+    feat_recombination(5) +
     locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5), number = 2) +
     locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5)) +
     sumstat_seg_sites()
@@ -296,7 +284,6 @@ test_that("a more complicated model works", {
 
 test_that("seqgen works with inter-locus variation", {
   if (!has_seqgen()) skip("seq-gen not installed")
-  sg <- get_simulator("seqgen")
 
   model_tmp <- coal_model(c(3, 3, 1), 2) +
     feat_pop_merge(2.0, 2, 1) +
@@ -308,24 +295,10 @@ test_that("seqgen works with inter-locus variation", {
   expect_true(has_variation(model_tmp))
 
   set.seed(1100)
-  sum_stats <- sg$simulate(model_tmp, parameters = numeric(0))
+  sum_stats <- simulate(model_tmp, pars = numeric(0))
   expect_is(sum_stats$jsfs, "matrix")
   expect_that(sum(sum_stats$jsfs), is_more_than(0))
-})
-
-
-test_that("simulating unphased data works", {
-  if (!has_seqgen()) skip("seq-gen not installed")
-  sg <- get_simulator("seqgen")
-  model <- coal_model(c(5, 1), 2, ploidy = 2) +
-    feat_outgroup(2) +
-    feat_pop_merge(1.0, 2, 1) +
-    feat_mutation(5, model = "GTR", gtr_rates = 1:6) +
-    feat_unphased(1) +
-    sumstat_seg_sites()
-  stats <- sg$simulate(model)
-  expect_equal(nrow(stats$seg_sites[[1]]), 5)
-  expect_equal(nrow(stats$seg_sites[[2]]), 5)
+  expect_equal(length(sum_stats$cmds), 2)
 })
 
 
@@ -337,22 +310,6 @@ test_that("seq-gen works without recombination", {
     feat_outgroup(3) +
     feat_mutation(par_range("theta", 1, 10), model = "GTR", gtr_rates = 1:6) +
     sumstat_jsfs()
-
-  stats <- simulate(model, pars = c(1, 5))
-  expect_is(stats, "list")
-})
-
-
-test_that("seq-gen can simulate scaled models", {
-  if (!has_seqgen()) skip("seq-gen not installed")
-  model <- coal_model(c(3, 3, 1), 100, 10) +
-    feat_pop_merge(par_range("tau", 0.01, 5), 2, 1) +
-    feat_pop_merge(par_expr("2*tau"), 3, 1) +
-    feat_outgroup(3) +
-    feat_mutation(par_range("theta", 1, 10), model = "GTR", gtr_rates = 1:6) +
-    sumstat_jsfs()
-
-  model <- scale_model(model, 5)
 
   stats <- simulate(model, pars = c(1, 5))
   expect_is(stats, "list")
@@ -376,47 +333,30 @@ test_that("seqgen can added manually", {
 })
 
 
-test_that("seqgen works with zero inflation", {
+
+test_that("seq-gen work with msms", {
   if (!has_seqgen()) skip("seqgen not installed")
+  if (!has_msms()) skip("msms not installed")
 
-  model <- coal_model(c(3, 3, 1)) +
-    locus_trio(rep(100, 3), rep(100, 2), 10) +
-    feat_pop_merge(.5, 2, 1) +
-    feat_pop_merge(1, 3, 1) +
-    feat_outgroup(3) +
-    feat_mutation(2, model = "GTR", gtr_rates = 1:6) +
-    feat_migration(par_zero_inflation(1, .5), symmetric = TRUE) +
-    sumstat_jsfs()
+  model <- model_gtr() +
+    feat_recombination(5) +
+    locus_trio(locus_length = c(10, 20, 10), distance = c(5, 5), number = 2) +
+    locus_trio(locus_length = c(20, 10, 15), distance = c(7, 5)) +
+    sumstat_seg_sites() +
+    feat_selection(strength_Aa = 1000, time = 0.05)
 
-  stats <- simulate(model)
-  expect_is(stats, "list")
+  sum.stats <- simulate(model, pars = c(1, 10))
+  expect_true(sum(sum.stats$jsfs) <= sum(sapply(sum.stats$seg_sites, ncol)))
 })
 
 
-test_that("seqgen command are added to the output", {
+test_that("seq-gen works with zero-inflation", {
   if (!has_seqgen()) skip("seqgen not installed")
 
-  model <- model_hky()
-  output <- get_simulator("seqgen")$simulate(model, c(tau = 1, theta = 5))
-  expect_true(is.list(output$cmds))
-  expect_equal(length(output$cmds), 2)
-  expect_true(grepl("^seq-gen ", output$cmds$seqgen[[1]]))
+  model <- model_gtr() +
+    feat_recombination(par_zero_inflation(5, .5)) +
+    sumstat_seg_sites()
 
-  model <- model_hky() + locus_single(10)
-  output <- get_simulator("seqgen")$simulate(model, c(tau = 1, theta = 5))
-  expect_true(is.list(output$cmds))
-  expect_equal(length(output$cmds), 2)
-  expect_equal(length(output$cmd$seqgen), 2)
-  expect_equal(length(output$cmd$seqgen[[1]]), 1)
-  expect_equal(length(output$cmd$seqgen[[2]]), 1)
-  expect_true(grepl("^seq-gen ", output$cmds$seqgen[[2]]))
-
-  model <- model_hky() + locus_trio()
-  output <- get_simulator("seqgen")$simulate(model, c(tau = 1, theta = 5))
-  expect_true(is.list(output$cmds))
-  expect_equal(length(output$cmds), 2)
-  expect_equal(length(output$cmd$seqgen), 2)
-  expect_equal(length(output$cmd$seqgen[[1]]), 1)
-  expect_equal(length(output$cmd$seqgen[[2]]), 3)
-  expect_true(all(grepl("^seq-gen ", output$cmds$seqgen[[2]])))
+  sum.stats <- simulate(model, pars = c(1, 10))
+  expect_true(sum(sum.stats$jsfs) <= sum(sapply(sum.stats$seg_sites, ncol)))
 })

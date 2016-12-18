@@ -1,16 +1,29 @@
 #' @importFrom R6 R6Class
 stat_dna_class <- R6Class("dna_stat", inherit = sumstat_class,
-  private = list(),
+  private = list(req_files = TRUE),
   public = list(
-    calculate = function(seg_sites, trees, dna, model) {
-      if (requires_segsites(model)) {
-        stop("Can not generate both seg. sites and DNA")
-      }
+    calculate = function(seg_sites, trees, files, model, sim_tasks) {
       if (has_trios(model)) {
         stop("Cannot generate DNA for trio models")
       }
-      lapply(dna, function(locus) {
-        apply(locus, 2, function(x) attr(locus, "levels")[x])
+      if (is_unphased(model)) {
+        stop("Cannot generate unphased DNA")
+      }
+
+      assert_that(length(files) == length(sim_tasks))
+
+      lapply(seq_along(files), function(i) {
+        assert_that(file.exists(files[i]))
+        locus_length <- sum(sim_tasks[[i]]$get_arg("trio_dists"))
+        dna <- parse_seqgen_output(readLines(files[i]),
+                                   individuals = sum(get_sample_size(model,
+                                                                     TRUE)),
+                                   locus_length = locus_length,
+                                   locus_number = sim_tasks[[i]]$locus_number,
+                                   outgroup_size = get_outgroup_size(model,
+                                                                     TRUE),
+                                   calc_segsites = FALSE)
+        dna[[1]]
       })
     }
   )

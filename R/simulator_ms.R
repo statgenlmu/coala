@@ -32,7 +32,7 @@ ms_class <- R6Class("ms", inherit = simulator_class,
       assert_that(is.numeric(priority) && length(priority) == 1)
       private$priority <- priority
     },
-    create_cmd_tempalte = function(model) {
+    create_cmd_template = function(model) {
       cmd <- read_cache(model, "ms_cmd")
       if (is.null(cmd)) {
         cmd <- paste(vapply(model$features, conv_to_ms_arg,
@@ -44,63 +44,52 @@ ms_class <- R6Class("ms", inherit = simulator_class,
 
       cmd
     },
-    simulate = function(model, parameters=numeric()) {
-      stopifnot(length(parameters) == 0 | all(is.numeric(parameters)))
+    create_task = function(model, pars, locus_number,
+                           locus_id = 1,
+                           eval_pars = TRUE) {
+      tmplt <- self$create_cmd_template(model)
+      cmd <- fill_cmd_template(tmplt, model, pars, locus_id, eval_pars)
+      create_sim_task(self, locus_number,
+                      cmd = cmd,
+                      sample_size = sum(get_sample_size(model, for_sim = TRUE)))
+    },
+    call = function(sample_size, n_loci, command) {
+      output <- tempfile("ms")
+      phyclust::ms(sample_size, n_loci, command, temp.file = output)
+      if (!file.exists(output)) stop("ms simulation failed")
+      list(file = output, cmd = paste("ms", sample_size, n_loci, command))
+    },
+    simulate = function(model, sim_task) {
+      # Call ms
+      result <- self$call(sim_task$get_arg("sample_size"),
+                          sim_task$locus_number,
+                          sim_task$get_arg("cmd"))
 
-      # Generate the simulation commands
-      cmd_template <- self$create_cmd_tempalte(model)
-      sample_size <- sum(get_sample_size(model, for_sim = TRUE))
-
-      sim_cmds <- lapply(1:get_locus_group_number(model), function(group) {
-        fill_cmd_template(cmd_template, model, parameters, group)
-      })
-
-      wd <- getwd()
-      setwd(tempdir())
-
-      # Do the actual simulation
-      files <- lapply(sim_cmds, function(sim_cmd) {
-        vapply(1:nrow(sim_cmd), function(j) {
-          file <- tempfile("ms")
-          ret <- phyclust::ms(sample_size,
-                              sim_cmd[j, "locus_number"],
-                              sim_cmd[j, "command"], #nolint
-                              temp.file = file)
-
-          if (!file.exists(file)) stop("ms simulation failed")
-          file
-        }, character(1))
-      })
-
-      setwd(wd)
-
-      # Parse the output and calculate summary statistics
+      # Parse the output
       if (requires_segsites(model) || requires_trees(model)) {
-        output <- parse_ms_output(files, #nolint
+        output <- parse_ms_output(list(result$file),
                                   get_sample_size(model, for_sim = TRUE),
-                                  get_locus_number(model))
+                                  sim_task$locus_number)
       } else {
         output <- list(seg_sites = NULL, trees = NULL)
       }
 
-      cmds <- lapply(sim_cmds, function(cmd) {
-        paste("ms", sample_size, cmd[, 1], cmd[, 2])
-      })
+      # Add the file if needed
+      if (requires_files(model)) output$file <- result$file
+      else unlink(result$file)
 
-      sum_stats <- calc_sumstats_from_sim(output$segsites, output$trees,
-                                          files, model, parameters, cmds, self)
+      # Add the simulation cmd
+      output$cmd <- result$cmd
+      output$simulator <- self
 
-      # Clean Up
-      unlink(unlist(files))
-      sum_stats
+      output
     },
     get_cmd = function(model) {
-      template <- self$create_cmd_tempalte(model)
-      cmd <- fill_cmd_template(template, model, NULL, 1, eval_pars = FALSE)
-      paste("ms",
-            sum(get_sample_size(model, TRUE)),
-            cmd[1, "locus_number"],
-            cmd[1, "command"])
+      task <- self$create_task(model, NULL, get_locus_number(model), 1, FALSE)
+      paste(self$get_name(),
+            task$get_arg("sample_size"),
+            task$locus_number,
+            task$get_arg("cmd"))
     },
     get_info = function() c(name = "ms",
                             version = paste0("phyclust_",

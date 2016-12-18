@@ -8,14 +8,17 @@ r:
 
 before_install:
   - mkdir ~/bin
-  - wget -P ~/bin/ https://dl.dropboxusercontent.com/u/24814716/msms.jar
-  - wget -P ~/bin/ https://dl.dropboxusercontent.com/u/24814716/OmegaPlus
-  - wget -P ~/bin/ https://dl.dropboxusercontent.com/u/24814716/seq-gen
+  - wget -O ~/bin/msms.jar "https://www.dropbox.com/s/csi77fa994g9cpw/msms.jar?dl=1"
+  - wget -O ~/bin/OmegaPlus "https://www.dropbox.com/s/m9ppejh6qz0eqmy/OmegaPlus?dl=1"
+  - wget -O ~/bin/seq-gen "https://www.dropbox.com/s/el8375o09snd5v5/seq-gen?dl=1"
   - chmod +x ~/bin/*
+  # Set CXX1X for R-devel, as R-devel does currently not detect CXX1X support for gcc 4.6.3
+  # Check if we can remove this at some point in 2017
+  - if [[ "$TRAVIS_R_VERSION_STRING" = 'devel' ]]; then mkdir ~/.R && echo 'CXX1X=g++ -std=c++0x -g -O2 -fPIC' > ~/.R/Makevars; fi
 
-r_github_packages:
-  - jimhester/lintr 
-  - jimhester/covr
+r_packages:
+  - lintr
+  - covr
 
 after_success:
   - Rscript -e "lintr::lint_package()"
@@ -23,4 +26,3 @@ after_success:
 
 notifications:
   email: false
-

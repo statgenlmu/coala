@@ -32,6 +32,6 @@ test_that("simulating a size change works", {
     feat_size_change(2, population = 1) +
     sumstat_sfs()
 
-  sum_stats <- scrm$simulate(model_tmp)
+  sum_stats <- simulate(model_tmp)
   expect_true(is.numeric(sum_stats$sfs))
 })
