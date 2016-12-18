@@ -106,3 +106,33 @@ test_that("mcmf can be calculated for multiple populations", {
   expect_is(stats$mcmf1, "numeric")
   expect_is(stats$mcmf2, "numeric")
 })
+
+
+test_that("mcmf can be calulated in the expanded version", {
+  model <- coal_model(4) + locus_averaged(1, 4)
+
+  seg_sites <- list(create_segsites(cbind(ss, ss, ss),
+                                    rep(c(0.1, 0.2, 0.5, 0.7), 3),
+                                    rep(c(-1, 0, 1), each = 4)))
+
+  stat <- sumstat_mcmf(population = 1, expand_mcmf = TRUE, type_expand = 1)
+  expect_equivalent(stat$calculate(seg_sites, NULL, NULL, model), matrix(0.5))
+
+  stat <- sumstat_mcmf(population = 1, expand_mcmf = TRUE, type_expand = 2)
+  expect_equivalent(stat$calculate(seg_sites, NULL, NULL, model),
+                    matrix(c(0.5, 0.25), 1))
+
+  stat <- sumstat_mcmf(population = 1, expand_mcmf = TRUE, type_expand = 3)
+  expect_equivalent(stat$calculate(seg_sites, NULL, NULL, model),
+                    matrix(c(0.5, 0.25, 1), 1))
+
+  stat <- sumstat_mcmf(population = 1, expand_mcmf = TRUE, type_expand = 3)
+  expect_equivalent(stat$calculate(list(seg_sites[[1]], seg_sites[[1]]),
+                                   NULL, NULL, model),
+                    matrix(c(0.5, 0.25, 1), 2, 3, byrow = TRUE))
+
+  model <- coal_model(4) + locus_trio()
+  stat <- sumstat_mcmf(population = 1, expand_mcmf = TRUE, type_expand = 3)
+  expect_equivalent(stat$calculate(seg_sites, NULL, NULL, model),
+                    matrix(c(1/3, 0.25, 0.004), 1))
+})
