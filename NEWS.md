@@ -2,6 +2,8 @@ coala 0.5.0
 ===========
 
 * Major interal refactoring on how simulators interface with coala (#174).
+* Support for calculating an expanded version of MCMF (#173, #179). This
+  feature was contributed by Jorge E. Amaya Romero (@jorgeamaya).
 
 
 

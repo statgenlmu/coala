@@ -1,11 +1,11 @@
 Package: coala
-Version: 0.4.1.9003
+Version: 0.4.1.9004
 License: MIT + file LICENSE
 Title: A Framework for Coalescent Simulation
 Authors@R: c(
     person('Paul', 'Staab', , 'develop@paulstaab.de', role=c('aut', 'cre')),
-    person('Dirk', 'Metzler', , 'metzler@bio.lmu.de', role=c('aut', 'ths'))
-    )
+    person('Dirk', 'Metzler', , 'metzler@bio.lmu.de', role=c('aut', 'ths')),
+    person('Jorge E.', 'Amaya Romero', role = 'ctb'))
 BugReports: https://github.com/statgenlmu/coala/issues
 URL: https://github.com/statgenlmu/coala
 Description: Coalescent simulators can rapidly simulate biological sequences
