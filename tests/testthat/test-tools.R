@@ -5,3 +5,7 @@ test_that("it checks for packages", {
   expect_true(require_package("coala"))
   expect_error(require_package("2l3ihjrpaiwhf"))
 })
+
+test_that("onLoad does not throw an error", {
+  expect_equal(coala:::.onLoad(NULL, NULL), NULL)
+})

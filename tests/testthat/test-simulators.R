@@ -110,4 +110,10 @@ for (simulator in progs) {
     expect_true(grepl("5 7", cmd))
     expect_true(grepl("-t theta", cmd))
   })
+
+
+  test_that("unknown features generate an error", {
+    feat_null <- R6Class("NULL", inherit = feature_class)$new()
+    expect_error(simulator$create_cmd_template(model + feat_null))
+  })
 }

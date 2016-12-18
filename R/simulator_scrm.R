@@ -7,19 +7,6 @@ conv_to_scrm_arg.default <- function(feature, model) {
 }
 
 
-scrm_create_cmd_template <- function(model) {
-  cmd <- read_cache(model, "scrm_cmd")
-  if (is.null(cmd)) {
-    cmd <- paste(vapply(model$features, conv_to_scrm_arg,
-                        FUN.VALUE = character(1), model),
-                 collapse = "")
-    cmd <- paste0("c('", cmd, "')")
-    cache(model, "scrm_cmd", cmd)
-  }
-  cmd
-}
-
-
 #' @importFrom scrm scrm
 #' @include simulator_class.R
 #' @include simulator_ms.R
@@ -29,7 +16,17 @@ scrm_class <- R6Class('Scrm', inherit = ms_class, #nolint
     version = packageDescription("scrm", fields = "Version")
   ),
   public = list(
-    create_cmd_template = scrm_create_cmd_template,
+    create_cmd_template = function(model) {
+      cmd <- read_cache(model, "scrm_cmd")
+      if (is.null(cmd)) {
+        cmd <- paste(vapply(model$features, conv_to_scrm_arg,
+                            FUN.VALUE = character(1), model),
+                     collapse = "")
+        cmd <- paste0("c('", cmd, "')")
+        cache(model, "scrm_cmd", cmd)
+      }
+      cmd
+    },
     initialize = function(priority = 400) {
       assert_that(is.numeric(priority) && length(priority) == 1)
       private$priority <- priority
