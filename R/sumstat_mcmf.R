@@ -18,29 +18,27 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
       private$type_expand <- type_expand
       super$initialize(name, transformation)
     },
-    calculate = function(seg_sites, trees, files, model) {
+    calculate = function(seg_sites, trees, files, model, sim_tasks = NULL) {
       ploidy <- get_samples_per_ind(model)
-      if(private$expand_mcmf == FALSE) {
-      calc_mcmf(seg_sites,
-                get_population_individuals(model,
-                                          private$population,
-                                          haploids = (ploidy == 1)),
-                get_locus_length_matrix(model),
-                private$expand_mcmf,
-                private$type_expand,
-                has_trios(model),
-                ploidy)[,1]
-      }else{
-        calc_mcmf(seg_sites,
-                  get_population_individuals(model,
-                                             private$population,
-                                             haploids = (ploidy == 1)),
-                  get_locus_length_matrix(model),
-                  private$expand_mcmf,
-                  private$type_expand,
-                  has_trios(model),
-                  ploidy)
+      individuals <- get_population_individuals(model,
+                                                private$population,
+                                                haploids = (ploidy == 1))
+      locus_length <- get_locus_length_matrix(model)
+      if (is.null(locus_length)) locus_length <- matrix(0, 0, 6)
+
+      mcmf <- calc_mcmf(seg_sites = seg_sites,
+                        individuals = individuals,
+                        expand_mcmf = private$expand_mcmf,
+                        type_expand = private$type_expand,
+                        has_trios = has_trios(model),
+                        ploidy = ploidy,
+                        locus_length = locus_length)
+
+      if (private$expand_mcmf == FALSE) {
+        return(mcmf[, 1])
       }
+
+      mcmf
     }
   )
 )
@@ -70,7 +68,7 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
 #' the results of the statistic. If specified, the results of the
 #' transformation are returned instead of the original values.
 #' @param expand_mcmf Whether to use or not the expanded MCMF. See Details
-#' @param type_expand Specifies the type of expanded MCMF to be used.See Details
+#' @param type_expand Specifies the type of expanded MCMF to be used. See Details
 #' @return A numeric vector or matrix containing MCMF for each locus.
 #'   \describe{
 #'    \item{mcmf}{The observed frequency of the mutational pattern
@@ -88,7 +86,15 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
 #'   sumstat_mcmf()
 #' simulate(model)
 #' @export
-sumstat_mcmf  <- function(name = "mcmf", population = 1,
-                          transformation = identity, expand_mcmf = FALSE, type_expand = 1) {
-  stat_mcmf_class$new(name, population, transformation, expand_mcmf, type_expand)
+sumstat_mcmf  <- function(name = "mcmf",
+                          population = 1,
+                          transformation = identity,
+                          expand_mcmf = FALSE,
+                          type_expand = 1) {
+
+  stat_mcmf_class$new(name,
+                      population,
+                      transformation,
+                      expand_mcmf,
+                      type_expand)
 }

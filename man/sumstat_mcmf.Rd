@@ -22,7 +22,7 @@ transformation are returned instead of the original values.}
 
 \item{expand_mcmf}{Whether to use or not the expanded MCMF. See Details}
 
-\item{type_expand}{Specifies the type of expanded MCMF to be used.See Details}
+\item{type_expand}{Specifies the type of expanded MCMF to be used. See Details}
 }
 \value{
 A numeric vector or matrix containing MCMF for each locus.

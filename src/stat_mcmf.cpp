@@ -105,21 +105,21 @@ void maxsplit(const coala::SegSites segsites,
 // [[Rcpp::export]]
 NumericMatrix calc_mcmf(const List seg_sites,
                         const NumericVector individuals,
-                        const NumericMatrix locus_length,
+                        const bool has_trios = true,
                         const bool expand_mcmf = false,
                         const int type_expand = 1,
-                        const bool has_trios = true,
-                        const int ploidy = 1) {
+                        const int ploidy = 1,
+                        const NumericMatrix locus_length = NumericMatrix(0)) {
 
   size_t n_loci = seg_sites.size();
 
   //Create the matrix that contains the mcmf
   int col_num;
-  if ( type_expand == 1 ) {
+  if (type_expand == 1) {
     col_num = 1;
-  }else if( type_expand == 2 ) {
+  } else if (type_expand == 2) {
     col_num = 2;
-  }else{
+  } else {
     col_num = 3;
   }
 
@@ -177,14 +177,17 @@ NumericMatrix calc_mcmf(const List seg_sites,
       }
       continue;
     }
+
     mcmf(locus,0) = (double)max_split / snp_number;
-    if(type_expand == 2 || type_expand == 3) {
+
+    if (type_expand == 2 || type_expand == 3) {
       mcmf(locus, 1) = weigth;
-      if(type_expand== 3) {
-      // Calculate SNPs per basepair
+      if (type_expand == 3) {
+        // Calculate SNPs per basepair
         mcmf(locus, 2) = sum(trio_locus_v == 0) / locus_length(0, 2);
       }
     }
   }
+
   return(mcmf);
 }
