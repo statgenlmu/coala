@@ -7,7 +7,9 @@ stat_mcmf_class <- R6Class("stat_mcmf", inherit = sumstat_class,
     type_expand = 1
   ),
   public = list(
-    initialize = function(name, population, transformation, expand_mcmf, type_expand) {
+    initialize = function(name, population, transformation,
+                          expand_mcmf, type_expand) {
+
       assert_that(identical(population, "all") || is.numeric(population))
 
       assert_that(length(population) == 1)
