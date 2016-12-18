@@ -134,5 +134,5 @@ test_that("mcmf can be calulated in the expanded version", {
   model <- coal_model(4) + locus_trio()
   stat <- sumstat_mcmf(population = 1, expand_mcmf = TRUE, type_expand = 3)
   expect_equivalent(stat$calculate(seg_sites, NULL, NULL, model),
-                    matrix(c(1/3, 0.25, 0.004), 1))
+                    matrix(c(1 / 3, 0.25, 0.004), 1))
 })
