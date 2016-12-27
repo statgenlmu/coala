@@ -26,7 +26,7 @@ size_change_class <- R6Class("size_change", inherit = feature_class,
 #' @return The feature, which can be added to a model using `+`.
 #' @export
 #' @seealso For continuous size changes over time: \code{\link{feat_growth}}.
-#' @family features
+#' @template feature
 #' @examples
 #' # A model with one smaller population:
 #' model <- coal_model(c(20, 5), 3) +
@@ -43,8 +43,10 @@ size_change_class <- R6Class("size_change", inherit = feature_class,
 #'   feat_mutation(20) +
 #'   sumstat_sfs()
 #' simulate(model)
-feat_size_change <- function(new_size, population = 1, time = "0") {
-  size_change_class$new(new_size, population, time)
+feat_size_change <- function(new_size, population = 1, time = "0",
+                             locus_group = "all") {
+  size_change_class$new(new_size, population, time,
+                        locus_group = locus_group)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion

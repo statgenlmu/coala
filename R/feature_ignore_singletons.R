@@ -13,9 +13,8 @@ ign_singletons_class <- R6Class("ign_singletons", inherit = feature_class)
 #' allele is observed exactly once in all sequences, regardless of the
 #' population structure.
 #'
-#' @return The feature, which can be added to a model using `+`.
 #' @export
-#' @family features
+#' @template feature
 #' @examples
 #' model <- coal_model(2, 1) +
 #'   feat_mutation(10) +
@@ -24,8 +23,8 @@ ign_singletons_class <- R6Class("ign_singletons", inherit = feature_class)
 #' # In this model, all mutations are singletons. Therefore,
 #' # the number of mutations is 0 when removing singletons:
 #' simulate(model)$n_mut
-feat_ignore_singletons <- function() {
-  ign_singletons_class$new()
+feat_ignore_singletons <- function(locus_group = "all") {
+  ign_singletons_class$new(locus_group = locus_group)
 }
 
 

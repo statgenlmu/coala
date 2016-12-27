@@ -7,7 +7,7 @@
 feat_selection(strength_AA = 0, strength_Aa = 0, strength_aa = 0,
   strength_A = NULL, population = "all", time, start = TRUE,
   start_frequency = 5e-04, Ne = 10000, position = 0.5,
-  force_keep = TRUE)
+  force_keep = TRUE, locus_group = "all")
 }
 \arguments{
 \item{strength_AA}{The selection strength for the selected homozygote.
@@ -58,6 +58,20 @@ while smaller values are to the left of it and larger ones to the right.}
 
 \item{force_keep}{Whether to restart simulations in which the selected goes to
 extinction or not.}
+
+\item{locus_group}{The loci for which this features is used. Can either be
+\code{"all"} (default), in which case the feature is used for simulating
+all loci, or a numeric vector. In the latter case, the feature is only
+used for the loci added in \code{locus_} commands  with the corresponding
+index starting from 1 in order in which the commands where added to the
+model. For example, if a model has
+\code{locus_single(10) + locus_averaged(10, 11) + locus_single(12)} and
+this argument is \code{c(2, 3)}, than the feature is used for all but
+the first locus (that is locus 2 - 12).}
+}
+\value{
+The feature, which can be added to a model created with
+  \code{\link{coal_model}} using \code{+}.
 }
 \description{
 This feature adds selection to a model. Only one site per locus can be under
@@ -83,6 +97,8 @@ For using rates that variate between the loci in a model:
 For summary statistics that are sensitive for selection:
   \code{\link{sumstat_tajimas_d}}, \code{\link{sumstat_ihh}},
   \code{\link{sumstat_omega}}, \code{\link{sumstat_mcmf}}
+
+For creating a model: \code{\link{coal_model}}
 
 Other features: \code{\link{feat_growth}},
   \code{\link{feat_ignore_singletons}},

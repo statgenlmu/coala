@@ -1,5 +1,6 @@
 segsites_feat_class <- R6Class("seg_sites_feat", inherit = feature_class,
   public = list(
+    initialize = function() super$initialize(locus_group = "all"),
     print = function() cat("Generating Seg. Sites\n")
   )
 )
@@ -29,6 +30,7 @@ conv_to_seqgen_arg.seg_sites_feat <- conv_to_ms_arg.seg_sites_feat #nolint
 
 trees_feat_class <- R6Class("trees_feat", inherit = feature_class,
   public = list(
+    initialize = function() super$initialize(locus_group = "all"),
     print = function() cat("Generating Trees\n")
   )
 )
@@ -55,6 +57,7 @@ conv_to_seqgen_arg.trees_feat <- function(feature, model) {
 
 files_feat_class <- R6Class("files_feat", inherit = feature_class,
   public = list(
+    initialize = function() super$initialize(locus_group = "all"),
     print = function() cat("Generating Files\n")
   )
 )

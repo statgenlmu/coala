@@ -1,9 +1,10 @@
 unphased_class <- R6Class("unphased", inherit = feature_class,
   private = list(ploidy = NA, samples_per_ind = NA),
   public = list(
-    initialize = function(samples_per_ind) {
+    initialize = function(samples_per_ind, locus_group) {
       assert_that(is.number(samples_per_ind))
       private$samples_per_ind <- samples_per_ind
+      private$set_locus_group(locus_group)
     },
     check = function(model) {
       if (self$get_samples_per_ind() > get_ploidy(model)) {
@@ -32,7 +33,7 @@ unphased_class <- R6Class("unphased", inherit = feature_class,
 #'   from the phased chromosomes for each individual.
 #' @return The feature, which can be added to a model using `+`.
 #' @export
-#' @family features
+#' @template feature
 #' @examples
 #' # Simulate unphased data in a diploid population
 #' model <- coal_model(10, 1, ploidy = 2) +
@@ -48,8 +49,8 @@ unphased_class <- R6Class("unphased", inherit = feature_class,
 #'   feat_unphased(1) +
 #'   sumstat_seg_sites()
 #' simulate(model)
-feat_unphased <- function(samples_per_ind) {
-  unphased_class$new(samples_per_ind)
+feat_unphased <- function(samples_per_ind, locus_group = "all") {
+  unphased_class$new(samples_per_ind, locus_group)
 }
 
 

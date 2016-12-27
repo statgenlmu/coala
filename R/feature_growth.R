@@ -30,7 +30,7 @@ growth_class <- R6Class("growth", inherit = feature_class,
 #' @export
 #' @seealso For instantaneous population size
 #'          changes: \code{\link{feat_size_change}}
-#' @family features
+#' @template feature
 #' @examples
 #' # Simulate a haploid population that has been expanding for
 #' # the last 2*Ne generations
@@ -40,8 +40,14 @@ growth_class <- R6Class("growth", inherit = feature_class,
 #'   feat_mutation(10) +
 #'   sumstat_sfs()
 #' simulate(model)
-feat_growth <- function(rate, population = "all", time="0") {
-  growth_class$new(rate, population, time)
+feat_growth <- function(rate,
+                        population = "all",
+                        time = "0",
+                        locus_group = "all") {
+
+  growth_class$new(rate, population, time,
+                   locus_group = locus_group)
+
 }
 
 

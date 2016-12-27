@@ -1,8 +1,9 @@
 migration_class <- R6Class("migration", inherit = feature_class,
   private = list(rate = NA),
   public = list(
-    initialize = function(rate, pop_from, pop_to, time, symmetric = FALSE) {
-      super$initialize(rate = rate, time = time)
+    initialize = function(rate, pop_from, pop_to, time,
+                          symmetric = FALSE, locus_group) {
+      super$initialize(rate = rate, time = time, locus_group = locus_group)
 
       if (symmetric) {
         private$population <- "all"
@@ -48,7 +49,7 @@ migration_class <- R6Class("migration", inherit = feature_class,
 #'        rate is set. The rate applies to the time past warts
 #'        of the time point, until it is changed again.
 #' @export
-#' @family features
+#' @template feature
 #'
 #' @examples
 #' # Asymmetric migration between two populations:
@@ -67,15 +68,18 @@ migration_class <- R6Class("migration", inherit = feature_class,
 #'   sumstat_sfs()
 #' simulate(model)
 feat_migration <- function(rate, pop_from = NULL, pop_to = NULL,
-                           symmetric = FALSE, time = "0") {
+                           symmetric = FALSE, time = "0",
+                           locus_group = "all") {
   if (symmetric) {
     if (!(is.null(pop_from) && is.null(pop_to))) {
       warning("Ignoring 'pop_form' and 'pop_to' because 'symmetric' is TRUE")
     }
-    return(migration_class$new(rate, time = time, symmetric = TRUE))
+    return(migration_class$new(rate, time = time, symmetric = TRUE,
+                               locus_group = locus_group))
   }
 
-  migration_class$new(rate, pop_from, pop_to, time)
+  migration_class$new(rate, pop_from, pop_to, time,
+                      locus_group = locus_group)
 }
 
 

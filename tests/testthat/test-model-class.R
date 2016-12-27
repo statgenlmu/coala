@@ -34,9 +34,9 @@ test_that("adding parameters works", {
 
 test_that("adding features works", {
   expect_equal(length(get_features(coal_model(5))), 1)
-  model <- coal_model(5) + feature_class$new(1, 1, 5)
+  model <- coal_model(5) + feature_class$new(1, 1, 5, locus_group = "all")
   expect_equal(length(get_features(model)), 2)
-  model <- model + feature_class$new(2, 1, 3)
+  model <- model + feature_class$new(2, 1, 3, locus_group = "all")
   expect_equal(length(get_features(model)), 3)
 })
 
@@ -334,4 +334,15 @@ test_that("create_group_models creates group models", {
   expect_equal(create_group_model(model, 1)$loci, model_theta_tau()$loci)
   expect_equal(create_group_model(model, 2)$loci, list(locus_averaged(2, 5)))
   expect_equal(create_group_model(model, 3)$loci, list(locus_single(7)))
+})
+
+
+test_that("group models respect feature restrictions", {
+  model <- coal_model(10, 5) +
+    locus_single(15) +
+    feat_mutation(5, locus_group = 2)
+  expect_equal(create_group_model(model, 1)$features,
+               coal_model(10, 5)$features)
+  expect_equal(create_group_model(model, 2)$features,
+               model$features)
 })

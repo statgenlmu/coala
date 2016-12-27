@@ -4,7 +4,8 @@
 \alias{feat_size_change}
 \title{Feature: Instantaneous Size Change}
 \usage{
-feat_size_change(new_size, population = 1, time = "0")
+feat_size_change(new_size, population = 1, time = "0",
+  locus_group = "all")
 }
 \arguments{
 \item{new_size}{A \code{\link{parameter}} giving the new size of the
@@ -15,9 +16,22 @@ Can also be set to "all". Then the size changes applies to all
 populations.}
 
 \item{time}{The time at which the population's size is changed.}
+
+\item{locus_group}{The loci for which this features is used. Can either be
+\code{"all"} (default), in which case the feature is used for simulating
+all loci, or a numeric vector. In the latter case, the feature is only
+used for the loci added in \code{locus_} commands  with the corresponding
+index starting from 1 in order in which the commands where added to the
+model. For example, if a model has
+\code{locus_single(10) + locus_averaged(10, 11) + locus_single(12)} and
+this argument is \code{c(2, 3)}, than the feature is used for all but
+the first locus (that is locus 2 - 12).}
 }
 \value{
 The feature, which can be added to a model using `+`.
+
+The feature, which can be added to a model created with
+  \code{\link{coal_model}} using \code{+}.
 }
 \description{
 This feature changes the effective population size of one
@@ -45,6 +59,8 @@ simulate(model)
 }
 \seealso{
 For continuous size changes over time: \code{\link{feat_growth}}.
+
+For creating a model: \code{\link{coal_model}}
 
 Other features: \code{\link{feat_growth}},
   \code{\link{feat_ignore_singletons}},

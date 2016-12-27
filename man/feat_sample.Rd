@@ -15,11 +15,8 @@ individual.}
 
 \item{time}{The time at which the sample is taken.}
 }
-\value{
-The feature, which can be added to a model using `+`.
-}
 \description{
 Creates a feature that represents the sampling from one population
 }
-\keyword{internal}
+\keyword{interna}
 

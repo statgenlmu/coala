@@ -121,6 +121,12 @@ create_group_model <- function(model, group) {
     group_model <- model
     group_model$loci <- model$loci[group]
     group_model$id <- get_id()
+    feature_mask <- vapply(model$features, function(feat) {
+      if (feat$get_locus_group() == "all") return(TRUE)
+      if (any(feat$get_locus_group() == group)) return(TRUE)
+      FALSE
+    }, logical(1))
+    group_model$features <- model$features[feature_mask]
     cache(model, key, group_model)
   }
 

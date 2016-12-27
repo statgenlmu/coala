@@ -2,6 +2,8 @@ sample_class <- R6Class("sample", inherit = feature_class,
   private = list(size = NA, ploidy = NA),
   public = list(
     initialize = function(sizes, ploidy, time) {
+      private$set_locus_group("all")
+
       assert_that(is.numeric(sizes))
       assert_that(length(sizes) >= 1)
       private$size <- sizes
@@ -36,8 +38,8 @@ sample_class <- R6Class("sample", inherit = feature_class,
 #' @param ploidy The number of chromosomes that will be simulated per
 #'   individual.
 #' @param time The time at which the sample is taken.
-#' @return The feature, which can be added to a model using `+`.
-#' @keywords internal
+#' @keywords interna
+# @template feature
 feat_sample <- function(individuals, ploidy = 1, time = "0") {
   if (time != "0")
     stop("Samples at time different from 0 at not supported at the moment")

@@ -34,3 +34,14 @@ test_that("print parameter works", {
   expect_equal(print_par("par(5)"), "`5`")
   expect_equal(print_par("par(2 * theta)"), "`2 * theta`")
 })
+
+
+test_that("setting a locus group works", {
+  feat <- feature_class$new("abc", locus_group = "all")
+  expect_equal(feat$get_locus_group(), "all")
+
+  feat <- feature_class$new("abc", locus_group = 1:3)
+  expect_equal(feat$get_locus_group(), 1:3)
+
+  expect_error(feature_class$new("abc", locus_group = "wrong value"))
+})

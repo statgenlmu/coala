@@ -63,8 +63,14 @@ add_to_model.feature <- function(feat, model, feat_name) {
   pop <- feat$get_population()
   if (!is.null(pop)) {
     if (pop != "all" && !all(pop %in% get_populations(model))) {
-      stop("Invalid population in ", feat_name)
+      stop("Invalid population in ", feat_name, call. = FALSE)
     }
+  }
+
+  # Check that the locus group is set correctly
+  locus_group <- feat$get_locus_group()
+  if (is.null(locus_group)) {
+    stop(feat_name, ": locus group has an invalid value", call. = FALSE)
   }
 
   # Execute the features checks
