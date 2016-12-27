@@ -45,4 +45,3 @@ test_that("setting a locus group works", {
 
   expect_error(feature_class$new("abc", locus_group = "wrong value"))
 })
-
