@@ -21,7 +21,7 @@ recombination_class <- R6Class("recombination", inherit = feature_class,
 #'        recombination event within the locus occurs in one generation.
 #' @return The feature, which can be added to a model using `+`.
 #' @export
-#' @family features
+#' @template feature
 #' @seealso For adding recombination: \code{\link{feat_mutation}}.
 #'
 #' @examples
@@ -31,8 +31,8 @@ recombination_class <- R6Class("recombination", inherit = feature_class,
 #'   feat_mutation(5) +
 #'   sumstat_sfs()
 #' simulate(model)
-feat_recombination <- function(rate) {
-  recombination_class$new(rate)
+feat_recombination <- function(rate, locus_group = "all") {
+  recombination_class$new(rate, locus_group = locus_group)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion

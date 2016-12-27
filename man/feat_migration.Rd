@@ -5,7 +5,7 @@
 \title{Feature: Migration/Gene Flow}
 \usage{
 feat_migration(rate, pop_from = NULL, pop_to = NULL, symmetric = FALSE,
-  time = "0")
+  time = "0", locus_group = "all")
 }
 \arguments{
 \item{rate}{The migration rate. Can be a numeric or a
@@ -23,6 +23,20 @@ from \code{pop_from} each generation (in forward time).}
 \item{time}{The time point at which the migration with the migration
 rate is set. The rate applies to the time past warts
 of the time point, until it is changed again.}
+
+\item{locus_group}{The loci for which this features is used. Can either be
+\code{"all"} (default), in which case the feature is used for simulating
+all loci, or a numeric vector. In the latter case, the feature is only
+used for the loci added in \code{locus_} commands  with the corresponding
+index starting from 1 in order in which the commands where added to the
+model. For example, if a model has
+\code{locus_single(10) + locus_averaged(10, 11) + locus_single(12)} and
+this argument is \code{c(2, 3)}, than the feature is used for all but
+the first locus (that is locus 2 - 12).}
+}
+\value{
+The feature, which can be added to a model created with
+  \code{\link{coal_model}} using \code{+}.
 }
 \description{
 This feature changes the migration rates at a given time point.
@@ -54,6 +68,8 @@ model <- coal_model(c(3, 4, 5), 2) +
 simulate(model)
 }
 \seealso{
+For creating a model: \code{\link{coal_model}}
+
 Other features: \code{\link{feat_growth}},
   \code{\link{feat_ignore_singletons}},
   \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},

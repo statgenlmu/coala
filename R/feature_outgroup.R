@@ -1,7 +1,8 @@
 outgroup_class <- R6Class("outgroup", inherit = feature_class,
   public = list(
-    initialize = function(population) {
+    initialize = function(population, locus_group) {
       private$set_population(population)
+      private$set_locus_group(locus_group)
     },
     print = function() {
       cat("Outgroup: Population", private$population, "\n")
@@ -19,7 +20,7 @@ outgroup_class <- R6Class("outgroup", inherit = feature_class,
 #'
 #' @param population The population that is marked as outgroup.
 #' @export
-#' @family features
+#' @template feature
 #' @examples
 #' # A simple finite sites model
 #' model <- coal_model(c(4, 6, 1), 2, 10) +
@@ -27,8 +28,8 @@ outgroup_class <- R6Class("outgroup", inherit = feature_class,
 #'    feat_pop_merge(0.5, 2, 1) +
 #'    feat_pop_merge(2, 3, 1) +
 #'    feat_mutation(5, model = "GTR", gtr_rates = 1:6)
-feat_outgroup <- function(population) {
-  outgroup_class$new(population)
+feat_outgroup <- function(population, locus_group = "all") {
+  outgroup_class$new(population, locus_group = locus_group)
 }
 
 is_feat_outgroup <- function(feat) inherits(feat, "outgroup")

@@ -13,7 +13,8 @@ selection_class <- R6Class("selection", inherit = feature_class,
   public = list(
     initialize = function(strength_AA, strength_Aa, strength_aa,
                           population, time, additive = FALSE,
-                          start, start_frequency, Ne, position, force_keep) {
+                          start, start_frequency, Ne, position, force_keep,
+                          locus_group) {
 
       assert_that(is.logical(additive) && length(additive) == 1)
       private$additive <- additive
@@ -41,6 +42,7 @@ selection_class <- R6Class("selection", inherit = feature_class,
 
       private$time <- private$add_parameter(time)
       private$set_population(population)
+      private$set_locus_group(locus_group)
     },
     get_strength_AA = function() private$strength_AA,
     get_strength_Aa = function() private$strength_Aa,
@@ -116,7 +118,7 @@ selection_class <- R6Class("selection", inherit = feature_class,
 #' @seealso For summary statistics that are sensitive for selection:
 #'   \code{\link{sumstat_tajimas_d}}, \code{\link{sumstat_ihh}},
 #'   \code{\link{sumstat_omega}}, \code{\link{sumstat_mcmf}}
-#' @family features
+#' @template  feature
 #' @examples
 #' # Positive additive selection in population 2:
 #' model <- coal_model(c(10, 13), 1, 10000) +
@@ -138,7 +140,8 @@ feat_selection <- function(strength_AA = 0,
                            start_frequency = 0.0005,
                            Ne = 10000,
                            position = 0.5,
-                           force_keep = TRUE) {
+                           force_keep = TRUE,
+                           locus_group = "all") {
 
   if (!is.null(strength_A)) {
     return(selection_class$new(strength_Aa = strength_A,
@@ -149,11 +152,13 @@ feat_selection <- function(strength_AA = 0,
                                start_frequency = start_frequency,
                                Ne = Ne,
                                position = position,
-                               force_keep = force_keep))
+                               force_keep = force_keep,
+                               locus_group = locus_group))
   }
 
   selection_class$new(strength_AA, strength_Aa, strength_aa, population, time,
-                      FALSE, start, start_frequency, Ne, position, force_keep)
+                      FALSE, start, start_frequency, Ne, position, force_keep,
+                      locus_group = locus_group)
 }
 
 

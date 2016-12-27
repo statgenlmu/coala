@@ -4,7 +4,7 @@
 \alias{feat_growth}
 \title{Feature: Exponential population size growth/decline}
 \usage{
-feat_growth(rate, population = "all", time = "0")
+feat_growth(rate, population = "all", time = "0", locus_group = "all")
 }
 \arguments{
 \item{rate}{The growth rate. Can be a numeric or a \code{\link{parameter}}.
@@ -16,6 +16,20 @@ population size.}
 
 \item{time}{The time at which the growth rate is changed. Can also be
 a \code{\link{parameter}}.}
+
+\item{locus_group}{The loci for which this features is used. Can either be
+\code{"all"} (default), in which case the feature is used for simulating
+all loci, or a numeric vector. In the latter case, the feature is only
+used for the loci added in \code{locus_} commands  with the corresponding
+index starting from 1 in order in which the commands where added to the
+model. For example, if a model has
+\code{locus_single(10) + locus_averaged(10, 11) + locus_single(12)} and
+this argument is \code{c(2, 3)}, than the feature is used for all but
+the first locus (that is locus 2 - 12).}
+}
+\value{
+The feature, which can be added to a model created with
+  \code{\link{coal_model}} using \code{+}.
 }
 \description{
 This feature changes the growth factor of a population at given
@@ -42,6 +56,8 @@ simulate(model)
 \seealso{
 For instantaneous population size
          changes: \code{\link{feat_size_change}}
+
+For creating a model: \code{\link{coal_model}}
 
 Other features: \code{\link{feat_ignore_singletons}},
   \code{\link{feat_migration}},

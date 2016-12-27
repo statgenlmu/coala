@@ -1,8 +1,9 @@
 pop_merge_class <- R6Class("pop_merge", inherit = feature_class,
   public = list(
-    initialize = function(time, pop_from, pop_to) {
+    initialize = function(time, pop_from, pop_to, locus_group) {
       private$time <- private$add_parameter(time)
       private$set_population(c(from = pop_from, to = pop_to), 2)
+      private$set_locus_group(locus_group)
     },
     print = function() {
       cat("Merge of pop", private$population[1],
@@ -30,7 +31,7 @@ pop_merge_class <- R6Class("pop_merge", inherit = feature_class,
 #'        the population in which the speciation event occurs.
 #' @param time The time at which the merge occurs.
 #' @export
-#' @family features
+#' @template feature
 #' @examples
 #' # Two population which merge after 0.5 time units:
 #' model <- coal_model(c(25,25), 1) +
@@ -43,8 +44,9 @@ pop_merge_class <- R6Class("pop_merge", inherit = feature_class,
 #' model_iwm <- model +
 #'   feat_migration(.75, symmetric = TRUE)
 #' simulate(model_iwm)
-feat_pop_merge <- function(time, pop_source, pop_target) {
-  pop_merge_class$new(time, pop_source, pop_target)
+feat_pop_merge <- function(time, pop_source, pop_target, locus_group = "all") {
+  pop_merge_class$new(time, pop_source, pop_target,
+                      locus_group = locus_group)
 }
 
 #' @describeIn conv_to_ms_arg Feature conversion
