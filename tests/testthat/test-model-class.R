@@ -335,3 +335,14 @@ test_that("create_group_models creates group models", {
   expect_equal(create_group_model(model, 2)$loci, list(locus_averaged(2, 5)))
   expect_equal(create_group_model(model, 3)$loci, list(locus_single(7)))
 })
+
+
+test_that("group models respect feature restrictions", {
+  model <- coal_model(10, 5) +
+    locus_single(15) +
+    feat_mutation(5, locus_group = 2)
+  expect_equal(create_group_model(model, 1)$features,
+               coal_model(10, 5)$features)
+  expect_equal(create_group_model(model, 2)$features,
+               model$features)
+})
