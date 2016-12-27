@@ -121,6 +121,16 @@ mutation_class <- R6Class("mutation", inherit = feature_class,
 #' model <- coal_model(5, 1) + feat_mutation(5) + sumstat_seg_sites()
 #' simulate(model)
 #'
+#' # A model with a mutation of 5.0 for the first 10 loci, and 7.5 for the
+#' # second 10 loci
+#' model <- coal_model(4) +
+#'   locus_averaged(10, 100) +
+#'   locus_averaged(10, 100) +
+#'   feat_mutation(5.0, locus_group = 1) +
+#'   feat_mutation(7.5, locus_group = 2) +
+#'   sumstat_seg_sites()
+#' simulate(model)
+#'
 #' # A model with 7 mutations per locus:
 #' model <- coal_model(5, 1) +
 #'   feat_mutation(7, fixed = TRUE) +
