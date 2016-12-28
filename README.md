@@ -35,14 +35,14 @@ in [the wiki](https://github.com/statgenlmu/coala/wiki/Installation).
 Usage & Help
 ------------
 Coala comes with a
-[vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-intro.html)
+[vignette](https://cran.r-project.org/package=coala/vignettes/coala-intro.html)
 that explains the packages concepts and is a good place to start. It also has a 
-[vignette containing a few example applications](https://cran.r-project.org/web/packages/coala/vignettes/coala-examples.html).
+[vignette containing a few example applications](https://cran.r-project.org/package=coala/vignettes/coala-examples.html).
 
 Detailed information about coala's functions is provided via R's help system. 
 Call `help(_function_)` in R to view them. They usually also contain examples and further links.
 
-The [ABC vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-abc.html) 
+The [ABC vignette](https://cran.r-project.org/package=coala/vignettes/coala-abc.html) 
 gives an example on how coala can be used to conduct the simulations for [Approximate Bayesian
 Computation](https://en.wikipedia.org/wiki/Approximate_Bayesian_computation).
 
@@ -65,7 +65,7 @@ result$sfs
 ```
 
 More examples can be found in the 
-[examples vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-examples.html).
+[examples vignette](https://cran.r-project.org/package=coala/vignettes/coala-examples.html).
 
 
 Problems
