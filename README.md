@@ -96,7 +96,7 @@ devtools::install_github('statgenlmu/coala')
 
 on Linux and OS X. This requires that you have `devtools` and a compiler or 
 Xcode installed. Bug reports and pull request on GitHub are highly appreciated.
-The [extending coala vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-extend.html)
+The [extending coala vignette](https://cran.r-project.org/package=coala/vignettes/coala-extend.html)
 contains information on how to create new summary statistics and add simulators
 to coala. The [wiki](https://github.com/statgenlmu/coala/wiki) also contains a few
 resources for developers.
