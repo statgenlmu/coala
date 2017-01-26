@@ -43,7 +43,7 @@ stat_jsfs_class <- R6Class("stat_jsfs", inherit = sumstat_class,
 #'   of globally. In this case, the result is a list, where each entry is the
 #'   JSFS for the corresponding locus.
 #' @return The JSFS, given as an array. The dimensions correspond to the
-#'   populatons as given in the \code{populations} argument.
+#'   populations as given in the \code{populations} argument.
 #' @template summary_statistics
 #' @export
 #' @examples
