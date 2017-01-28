@@ -62,7 +62,7 @@ get_sample_size <- function(model, for_sim = FALSE) {
   sample_size <- read_cache(model, paste0("sample_size_", for_sim))
 
   if (is.null(sample_size)) {
-    feat_mask <- sapply(model$feature, is_feat_sample)
+    feat_mask <- vapply(model$feature, is_feat_sample, logical(1))
     if (sum(feat_mask) > 1) stop("Only one sample is currently supported")
     sample_size <- model$feature[feat_mask][[1]]$get_sizes()
 

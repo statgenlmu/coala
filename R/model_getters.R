@@ -16,7 +16,7 @@ get_parameter_table <- function(model) {
 
   par_table <- read_cache(model, "par_table")
   if (is.null(par_table)) {
-    if (!all(sapply(get_parameter(model), is.ranged_par))) {
+    if (!all(vapply(get_parameter(model), is.ranged_par, logical(1L)))) {
       stop("Can not create a parameter table with non-ranged pars in model")
     }
     if (length(get_parameter(model)) == 0) {
@@ -159,7 +159,7 @@ get_par_names <- function(model, without_priors=FALSE) {
   if (without_priors) {
     param <- param[!vapply(param, is.prior_par, numeric(1))]
   }
-  sapply(param, function(par) par$get_name())
+  vapply(param, function(par) par$get_name(), character(1L))
 }
 
 get_loci <- function(model) model$loci
