@@ -38,7 +38,7 @@ positions: 0.3718 0.8443
 01
 01
 10
-", file = sim_output);
+", file = sim_output)
 
   output <- parse_ms_output(list(sim_output), 3, 2)
 

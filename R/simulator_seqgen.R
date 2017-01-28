@@ -48,12 +48,12 @@ sg_generate_opts <- function(model, parameters, locus,
   #print(cmd)
 
   # Fill the parameters in the template
-  sapply(seq(along = locus_lengths), function(i) {
+  vapply(seq(along = locus_lengths), function(i) {
     par_envir <- create_par_env(model, parameters, locus = locus,
                                 locus_length = locus_lengths[i],
                                 for_cmd = for_cmd)
     paste(eval(parse(text = cmd[[i]]), envir = par_envir), collapse = " ")
-  })
+  }, character(1L))
 }
 
 

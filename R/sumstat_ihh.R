@@ -122,7 +122,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #'   iHH and iES is returned. Otherwise, a list of two data frames are
 #'   returned, one for IHH and IES values and the other one for IHS values.
 #'
-#'   In all `data.frames` rows are SNPs and the colums present the following
+#'   In all `data.frames` rows are SNPs and the columns present the following
 #'   values for each SNP:
 #'   \itemize{
 #'    \item{CHR: The SNP's locus}
