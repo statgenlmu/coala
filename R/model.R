@@ -149,7 +149,7 @@ has_trios <- function(model) {
 
 
 get_snp_positions <- function(seg_sites, model, relative=TRUE) {
-  lapply(1:length(seg_sites), function(locus) {
+  lapply(seq_along(seg_sites), function(locus) {
     pos <- get_positions(seg_sites[[locus]])
     locus_length <- get_locus_length(model, locus, total = FALSE)
 

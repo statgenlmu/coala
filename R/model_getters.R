@@ -58,7 +58,7 @@ get_parameter <- function(model) {
 get_locus_length <- function(model, locus = NULL, group = NULL, total = TRUE) {
   llm <- get_locus_length_matrix(model)
   if (is.null(locus) & is.null(group)) {
-    group <- 1:nrow(llm)
+    group <- seq_len(nrow(llm))
   }
 
   # Group and locus are identical for ilv models
