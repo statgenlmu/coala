@@ -24,5 +24,3 @@ after_success:
   - Rscript -e "lintr::lint_package()"
   - Rscript -e "library(covr); coveralls()"
 
-notifications:
-  email: false
