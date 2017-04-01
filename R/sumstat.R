@@ -213,15 +213,21 @@ calc_sumstats_from_data <- function(model,
 
 
 requires_segsites <- function(model) {
-  any(sapply(get_summary_statistics(model), function(x) x$requires_segsites()))
+  any(vapply(get_summary_statistics(model),
+             function(x) x$requires_segsites(),
+             logical(1L)))
 }
 
 
 requires_trees <- function(model) {
-  any(sapply(get_summary_statistics(model), function(x) x$requires_trees()))
+  any(vapply(get_summary_statistics(model),
+             function(x) x$requires_trees(),
+             logical(1L)))
 }
 
 
 requires_files <- function(model) {
-  any(sapply(get_summary_statistics(model), function(x) x$requires_files()))
+  any(vapply(get_summary_statistics(model),
+             function(x) x$requires_files(),
+             logical(1L)))
 }

@@ -15,7 +15,7 @@ stat_tajimas_d_class <- R6Class("stat_tajimas_d", inherit = sumstat_class,
         n <- length(ind)
         if (n < 2) stop("At least two individuals are needed for Tajima's D")
         pi <- calc_nucleotide_div(seg_sites, ind)
-        s <- sapply(seg_sites, ncol)
+        s <- vapply(seg_sites, ncol, integer(1L))
 
         tmp <- 1 / (1:(n - 1)) #nolint
         a1 <- sum(tmp)
