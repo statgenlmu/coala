@@ -1,3 +1,12 @@
+coala 0.5.1
+===========
+
+* This is a small maintainence release
+* Fix a number of minor issues pointed out by hadley/strict (#186)
+* Register native routines to fix the new R CMD check NOTE (#187)
+
+
+
 coala 0.5.0
 ===========
 
