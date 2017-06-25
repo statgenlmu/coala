@@ -9,4 +9,25 @@
 This package allows to specify and simulate coalescent models from
 within R. The `introduction` vignette is a good place to start.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/statgenlmu/coala}
+  \item Report bugs at \url{https://github.com/statgenlmu/coala/issues}
+}
 
+}
+\author{
+\strong{Maintainer}: Paul Staab \email{develop@paulstaab.de}
+
+Authors:
+\itemize{
+  \item Dirk Metzler \email{metzler@bio.lmu.de} [thesis advisor]
+}
+
+Other contributors:
+\itemize{
+  \item Jorge E. Amaya Romero [contributor]
+}
+
+}

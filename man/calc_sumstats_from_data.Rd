@@ -47,4 +47,3 @@ model <- coal_model(3, 1) +
 sumstats <- calc_sumstats_from_data(model, list(segsites))
 print(sumstats)
 }
-

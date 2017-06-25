@@ -29,4 +29,3 @@ Further instructions are provided in the `coala-data-import` vignette
 
 For information about segsites: \code{\link{segsites}}
 }
-

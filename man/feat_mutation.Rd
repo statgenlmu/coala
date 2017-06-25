@@ -77,6 +77,7 @@ than the HKY model and allows to define the rates for each
 type of substitution. The rates are assumed to be symmetric
 (e.g., the rate for T to G is equal to the one for G to T).
 }
+
 \examples{
 # A model with a constant mutation rate of 5:
 model <- coal_model(5, 1) + feat_mutation(5) + sumstat_seg_sites()
@@ -134,4 +135,3 @@ Other features: \code{\link{feat_growth}},
   \code{\link{feat_size_change}},
   \code{\link{feat_unphased}}
 }
-

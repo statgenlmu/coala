@@ -33,4 +33,3 @@ print(abc_param)
 For generating abc's summary statistics format:
          \code{\link{create_abc_sumstat}}
 }
-

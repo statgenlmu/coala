@@ -29,4 +29,3 @@ is used as length of a locus.
 An example and additional instructions are provided in the
          `coala-data-import` vignette
 }
-

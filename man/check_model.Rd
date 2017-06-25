@@ -22,4 +22,3 @@ check_model(model)
 \seealso{
 Do view the priority of the simulators: \code{\link{list_simulators}}
 }
-

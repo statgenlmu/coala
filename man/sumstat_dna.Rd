@@ -50,4 +50,3 @@ Other summary statistics: \code{\link{sumstat_file}},
   \code{\link{sumstat_tajimas_d}},
   \code{\link{sumstat_trees}}
 }
-

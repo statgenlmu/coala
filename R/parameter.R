@@ -210,7 +210,7 @@ create_par_env <- function(model, parameters, ..., for_cmd = FALSE) {
   }
 
   additional_pars <- list(...)
-  for (i in seq(along = additional_pars)) {
+  for (i in seq(along.with = additional_pars)) {
     par_env[[names(additional_pars)[i]]] <- additional_pars[[i]]
   }
 

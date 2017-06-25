@@ -49,4 +49,3 @@ print(abc_sumstat)
 For generating abc's parameter format:
          \code{\link{create_abc_param}}
 }
-

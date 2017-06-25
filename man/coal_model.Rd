@@ -75,4 +75,3 @@ For adding loci: \code{\link{locus_single}},
 For a generating DNA sequences or for a list of summary statistics:
          \code{\link{sumstat_dna}}
 }
-

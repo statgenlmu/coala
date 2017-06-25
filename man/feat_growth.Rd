@@ -68,4 +68,3 @@ Other features: \code{\link{feat_ignore_singletons}},
   \code{\link{feat_size_change}},
   \code{\link{feat_unphased}}
 }
-

@@ -33,7 +33,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
       assert_that(is.list(seg_sites))
       assert_that(is.model(model))
       ind <- get_population_individuals(model, private$population)
-      ihh <- do.call(rbind, lapply(seq(along = seg_sites), function(locus) {
+      ihh <- do.call(rbind, lapply(seq_along(seg_sites), function(locus) {
         assert_that(is_segsites(seg_sites[[locus]]))
         if (ncol(seg_sites[[locus]]) == 0) return(private$empty_matrix)
 
@@ -77,7 +77,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
       rehh_data <- new("haplohh")
       rehh_data@haplo <- as.matrix(seg_sites[ind, snp_mask]) + 1
       rehh_data@position <- pos[[1]][snp_mask]
-      rehh_data@snp.name <- as.character(seq(along = rehh_data@position))
+      rehh_data@snp.name <- as.character(seq_along(rehh_data@position))
       rehh_data@chr.name <- as.character(chr_name)
       rehh_data@nhap <- length(ind)
       rehh_data@nsnp <- length(rehh_data@position)

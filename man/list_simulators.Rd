@@ -12,4 +12,3 @@ This functions returns the usable simulators
 \examples{
 list_simulators()
 }
-

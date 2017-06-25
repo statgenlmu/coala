@@ -62,4 +62,3 @@ Other features: \code{\link{feat_growth}},
   \code{\link{feat_selection}},
   \code{\link{feat_size_change}}
 }
-

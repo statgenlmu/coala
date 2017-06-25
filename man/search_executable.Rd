@@ -22,4 +22,3 @@ name equal to to binaries name in upper case is given, it also
 tries to use this as path of the binary.
 }
 \keyword{internal}
-

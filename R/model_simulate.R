@@ -38,7 +38,7 @@ simulate.coalmodel <- function(object, nsim = 1, seed, ...,
 
   if (!missing(seed)) set.seed(seed)
 
-  results <- mclapply(seq(len = nsim), function(i) {
+  results <- mclapply(seq_len(nsim), function(i) {
     current_pars <- prepare_pars(pars, object)
     sim_tasks <- generate_sim_tasks(object, current_pars)
 
