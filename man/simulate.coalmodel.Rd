@@ -46,4 +46,3 @@ model <- coal_model(c(5,10), 20) +
   sumstat_jsfs()
 simulate(model, pars=c(tau = 1, theta = 5))
 }
-

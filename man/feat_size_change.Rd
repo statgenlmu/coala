@@ -70,4 +70,3 @@ Other features: \code{\link{feat_growth}},
   \code{\link{feat_recombination}},
   \code{\link{feat_selection}}, \code{\link{feat_unphased}}
 }
-

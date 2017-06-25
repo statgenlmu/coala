@@ -18,4 +18,3 @@ The extended model
 Add a feature or parameter to a model
 }
 \keyword{internal}
-

@@ -29,4 +29,3 @@ model <- scale_model(model, 3)
 model
 # Group 1: 3 loci; group 2: 1 locus
 }
-

@@ -22,4 +22,3 @@ Calculates the Joint Site Frequency Spectrum
 Paul Staab & Dirk Metzler
 }
 \keyword{internal}
-

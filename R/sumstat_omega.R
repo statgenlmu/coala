@@ -49,7 +49,7 @@ stat_omega_class <- R6Class("stat_omega", inherit = sumstat_class,
       setwd(tmp_dir)
       grid <- self$get_grid()
 
-      op_list <- lapply(seq(along = seg_sites), function(i) {
+      op_list <- lapply(seq_along(seg_sites), function(i) {
         locus_length <- get_locus_length(model, locus = i)
 
         # Return 0 if there are few SNPs

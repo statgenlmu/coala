@@ -56,6 +56,7 @@ there must have been at least one recombination event between the SNPs.
 For unphased data, the four gamete condition is only counted as violated if
 it is violated for all possible phasing of the data.
 }
+
 \examples{
 model <- coal_model(5, 2) +
  feat_mutation(50) +
@@ -79,4 +80,3 @@ Other summary statistics: \code{\link{sumstat_dna}},
   \code{\link{sumstat_tajimas_d}},
   \code{\link{sumstat_trees}}
 }
-

@@ -16,10 +16,10 @@ sample_class <- R6Class("sample", inherit = feature_class,
     get_sizes = function() private$size,
     get_ploidy = function() private$ploidy,
     print = function() {
-      pop <- seq(along = private$size)[private$size > 0]
+      pop <- seq(along.with = private$size)[private$size > 0]
       samples <- private$size[private$size > 0]
       cat("Sampling of ")
-      for (i in seq(along = samples)) {
+      for (i in seq_along(samples)) {
         cat(samples[i], " (pop ", pop[i], ")", sep = "")
         if (i < length(samples) - 1) cat(", ")
         else if (i == length(samples) - 1) cat(" and ")
@@ -62,9 +62,9 @@ get_sample_size <- function(model, for_sim = FALSE) {
   sample_size <- read_cache(model, paste0("sample_size_", for_sim))
 
   if (is.null(sample_size)) {
-    feat_mask <- vapply(model$feature, is_feat_sample, logical(1))
+    feat_mask <- vapply(model[["features"]], is_feat_sample, logical(1))
     if (sum(feat_mask) > 1) stop("Only one sample is currently supported")
-    sample_size <- model$feature[feat_mask][[1]]$get_sizes()
+    sample_size <- model$features[feat_mask][[1]]$get_sizes()
 
     if (for_sim) {
       sample_size <- sample_size * get_ploidy(model)

@@ -104,7 +104,7 @@ create_locus_trio <- function(left, middle, right) {
   assert_that(length(left) == length(middle))
   assert_that(length(left) == length(right))
 
-  lapply(seq(along = left), function(locus) {
+  lapply(seq_along(left), function(locus) {
     create_segsites(cbind(get_snps(left[[locus]]),
                           get_snps(middle[[locus]]),
                           get_snps(right[[locus]])),

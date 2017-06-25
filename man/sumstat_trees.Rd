@@ -41,4 +41,3 @@ Other summary statistics: \code{\link{sumstat_dna}},
   \code{\link{sumstat_sfs}},
   \code{\link{sumstat_tajimas_d}}
 }
-

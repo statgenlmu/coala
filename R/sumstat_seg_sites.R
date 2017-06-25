@@ -34,7 +34,7 @@ sumstat_seg_sites <- function(name = "seg_sites", transformation = identity) {
 
 
 conv_for_trios <- function(seg_sites, model) {
-  for (i in seq(along = seg_sites)) {
+  for (i in seq_along(seg_sites)) {
     locus_length <- get_locus_length(model, i, total = FALSE)
     if (length(locus_length) == 1) next
 

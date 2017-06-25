@@ -19,4 +19,3 @@ individual.}
 Creates a feature that represents the sampling from one population
 }
 \keyword{interna}
-

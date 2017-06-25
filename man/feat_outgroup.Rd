@@ -51,4 +51,3 @@ Other features: \code{\link{feat_growth}},
   \code{\link{feat_size_change}},
   \code{\link{feat_unphased}}
 }
-

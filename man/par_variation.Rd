@@ -30,4 +30,3 @@ simulate(model)
 \seealso{
 For parameters that are identical for all loci: \code{\link{parameter}}
 }
-

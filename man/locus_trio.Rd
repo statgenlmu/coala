@@ -41,4 +41,3 @@ coal_model(25) +
 \seealso{
 For adding unlinked loci: \code{\link{locus}}
 }
-
