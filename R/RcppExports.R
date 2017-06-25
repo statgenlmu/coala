@@ -2,19 +2,19 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 parse_ms_positions <- function(line) {
-    .Call('coala_parse_ms_positions', PACKAGE = 'coala', line)
+    .Call(coala_parse_ms_positions, line)
 }
 
 parse_ms_output <- function(file_names, sample_size, loci_number) {
-    .Call('coala_parse_ms_output', PACKAGE = 'coala', file_names, sample_size, loci_number)
+    .Call(coala_parse_ms_output, file_names, sample_size, loci_number)
 }
 
 parse_seqgen_output <- function(output, individuals, locus_length, locus_number, outgroup_size, calc_segsites = TRUE) {
-    .Call('coala_parse_seqgen_output', PACKAGE = 'coala', output, individuals, locus_length, locus_number, outgroup_size, calc_segsites)
+    .Call(coala_parse_seqgen_output, output, individuals, locus_length, locus_number, outgroup_size, calc_segsites)
 }
 
 generate_trio_trees <- function(trees, trio_dists, file_names) {
-    .Call('coala_generate_trio_trees', PACKAGE = 'coala', trees, trio_dists, file_names)
+    .Call(coala_generate_trio_trees, trees, trio_dists, file_names)
 }
 
 #' @describeIn segsites Creates segregating sites
@@ -28,7 +28,7 @@ generate_trio_trees <- function(trees, trio_dists, file_names) {
 #' @export
 #'
 create_segsites <- function(snps, positions, trio_locus = numeric(0), check = TRUE) {
-    .Call('coala_create_segsites', PACKAGE = 'coala', snps, positions, trio_locus, check)
+    .Call(coala_create_segsites, snps, positions, trio_locus, check)
 }
 
 #' @describeIn segsites Returns the SNP matrix from a segregating sites
@@ -37,39 +37,39 @@ create_segsites <- function(snps, positions, trio_locus = numeric(0), check = TR
 #' @param segsites The segregating sites object
 #' @export
 get_snps <- function(segsites) {
-    .Call('coala_get_snps', PACKAGE = 'coala', segsites)
+    .Call(coala_get_snps, segsites)
 }
 
 #' @describeIn segsites Returns the SNP's positions from a segregating
 #'   sites  object.
 #' @export
 get_positions <- function(segsites) {
-    .Call('coala_get_positions', PACKAGE = 'coala', segsites)
+    .Call(coala_get_positions, segsites)
 }
 
 #' @describeIn segsites Sets the SNP's positions in a segregating
 #'   sites object.
 #' @export
 set_positions <- function(segsites, positions) {
-    .Call('coala_set_positions', PACKAGE = 'coala', segsites, positions)
+    .Call(coala_set_positions, segsites, positions)
 }
 
 #' @describeIn segsites Returns the trio locus positions from a
 #'   segregating sites  object.
 #' @export
 get_trio_locus <- function(segsites) {
-    .Call('coala_get_trio_locus', PACKAGE = 'coala', segsites)
+    .Call(coala_get_trio_locus, segsites)
 }
 
 #' @describeIn segsites Sets the trio locus in a segregating sites
 #'   object.
 #' @export
 set_trio_locus <- function(segsites, trio_locus) {
-    .Call('coala_set_trio_locus', PACKAGE = 'coala', segsites, trio_locus)
+    .Call(coala_set_trio_locus, segsites, trio_locus)
 }
 
 calc_four_gamete_stat <- function(seg_sites_list, individuals, locus_length, ploidy = 1L) {
-    .Call('coala_calc_four_gamete_stat', PACKAGE = 'coala', seg_sites_list, individuals, locus_length, ploidy)
+    .Call(coala_calc_four_gamete_stat, seg_sites_list, individuals, locus_length, ploidy)
 }
 
 #' Calculates the Joint Site Frequency Spectrum
@@ -82,18 +82,18 @@ calc_four_gamete_stat <- function(seg_sites_list, individuals, locus_length, plo
 #' @return The Joint Site Frequency Spectrum, as a matrix.
 #' @keywords internal
 calc_jsfs <- function(segsites_list, ind_per_pop) {
-    .Call('coala_calc_jsfs', PACKAGE = 'coala', segsites_list, ind_per_pop)
+    .Call(coala_calc_jsfs, segsites_list, ind_per_pop)
 }
 
 calc_mcmf <- function(seg_sites, individuals, has_trios = TRUE, expand_mcmf = FALSE, type_expand = 1L, ploidy = 1L, locus_length = matrix(0)) {
-    .Call('coala_calc_mcmf', PACKAGE = 'coala', seg_sites, individuals, has_trios, expand_mcmf, type_expand, ploidy, locus_length)
+    .Call(coala_calc_mcmf, seg_sites, individuals, has_trios, expand_mcmf, type_expand, ploidy, locus_length)
 }
 
 calc_nucleotide_div <- function(segsites_list, individuals) {
-    .Call('coala_calc_nucleotide_div', PACKAGE = 'coala', segsites_list, individuals)
+    .Call(coala_calc_nucleotide_div, segsites_list, individuals)
 }
 
 unphase_segsites <- function(seg_sites_list, ploidy, samples_per_ind) {
-    .Call('coala_unphase_segsites', PACKAGE = 'coala', seg_sites_list, ploidy, samples_per_ind)
+    .Call(coala_unphase_segsites, seg_sites_list, ploidy, samples_per_ind)
 }
 

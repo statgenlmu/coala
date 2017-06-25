@@ -4,7 +4,7 @@
 #' within R. The `introduction` vignette is a good place to start.
 #'
 #' @importFrom Rcpp evalCpp
-#' @useDynLib coala
+#' @useDynLib coala, .registration = TRUE
 #' @importFrom assertthat assert_that
 "_PACKAGE"
 

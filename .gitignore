@@ -8,6 +8,7 @@
 # Creates binaries
 *.o
 *.so
+*.dll
 .Rproj.user
 vignettes/abc_cache
 cran-comments.md
