@@ -75,7 +75,7 @@ ms_class <- R6Class("ms", inherit = simulator_class,
       }
 
       # Add the file if needed
-      if (requires_files(model)) output$file <- result$file
+      if (requires_files(model)) output$files <- result$file
       else unlink(result$file)
 
       # Add the simulation cmd

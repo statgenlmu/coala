@@ -1,3 +1,10 @@
+coala 0.5.2
+===========
+
+* Fix sumstat_file() with ms (#188). Thanks to @acottin for reporting this issue!
+
+
+
 coala 0.5.1
 ===========
 

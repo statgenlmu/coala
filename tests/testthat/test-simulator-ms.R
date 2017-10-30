@@ -111,3 +111,18 @@ test_that("ms simulation works", {
   stats <- ms$simulate(model, task)
   expect_is(stats, "list")
 })
+
+
+test_that("ms can simulate files", {
+  if (!has_ms()) skip("ms not installed")
+  ms <- get_simulator("ms")
+  folder <- tempfile("ms-filetest")
+  model <- coal_model(10, 1) +
+    feat_mutation(5) +
+    sumstat_file(folder)
+  task <- ms$create_task(model, NULL, 1)
+  stats <- ms$simulate(model, task)
+  expect_true(!is.null(stats$files))
+  unlink(stats$files)
+  unlink(folder, recursive = TRUE)
+})
