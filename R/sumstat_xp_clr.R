@@ -54,6 +54,20 @@ stat_xp_clr_class <- R6Class("stat_xp_clr", inherit = sumstat_class,
      }
 
      geno_file
+   },
+   create_snp_file = function(seg_sites, model) {
+     assert_that(is.list(seg_sites))
+     assert_that(is.model(model))
+
+     snp_file <- tempfile("xp_clr_snp")
+     for (locus_nr in seq_along(seg_sites)) {
+       locus_seg_sites <- seg_sites[[locus_nr]]
+       assert_that(is_segsites(locus_seg_sites))
+     }
+
+     #SNPName chr# GeneticDistance(Morgan) PhysicalDistance(bp) RefAllele TheOtherAllele
+     #for example:
+     #   rs465423 1 0.042681 4268076 T C
    }
  )
 )

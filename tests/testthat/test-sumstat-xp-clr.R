@@ -10,6 +10,7 @@ test_model <- coal_model(c(2, 2), 2, 337)
 
 
 test_that("it creates geno files", {
+  if (!has_xp_clr()) skip("XPCLR not found")
   xp_clr <- sumstat_xp_clr("xp-clr", 1, 2)
   geno_file <- xp_clr$create_geno_file(list(test_seg_sites, test_seg_sites), test_model, 1)
   expect_true(file.exists(geno_file))

@@ -24,3 +24,9 @@ test_that("OmegaPlus is available on travis", {
   if (!on_travis) skip("Not on Travis-CI")
   expect_true(has_omega())
 })
+
+
+test_that("XPCLR is available on travis", {
+  if (!on_travis) skip("Not on Travis-CI")
+  expect_true(has_xp_clr())
+})
