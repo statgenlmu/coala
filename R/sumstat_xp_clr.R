@@ -4,6 +4,7 @@ stat_xp_clr_class <- R6Class("stat_xp_clr", inherit = sumstat_class,
    req_segsites = TRUE,
    pop_focal = NULL,
    pop_reference = NULL,
+   binary = NULL,
    empty_matrix = data.frame(CHR = numeric(),
                              POSITION = numeric(),
                              FREQ_a = numeric(),
@@ -12,12 +13,22 @@ stat_xp_clr_class <- R6Class("stat_xp_clr", inherit = sumstat_class,
                              IES = numeric())
  ),
  public = list(
-   initialize = function(name, pop_focal, pop_reference, transformation) {
+   initialize = function(name, pop_focal, pop_reference, binary, transformation) {
      assert_that(is.numeric(pop_focal) && length(pop_focal) == 1)
      private$pop_focal <- pop_focal
 
      assert_that(is.numeric(pop_reference) && length(pop_reference) == 1)
      private$pop_reference <- pop_reference
+
+     if (identical(binary, "automatic")) {
+       binary <- search_executable("XPCLR", envir_var = "XPCLR")
+       if (is.null(binary)) stop("No binary for OmegaPlus found.")
+     } else {
+       assert_that(length(binary) == 1)
+       assert_that(is.character(binary))
+       assert_that(file.exists(binary))
+     }
+     private$binary <- binary
 
      super$initialize(name, transformation)
    },
@@ -101,6 +112,12 @@ stat_xp_clr_class <- R6Class("stat_xp_clr", inherit = sumstat_class,
 #'     print(stat$ihh)}
 #' @author Paul Staab
 sumstat_xp_clr <- function(name = "xp_clr", pop_focal, pop_reference,
+                           binary = "automatic",
                            transformation = identity) {
-  stat_xp_clr_class$new(name, pop_focal, pop_reference, transformation)
+  stat_xp_clr_class$new(name, pop_focal, pop_reference, binary, transformation)
+}
+
+
+has_xp_clr <- function() {
+  !is.null(search_executable("XPCLR", envir_var = "XPCLR"))
 }

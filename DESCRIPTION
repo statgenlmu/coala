@@ -1,5 +1,5 @@
 Package: coala
-Version: 0.5.2
+Version: 0.5.2.9000
 License: MIT + file LICENSE
 Title: A Framework for Coalescent Simulation
 Authors@R: c(
@@ -37,7 +37,7 @@ Suggests:
     testthat (>= 0.11.0)
 LinkingTo: Rcpp, RcppArmadillo (>= 0.3.810.0)
 VignetteBuilder: knitr
-Collate:
+Collate: 
     'RcppExports.R'
     'cache.R'
     'coala.R'
@@ -91,5 +91,6 @@ Collate:
     'sumstat_sfs.R'
     'sumstat_tajimas_d.R'
     'sumstat_trees.R'
+    'sumstat_xp_clr.R'
     'tools.R'
 RoxygenNote: 6.0.1
