@@ -1,3 +1,10 @@
+coala 0.5.3
+===========
+
+* Disable vignette about data import from PopGenome as PopGenome is no longer available on CRAN.
+
+
+
 coala 0.5.2
 ===========
 
