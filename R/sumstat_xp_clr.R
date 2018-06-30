@@ -5,6 +5,10 @@ stat_xp_clr_class <- R6Class("stat_xp_clr", inherit = sumstat_class,
    pop_focal = NULL,
    pop_reference = NULL,
    binary = NULL,
+   param_gwin = NULL,
+   param_snpwin = NULL,
+   param_grid_size = NULL,
+   param_corrlevel = NULL,
    empty_matrix = data.frame(CHR = numeric(),
                              POSITION = numeric(),
                              FREQ_a = numeric(),
@@ -13,16 +17,28 @@ stat_xp_clr_class <- R6Class("stat_xp_clr", inherit = sumstat_class,
                              IES = numeric())
  ),
  public = list(
-   initialize = function(name, pop_focal, pop_reference, binary, transformation) {
+   initialize = function(name, pop_focal, pop_reference, g_win, snp_win, grid_size, corrlevel, binary, transformation) {
      assert_that(is.numeric(pop_focal) && length(pop_focal) == 1)
      private$pop_focal <- pop_focal
 
      assert_that(is.numeric(pop_reference) && length(pop_reference) == 1)
      private$pop_reference <- pop_reference
 
+     assert_that(is.numeric(g_win) && length(g_win) == 1)
+     private$param_gwin <- g_win
+
+     assert_that(is.numeric(snp_win) && length(snp_win) == 1)
+     private$param_snpwin <- snp_win
+
+     assert_that(is.numeric(grid_size) && length(grid_size) == 1)
+     private$param_grid_size <- grid_size
+
+     assert_that(is.numeric(corrlevel) && length(corrlevel) == 1)
+     private$param_corrlevel <- corrlevel
+
      if (identical(binary, "automatic")) {
        binary <- search_executable("XPCLR", envir_var = "XPCLR")
-       if (is.null(binary)) stop("No binary for OmegaPlus found.")
+       if (is.null(binary)) stop("No binary for XPCLR found.")
      } else {
        assert_that(length(binary) == 1)
        assert_that(is.character(binary))
@@ -34,11 +50,35 @@ stat_xp_clr_class <- R6Class("stat_xp_clr", inherit = sumstat_class,
    },
    calculate = function(seg_sites, trees, files, model, sim_tasks = NULL) {
      # Create input files
-     geno_file_focal <- public$create_geno_file(seg_sites, model, private$pop_focal)
-     geno_file_reference <- public$create_geno_file(seg_sites, model, private$pop_focal)
+     geno_file_focal <- self$create_geno_file(seg_sites, model, private$pop_focal)
+     geno_file_reference <- self$create_geno_file(seg_sites, model, private$pop_focal)
+     snp_file <- self$create_snp_file(seg_sites, model)
+
+     # Call XP-CLS
+     output_file <- tempfile("xp_clr_output")
+     message(output_file)
+     message("Running XP-CLR. This will take a while.")
+     system2(private$binary,
+             args = c("-xpclr",
+                      geno_file_focal,
+                      geno_file_reference,
+                      snp_file,
+                      output_file,
+                      "-w1",
+                      private$param_gwin,
+                      private$param_snpwin,
+                      private$param_grid_size,
+                      1,
+                      ifelse(is_unphased(model), "-p0", "-p1"),
+                      private$param_corrlevel),
+             stdout = "")
+
+     if (!file.exists(output_file)) stop("XP-CLR outputfile does not exist after calling the program", call. = FALSE)
 
      # Clean-Up
-     unlink(c(geno_file_focal, geno_file_reference))
+     unlink(c(geno_file_focal, geno_file_reference, snp_file))
+
+     output_file
    },
    create_geno_file = function(seg_sites, model, pop) {
      assert_that(is.list(seg_sites))
@@ -60,16 +100,27 @@ stat_xp_clr_class <- R6Class("stat_xp_clr", inherit = sumstat_class,
      assert_that(is.model(model))
 
      snp_file <- tempfile("xp_clr_snp")
+     # relative positions are propotrional to genetic distance as recombination is homogenious along the chr
+     snp_pos_relative <- get_snp_positions(seg_sites, model, relative = TRUE)
+     snp_pos_abs <- get_snp_positions(seg_sites, model, relative = FALSE)
+
      for (locus_nr in seq_along(seg_sites)) {
        locus_seg_sites <- seg_sites[[locus_nr]]
        assert_that(is_segsites(locus_seg_sites))
+       locus_snp_data <- data.frame(
+         snp_name = paste0("locus", locus_nr, "snp", seq_along(snp_pos_relative[[locus_nr]])),
+         chr = locus_nr,
+         dist_gen = snp_pos_relative[[locus_nr]],
+         dist_bp = round(snp_pos_abs[[locus_nr]]),
+         major = "T",
+         minor = "C"
+       )
+       write.table(locus_snp_data, file = snp_file, append = TRUE, col.names = FALSE, row.names = FALSE)
      }
 
-     #SNPName chr# GeneticDistance(Morgan) PhysicalDistance(bp) RefAllele TheOtherAllele
-     #for example:
-     #   rs465423 1 0.042681 4268076 T C
-   }
- )
+     snp_file
+    }
+  )
 )
 
 
@@ -126,9 +177,10 @@ stat_xp_clr_class <- R6Class("stat_xp_clr", inherit = sumstat_class,
 #'     print(stat$ihh)}
 #' @author Paul Staab
 sumstat_xp_clr <- function(name = "xp_clr", pop_focal, pop_reference,
+                           g_win = 0.005, snp_win = 200, grid_size = 2000, corrlevel = 0.95,
                            binary = "automatic",
                            transformation = identity) {
-  stat_xp_clr_class$new(name, pop_focal, pop_reference, binary, transformation)
+  stat_xp_clr_class$new(name, pop_focal, pop_reference, g_win, snp_win, grid_size, corrlevel, binary, transformation)
 }
 
 

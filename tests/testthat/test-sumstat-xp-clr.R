@@ -29,3 +29,28 @@ test_that("it creates geno files", {
   unlink(geno_file)
 })
 
+test_that("it creates snp files", {
+  if (!has_xp_clr()) skip("XPCLR not found")
+  xp_clr <- sumstat_xp_clr("xp-clr", 1, 2)
+  snp_file <- xp_clr$create_snp_file(list(test_seg_sites, test_seg_sites), test_model)
+  expect_true(file.exists(snp_file))
+
+  snp_data <- read.table(snp_file)
+  expect_equal(dim(snp_data), c(10, 6))
+
+  unlink(snp_data)
+})
+
+that_that("it can calculate xp_clr", {
+  if (!has_xp_clr()) skip("XPCLR not found")
+
+  test_model <- coal_model(c(10, 10), 2, 1000) +
+    feat_mutation(1) +
+    feat_migration(1, symmetric = TRUE) +
+    sumstat_seg_sites()
+  test_seg_sites <- simulate(test_model)$seg_sites
+
+  xp_clr <- sumstat_xp_clr("xp-clr", 1, 2, grid_size = 500)
+  outfile <- xp_clr$calculate(test_seg_sites, NULL, NULL, test_model, NULL)
+  expect_true(file.exists(outfile))
+})
