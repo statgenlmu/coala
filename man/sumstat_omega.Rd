@@ -76,5 +76,5 @@ Other summary statistics: \code{\link{sumstat_dna}},
   \code{\link{sumstat_seg_sites}},
   \code{\link{sumstat_sfs}},
   \code{\link{sumstat_tajimas_d}},
-  \code{\link{sumstat_trees}}
+  \code{\link{sumstat_trees}}, \code{\link{sumstat_xp_clr}}
 }
