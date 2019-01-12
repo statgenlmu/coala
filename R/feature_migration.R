@@ -15,8 +15,8 @@ migration_class <- R6Class("migration", inherit = feature_class,
       if (all(private$population == "all")) {
         cat("Symmetric migration")
       } else {
-        cat("Migration from pop", private$population,
-            "to pop", private$pop_to)
+        cat("Migration from pop", private$population[1],
+            "to pop", private$population[2])
       }
       cat(" with rate", print_par(private$rate),
           "starting at time", print_par(self$get_time()), "\n")

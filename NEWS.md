@@ -1,3 +1,10 @@
+coala 0.5.3
+===========
+
+* Fixes output of `feat_migration()` (#198). Thanks to @dswdejonge for reporting this bug!
+
+
+
 coala 0.5.2
 ===========
 
