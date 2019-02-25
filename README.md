@@ -47,7 +47,7 @@ gives an example on how coala can be used to conduct the simulations for [Approx
 Computation](https://en.wikipedia.org/wiki/Approximate_Bayesian_computation).
 
 Also take a look at the [project wiki](https://github.com/statgenlmu/coala/wiki) for additional
-resources. You can ask questions on coala's [mailing list](https://groups.google.com/forum/#!forum/coala-pkg). 
+resources.
 
 
 Example
