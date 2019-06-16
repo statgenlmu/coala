@@ -4,8 +4,8 @@
 \alias{sumstat_mcmf}
 \title{Summary Statistic: Most Common Mutation's Frequency}
 \usage{
-sumstat_mcmf(name = "mcmf", population = 1, transformation = identity,
-  expand_mcmf = FALSE, type_expand = 1)
+sumstat_mcmf(name = "mcmf", population = 1,
+  transformation = identity, expand_mcmf = FALSE, type_expand = 1)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating
@@ -72,3 +72,4 @@ Other summary statistics: \code{\link{sumstat_dna}},
   \code{\link{sumstat_tajimas_d}},
   \code{\link{sumstat_trees}}
 }
+\concept{summary statistics}

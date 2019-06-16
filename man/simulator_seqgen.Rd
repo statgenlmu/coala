@@ -45,3 +45,4 @@ doi:10.1093/bioinformatics/13.3.235
 Other simulators: \code{\link{simulator_msms}},
   \code{\link{simulator_ms}}, \code{\link{simulator_scrm}}
 }
+\concept{simulators}

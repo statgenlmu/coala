@@ -4,7 +4,8 @@
 \alias{coal_model}
 \title{Create a Coalescent Model}
 \usage{
-coal_model(sample_size, loci_number = 0, loci_length = 1000, ploidy = 1)
+coal_model(sample_size, loci_number = 0, loci_length = 1000,
+  ploidy = 1)
 }
 \arguments{
 \item{sample_size}{Defines the number of populations and the number of

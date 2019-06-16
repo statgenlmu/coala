@@ -58,3 +58,4 @@ Other summary statistics: \code{\link{sumstat_dna}},
   \code{\link{sumstat_seg_sites}},
   \code{\link{sumstat_sfs}}, \code{\link{sumstat_trees}}
 }
+\concept{summary statistics}

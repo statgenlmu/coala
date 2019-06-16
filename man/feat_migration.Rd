@@ -4,8 +4,8 @@
 \alias{feat_migration}
 \title{Feature: Migration/Gene Flow}
 \usage{
-feat_migration(rate, pop_from = NULL, pop_to = NULL, symmetric = FALSE,
-  time = "0", locus_group = "all")
+feat_migration(rate, pop_from = NULL, pop_to = NULL,
+  symmetric = FALSE, time = "0", locus_group = "all")
 }
 \arguments{
 \item{rate}{The migration rate. Can be a numeric or a
@@ -79,3 +79,4 @@ Other features: \code{\link{feat_growth}},
   \code{\link{feat_size_change}},
   \code{\link{feat_unphased}}
 }
+\concept{features}

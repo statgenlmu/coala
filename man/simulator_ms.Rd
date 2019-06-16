@@ -32,3 +32,4 @@ Other simulators: \code{\link{simulator_msms}},
   \code{\link{simulator_scrm}},
   \code{\link{simulator_seqgen}}
 }
+\concept{simulators}

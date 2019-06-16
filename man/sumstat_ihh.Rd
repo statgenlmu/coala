@@ -35,12 +35,14 @@ If \code{calc_ihs = FALSE}, a data.frame with values for
   values for each SNP:
   \itemize{
    \item{CHR: The SNP's locus}
-   \item{Positions: The SNP's absolute position on its locus}
-   \item{FREQ_a: The SNP's absolute position on its locus}
-   \item{IHHa: integrated EHH for the ancestral allele}
-   \item{IHHd: integrated EHH for the derived allele}
+   \item{POSITION: The SNP's absolute position on its locus}
+   \item{FREQ_A: The frequency of the ancestral allele}
+   \item{FREQ_D: The frequency of the derived allele}
+   \item{IHH_A: integrated EHH for the ancestral allele}
+   \item{IHH_D: integrated EHH for the derived allele}
    \item{IES: integrated EHHS}
-   \item{iHS: iHS, normalized over all loci.}
+   \item{INES: integrated normalized EHHS}
+   \item{IHS: iHS, normalized over all loci.}
   }
 }
 \description{
@@ -92,3 +94,4 @@ Other summary statistics: \code{\link{sumstat_dna}},
 \author{
 Paul Staab
 }
+\concept{summary statistics}

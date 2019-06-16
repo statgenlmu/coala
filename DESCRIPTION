@@ -1,5 +1,5 @@
 Package: coala
-Version: 0.5.2
+Version: 0.5.3
 License: MIT + file LICENSE
 Title: A Framework for Coalescent Simulation
 Authors@R: c(
@@ -24,7 +24,7 @@ Imports:
     parallel,
     R6 (>= 2.0.1),
     Rcpp (>= 0.11.0),
-    rehh (>= 2.0.0),
+    rehh (>= 2.1.0),
     scrm (>= 1.6.0-2),
     stats,
     utils
@@ -92,4 +92,4 @@ Collate:
     'sumstat_tajimas_d.R'
     'sumstat_trees.R'
     'tools.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

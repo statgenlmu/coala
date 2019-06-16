@@ -4,8 +4,9 @@
 \alias{feat_mutation}
 \title{Feature: Mutation}
 \usage{
-feat_mutation(rate, model = "IFS", base_frequencies = NA, tstv_ratio = NA,
-  gtr_rates = NA, fixed_number = FALSE, locus_group = "all")
+feat_mutation(rate, model = "IFS", base_frequencies = NA,
+  tstv_ratio = NA, gtr_rates = NA, fixed_number = FALSE,
+  locus_group = "all")
 }
 \arguments{
 \item{rate}{The mutation rate. Can be a numeric or a \code{\link{parameter}}.
@@ -135,3 +136,4 @@ Other features: \code{\link{feat_growth}},
   \code{\link{feat_size_change}},
   \code{\link{feat_unphased}}
 }
+\concept{features}
