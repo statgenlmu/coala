@@ -2,8 +2,8 @@ coala 0.5.3
 ===========
 
 * Fixes output of `feat_migration()` (#198). Thanks to @dswdejonge for reporting this bug!
-* Adds compatability with version `2.1.0` of package `rehh`. Big thanks to rehh's maintainer
-  Alexander Klassmann for providing the neccessary changes.
+* Adds compatability with version `3.0.0` of package `rehh` (#200). Big thanks to rehh's 
+  maintainer Alexander Klassmann for providing the neccessary changes.
 
 
 

@@ -24,7 +24,7 @@ Imports:
     parallel,
     R6 (>= 2.0.1),
     Rcpp (>= 0.11.0),
-    rehh (>= 2.1.0),
+    rehh (>= 3.0.0),
     scrm (>= 1.6.0-2),
     stats,
     utils

@@ -85,13 +85,13 @@ test_that("calculation of ihh works", {
   stat_ihh <- sumstat_ihh()
   ihh <- stat_ihh$calculate(list(seg_sites), NULL, NULL, model)
   expect_that(ihh, is_a("data.frame"))
-  expect_equal(dim(ihh), c(5, 8))
+  expect_equal(dim(ihh), c(5, 10))
   expect_equal(ihh$POSITION, pos)
 
   ihh <- stat_ihh$calculate(list(seg_sites, seg_sites), NULL, NULL,
                             coal_model(4, 2, 337))
   expect_that(ihh, is_a("data.frame"))
-  expect_equal(dim(ihh), c(10, 8))
+  expect_equal(dim(ihh), c(10, 10))
   expect_equal(ihh$POSITION, c(pos, pos))
 })
 
