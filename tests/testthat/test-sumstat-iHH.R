@@ -29,17 +29,30 @@ test_that("generation of rehh data works", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh(population = 1)
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, 1:4, model)
-  expect_equivalent(rehh_data@haplo, as.matrix(seg_sites) + 1)
-  expect_equal(rehh_data@position, pos)
-  expect_equal(rehh_data@snp.name, as.character(1:5))
-  expect_equal(rehh_data@nhap, 4)
-  expect_equal(rehh_data@nsnp, 5)
+  expect_equivalent(rehh_data@haplo, as.matrix(seg_sites))
+  expect_equal(rehh_data@positions, pos)
 
   rehh_data <- stat_ihh$create_rehh_data(create_empty_segsites(5), 1:5, model)
-  expect_equal(rehh_data@haplo, matrix(0, 5, 0))
+  expect_equal(dim(rehh_data@haplo), c(5, 0))
 
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, numeric(), model)
-  expect_equal(rehh_data@haplo, matrix(0, 0, 0))
+  expect_equal(dim(rehh_data@haplo), c(0, 0))
+})
+
+
+test_that("rehh data does not contain duplicated positions", {
+  skip_if_not_installed("rehh")
+  stat_ihh <- sumstat_ihh(population = 1)
+
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, 1:4, model)
+  expect_equivalent(rehh_data@haplo, as.matrix(seg_sites))
+  expect_equal(rehh_data@positions, pos)
+
+  rehh_data <- stat_ihh$create_rehh_data(create_empty_segsites(5), 1:5, model)
+  expect_equal(dim(rehh_data@haplo), c(5, 0))
+
+  rehh_data <- stat_ihh$create_rehh_data(seg_sites, numeric(), model)
+  expect_equal(dim(rehh_data@haplo), c(0, 0))
 })
 
 
@@ -47,11 +60,8 @@ test_that("SNPs not segregating in individuals are removed from rehh_data", {
   skip_if_not_installed("rehh")
   stat_ihh <- sumstat_ihh(population = 1)
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, 1:2, model)
-  expect_equivalent(rehh_data@haplo, as.matrix(seg_sites[1:2, c(2, 4, 5)]) + 1)
-  expect_equal(rehh_data@position, pos[c(2, 4, 5)])
-  expect_equal(rehh_data@snp.name, as.character(1:3))
-  expect_equal(rehh_data@nhap, 2)
-  expect_equal(rehh_data@nsnp, 3)
+  expect_equivalent(rehh_data@haplo, as.matrix(seg_sites[1:2, c(2, 4, 5)]))
+  expect_equal(rehh_data@positions, pos[c(2, 4, 5)])
 })
 
 
@@ -59,19 +69,14 @@ test_that("selection of snps works", {
   stat_ihh <- sumstat_ihh(population = 1, max_snps = 2)
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, 1:4, model)
   expect_equal(dim(rehh_data@haplo), c(4, 2))
-  expect_equal(rehh_data@nsnp, 2)
-  expect_equal(rehh_data@nhap, 4)
 
   stat_ihh <- sumstat_ihh(population = 1, max_snps = 3)
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, 1:4, model)
   expect_equal(dim(rehh_data@haplo), c(4, 3))
-  expect_equal(rehh_data@nsnp, 3)
 
   stat_ihh <- sumstat_ihh(population = 1, max_snps = 2)
   rehh_data <- stat_ihh$create_rehh_data(seg_sites, 1:2, model)
   expect_equal(dim(rehh_data@haplo), c(2, 2))
-  expect_equal(rehh_data@nsnp, 2)
-  expect_equal(rehh_data@nhap, 2)
 })
 
 
@@ -80,15 +85,13 @@ test_that("calculation of ihh works", {
   stat_ihh <- sumstat_ihh()
   ihh <- stat_ihh$calculate(list(seg_sites), NULL, NULL, model)
   expect_that(ihh, is_a("data.frame"))
-  expect_equal(dim(ihh), c(5, 7))
-  expect_equal(ihh$CHR, rep("1", 5))
+  expect_equal(dim(ihh), c(5, 10))
   expect_equal(ihh$POSITION, pos)
 
   ihh <- stat_ihh$calculate(list(seg_sites, seg_sites), NULL, NULL,
                             coal_model(4, 2, 337))
   expect_that(ihh, is_a("data.frame"))
-  expect_equal(dim(ihh), c(10, 7))
-  expect_equal(ihh$CHR, rep(c("1", "2"), each = 5))
+  expect_equal(dim(ihh), c(10, 10))
   expect_equal(ihh$POSITION, c(pos, pos))
 })
 

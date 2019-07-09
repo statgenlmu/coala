@@ -4,7 +4,8 @@
 \alias{sumstat_sfs}
 \title{Summary Statistic: Site Frequency Spectrum}
 \usage{
-sumstat_sfs(name = "sfs", population = "all", transformation = identity)
+sumstat_sfs(name = "sfs", population = "all",
+  transformation = identity)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -46,3 +47,4 @@ Other summary statistics: \code{\link{sumstat_dna}},
   \code{\link{sumstat_tajimas_d}},
   \code{\link{sumstat_trees}}
 }
+\concept{summary statistics}

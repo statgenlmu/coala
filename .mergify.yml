@@ -1,0 +1,10 @@
+pull_request_rules:
+  - name: automatic merge on CI success
+    conditions:
+      - status-success=continuous-integration/travis-ci/pr
+      - status-success=continuous-integration/appveyor/pr
+      - label=ready-to-merge
+    actions:
+      merge:
+        method: rebase
+      delete_head_branch: {}

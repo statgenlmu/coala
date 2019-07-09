@@ -14,3 +14,4 @@
 ^wercker.yml$
 ^.lintr$
 ^man-roxygen$
+^.mergify.yml$

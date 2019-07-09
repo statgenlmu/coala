@@ -10,10 +10,12 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
     use_ihs = FALSE,
     empty_matrix = data.frame(CHR = numeric(),
                               POSITION = numeric(),
-                              FREQ_a = numeric(),
-                              IHHa = numeric(),
-                              HHd = numeric(),
-                              IES = numeric())
+                              FREQ_A = numeric(),
+                              FREQ_D = numeric(),
+                              IHH_A = numeric(),
+                              IHH_D = numeric(),
+                              IES = numeric(),
+                              INES = numeric())
   ),
   public = list(
     initialize = function(name, population, max_snps,
@@ -40,9 +42,9 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
         rehh_data <- self$create_rehh_data(seg_sites[[locus]],
                                            ind, model, locus)
 
-        if (rehh_data@nsnp == 0) return(private$empty_matrix)
+        if (length(rehh_data@positions) == 0) return(private$empty_matrix)
 
-        data.frame(rehh::scan_hh(rehh_data))
+        rehh::scan_hh(rehh_data)
       }))
 
       if (private$use_ihs) {
@@ -58,8 +60,8 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
           else if (n_snps < 400) freqbin <- 0.1
           else freqbin <- 0.05
           ihs <- suppressWarnings({
-            ihs <- ihh2ihs(ihh, freqbin)
-            data.frame(ihs$iHS[, -4]) #nolint
+            ihs <- rehh::ihh2ihs(ihh, freqbin)
+            ihs$ihs[, -4] #nolint
           })
           return(list(ihh = ihh, iHS = ihs))
         }
@@ -75,12 +77,13 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
       snp_mask <- self$create_snp_mask(seg_sites)
 
       rehh_data <- new("haplohh")
-      rehh_data@haplo <- as.matrix(seg_sites[ind, snp_mask]) + 1
-      rehh_data@position <- pos[[1]][snp_mask]
-      rehh_data@snp.name <- as.character(seq_along(rehh_data@position))
+      rehh_data@haplo <- type.convert(as.matrix(seg_sites[ind, snp_mask]),
+                                      "integer")
+      rehh_data@positions <- pos[[1]][snp_mask]
+      assert_that(length(rehh_data@positions) ==
+                    length(unique(rehh_data@positions)))
+      colnames(rehh_data@haplo) <- as.character(seq_along(rehh_data@positions))
       rehh_data@chr.name <- as.character(chr_name)
-      rehh_data@nhap <- length(ind)
-      rehh_data@nsnp <- length(rehh_data@position)
       rehh_data
     },
     create_snp_mask = function(seg_sites) {
@@ -126,12 +129,14 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #'   values for each SNP:
 #'   \itemize{
 #'    \item{CHR: The SNP's locus}
-#'    \item{Positions: The SNP's absolute position on its locus}
-#'    \item{FREQ_a: The SNP's absolute position on its locus}
-#'    \item{IHHa: integrated EHH for the ancestral allele}
-#'    \item{IHHd: integrated EHH for the derived allele}
+#'    \item{POSITION: The SNP's absolute position on its locus}
+#'    \item{FREQ_A: The frequency of the ancestral allele}
+#'    \item{FREQ_D: The frequency of the derived allele}
+#'    \item{IHH_A: integrated EHH for the ancestral allele}
+#'    \item{IHH_D: integrated EHH for the derived allele}
 #'    \item{IES: integrated EHHS}
-#'    \item{iHS: iHS, normalized over all loci.}
+#'    \item{INES: integrated normalized EHHS}
+#'    \item{IHS: iHS, normalized over all loci.}
 #'   }
 #' @export
 #' @template summary_statistics
