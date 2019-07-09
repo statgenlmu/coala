@@ -15,3 +15,4 @@
 ^.lintr$
 ^man-roxygen$
 ^.mergify.yml$
+^CRAN-RELEASE$
