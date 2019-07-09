@@ -19,15 +19,15 @@ feature_class <- R6Class("feature", inherit = model_part,
     },
     add_parameter = function(parameter, required = TRUE, add_par = TRUE) {
       expr <- NA
-      if (is.numeric(parameter) && length(parameter) == 1) {
+      if (length(parameter) == 1 && is.numeric(parameter)) {
         expr <- parameter
-      } else if (is.character(parameter) && length(parameter) == 1) {
+      } else if (length(parameter) == 1 && is.character(parameter)) {
         expr <- parameter
       } else if (is.par(parameter)) {
         idx <- as.character(length(private$parameter) + 1)
         private$parameter[[idx]] <- parameter
         expr <- parameter$get_expression()
-      } else if (is.null(parameter) || is.na(parameter)) {
+      } else if (is.null(parameter) || any(is.na(parameter))) {
         if (required) stop("Missing value for required parameter")
         return(NA)
       } else stop("Unexpected type of parameter")
