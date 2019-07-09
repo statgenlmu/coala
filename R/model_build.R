@@ -62,7 +62,7 @@ add_to_model.feature <- function(feat, model, feat_name) {
   # Check that the population in the feature exists
   pop <- feat$get_population()
   if (!is.null(pop)) {
-    if (pop != "all" && !all(pop %in% get_populations(model))) {
+    if (any(!pop %in% get_populations(model)) && pop[1] != 'all' ) {
       stop("Invalid population in ", feat_name, call. = FALSE)
     }
   }
