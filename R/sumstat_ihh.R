@@ -77,9 +77,11 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
       snp_mask <- self$create_snp_mask(seg_sites)
 
       rehh_data <- new("haplohh")
-      rehh_data@haplo <- type.convert(as.matrix(seg_sites[ind, snp_mask]), "integer")
+      rehh_data@haplo <- type.convert(as.matrix(seg_sites[ind, snp_mask]),
+                                      "integer")
       rehh_data@positions <- pos[[1]][snp_mask]
-      assert_that(length(rehh_data@positions) == length(unique(rehh_data@positions)))
+      assert_that(length(rehh_data@positions) ==
+                    length(unique(rehh_data@positions)))
       colnames(rehh_data@haplo) <- as.character(seq_along(rehh_data@positions))
       rehh_data@chr.name <- as.character(chr_name)
       rehh_data
