@@ -8,9 +8,9 @@ r:
 
 before_install:
   - mkdir -p ~/bin
-  - wget -O ~/bin/msms.jar "$MSMS_URL"
-  - wget -O ~/bin/OmegaPlus "$OMEGA_PLUS_URL"
-  - wget -O ~/bin/seq-gen "$SEQGEN_URL"
+  - wget -q -O ~/bin/msms.jar "$MSMS_URL"
+  - wget -q -O ~/bin/OmegaPlus "$OMEGA_PLUS_URL"
+  - wget -q -O ~/bin/seq-gen "$SEQGEN_URL"
   - chmod +x ~/bin/*
 
 r_packages:
