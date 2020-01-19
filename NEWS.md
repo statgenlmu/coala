@@ -1,8 +1,9 @@
-coala 0.5.4
+coala 0.6.0
 ===========
 
 * Removes the option to import data import via PopGenome, as PopGenome is not on 
-  CRAN anymore.
+  CRAN anymore. Also removes the `as.segsites` function, as it does not do anything
+  anymore without the PopGenome import option (#205).
 
 
 

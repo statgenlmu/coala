@@ -5,6 +5,7 @@
 #' can be simulated using the \code{\link[=simulate.coalmodel]{simulate}} function.
 #'
 #' @inheritParams feat_sample
+#' @aliases coalmodelpart
 #' @param sample_size Defines the number of populations and the number of
 #'   individual sampled from each population. Given as an integer vector where
 #'   each entry gives the number of individuals sampled from the corresponding
