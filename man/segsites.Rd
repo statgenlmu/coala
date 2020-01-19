@@ -111,9 +111,6 @@ get_positions(segsites)
 # segregating in these are automatically removed:
 segsites[1:2, 1:3]
 }
-\seealso{
-For converting biological data to segsites: \code{\link{as.segsites}}
-}
 \author{
 Paul Staab
 }

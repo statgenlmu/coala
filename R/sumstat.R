@@ -143,10 +143,7 @@ calc_sumstats_from_sim <- function(seg_sites, trees, files, model,
 #' @param model The coala model. The summary statistics present in this model
 #'   will be calculated. The model should fit to the data, in particular
 #'   regarding the number of loci and haploids.
-#' @param segsites_list Either a list of \code{segsites} objects, or an object
-#'   that can be converted using \code{\link{as.segsites}}. It is possible
-#'   to specify additional argument for the conversion using the \code{...}
-#'   argument.
+#' @param segsites_list A list of \code{segsites} objects
 #' @param tree_list Not yet implemented.
 #' @param trios If your model is using locus trios, then you
 #'   can create these by combining individual loci. This is a list that defines
@@ -155,8 +152,7 @@ calc_sumstats_from_sim <- function(seg_sites, trees, files, model,
 #'   summary statistics is locus in the provided data that corresponds to the
 #'   number. If three numbers are provided, the locus for calculation is created
 #'   by combining the corresponding three loci from the given data.
-#' @param ... Additional arguments that will be passed to
-#'   \code{\link{as.segsites}}.
+#' @param ... Ignored
 #' @export
 #' @examples
 #' segsites <- create_segsites(matrix(c(1, 0, 0,
@@ -195,7 +191,6 @@ calc_sumstats_from_data <- function(model,
   }
 
   if (!is.null(segsites_list)) {
-    segsites_list <- as.segsites(segsites_list, ...)
     if (!all(vapply(segsites_list, is_segsites, logical(1)))) {
       stop("Incorrect or missing data in list of segregating sites")
     }
