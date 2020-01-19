@@ -4,8 +4,14 @@
 \alias{sumstat_omega}
 \title{Summary Statistic: Omega}
 \usage{
-sumstat_omega(name = "omega", min_win = 100, max_win = 1000,
-  grid = 1000, binary = "automatic", transformation = identity)
+sumstat_omega(
+  name = "omega",
+  min_win = 100,
+  max_win = 1000,
+  grid = 1000,
+  binary = "automatic",
+  transformation = identity
+)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -67,15 +73,17 @@ To create a demographic model: \code{\link{coal_model}}
 
 To calculate this statistic from data: \code{\link{calc_sumstats_from_data}}
 
-Other summary statistics: \code{\link{sumstat_dna}},
-  \code{\link{sumstat_file}},
-  \code{\link{sumstat_four_gamete}},
-  \code{\link{sumstat_ihh}}, \code{\link{sumstat_jsfs}},
-  \code{\link{sumstat_mcmf}},
-  \code{\link{sumstat_nucleotide_div}},
-  \code{\link{sumstat_seg_sites}},
-  \code{\link{sumstat_sfs}},
-  \code{\link{sumstat_tajimas_d}},
-  \code{\link{sumstat_trees}}
+Other summary statistics: 
+\code{\link{sumstat_dna}()},
+\code{\link{sumstat_file}()},
+\code{\link{sumstat_four_gamete}()},
+\code{\link{sumstat_ihh}()},
+\code{\link{sumstat_jsfs}()},
+\code{\link{sumstat_mcmf}()},
+\code{\link{sumstat_nucleotide_div}()},
+\code{\link{sumstat_seg_sites}()},
+\code{\link{sumstat_sfs}()},
+\code{\link{sumstat_tajimas_d}()},
+\code{\link{sumstat_trees}()}
 }
 \concept{summary statistics}

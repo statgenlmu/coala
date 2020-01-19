@@ -28,8 +28,9 @@ Bioinformatics (2002) 18 (2): 337-338
 doi:10.1093/bioinformatics/18.2.337
 }
 \seealso{
-Other simulators: \code{\link{simulator_msms}},
-  \code{\link{simulator_scrm}},
-  \code{\link{simulator_seqgen}}
+Other simulators: 
+\code{\link{simulator_msms}},
+\code{\link{simulator_scrm}},
+\code{\link{simulator_seqgen}}
 }
 \concept{simulators}

@@ -4,8 +4,13 @@
 \alias{sumstat_ihh}
 \title{Summary Statistic: Integrated Extended Haplotype Homozygosity}
 \usage{
-sumstat_ihh(name = "ihh", population = 1, max_snps = 1000,
-  calc_ihs = FALSE, transformation = identity)
+sumstat_ihh(
+  name = "ihh",
+  population = 1,
+  max_snps = 1000,
+  calc_ihs = FALSE,
+  transformation = identity
+)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -80,16 +85,18 @@ To create a demographic model: \code{\link{coal_model}}
 
 To calculate this statistic from data: \code{\link{calc_sumstats_from_data}}
 
-Other summary statistics: \code{\link{sumstat_dna}},
-  \code{\link{sumstat_file}},
-  \code{\link{sumstat_four_gamete}},
-  \code{\link{sumstat_jsfs}}, \code{\link{sumstat_mcmf}},
-  \code{\link{sumstat_nucleotide_div}},
-  \code{\link{sumstat_omega}},
-  \code{\link{sumstat_seg_sites}},
-  \code{\link{sumstat_sfs}},
-  \code{\link{sumstat_tajimas_d}},
-  \code{\link{sumstat_trees}}
+Other summary statistics: 
+\code{\link{sumstat_dna}()},
+\code{\link{sumstat_file}()},
+\code{\link{sumstat_four_gamete}()},
+\code{\link{sumstat_jsfs}()},
+\code{\link{sumstat_mcmf}()},
+\code{\link{sumstat_nucleotide_div}()},
+\code{\link{sumstat_omega}()},
+\code{\link{sumstat_seg_sites}()},
+\code{\link{sumstat_sfs}()},
+\code{\link{sumstat_tajimas_d}()},
+\code{\link{sumstat_trees}()}
 }
 \author{
 Paul Staab

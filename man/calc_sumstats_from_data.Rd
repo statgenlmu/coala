@@ -4,8 +4,13 @@
 \alias{calc_sumstats_from_data}
 \title{Calculate summary statistics for biological data}
 \usage{
-calc_sumstats_from_data(model, segsites_list = NULL, tree_list = NULL,
-  trios = NULL, ...)
+calc_sumstats_from_data(
+  model,
+  segsites_list = NULL,
+  tree_list = NULL,
+  trios = NULL,
+  ...
+)
 }
 \arguments{
 \item{model}{The coala model. The summary statistics present in this model

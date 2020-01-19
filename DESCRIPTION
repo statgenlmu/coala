@@ -1,5 +1,5 @@
 Package: coala
-Version: 0.5.3
+Version: 0.5.4
 License: MIT + file LICENSE
 Title: A Framework for Coalescent Simulation
 Authors@R: c(
@@ -31,7 +31,6 @@ Imports:
 Suggests:
     abc (>= 2.0),
     knitr,
-    PopGenome (>= 2.1.0),
     phyclust (>= 0.1-16),
     rmarkdown,
     testthat (>= 0.11.0)
@@ -55,7 +54,6 @@ Collate:
     'feature_size_change.R'
     'feature_sumstats.R'
     'feature_unphased.R'
-    'import_popgenome.R'
     'interface_abc.R'
     'locus.R'
     'model_build.R'
@@ -92,4 +90,4 @@ Collate:
     'sumstat_tajimas_d.R'
     'sumstat_trees.R'
     'tools.R'
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2

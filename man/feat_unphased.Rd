@@ -53,13 +53,15 @@ simulate(model)
 \seealso{
 For creating a model: \code{\link{coal_model}}
 
-Other features: \code{\link{feat_growth}},
-  \code{\link{feat_ignore_singletons}},
-  \code{\link{feat_migration}},
-  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
-  \code{\link{feat_pop_merge}},
-  \code{\link{feat_recombination}},
-  \code{\link{feat_selection}},
-  \code{\link{feat_size_change}}
+Other features: 
+\code{\link{feat_growth}()},
+\code{\link{feat_ignore_singletons}()},
+\code{\link{feat_migration}()},
+\code{\link{feat_mutation}()},
+\code{\link{feat_outgroup}()},
+\code{\link{feat_pop_merge}()},
+\code{\link{feat_recombination}()},
+\code{\link{feat_selection}()},
+\code{\link{feat_size_change}()}
 }
 \concept{features}

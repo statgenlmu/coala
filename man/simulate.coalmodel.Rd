@@ -4,8 +4,7 @@
 \alias{simulate.coalmodel}
 \title{Simulate Data According to a Demographic Model}
 \usage{
-\method{simulate}{coalmodel}(object, nsim = 1, seed, ...,
-  pars = numeric(0), cores = 1)
+\method{simulate}{coalmodel}(object, nsim = 1, seed, ..., pars = numeric(0), cores = 1)
 }
 \arguments{
 \item{object}{The coalescent model to be simulated}

@@ -1,3 +1,11 @@
+coala 0.5.4
+===========
+
+* Removes the option to import data import via PopGenome, as PopGenome is not on 
+  CRAN anymore.
+
+
+
 coala 0.5.3
 ===========
 
