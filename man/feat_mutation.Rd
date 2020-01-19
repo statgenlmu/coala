@@ -4,9 +4,15 @@
 \alias{feat_mutation}
 \title{Feature: Mutation}
 \usage{
-feat_mutation(rate, model = "IFS", base_frequencies = NA,
-  tstv_ratio = NA, gtr_rates = NA, fixed_number = FALSE,
-  locus_group = "all")
+feat_mutation(
+  rate,
+  model = "IFS",
+  base_frequencies = NA,
+  tstv_ratio = NA,
+  gtr_rates = NA,
+  fixed_number = FALSE,
+  locus_group = "all"
+)
 }
 \arguments{
 \item{rate}{The mutation rate. Can be a numeric or a \code{\link{parameter}}.
@@ -126,14 +132,15 @@ For adding recombination: \code{\link{feat_recombination}}.
 
 For creating a model: \code{\link{coal_model}}
 
-Other features: \code{\link{feat_growth}},
-  \code{\link{feat_ignore_singletons}},
-  \code{\link{feat_migration}},
-  \code{\link{feat_outgroup}},
-  \code{\link{feat_pop_merge}},
-  \code{\link{feat_recombination}},
-  \code{\link{feat_selection}},
-  \code{\link{feat_size_change}},
-  \code{\link{feat_unphased}}
+Other features: 
+\code{\link{feat_growth}()},
+\code{\link{feat_ignore_singletons}()},
+\code{\link{feat_migration}()},
+\code{\link{feat_outgroup}()},
+\code{\link{feat_pop_merge}()},
+\code{\link{feat_recombination}()},
+\code{\link{feat_selection}()},
+\code{\link{feat_size_change}()},
+\code{\link{feat_unphased}()}
 }
 \concept{features}

@@ -4,8 +4,13 @@
 \alias{sumstat_mcmf}
 \title{Summary Statistic: Most Common Mutation's Frequency}
 \usage{
-sumstat_mcmf(name = "mcmf", population = 1,
-  transformation = identity, expand_mcmf = FALSE, type_expand = 1)
+sumstat_mcmf(
+  name = "mcmf",
+  population = 1,
+  transformation = identity,
+  expand_mcmf = FALSE,
+  type_expand = 1
+)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating
@@ -61,15 +66,17 @@ To create a demographic model: \code{\link{coal_model}}
 
 To calculate this statistic from data: \code{\link{calc_sumstats_from_data}}
 
-Other summary statistics: \code{\link{sumstat_dna}},
-  \code{\link{sumstat_file}},
-  \code{\link{sumstat_four_gamete}},
-  \code{\link{sumstat_ihh}}, \code{\link{sumstat_jsfs}},
-  \code{\link{sumstat_nucleotide_div}},
-  \code{\link{sumstat_omega}},
-  \code{\link{sumstat_seg_sites}},
-  \code{\link{sumstat_sfs}},
-  \code{\link{sumstat_tajimas_d}},
-  \code{\link{sumstat_trees}}
+Other summary statistics: 
+\code{\link{sumstat_dna}()},
+\code{\link{sumstat_file}()},
+\code{\link{sumstat_four_gamete}()},
+\code{\link{sumstat_ihh}()},
+\code{\link{sumstat_jsfs}()},
+\code{\link{sumstat_nucleotide_div}()},
+\code{\link{sumstat_omega}()},
+\code{\link{sumstat_seg_sites}()},
+\code{\link{sumstat_sfs}()},
+\code{\link{sumstat_tajimas_d}()},
+\code{\link{sumstat_trees}()}
 }
 \concept{summary statistics}

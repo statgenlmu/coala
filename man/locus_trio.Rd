@@ -4,8 +4,11 @@
 \alias{locus_trio}
 \title{Locus Trios}
 \usage{
-locus_trio(locus_length = c(left = 1000, middle = 1000, right = 1000),
-  distance = c(left_middle = 500, middle_right = 500), number = 1)
+locus_trio(
+  locus_length = c(left = 1000, middle = 1000, right = 1000),
+  distance = c(left_middle = 500, middle_right = 500),
+  number = 1
+)
 }
 \arguments{
 \item{locus_length}{An integer vector of length 3, giving the length of each

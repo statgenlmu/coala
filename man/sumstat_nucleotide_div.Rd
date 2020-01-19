@@ -4,8 +4,7 @@
 \alias{sumstat_nucleotide_div}
 \title{Summary Statistic: Nucleotide Diversity}
 \usage{
-sumstat_nucleotide_div(name = "pi", population = 1,
-  transformation = identity)
+sumstat_nucleotide_div(name = "pi", population = 1, transformation = identity)
 }
 \arguments{
 \item{name}{The name of the summary statistic. When simulating a model,
@@ -32,7 +31,7 @@ mutation rate \eqn{\theta}.
 \details{
 The nucleotide diversity was introduced by
 
-Nei and Li (1979). "Mathematical Model for Studying Genetic Variation in
+ Nei and Li (1979). "Mathematical Model for Studying Genetic Variation in
  Terms of Restriction Endonucleases". PNAS 76 (10): 5269-73.
  doi:10.1073/pnas.76.10.5269.
 }
@@ -48,14 +47,17 @@ To create a demographic model: \code{\link{coal_model}}
 
 To calculate this statistic from data: \code{\link{calc_sumstats_from_data}}
 
-Other summary statistics: \code{\link{sumstat_dna}},
-  \code{\link{sumstat_file}},
-  \code{\link{sumstat_four_gamete}},
-  \code{\link{sumstat_ihh}}, \code{\link{sumstat_jsfs}},
-  \code{\link{sumstat_mcmf}}, \code{\link{sumstat_omega}},
-  \code{\link{sumstat_seg_sites}},
-  \code{\link{sumstat_sfs}},
-  \code{\link{sumstat_tajimas_d}},
-  \code{\link{sumstat_trees}}
+Other summary statistics: 
+\code{\link{sumstat_dna}()},
+\code{\link{sumstat_file}()},
+\code{\link{sumstat_four_gamete}()},
+\code{\link{sumstat_ihh}()},
+\code{\link{sumstat_jsfs}()},
+\code{\link{sumstat_mcmf}()},
+\code{\link{sumstat_omega}()},
+\code{\link{sumstat_seg_sites}()},
+\code{\link{sumstat_sfs}()},
+\code{\link{sumstat_tajimas_d}()},
+\code{\link{sumstat_trees}()}
 }
 \concept{summary statistics}

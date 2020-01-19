@@ -36,8 +36,7 @@ get_locus_length_matrix(model)
 
 get_locus_number(model, group = NA, ignore_variation = FALSE)
 
-get_population_individuals(model, pop, zero_indexed = FALSE,
-  haploids = TRUE)
+get_population_individuals(model, pop, zero_indexed = FALSE, haploids = TRUE)
 
 get_summary_statistics(model)
 }

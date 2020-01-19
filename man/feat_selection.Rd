@@ -4,10 +4,20 @@
 \alias{feat_selection}
 \title{Feature: Selection}
 \usage{
-feat_selection(strength_AA = 0, strength_Aa = 0, strength_aa = 0,
-  strength_A = NULL, population = "all", time, start = TRUE,
-  start_frequency = 5e-04, Ne = 10000, position = 0.5,
-  force_keep = TRUE, locus_group = "all")
+feat_selection(
+  strength_AA = 0,
+  strength_Aa = 0,
+  strength_aa = 0,
+  strength_A = NULL,
+  population = "all",
+  time,
+  start = TRUE,
+  start_frequency = 5e-04,
+  Ne = 10000,
+  position = 0.5,
+  force_keep = TRUE,
+  locus_group = "all"
+)
 }
 \arguments{
 \item{strength_AA}{The selection strength for the selected homozygote.
@@ -100,13 +110,15 @@ For summary statistics that are sensitive for selection:
 
 For creating a model: \code{\link{coal_model}}
 
-Other features: \code{\link{feat_growth}},
-  \code{\link{feat_ignore_singletons}},
-  \code{\link{feat_migration}},
-  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
-  \code{\link{feat_pop_merge}},
-  \code{\link{feat_recombination}},
-  \code{\link{feat_size_change}},
-  \code{\link{feat_unphased}}
+Other features: 
+\code{\link{feat_growth}()},
+\code{\link{feat_ignore_singletons}()},
+\code{\link{feat_migration}()},
+\code{\link{feat_mutation}()},
+\code{\link{feat_outgroup}()},
+\code{\link{feat_pop_merge}()},
+\code{\link{feat_recombination}()},
+\code{\link{feat_size_change}()},
+\code{\link{feat_unphased}()}
 }
 \concept{features}

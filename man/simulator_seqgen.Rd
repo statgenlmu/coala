@@ -42,7 +42,9 @@ Comput Appl Biosci (1997) 13 (3): 235-238
 doi:10.1093/bioinformatics/13.3.235
 }
 \seealso{
-Other simulators: \code{\link{simulator_msms}},
-  \code{\link{simulator_ms}}, \code{\link{simulator_scrm}}
+Other simulators: 
+\code{\link{simulator_msms}},
+\code{\link{simulator_ms}},
+\code{\link{simulator_scrm}}
 }
 \concept{simulators}

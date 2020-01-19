@@ -41,14 +41,15 @@ model <- coal_model(c(4, 6, 1), 2, 10) +
 \seealso{
 For creating a model: \code{\link{coal_model}}
 
-Other features: \code{\link{feat_growth}},
-  \code{\link{feat_ignore_singletons}},
-  \code{\link{feat_migration}},
-  \code{\link{feat_mutation}},
-  \code{\link{feat_pop_merge}},
-  \code{\link{feat_recombination}},
-  \code{\link{feat_selection}},
-  \code{\link{feat_size_change}},
-  \code{\link{feat_unphased}}
+Other features: 
+\code{\link{feat_growth}()},
+\code{\link{feat_ignore_singletons}()},
+\code{\link{feat_migration}()},
+\code{\link{feat_mutation}()},
+\code{\link{feat_pop_merge}()},
+\code{\link{feat_recombination}()},
+\code{\link{feat_selection}()},
+\code{\link{feat_size_change}()},
+\code{\link{feat_unphased}()}
 }
 \concept{features}

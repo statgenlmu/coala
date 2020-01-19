@@ -5,8 +5,7 @@
 \alias{activate_msms}
 \title{Simulator: msms}
 \usage{
-activate_msms(jar = NULL, java = NULL, priority = 200,
-  download = FALSE)
+activate_msms(jar = NULL, java = NULL, priority = 200, download = FALSE)
 }
 \arguments{
 \item{jar}{The path of the msms jar file.}
@@ -37,8 +36,9 @@ Bioinformatics (2010) 26 (16): 2064-2065
 doi:10.1093/bioinformatics/btq322
 }
 \seealso{
-Other simulators: \code{\link{simulator_ms}},
-  \code{\link{simulator_scrm}},
-  \code{\link{simulator_seqgen}}
+Other simulators: 
+\code{\link{simulator_ms}},
+\code{\link{simulator_scrm}},
+\code{\link{simulator_seqgen}}
 }
 \concept{simulators}

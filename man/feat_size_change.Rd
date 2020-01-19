@@ -4,8 +4,7 @@
 \alias{feat_size_change}
 \title{Feature: Instantaneous Size Change}
 \usage{
-feat_size_change(new_size, population = 1, time = "0",
-  locus_group = "all")
+feat_size_change(new_size, population = 1, time = "0", locus_group = "all")
 }
 \arguments{
 \item{new_size}{A \code{\link{parameter}} giving the new size of the
@@ -62,12 +61,15 @@ For continuous size changes over time: \code{\link{feat_growth}}.
 
 For creating a model: \code{\link{coal_model}}
 
-Other features: \code{\link{feat_growth}},
-  \code{\link{feat_ignore_singletons}},
-  \code{\link{feat_migration}},
-  \code{\link{feat_mutation}}, \code{\link{feat_outgroup}},
-  \code{\link{feat_pop_merge}},
-  \code{\link{feat_recombination}},
-  \code{\link{feat_selection}}, \code{\link{feat_unphased}}
+Other features: 
+\code{\link{feat_growth}()},
+\code{\link{feat_ignore_singletons}()},
+\code{\link{feat_migration}()},
+\code{\link{feat_mutation}()},
+\code{\link{feat_outgroup}()},
+\code{\link{feat_pop_merge}()},
+\code{\link{feat_recombination}()},
+\code{\link{feat_selection}()},
+\code{\link{feat_unphased}()}
 }
 \concept{features}
