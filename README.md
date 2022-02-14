@@ -28,7 +28,7 @@ install.packages("coala")
 
 If you want to use the simulation programs `ms`, `msms` or `seqgen`, 
 they need to be installed separately. This is described in the 
-["Using External Simulators" vignette](/coala-install.html) and
+["Using External Simulators" vignette](https://cran.r-project.org/web/packages/coala/vignettes/coala-install.html) and
 in [the wiki](https://github.com/statgenlmu/coala/wiki/Installation).
 
 
