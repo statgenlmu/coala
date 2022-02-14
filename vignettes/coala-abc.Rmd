@@ -9,7 +9,7 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-[Approximate Bayesian Computation (ABC)](http://en.wikipedia.org/wiki/Approximate_Bayesian_computation)
+[Approximate Bayesian Computation (ABC)](https://en.wikipedia.org/wiki/Approximate_Bayesian_computation)
 is a simulation based method for Bayesian inference. It is commonly used in
 evolutionary biology to estimate parameters of demographic models.
 Coala makes it easy to conduct the simulations for an ABC analysis and works

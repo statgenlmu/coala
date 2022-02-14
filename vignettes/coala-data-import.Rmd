@@ -9,10 +9,8 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-Prevously, it was possible it import genetic data via the Package `PopGenome`.
-Unfortunately, `PopGenome` was removed from CRAN in early 2020, so this is not 
-an option anymore. 
+The preferred way to import genetic data in coala is via the Package `PopGenome`.
 
-You will have to import your data and convert it into a 
+An alternative is to import your data and convert it into a 
 `seg_sites` object manually. Please refer to the `create_segsites` section
 in `coala`'s documentation for details.

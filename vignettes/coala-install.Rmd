@@ -95,19 +95,19 @@ activate_ms(priority = 500)
 * __[1]__: Richard R. Hudson. 
   _Generating samples under a Wright-Fisher neutral model of genetic variation._
   Bioinformatics (2002) 18 (2): 337-338
-  [10.1093/bioinformatics/18.2.337](http://doi.org/10.1093/bioinformatics/18.2.337)
+  [10.1093/bioinformatics/18.2.337](https://doi.org/10.1093/bioinformatics/18.2.337)
 * __[2]__: Gregory Ewing and Joachim Hermisson.
   _MSMS: a coalescent simulation program including recombination,
   demographic structure and selection at a single locus._
   Bioinformatics (2010) 26 (16): 2064-2065
-  [10.1093/bioinformatics/btq322](http://doi.org/10.1093/bioinformatics/btq322)
+  [10.1093/bioinformatics/btq322](https://doi.org/10.1093/bioinformatics/btq322)
 * __[3]__: Paul R. Staab, Sha Zhu, Dirk Metzler and Gerton Lunter. 
   _scrm: efficiently simulating long sequences using the approximated 
   coalescent with recombination._
   Bioinformatics (2015) 31 (10): 1680-1682. 
-  [10.1093/bioinformatics/btu861](http://doi.org/doi:10.1093/bioinformatics/btu861)
+  [10.1093/bioinformatics/btu861](https://doi.org/doi:10.1093/bioinformatics/btu861)
 * __[4]__: Andrew Rambaut and Nicholas C. Grassly.
   _Seq-Gen: an application for the Monte Carlo simulation of DNA sequence
   evolution along phylogenetic trees._
   Comput Appl Biosci (1997) 13 (3): 235-238
-  [10.1093/bioinformatics/13.3.235](http://doi.org/10.1093/bioinformatics/13.3.235)
+  [10.1093/bioinformatics/13.3.235](https://doi.org/10.1093/bioinformatics/13.3.235)
