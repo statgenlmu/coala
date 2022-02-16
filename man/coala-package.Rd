@@ -18,11 +18,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Paul Staab \email{develop@paulstaab.de}
+\strong{Maintainer}: Dirk Metzler \email{metzler@bio.lmu.de} [thesis advisor]
 
 Authors:
 \itemize{
-  \item Dirk Metzler \email{metzler@bio.lmu.de} [thesis advisor]
+  \item Paul Staab \email{develop@paulstaab.de}
 }
 
 Other contributors:

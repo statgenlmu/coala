@@ -94,4 +94,4 @@ Collate:
     'sumstat_tajimas_d.R'
     'sumstat_trees.R'
     'tools.R'
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.2

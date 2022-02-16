@@ -38,8 +38,8 @@ sample_class <- R6Class("sample", inherit = feature_class,
 #' @param ploidy The number of chromosomes that will be simulated per
 #'   individual.
 #' @param time The time at which the sample is taken.
-#' @keywords interna
-# @template feature
+#' @keywords internal
+#' @template feature
 feat_sample <- function(individuals, ploidy = 1, time = "0") {
   if (time != "0")
     stop("Samples at time different from 0 at not supported at the moment")
