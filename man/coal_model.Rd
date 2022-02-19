@@ -2,6 +2,7 @@
 % Please edit documentation in R/model.R
 \name{coal_model}
 \alias{coal_model}
+\alias{coalmodelpart}
 \title{Create a Coalescent Model}
 \usage{
 coal_model(sample_size, loci_number = 0, loci_length = 1000, ploidy = 1)
