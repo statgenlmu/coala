@@ -26,6 +26,7 @@
 #'
 #' @name segsites
 #' @author Paul Staab
+#' @seealso For converting biological data to segsites: \code{\link{as.segsites}}
 #' @examples
 #' snps <- matrix(c(1, 0, 0,
 #'                  1, 1, 0,
@@ -115,4 +116,35 @@ create_locus_trio <- function(left, middle, right) {
                       rep( 1, ncol(right[[locus]]))),
                     check = FALSE)
   })
+}
+
+
+#' Convert genetic data to coala's internal format
+#'
+#' This function can be used to convert the genomic data formats used in other
+#' packages to calculate coala's segregating sites object. This is useful for
+#' calculating the summary statistics of biological data using the
+#' \code{\link{calc_sumstats_from_data}} function.
+#'
+#' Currently, only the package \pkg{PopGenome} is supported, see
+#' \code{\link{as.segsites.GENOME}} for details.
+#'
+#' @param data The data object that is converted.
+#' @param ... Additional arguments specific for the used package.
+#'
+#' @return A list of segregating sites objects.
+#' @seealso Further instructions are provided in the `coala-data-import` vignette
+#' @seealso For information about segsites: \code{\link{segsites}}
+#' @export
+as.segsites <- function(data, ...) UseMethod("as.segsites")
+
+#' @export
+as.segsites.default <- function(data, ...) { #nolint
+  stop("Unknown data format")
+}
+
+#' @export
+as.segsites.list <- function(data, ...) { #nolint
+  assert_that(all(vapply(data, is_segsites, logical(1))))
+  data
 }
