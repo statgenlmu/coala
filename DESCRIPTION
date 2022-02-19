@@ -35,6 +35,7 @@ Imports:
 Suggests:
     abc (>= 2.0),
     knitr,
+    PopGenome (>= 2.1.0),
     phyclust (>= 0.1-16),
     rmarkdown,
     testthat (>= 0.11.0)
@@ -58,6 +59,7 @@ Collate:
     'feature_size_change.R'
     'feature_sumstats.R'
     'feature_unphased.R'
+    'import_popgenome.R'
     'interface_abc.R'
     'locus.R'
     'model_build.R'
