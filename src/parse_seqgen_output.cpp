@@ -142,7 +142,7 @@ List parse_seqgen_output(CharacterVector output,
     }
   }
 
-  if (locus != locus_number - 1) stop("Less loci than expected");
+  if (locus != locus_number - 1) stop("Fewer loci than expected");
 
   return(results);
 }

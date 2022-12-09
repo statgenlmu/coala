@@ -157,6 +157,10 @@ seqgen_class <- R6Class("seqgen", inherit = simulator_class,
       assert_that(length(tree_files) == length(cmds))
       assert_that(length(tree_files) == length(locus_length))
 
+      if(get_outgroup_size(model) > 0 & get_outgroup(model) != length(get_populations(model)) ) {
+          stop("In current coala version using seqgen with outgroup requires that last population is outgroup")
+      }
+      
       # Call seq-gen for each trio locus
       sim_results <- lapply(seq_along(cmds), function(trio_locus) {
         cmd <- paste(cmds[trio_locus], tree_files[trio_locus])

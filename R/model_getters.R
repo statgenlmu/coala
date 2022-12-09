@@ -152,7 +152,6 @@ get_population_individuals <- function(model, pop,
   from[pop]:to[pop]
 }
 
-
 get_par_names <- function(model, without_priors=FALSE) {
   param <- get_parameter(model)
   if (length(param) == 0) return(character(0))
