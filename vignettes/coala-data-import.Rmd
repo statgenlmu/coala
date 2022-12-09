@@ -1,6 +1,6 @@
 ---
 title: "Importing Genetic Data into Coala"
-author: "Paul Staab"
+author: "Paul Staab, Dirk Metzler"
 date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -26,7 +26,7 @@ Importing Data from PopGenome
 and `fasta`. Please refer to its documentation for detailed instructions. As an example,
 we will read sequence data from a short fasta file that is included in coala:
 
-```{r import_data, results="hide"}
+```{r import_data, results="hide", eval=FALSE}
 suppressPackageStartupMessages(library(PopGenome))
 fasta <- system.file("example_fasta_files", package = "coala")
 data_pg <- readData(fasta, progress_bar_switch = FALSE)
@@ -40,13 +40,13 @@ is required for most summary statistics.
 
 We can now convert `data_pg` using the `as.segsites` function: 
 
-```{r}
+```{r, eval=FALSE}
 library(coala)
 segsites <- as.segsites(data_pg)
 ```
 
 Next, we calculate summary statistics using `calc_sumstats_from_data`:
-```{r calc_sumstats_1}
+```{r calc_sumstats_1, eval=FALSE}
 model <- coal_model(c(5, 5, 2), 1, 25) + 
   feat_mutation(5) +
   feat_outgroup(3) +
@@ -59,7 +59,7 @@ stats$sfs
 Alternatively, it is also possible to pass the `data_pg` object directly to
 `calc_sumstats_from_data`:
 
-```{r calc_sumstats_2}
+```{r calc_sumstats_2, eval=FALSE}
 stats <- calc_sumstats_from_data(model, data_pg)
 stats$sfs
 ```
