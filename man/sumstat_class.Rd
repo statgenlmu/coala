@@ -14,27 +14,21 @@ If you want to create additional summary statistics for coala, create
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{sumstat_class$new()}}
-\item \href{#method-calculate}{\code{sumstat_class$calculate()}}
-\item \href{#method-check}{\code{sumstat_class$check()}}
-\item \href{#method-get_name}{\code{sumstat_class$get_name()}}
-\item \href{#method-requires_files}{\code{sumstat_class$requires_files()}}
-\item \href{#method-requires_segsites}{\code{sumstat_class$requires_segsites()}}
-\item \href{#method-requires_trees}{\code{sumstat_class$requires_trees()}}
-\item \href{#method-print}{\code{sumstat_class$print()}}
-\item \href{#method-transform}{\code{sumstat_class$transform()}}
-\item \href{#method-clone}{\code{sumstat_class$clone()}}
+\item \href{#method-sumstat-new}{\code{sumstat_class$new()}}
+\item \href{#method-sumstat-calculate}{\code{sumstat_class$calculate()}}
+\item \href{#method-sumstat-check}{\code{sumstat_class$check()}}
+\item \href{#method-sumstat-get_name}{\code{sumstat_class$get_name()}}
+\item \href{#method-sumstat-requires_files}{\code{sumstat_class$requires_files()}}
+\item \href{#method-sumstat-requires_segsites}{\code{sumstat_class$requires_segsites()}}
+\item \href{#method-sumstat-requires_trees}{\code{sumstat_class$requires_trees()}}
+\item \href{#method-sumstat-print}{\code{sumstat_class$print()}}
+\item \href{#method-sumstat-transform}{\code{sumstat_class$transform()}}
+\item \href{#method-sumstat-clone}{\code{sumstat_class$clone()}}
 }
-}
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-sumstat-new"></a>}}
+\if{latex}{\out{\hypertarget{method-sumstat-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$new(name, transformation)}\if{html}{\out{</div>}}
@@ -42,8 +36,8 @@ If you want to create additional summary statistics for coala, create
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-calculate"></a>}}
-\if{latex}{\out{\hypertarget{method-calculate}{}}}
+\if{html}{\out{<a id="method-sumstat-calculate"></a>}}
+\if{latex}{\out{\hypertarget{method-sumstat-calculate}{}}}
 \subsection{Method \code{calculate()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$calculate(seg_sites, trees, files, model)}\if{html}{\out{</div>}}
@@ -51,8 +45,8 @@ If you want to create additional summary statistics for coala, create
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check"></a>}}
-\if{latex}{\out{\hypertarget{method-check}{}}}
+\if{html}{\out{<a id="method-sumstat-check"></a>}}
+\if{latex}{\out{\hypertarget{method-sumstat-check}{}}}
 \subsection{Method \code{check()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$check(model)}\if{html}{\out{</div>}}
@@ -60,8 +54,8 @@ If you want to create additional summary statistics for coala, create
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_name"></a>}}
-\if{latex}{\out{\hypertarget{method-get_name}{}}}
+\if{html}{\out{<a id="method-sumstat-get_name"></a>}}
+\if{latex}{\out{\hypertarget{method-sumstat-get_name}{}}}
 \subsection{Method \code{get_name()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$get_name()}\if{html}{\out{</div>}}
@@ -69,8 +63,8 @@ If you want to create additional summary statistics for coala, create
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-requires_files"></a>}}
-\if{latex}{\out{\hypertarget{method-requires_files}{}}}
+\if{html}{\out{<a id="method-sumstat-requires_files"></a>}}
+\if{latex}{\out{\hypertarget{method-sumstat-requires_files}{}}}
 \subsection{Method \code{requires_files()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$requires_files()}\if{html}{\out{</div>}}
@@ -78,8 +72,8 @@ If you want to create additional summary statistics for coala, create
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-requires_segsites"></a>}}
-\if{latex}{\out{\hypertarget{method-requires_segsites}{}}}
+\if{html}{\out{<a id="method-sumstat-requires_segsites"></a>}}
+\if{latex}{\out{\hypertarget{method-sumstat-requires_segsites}{}}}
 \subsection{Method \code{requires_segsites()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$requires_segsites()}\if{html}{\out{</div>}}
@@ -87,8 +81,8 @@ If you want to create additional summary statistics for coala, create
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-requires_trees"></a>}}
-\if{latex}{\out{\hypertarget{method-requires_trees}{}}}
+\if{html}{\out{<a id="method-sumstat-requires_trees"></a>}}
+\if{latex}{\out{\hypertarget{method-sumstat-requires_trees}{}}}
 \subsection{Method \code{requires_trees()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$requires_trees()}\if{html}{\out{</div>}}
@@ -96,8 +90,8 @@ If you want to create additional summary statistics for coala, create
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-sumstat-print"></a>}}
+\if{latex}{\out{\hypertarget{method-sumstat-print}{}}}
 \subsection{Method \code{print()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$print()}\if{html}{\out{</div>}}
@@ -105,8 +99,8 @@ If you want to create additional summary statistics for coala, create
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-transform"></a>}}
-\if{latex}{\out{\hypertarget{method-transform}{}}}
+\if{html}{\out{<a id="method-sumstat-transform"></a>}}
+\if{latex}{\out{\hypertarget{method-sumstat-transform}{}}}
 \subsection{Method \code{transform()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$transform(x)}\if{html}{\out{</div>}}
@@ -114,8 +108,8 @@ If you want to create additional summary statistics for coala, create
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-sumstat-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-sumstat-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

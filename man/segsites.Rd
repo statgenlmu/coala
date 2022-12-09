@@ -75,28 +75,28 @@ consists of multiple transscripts ('locus trio').
 }
 \section{Functions}{
 \itemize{
-\item \code{create_segsites}: Creates segregating sites
+\item \code{create_segsites()}: Creates segregating sites
 
-\item \code{get_snps}: Returns the SNP matrix from a segregating sites
+\item \code{get_snps()}: Returns the SNP matrix from a segregating sites
 object.
 
-\item \code{get_positions}: Returns the SNP's positions from a segregating
+\item \code{get_positions()}: Returns the SNP's positions from a segregating
 sites  object.
 
-\item \code{set_positions}: Sets the SNP's positions in a segregating
+\item \code{set_positions()}: Sets the SNP's positions in a segregating
 sites object.
 
-\item \code{get_trio_locus}: Returns the trio locus positions from a
+\item \code{get_trio_locus()}: Returns the trio locus positions from a
 segregating sites  object.
 
-\item \code{set_trio_locus}: Sets the trio locus in a segregating sites
+\item \code{set_trio_locus()}: Sets the trio locus in a segregating sites
 object.
 
-\item \code{is_segsites}: Checks whether an object is a segsites object.
+\item \code{is_segsites()}: Checks whether an object is a segsites object.
 
-\item \code{create_locus_trio}: Combines three segregating sites to a locus trio
+\item \code{create_locus_trio()}: Combines three segregating sites to a locus trio
+
 }}
-
 \examples{
 snps <- matrix(c(1, 0, 0,
                  1, 1, 0,

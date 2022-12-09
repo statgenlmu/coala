@@ -18,7 +18,9 @@ outgroup_class <- R6Class("outgroup", inherit = feature_class,
 #' statistics. If the outgroup consists of multiple individuals, all positions
 #' where the individuals have different alleles are ignored.
 #'
-#' @param population The population that is marked as outgroup.
+#' @param population The population that is marked as outgroup. 
+#'    If finite-sites mutation models are used, the last population must be
+#'    specified as outgroup.
 #' @export
 #' @template feature
 #' @examples

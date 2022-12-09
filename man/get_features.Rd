@@ -70,35 +70,35 @@ Getters for coalescent models
 }
 \section{Functions}{
 \itemize{
-\item \code{get_outgroup}: Returns the population that is marked as outgroup
+\item \code{get_outgroup()}: Returns the population that is marked as outgroup
 
-\item \code{get_outgroup_size}: Returns the number of samples in the outgroup
+\item \code{get_outgroup_size()}: Returns the number of samples in the outgroup
 
-\item \code{get_sample_size}: Returns a vector containing the number of
+\item \code{get_sample_size()}: Returns a vector containing the number of
 haploids sampled per population. This is the default ordering of
 individuals used by coala.
 
-\item \code{get_parameter_table}: Returns the ranged parameters of a model as a
+\item \code{get_parameter_table()}: Returns the ranged parameters of a model as a
 data.frame
 
-\item \code{get_parameter}: Returns the ranged parameters of a model
+\item \code{get_parameter()}: Returns the ranged parameters of a model
 
-\item \code{get_locus_length}: Returns the length of the loci in a locus group
+\item \code{get_locus_length()}: Returns the length of the loci in a locus group
 
-\item \code{get_populations}: Returns a vector of populations in the model
+\item \code{get_populations()}: Returns a vector of populations in the model
 
-\item \code{get_locus_length_matrix}: Returns a matrix with detailed length
+\item \code{get_locus_length_matrix()}: Returns a matrix with detailed length
 information about the loci in the model.
 
-\item \code{get_locus_number}: Returns the number of loci in a locus group
+\item \code{get_locus_number()}: Returns the number of loci in a locus group
 
-\item \code{get_population_individuals}: Returns the index of the individuals of one
+\item \code{get_population_individuals()}: Returns the index of the individuals of one
 population. Ignores outgroups, so that it can be used for indexing
 segregating sites.
 
-\item \code{get_summary_statistics}: Returns the summary statistics in the model
-}}
+\item \code{get_summary_statistics()}: Returns the summary statistics in the model
 
+}}
 \author{
 Paul Staab
 }

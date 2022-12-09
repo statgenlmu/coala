@@ -52,27 +52,27 @@ distribution (\code{par_prior}) or can be derived from other parameters
 }
 \section{Functions}{
 \itemize{
-\item \code{par_expr}: Creates a parameter with value determined by evaluating an expression.
+\item \code{par_expr()}: Creates a parameter with value determined by evaluating an expression.
 
-\item \code{par_const}: Creates an parameter that is equal to a fixed value.
+\item \code{par_const()}: Creates an parameter that is equal to a fixed value.
 Different to \code{par_expr}, the value is evaluated on parameter creation.
 
-\item \code{par_named}: Creates an parameter whose value is specified via the
+\item \code{par_named()}: Creates an parameter whose value is specified via the
 \code{pars} argument in \code{\link{simulate.coalmodel}}.
 
-\item \code{par_range}: Creates an parameter that can take a range of possible
+\item \code{par_range()}: Creates an parameter that can take a range of possible
 values.
 Similar to \code{\link{par_named}}, the value of the parameter
 used in a simulation is set via the \code{pars} argument.
 This is primarily intended for creating model parameters for
 \pkg{jaatha}.
 
-\item \code{par_prior}: Creates a named parameter with a prior
+\item \code{par_prior()}: Creates a named parameter with a prior
 distribution. Before each simulation, the expression for the prior
 is evaluated. The resulting value can be used in
 \code{\link{par_expr}} under the chosen name.
-}}
 
+}}
 \examples{
 # A parameter (here for the mutation rate) that is always
 # equal to '5':

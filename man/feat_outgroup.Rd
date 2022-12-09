@@ -7,7 +7,9 @@
 feat_outgroup(population, locus_group = "all")
 }
 \arguments{
-\item{population}{The population that is marked as outgroup.}
+\item{population}{The population that is marked as outgroup. 
+If finite-sites mutation models are used, the last population must be
+specified as outgroup.}
 
 \item{locus_group}{The loci for which this features is used. Can either be
 \code{"all"} (default), in which case the feature is used for simulating

@@ -30,11 +30,11 @@ are added to the model.
 }
 \section{Functions}{
 \itemize{
-\item \code{locus_single}: Adds a single locus.
+\item \code{locus_single()}: Adds a single locus.
 
-\item \code{locus_averaged}: Adds multiple loci with equal length.
+\item \code{locus_averaged()}: Adds multiple loci with equal length.
+
 }}
-
 \examples{
 # A model with one locus of length 1005 bp:
 coal_model(10) + locus_single(1005)

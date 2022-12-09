@@ -203,125 +203,128 @@ users.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{growth}: Feature conversion
+\item \code{conv_to_ms_arg(growth)}: Feature conversion
 
-\item \code{growth}: Feature conversion
+\item \code{conv_to_ms_arg(ign_singletons)}: Feature conversion
 
-\item \code{growth}: Feature conversion
+\item \code{conv_to_ms_arg(migration)}: Feature conversion
 
-\item \code{growth}: Feature conversion
+\item \code{conv_to_ms_arg(mutation)}: Feature conversion
 
-\item \code{ign_singletons}: Feature conversion
+\item \code{conv_to_ms_arg(outgroup)}: Feature conversion
 
-\item \code{ign_singletons}: Feature conversion
+\item \code{conv_to_ms_arg(pop_merge)}: Feature conversion
 
-\item \code{ign_singletons}: Feature conversion
+\item \code{conv_to_ms_arg(recombination)}: Feature conversion
 
-\item \code{ign_singletons}: Feature conversion
+\item \code{conv_to_ms_arg(sample)}: Feature conversion
 
-\item \code{migration}: Feature conversion
+\item \code{conv_to_ms_arg(selection)}: Feature conversion
 
-\item \code{migration}: Feature conversion
+\item \code{conv_to_ms_arg(size_change)}: Feature conversion
 
-\item \code{migration}: Feature conversion
+\item \code{conv_to_ms_arg(seg_sites_feat)}: Feature conversion
 
-\item \code{migration}: Feature conversion
+\item \code{conv_to_ms_arg(trees_feat)}: Feature conversion
 
-\item \code{mutation}: Feature conversion
+\item \code{conv_to_ms_arg(files_feat)}: Feature conversion
 
-\item \code{mutation}: Feature conversion
+\item \code{conv_to_ms_arg(unphased)}: Feature conversion
 
-\item \code{mutation}: Feature conversion
+\item \code{conv_to_ms_arg(default)}: Feature conversion
 
-\item \code{mutation}: Feature conversion
-
-\item \code{outgroup}: Feature conversion
-
-\item \code{outgroup}: Feature conversion
-
-\item \code{outgroup}: Feature conversion
-
-\item \code{outgroup}: Feature conversion
-
-\item \code{pop_merge}: Feature conversion
-
-\item \code{pop_merge}: Feature conversion
-
-\item \code{pop_merge}: Feature conversion
-
-\item \code{pop_merge}: Feature conversion
-
-\item \code{recombination}: Feature conversion
-
-\item \code{recombination}: Feature conversion
-
-\item \code{recombination}: Feature conversion
-
-\item \code{recombination}: Feature conversion
-
-\item \code{sample}: Feature conversion
-
-\item \code{sample}: Feature conversion
-
-\item \code{sample}: Feature conversion
-
-\item \code{sample}: Feature conversion
-
-\item \code{selection}: Feature conversion
-
-\item \code{selection}: Feature conversion
-
-\item \code{selection}: Feature conversion
-
-\item \code{selection}: Feature conversion
-
-\item \code{size_change}: Feature conversion
-
-\item \code{size_change}: Feature conversion
-
-\item \code{size_change}: Feature conversion
-
-\item \code{size_change}: Feature conversion
-
-\item \code{seg_sites_feat}: Feature conversion
-
-\item \code{seg_sites_feat}: Feature conversion
-
-\item \code{seg_sites_feat}: Feature conversion
-
-\item \code{seg_sites_feat}: Feature conversion
-
-\item \code{trees_feat}: Feature conversion
-
-\item \code{trees_feat}: Feature conversion
-
-\item \code{trees_feat}: Feature conversion
-
-\item \code{trees_feat}: Feature conversion
-
-\item \code{files_feat}: Feature conversion
-
-\item \code{files_feat}: Feature conversion
-
-\item \code{files_feat}: Feature conversion
-
-\item \code{files_feat}: Feature conversion
-
-\item \code{unphased}: Feature conversion
-
-\item \code{unphased}: Feature conversion
-
-\item \code{unphased}: Feature conversion
-
-\item \code{unphased}: Feature conversion
-
-\item \code{default}: Feature conversion
-
-\item \code{default}: Feature conversion
-
-\item \code{default}: Feature conversion
-
-\item \code{default}: Feature conversion
 }}
+\section{Functions}{
+\itemize{
+\item \code{conv_to_msms_arg(growth)}: Feature conversion
 
+\item \code{conv_to_scrm_arg(growth)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(growth)}: Feature conversion
+
+\item \code{conv_to_msms_arg(ign_singletons)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(ign_singletons)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(ign_singletons)}: Feature conversion
+
+\item \code{conv_to_msms_arg(migration)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(migration)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(migration)}: Feature conversion
+
+\item \code{conv_to_msms_arg(mutation)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(mutation)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(mutation)}: Feature conversion
+
+\item \code{conv_to_msms_arg(outgroup)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(outgroup)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(outgroup)}: Feature conversion
+
+\item \code{conv_to_msms_arg(pop_merge)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(pop_merge)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(pop_merge)}: Feature conversion
+
+\item \code{conv_to_msms_arg(recombination)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(recombination)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(recombination)}: Feature conversion
+
+\item \code{conv_to_msms_arg(sample)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(sample)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(sample)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(selection)}: Feature conversion
+
+\item \code{conv_to_msms_arg(selection)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(selection)}: Feature conversion
+
+\item \code{conv_to_msms_arg(size_change)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(size_change)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(size_change)}: Feature conversion
+
+\item \code{conv_to_msms_arg(seg_sites_feat)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(seg_sites_feat)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(seg_sites_feat)}: Feature conversion
+
+\item \code{conv_to_msms_arg(trees_feat)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(trees_feat)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(trees_feat)}: Feature conversion
+
+\item \code{conv_to_msms_arg(files_feat)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(files_feat)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(files_feat)}: Feature conversion
+
+\item \code{conv_to_msms_arg(unphased)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(unphased)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(unphased)}: Feature conversion
+
+\item \code{conv_to_msms_arg(default)}: Feature conversion
+
+\item \code{conv_to_scrm_arg(default)}: Feature conversion
+
+\item \code{conv_to_seqgen_arg(default)}: Feature conversion
+
+}}
 \keyword{internal}
