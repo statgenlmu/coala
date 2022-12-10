@@ -19,6 +19,10 @@ Description: Coalescent simulators can rapidly simulate biological sequences
     It relies on existing simulators for doing the simulation, and currently
     supports the programs 'ms', 'msms' and 'scrm'. It also supports finite-sites
     mutation models by combining the simulators with the program 'seq-gen'.
+    Coala provides functions for calculating certain summary statistics, which
+    can also be applied to actual biological data.
+    One possibility to import data is through the PopGenome package
+    (<https://github.com/pievos101/PopGenome>).
 Depends: R (>= 3.1.0)
 Imports: assertthat (>= 0.1), digest, methods, parallel, R6 (>= 2.0.1),
         Rcpp (>= 0.11.0), rehh (>= 3.0.0), scrm (>= 1.6.0-2), stats,
