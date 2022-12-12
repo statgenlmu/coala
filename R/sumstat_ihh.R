@@ -144,7 +144,7 @@ stat_ihh_class <- R6Class("stat_ihh", inherit = sumstat_class,
 #'   model <- coal_model(20, 1, 1000) +
 #'     feat_mutation(1000) +
 #'     sumstat_ihh()
-#' \dontrun{
+#' \donttest{
 #'     stat <- simulate(model)
 #'     print(stat$ihh)}
 #' @author Paul Staab

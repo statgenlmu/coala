@@ -21,7 +21,7 @@ Description: Coalescent simulators can rapidly simulate biological sequences
     mutation models by combining the simulators with the program 'seq-gen'.
     Coala provides functions for calculating certain summary statistics, which
     can also be applied to actual biological data.
-    One possibility to import data is through the PopGenome package
+    One possibility to import data is through the 'PopGenome' package
     (<https://github.com/pievos101/PopGenome>).
 Depends: R (>= 3.1.0)
 Imports: assertthat (>= 0.1), digest, methods, parallel, R6 (>= 2.0.1),
@@ -50,7 +50,7 @@ Collate: 'RcppExports.R' 'cache.R' 'coala.R' 'model.R' 'feature.R'
         'sumstat_nucleotide_div.R' 'sumstat_omega.R'
         'sumstat_seg_sites.R' 'sumstat_sfs.R' 'sumstat_tajimas_d.R'
         'sumstat_trees.R' 'tools.R'
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 NeedsCompilation: yes
 Packaged: 2022-12-09 15:19:34 UTC; dirk
 Maintainer: Dirk Metzler <metzler@bio.lmu.de>

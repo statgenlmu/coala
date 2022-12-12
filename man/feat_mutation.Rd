@@ -104,7 +104,7 @@ simulate(model)
 model <- coal_model(5, 1) +
   feat_mutation(7, fixed = TRUE) +
   sumstat_seg_sites()
-\dontrun{simulate(model)}
+\donttest{simulate(model)}
 
 # A model using the HKY model:
 model <- coal_model(c(10, 1), 2) +

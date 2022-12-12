@@ -76,7 +76,7 @@ statistic for a publication.
   model <- coal_model(20, 1, 1000) +
     feat_mutation(1000) +
     sumstat_ihh()
-\dontrun{
+\donttest{
     stat <- simulate(model)
     print(stat$ihh)}
 }
