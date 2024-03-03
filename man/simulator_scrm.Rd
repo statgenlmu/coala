@@ -35,8 +35,8 @@ http://dx.doi.org/10.1093/bioinformatics/btu861
 }
 \seealso{
 Other simulators: 
-\code{\link{simulator_msms}},
 \code{\link{simulator_ms}},
+\code{\link{simulator_msms}},
 \code{\link{simulator_seqgen}}
 }
 \concept{simulators}

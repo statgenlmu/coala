@@ -137,8 +137,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // calc_four_gamete_stat
-NumericMatrix calc_four_gamete_stat(const ListOf<coala::SegSites> seg_sites_list, const IntegerVector individuals, const NumericMatrix locus_length, const unsigned int ploidy);
-RcppExport SEXP _coala_calc_four_gamete_stat(SEXP seg_sites_listSEXP, SEXP individualsSEXP, SEXP locus_lengthSEXP, SEXP ploidySEXP) {
+NumericMatrix calc_four_gamete_stat(const ListOf<coala::SegSites> seg_sites_list, const IntegerVector individuals, const NumericMatrix locus_length, const unsigned int ploidy, const unsigned int narm);
+RcppExport SEXP _coala_calc_four_gamete_stat(SEXP seg_sites_listSEXP, SEXP individualsSEXP, SEXP locus_lengthSEXP, SEXP ploidySEXP, SEXP narmSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -146,7 +146,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const IntegerVector >::type individuals(individualsSEXP);
     Rcpp::traits::input_parameter< const NumericMatrix >::type locus_length(locus_lengthSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type ploidy(ploidySEXP);
-    rcpp_result_gen = Rcpp::wrap(calc_four_gamete_stat(seg_sites_list, individuals, locus_length, ploidy));
+    Rcpp::traits::input_parameter< const unsigned int >::type narm(narmSEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_four_gamete_stat(seg_sites_list, individuals, locus_length, ploidy, narm));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -216,7 +217,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_coala_set_positions", (DL_FUNC) &_coala_set_positions, 2},
     {"_coala_get_trio_locus", (DL_FUNC) &_coala_get_trio_locus, 1},
     {"_coala_set_trio_locus", (DL_FUNC) &_coala_set_trio_locus, 2},
-    {"_coala_calc_four_gamete_stat", (DL_FUNC) &_coala_calc_four_gamete_stat, 4},
+    {"_coala_calc_four_gamete_stat", (DL_FUNC) &_coala_calc_four_gamete_stat, 5},
     {"_coala_calc_jsfs", (DL_FUNC) &_coala_calc_jsfs, 2},
     {"_coala_calc_mcmf", (DL_FUNC) &_coala_calc_mcmf, 7},
     {"_coala_calc_nucleotide_div", (DL_FUNC) &_coala_calc_nucleotide_div, 2},

@@ -4,6 +4,11 @@
 \alias{sumstat_class}
 \title{Base Class for Summary Statistics}
 \description{
+Base Class for Summary Statistics
+
+Base Class for Summary Statistics
+}
+\details{
 If you want to create additional summary statistics for coala, create
 \pkg{R6} classes that inherit from this object.
 }
@@ -30,69 +35,131 @@ If you want to create additional summary statistics for coala, create
 \if{html}{\out{<a id="method-sumstat-new"></a>}}
 \if{latex}{\out{\hypertarget{method-sumstat-new}{}}}
 \subsection{Method \code{new()}}{
+Initialization of $sumstat
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$new(name, transformation)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{name}}{the name to be used for this statistic}
+
+\item{\code{transformation}}{transformation to be used for this statistic}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+NULL
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sumstat-calculate"></a>}}
 \if{latex}{\out{\hypertarget{method-sumstat-calculate}{}}}
 \subsection{Method \code{calculate()}}{
+This function must be overwritten in the derived class
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$calculate(seg_sites, trees, files, model)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{seg_sites}}{seg_sites object containing the segregating sites}
+
+\item{\code{trees}}{trees}
+
+\item{\code{files}}{files}
+
+\item{\code{model}}{demographic model}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+NULL
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sumstat-check"></a>}}
 \if{latex}{\out{\hypertarget{method-sumstat-check}{}}}
 \subsection{Method \code{check()}}{
+Optional functions that checks if a model is compatible with the stat.
+
+In a derived class this can be overwritten by a function that throws
+an informative error if the model is incompatible with the statistic
+The function is executed before the statistic is added to the model.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$check(model)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{model}}{demographic model}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+invisible TRUE
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sumstat-get_name"></a>}}
 \if{latex}{\out{\hypertarget{method-sumstat-get_name}{}}}
 \subsection{Method \code{get_name()}}{
+function to read the private attribute name
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$get_name()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+name of the statistic
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sumstat-requires_files"></a>}}
 \if{latex}{\out{\hypertarget{method-sumstat-requires_files}{}}}
 \subsection{Method \code{requires_files()}}{
+function to check whether files are required by this statsitic
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$requires_files()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+req_files, which is TRUE or FALSE and indicates whether files are required by this statsitic
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sumstat-requires_segsites"></a>}}
 \if{latex}{\out{\hypertarget{method-sumstat-requires_segsites}{}}}
 \subsection{Method \code{requires_segsites()}}{
+function to check whether segregating sites are required by this statsitic
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$requires_segsites()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+req_segsites, which is TRUE or FALSE and indicates whether segregating sites are required by this statsitic
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sumstat-requires_trees"></a>}}
 \if{latex}{\out{\hypertarget{method-sumstat-requires_trees}{}}}
 \subsection{Method \code{requires_trees()}}{
+function to check whether trees are required by this statsitic
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$requires_trees()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+req_trees, which is TRUE or FALSE and indicates whether trees are required by this statsitic
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sumstat-print"></a>}}
 \if{latex}{\out{\hypertarget{method-sumstat-print}{}}}
 \subsection{Method \code{print()}}{
+function to print the class of the statistic
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$print()}\if{html}{\out{</div>}}
 }
@@ -102,10 +169,21 @@ If you want to create additional summary statistics for coala, create
 \if{html}{\out{<a id="method-sumstat-transform"></a>}}
 \if{latex}{\out{\hypertarget{method-sumstat-transform}{}}}
 \subsection{Method \code{transform()}}{
+Transformation that is applied to the statistic
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sumstat_class$transform(x)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{untransformed value}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+transformed value
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sumstat-clone"></a>}}

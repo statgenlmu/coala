@@ -27,5 +27,5 @@ is used as length of a locus.
 }
 \seealso{
 An example and additional instructions are provided in the
-         `coala-data-import` vignette
+\code{coala-data-import} vignette
 }

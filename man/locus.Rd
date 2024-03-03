@@ -54,5 +54,5 @@ coal_model(15, 10, 150) + locus_single(250) + locus_averaged(10, 350)
 }
 \seealso{
 For adding three loci which are linked to each other:
- \code{\link{locus_trio}}
+\code{\link{locus_trio}}
 }

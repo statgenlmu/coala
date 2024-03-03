@@ -1,5 +1,5 @@
 Package: coala
-Version: 0.7.1
+Version: 0.7.2
 License: MIT + file LICENSE
 Title: A Framework for Coalescent Simulation
 Authors@R: c(
@@ -50,7 +50,9 @@ Collate: 'RcppExports.R' 'cache.R' 'coala.R' 'model.R' 'feature.R'
         'sumstat_nucleotide_div.R' 'sumstat_omega.R'
         'sumstat_seg_sites.R' 'sumstat_sfs.R' 'sumstat_tajimas_d.R'
         'sumstat_trees.R' 'tools.R'
-RoxygenNote: 7.2.3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE, r6 = TRUE)
+RoxygenNote: 7.3.1
 NeedsCompilation: yes
 Packaged: 2022-12-09 15:19:34 UTC; dirk
 Maintainer: Dirk Metzler <metzler@bio.lmu.de>

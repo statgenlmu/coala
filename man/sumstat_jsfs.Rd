@@ -29,7 +29,7 @@ returned instead of the original values.}
 }
 \value{
 The JSFS, given as an array. The dimensions correspond to the
-  populations as given in the \code{populations} argument.
+populations as given in the \code{populations} argument.
 }
 \description{
 The summary statistic calculates the joint site frequency

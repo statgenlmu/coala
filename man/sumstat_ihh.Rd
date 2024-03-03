@@ -18,7 +18,7 @@ the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
 \item{population}{The population for which the statistic is calculated.
-Can also be "all" to calculate it from all populations.}
+Can also be "all" to calculate it from all populations. Default is population 1.}
 
 \item{max_snps}{The maximal number of SNPs per locus that are used for the
 calculation. If a locus has more SNPs, only a random subset of them will
@@ -33,22 +33,22 @@ returned instead of the original values.}
 }
 \value{
 If \code{calc_ihs = FALSE}, a data.frame with values for
-  iHH and iES is returned. Otherwise, a list of two data frames are
-  returned, one for IHH and IES values and the other one for IHS values.
+iHH and iES is returned. Otherwise, a list of two data frames are
+returned, one for IHH and IES values and the other one for IHS values.
 
-  In all `data.frames` rows are SNPs and the columns present the following
-  values for each SNP:
-  \itemize{
-   \item{CHR: The SNP's locus}
-   \item{POSITION: The SNP's absolute position on its locus}
-   \item{FREQ_A: The frequency of the ancestral allele}
-   \item{FREQ_D: The frequency of the derived allele}
-   \item{IHH_A: integrated EHH for the ancestral allele}
-   \item{IHH_D: integrated EHH for the derived allele}
-   \item{IES: integrated EHHS}
-   \item{INES: integrated normalized EHHS}
-   \item{IHS: iHS, normalized over all loci.}
-  }
+In all \code{data.frames} rows are SNPs and the columns present the following
+values for each SNP:
+\itemize{
+\item{CHR: The SNP's locus}
+\item{POSITION: The SNP's absolute position on its locus}
+\item{FREQ_A: The frequency of the ancestral allele}
+\item{FREQ_D: The frequency of the derived allele}
+\item{IHH_A: integrated EHH for the ancestral allele}
+\item{IHH_D: integrated EHH for the derived allele}
+\item{IES: integrated EHHS}
+\item{INES: integrated normalized EHHS}
+\item{IHS: iHS, normalized over all loci.}
+}
 }
 \description{
 This summary statistic calculates a number of values based on
@@ -63,13 +63,13 @@ statistic for a publication.
 \section{References}{
 
 \itemize{
- \item{Mathieu Gautier and Renaud Vitalis, rehh: an R package to detect
-      footprints of selection in genome-wide SNP data from
-      haplotype structure. Bioinformatics (2012) 28 (8): 1176-1177
-      first published online March 7, 2012 doi:10.1093/bioinformatics/bts115}
- \item{Voight et al., A map of recent positive selection in the human
-                       genome. PLoS Biol, 4(3):e72, Mar 2006.}
- }
+\item{Mathieu Gautier and Renaud Vitalis, rehh: an R package to detect
+footprints of selection in genome-wide SNP data from
+haplotype structure. Bioinformatics (2012) 28 (8): 1176-1177
+first published online March 7, 2012 doi:10.1093/bioinformatics/bts115}
+\item{Voight et al., A map of recent positive selection in the human
+genome. PLoS Biol, 4(3):e72, Mar 2006.}
+}
 }
 
 \examples{

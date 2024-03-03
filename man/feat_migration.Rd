@@ -42,7 +42,7 @@ the first locus (that is locus 2 - 12).}
 }
 \value{
 The feature, which can be added to a model created with
-  \code{\link{coal_model}} using \code{+}.
+\code{\link{coal_model}} using \code{+}.
 }
 \description{
 This feature changes the migration rates at a given time point.

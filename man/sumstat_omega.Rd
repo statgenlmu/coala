@@ -37,7 +37,7 @@ returned instead of the original values.}
 }
 \value{
 A data frame listing of locus, genetic position and the
-  calculated omega value.
+calculated omega value.
 }
 \description{
 Calculates the Omega Statistic introduced by

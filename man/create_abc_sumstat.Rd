@@ -14,7 +14,7 @@ create_abc_sumstat(sim_results, model)
 }
 \value{
 A data.frame that can be used as \code{sumstat}
-        argument of \code{\link[abc]{abc}}.
+argument of \code{\link[abc]{abc}}.
 }
 \description{
 This function creates an object compatible with the \code{sumstat}
@@ -47,5 +47,5 @@ print(abc_sumstat)
 }
 \seealso{
 For generating abc's parameter format:
-         \code{\link{create_abc_param}}
+\code{\link{create_abc_param}}
 }

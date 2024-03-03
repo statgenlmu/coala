@@ -16,7 +16,7 @@ the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
 \item{population}{The population for which the statistic is calculated.
-Can also be "all" to calculate it from all populations.}
+Can also be "all" to calculate it from all populations. Default is population 1.}
 
 \item{transformation}{An optional function for transforming the results
 of the statistic. If specified, the results of the transformation are
@@ -24,7 +24,7 @@ returned instead of the original values.}
 }
 \value{
 On simulation, this returns a vector with the value of Tajima's D for
-  each locus.
+each locus.
 }
 \description{
 This statistic calculates Tajima's D from the simulation

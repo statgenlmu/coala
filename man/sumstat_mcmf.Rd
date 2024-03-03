@@ -31,13 +31,13 @@ transformation are returned instead of the original values.}
 }
 \value{
 A numeric vector or matrix containing MCMF for each locus.
-  \describe{
-   \item{mcmf}{The observed frequency of the mutational pattern
-     that is observed most often in the data.}
-   \item{bal}{The frequency of derived alleles in the most
-     frequently observed mutational pattern.}
-   \item{perc_poly}{The percentage of positions that are polymorpic.}
-  }
+\describe{
+\item{mcmf}{The observed frequency of the mutational pattern
+that is observed most often in the data.}
+\item{bal}{The frequency of derived alleles in the most
+frequently observed mutational pattern.}
+\item{perc_poly}{The percentage of positions that are polymorpic.}
+}
 }
 \description{
 This summary statistic calculates the observed frequency

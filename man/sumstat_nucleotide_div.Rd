@@ -12,7 +12,7 @@ the value of the statistics are written to an entry of the returned list
 with this name. Summary statistic names must be unique in a model.}
 
 \item{population}{The population for which the statistic is calculated.
-Can also be "all" to calculate it from all populations.}
+Can also be "all" to calculate it from all populations. Default is population 1.}
 
 \item{transformation}{An optional function for transforming the results
 of the statistic. If specified, the results of the transformation are
@@ -20,7 +20,7 @@ returned instead of the original values.}
 }
 \value{
 On simulation, this returns a vector with the value of pi for
-  each locus.
+each locus.
 }
 \description{
 The summary statistic calculates the nucleotide diversity (\eqn{\pi})
@@ -31,9 +31,9 @@ mutation rate \eqn{\theta}.
 \details{
 The nucleotide diversity was introduced by
 
- Nei and Li (1979). "Mathematical Model for Studying Genetic Variation in
- Terms of Restriction Endonucleases". PNAS 76 (10): 5269-73.
- doi:10.1073/pnas.76.10.5269.
+Nei and Li (1979). "Mathematical Model for Studying Genetic Variation in
+Terms of Restriction Endonucleases". PNAS 76 (10): 5269-73.
+doi:10.1073/pnas.76.10.5269.
 }
 \examples{
 model <- coal_model(5, 2) +

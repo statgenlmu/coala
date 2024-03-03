@@ -61,16 +61,16 @@ a vector that states which transcript a SNP belong to, if the locus
 consists of multiple transscripts ('locus trio').
 
 \itemize{
-  \item{In the \strong{SNP} matrix, each row represents a haplotype and each
-        column represents a SNP. An entry is either \code{1} if the
-        haplotype carries the derived allele for the SNP, or \code{0} if it
-        carries the ancestral one.}
-  \item{In the \strong{positions} vector, each entry gives the relative
-        position of SNP in the corresponding column of the SNP matrix.}
-  \item{The \strong{trio_locus} vector contains the trio locus each SNP
-        belongs to. Entry of \code{-1},\code{0}, \code{1} represent the
-        left, middle, and right locus, respectively. For normal loci,
-        this just consists of \code{0}'s}
+\item{In the \strong{SNP} matrix, each row represents a haplotype and each
+column represents a SNP. An entry is either \code{1} if the
+haplotype carries the derived allele for the SNP, or \code{0} if it
+carries the ancestral one.}
+\item{In the \strong{positions} vector, each entry gives the relative
+position of SNP in the corresponding column of the SNP matrix.}
+\item{The \strong{trio_locus} vector contains the trio locus each SNP
+belongs to. Entry of \code{-1},\code{0}, \code{1} represent the
+left, middle, and right locus, respectively. For normal loci,
+this just consists of \code{0}'s}
 }
 }
 \section{Functions}{

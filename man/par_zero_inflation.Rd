@@ -9,12 +9,12 @@ par_zero_inflation(par, prob, random = TRUE)
 \arguments{
 \item{par}{A parameter which will be set to 0 for part of the loci.}
 
-\item{prob}{The probability that the parameters value will be set to `0`
+\item{prob}{The probability that the parameters value will be set to \code{0}
 for each locus if \code{random} is \code{TRUE}. Otherwise, it's the
-fixed fraction of loci which will have a parameter value of `0`.}
+fixed fraction of loci which will have a parameter value of \code{0}.}
 
 \item{random}{Whether the number of loci which are simulated with a value of
-`0` should be random (\code{TRUE}) or a fixed fraction (\code{FALSE}). See
+\code{0} should be random (\code{TRUE}) or a fixed fraction (\code{FALSE}). See
 \code{prob} for details.}
 }
 \description{

@@ -27,7 +27,7 @@ the first locus (that is locus 2 - 12).}
 }
 \value{
 The feature, which can be added to a model created with
-  \code{\link{coal_model}} using \code{+}.
+\code{\link{coal_model}} using \code{+}.
 }
 \description{
 Backwards in time, this feature merges one population into another.

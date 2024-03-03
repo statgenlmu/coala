@@ -68,8 +68,8 @@ set_trio_locus <- function(segsites, trio_locus) {
     .Call(`_coala_set_trio_locus`, segsites, trio_locus)
 }
 
-calc_four_gamete_stat <- function(seg_sites_list, individuals, locus_length, ploidy = 1L) {
-    .Call(`_coala_calc_four_gamete_stat`, seg_sites_list, individuals, locus_length, ploidy)
+calc_four_gamete_stat <- function(seg_sites_list, individuals, locus_length, ploidy = 1L, narm = 0L) {
+    .Call(`_coala_calc_four_gamete_stat`, seg_sites_list, individuals, locus_length, ploidy, narm)
 }
 
 #' Calculates the Joint Site Frequency Spectrum

@@ -11,7 +11,7 @@ sumstat_file(folder)
 }
 \value{
 A character vector containing the files in order in which they
-        where created.
+where created.
 }
 \description{
 This "summary statistic" returns files with the raw results of

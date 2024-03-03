@@ -17,8 +17,8 @@ returned instead of the original values.}
 }
 \value{
 A list of \code{\link[=create_segsites]{segsites}} objects.
-        These can be treated as a matrix for
-        most applications. Rows are individuals, columns are SNPs.
+These can be treated as a matrix for
+most applications. Rows are individuals, columns are SNPs.
 }
 \description{
 This summary statistics generates a matrix of segregating sites.

@@ -39,7 +39,8 @@ inline bool is_singleton(const NumericMatrix seg_sites,
 NumericMatrix calc_four_gamete_stat(const ListOf<coala::SegSites> seg_sites_list,
                                     const IntegerVector individuals,
                                     const NumericMatrix locus_length,
-                                    const unsigned int ploidy = 1) {
+                                    const unsigned int ploidy = 1,
+				    const unsigned int narm = 0) {
 
   size_t loci_number = seg_sites_list.size();
   size_t n_ind = individuals.size();
@@ -113,8 +114,14 @@ NumericMatrix calc_four_gamete_stat(const ListOf<coala::SegSites> seg_sites_list
           }
           if ((n[0] == 0 || n[0] == ploidy) || (n[1] == 0 || n[1] == ploidy)) {
             for (size_t l = 0; l < ploidy; ++l) {
-              combinations[2 * snps_matrix(ind_offset + l, idx_i) +
-                            snps_matrix(ind_offset + l, idx_j)] = true;
+		if(!narm ||
+		   ( !std::isnan(snps_matrix(ind_offset + l, idx_i) &&
+				 !std::isnan(snps_matrix(ind_offset + l, idx_j)))
+		     )
+		   ) {
+		    combinations[2 * snps_matrix(ind_offset + l, idx_i) +
+				 snps_matrix(ind_offset + l, idx_j)] = true;
+		}
             }
           }
         }

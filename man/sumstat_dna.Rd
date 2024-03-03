@@ -17,8 +17,8 @@ returned instead of the original values.}
 }
 \value{
 A list of sequences for each locus. Each entries is a
-        character matrix decoding the sequences. Each row
-        is an individual, and each column is a genetic position.
+character matrix decoding the sequences. Each row
+is an individual, and each column is a genetic position.
 }
 \description{
 This summary statistic returns the actual DNA sequences from

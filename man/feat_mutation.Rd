@@ -49,10 +49,10 @@ this argument is \code{c(2, 3)}, than the feature is used for all but
 the first locus (that is locus 2 - 12).}
 }
 \value{
-The feature, which can be added to a model using `+`.
+The feature, which can be added to a model using \code{+}.
 
 The feature, which can be added to a model created with
-  \code{\link{coal_model}} using \code{+}.
+\code{\link{coal_model}} using \code{+}.
 }
 \description{
 This feature adds mutations to a model. Mutations occur in the genomes
@@ -126,7 +126,7 @@ model <- coal_model(c(10, 1), 1, 25) +
 }
 \seealso{
 For using rates that variate between the loci in a model:
-  \code{\link{par_variation}}, \code{\link{par_zero_inflation}}
+\code{\link{par_variation}}, \code{\link{par_zero_inflation}}
 
 For adding recombination: \code{\link{feat_recombination}}.
 

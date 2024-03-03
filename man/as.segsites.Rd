@@ -25,7 +25,7 @@ Currently, only the package \pkg{PopGenome} is supported, see
 \code{\link{as.segsites.GENOME}} for details.
 }
 \seealso{
-Further instructions are provided in the `coala-data-import` vignette
+Further instructions are provided in the \code{coala-data-import} vignette
 
 For information about segsites: \code{\link{segsites}}
 }

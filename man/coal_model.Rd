@@ -23,7 +23,7 @@ individual.}
 }
 \value{
 The basic coalescent model which can be extended with features,
-  parameters, loci and summary statistics.
+parameters, loci and summary statistics.
 }
 \description{
 This creates a basic coalescent model to which more features, loci,
@@ -62,17 +62,17 @@ simulate(model)
 }
 \seealso{
 The 'coala-intro' vignette for a general description on how to extend
-         models.
+models.
 
 For checking which simulators can be used for this model:
-         \code{\link{check_model}}
+\code{\link{check_model}}
 
 For adding mutation or for a list of other features:
-         \code{\link{feat_mutation}}
+\code{\link{feat_mutation}}
 
 For adding loci: \code{\link{locus_single}},
-         \code{\link{locus_averaged}}, \code{\link{locus_trio}}
+\code{\link{locus_averaged}}, \code{\link{locus_trio}}
 
 For a generating DNA sequences or for a list of summary statistics:
-         \code{\link{sumstat_dna}}
+\code{\link{sumstat_dna}}
 }

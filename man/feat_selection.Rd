@@ -81,7 +81,7 @@ the first locus (that is locus 2 - 12).}
 }
 \value{
 The feature, which can be added to a model created with
-  \code{\link{coal_model}} using \code{+}.
+\code{\link{coal_model}} using \code{+}.
 }
 \description{
 This feature adds selection to a model. Only one site per locus can be under
@@ -102,11 +102,11 @@ model <- coal_model(c(10, 13), 1, 10000) +
 }
 \seealso{
 For using rates that variate between the loci in a model:
-  \code{\link{par_variation}}, \code{\link{par_zero_inflation}}
+\code{\link{par_variation}}, \code{\link{par_zero_inflation}}
 
 For summary statistics that are sensitive for selection:
-  \code{\link{sumstat_tajimas_d}}, \code{\link{sumstat_ihh}},
-  \code{\link{sumstat_omega}}, \code{\link{sumstat_mcmf}}
+\code{\link{sumstat_tajimas_d}}, \code{\link{sumstat_ihh}},
+\code{\link{sumstat_omega}}, \code{\link{sumstat_mcmf}}
 
 For creating a model: \code{\link{coal_model}}
 

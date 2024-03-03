@@ -31,14 +31,17 @@ print.partial_model <- function(x, ...) {
 }
 
 add_to_model <- function(x, model, x_name) UseMethod("add_to_model")
+
+#' @export
 add_to_model.default <- function(x, model, x_name) {
   stop("Can not add `", x_name, "` to model")
 }
 
-
+#' @export
 add_to_model.parameter <- function(par, model, par_name) model
 
 
+#' @export
 add_to_model.named_par <- function(par, model, par_name) {
   if (par$get_name() %in% get_par_names(model))
     stop("There is already a parameter with name ", par_name)
@@ -50,6 +53,7 @@ add_to_model.named_par <- function(par, model, par_name) {
 }
 
 
+#' @export
 add_to_model.variation_par <- function(par, model, par_name) {
   model <- add_variation(model)
   for (par in par$get_base_par()) model <- model + par
@@ -58,6 +62,7 @@ add_to_model.variation_par <- function(par, model, par_name) {
 }
 
 
+#' @export
 add_to_model.feature <- function(feat, model, feat_name) {
   # Check that the population in the feature exists
   pop <- feat$get_population()
@@ -87,6 +92,7 @@ add_to_model.feature <- function(feat, model, feat_name) {
 }
 
 
+#' @export
 add_to_model.locus <- function(locus, model, locus_name) {
   model$loci[[length(model$loci) + 1]] <- locus
   model$id <- get_id()
@@ -94,6 +100,7 @@ add_to_model.locus <- function(locus, model, locus_name) {
 }
 
 
+#' @export
 add_to_model.partial_model <- function(partial_model, model, partical_name) {
   for (part in partial_model) {
     model <- model + part
