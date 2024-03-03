@@ -1,7 +1,5 @@
 ---
 title: "Examples"
-author: "Paul Staab"
-date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Examples}

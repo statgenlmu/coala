@@ -1,10 +1,8 @@
 ---
 title: "Importing Genetic Data into Coala"
-author: "Paul Staab, Dirk Metzler"
-date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Calculating Summary Statistics for Genetic Data}
+  %\VignetteIndexEntry{Importing Genetic Data into Coala}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---

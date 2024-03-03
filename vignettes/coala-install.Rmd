@@ -1,10 +1,8 @@
 ---
 title: "Using External Simulators"
-author: "Paul Staab"
-date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Installing ms, msms and seqgen}
+  %\VignetteIndexEntry{Using External Simulators}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---

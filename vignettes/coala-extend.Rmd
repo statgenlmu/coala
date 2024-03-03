@@ -1,10 +1,8 @@
 ---
 title: "Adding Summary Statistics and Simulators"
-author: "Paul Staab"
-date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Extending coala}
+  %\VignetteIndexEntry{Adding Summary Statistics and Simulators}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
