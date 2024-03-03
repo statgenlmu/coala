@@ -139,7 +139,7 @@ function to check whether segregating sites are required by this statsitic
 }
 
 \subsection{Returns}{
-req_segsites, which is TRUE or FALSE and indicates whether segregating sites are required by this statsitic
+req_segsites, which is TRUE or FALSE and indicates whether segregating sites are required by this statsiti
 }
 }
 \if{html}{\out{<hr>}}

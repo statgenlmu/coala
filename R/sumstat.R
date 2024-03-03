@@ -5,7 +5,7 @@
 #'
 #' @include model.R
 #' @keywords internal
-sumstat_class <- R6Class("sumstat", inherit = model_part,
+sumstat_class <- R6::R6Class("sumstat", inherit = model_part,
   private = list(
     name = NA,
     req_files = FALSE,
@@ -14,7 +14,6 @@ sumstat_class <- R6Class("sumstat", inherit = model_part,
     transformation = NULL
   ),
   public = list(
-      
       #' @description
       #' Initialization of $sumstat
       #'
@@ -42,7 +41,7 @@ sumstat_class <- R6Class("sumstat", inherit = model_part,
       calculate = function(seg_sites, trees, files, model) {
           stop("Overwrite this function with the calculation of the statistic.")
       },
-
+      
       #' @description
       #' Optional functions that checks if a model is compatible with the stat.
       #'
@@ -75,9 +74,9 @@ sumstat_class <- R6Class("sumstat", inherit = model_part,
       #' @description
       #' function to check whether segregating sites are required by this statsitic
       #'
-      #' @return req_segsites, which is TRUE or FALSE and indicates whether segregating sites are required by this statsitic
+      #' @return req_segsites, which is TRUE or FALSE and indicates whether segregating sites are required by this statsiti
       requires_segsites = function() private$req_segsites,
-      
+  
       #' @description
       #' function to check whether trees are required by this statsitic
       #'

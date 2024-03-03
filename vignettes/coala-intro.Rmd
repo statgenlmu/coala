@@ -1,12 +1,10 @@
 ---
 title: "Introduction to Coala"
-author: "Paul Staab"
-date: "coala `r packageVersion('coala')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction to Coala}
   %\VignetteEngine{knitr::rmarkdown}
-  %\usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
 
 Coalescent simulation refers to the idea of simulating the evolution of 
@@ -99,15 +97,14 @@ five haploids are sampled from population 1 and two from population 2. Please
 note that sample sizes for all populations must be given, even if no haploid
 is sampled from a population, as it is the case for population 3 here.
 
-
 # Adding Summary Statistics
 
 Adding summary statistics works in a similar fashion as adding features:
 
 ```{r}
 model <- coal_model(3, 1) +
-  feat_mutation(rate = 1) +
-  sumstat_seg_sites()
+   feat_mutation(rate = 1) +
+   sumstat_seg_sites()
 model
 ```
 
