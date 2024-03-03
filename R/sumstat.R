@@ -24,7 +24,6 @@ sumstat_class <- R6::R6Class("sumstat", inherit = model_part,
           assert_that(is.character(name))
           assert_that(length(name) == 1)
           private$name <- name
-          
           assert_that(is.function(transformation))
           private$transformation <- transformation
       },
@@ -95,7 +94,7 @@ sumstat_class <- R6::R6Class("sumstat", inherit = model_part,
       #' @return transformed value
       transform = function(x) private$transformation(x)
   )
-  )
+)
 
 
 is.sum_stat <- function(sumstat) inherits(sumstat, "sumstat")
