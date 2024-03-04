@@ -14,7 +14,7 @@ If you want to create additional summary statistics for coala, create
 }
 \keyword{internal}
 \section{Super class}{
-\code{\link[coala:coalmodelpart]{coala::coalmodelpart}} -> \code{sumstat}
+\code{coala::coalmodelpart} -> \code{sumstat}
 }
 \section{Methods}{
 \subsection{Public methods}{
