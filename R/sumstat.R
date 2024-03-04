@@ -5,7 +5,7 @@
 #'
 #' @include model.R
 #' @keywords internal
-#' @extern
+#' @export
 sumstat_class <- R6::R6Class("sumstat", inherit = model_part,
   private = list(
     name = NA,
