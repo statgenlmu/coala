@@ -38,15 +38,15 @@ add_to_model.default <- function(x, model, x_name) {
 }
 
 #' @export
-add_to_model.parameter <- function(par, model, par_name) model
+add_to_model.parameter <- function(x, model, x_name) model
 
 
 #' @export
-add_to_model.named_par <- function(par, model, par_name) {
-  if (par$get_name() %in% get_par_names(model))
-    stop("There is already a parameter with name ", par_name)
+add_to_model.named_par <- function(x, model, x_name) {
+  if (x$get_name() %in% get_par_names(model))
+    stop("There is already a parameter with name ", x_name)
 
-  model$parameter[[length(model$parameter) + 1]] <- par
+  model$parameter[[length(model$parameter) + 1]] <- x
 
   model$id <- get_id()
   model
@@ -54,38 +54,38 @@ add_to_model.named_par <- function(par, model, par_name) {
 
 
 #' @export
-add_to_model.variation_par <- function(par, model, par_name) {
+add_to_model.variation_par <- function(x, model, x_name) {
   model <- add_variation(model)
-  for (par in par$get_base_par()) model <- model + par
+  for (par in x$get_base_par()) model <- model + par
   model$id <- get_id()
   model
 }
 
 
 #' @export
-add_to_model.feature <- function(feat, model, feat_name) {
+add_to_model.feature <- function(x, model, x_name) {
   # Check that the population in the feature exists
-  pop <- feat$get_population()
+  pop <- x$get_population()
   if (!is.null(pop)) {
     if (any(!pop %in% get_populations(model)) && pop[1] != "all" ) {
-      stop("Invalid population in ", feat_name, call. = FALSE)
+      stop("Invalid population in ", x_name, call. = FALSE)
     }
   }
 
   # Check that the locus group is set correctly
-  locus_group <- feat$get_locus_group()
+  locus_group <- x$get_locus_group()
   if (is.null(locus_group)) {
-    stop(feat_name, ": locus group has an invalid value", call. = FALSE)
+    stop(x_name, ": locus group has an invalid value", call. = FALSE)
   }
 
   # Execute the features checks
-  feat$check(model)
+  x$check(model)
 
   # Add the parameters in the feature
-  for (para in feat$get_parameters()) model <- model + para
+  for (para in x$get_parameters()) model <- model + para
 
   # Add the feature itself
-  model$features[[length(model$features) + 1]] <- feat
+  model$features[[length(model$features) + 1]] <- x
 
   model$id <- get_id()
   model
@@ -93,16 +93,16 @@ add_to_model.feature <- function(feat, model, feat_name) {
 
 
 #' @export
-add_to_model.locus <- function(locus, model, locus_name) {
-  model$loci[[length(model$loci) + 1]] <- locus
+add_to_model.locus <- function(x, model, x_name) {
+  model$loci[[length(model$loci) + 1]] <- x
   model$id <- get_id()
   model
 }
 
 
 #' @export
-add_to_model.partial_model <- function(partial_model, model, partical_name) {
-  for (part in partial_model) {
+add_to_model.partial_model <- function(x, model, x_name) {
+  for (part in x) {
     model <- model + part
   }
   model

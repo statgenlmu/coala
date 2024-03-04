@@ -107,22 +107,22 @@ create_sumstat_container <- function() list()
 
                                         # Add a summary statistic to a model
 #' @export
-add_to_model.sumstat <- function(sum_stat, model, feat_name) {
-  sum_stat$check(model)
+add_to_model.sumstat <- function(x, model, x_name) {
+  x$check(model)
 
-  if (sum_stat$get_name() %in% names(model$sum_stats))
-    stop("Can not add ", feat_name, " to model: ",
-         "There is already a statistic with name ", sum_stat$get_name())
+  if (x$get_name() %in% names(model$sum_stats))
+    stop("Can not add ", x_name, " to model: ",
+         "There is already a statistic with name ", x$get_name())
 
-  if (sum_stat$requires_files() && !requires_files(model))
+  if (x$requires_files() && !requires_files(model))
     model <- model + files_feat_class$new()
-  if (sum_stat$requires_segsites() && !requires_segsites(model))
+  if (x$requires_segsites() && !requires_segsites(model))
     model <- model + segsites_feat_class$new()
-  if (sum_stat$requires_trees() && !requires_trees(model))
+  if (x$requires_trees() && !requires_trees(model))
     model <- model + trees_feat_class$new()
 
   # Save the statistic
-  model$sum_stats[[sum_stat$get_name()]] <- sum_stat
+  model$sum_stats[[x$get_name()]] <- x
 
   # Update cache
   model$id <- get_id()
